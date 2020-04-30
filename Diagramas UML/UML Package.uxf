@@ -4,13 +4,13 @@
   <element>
     <id>UMLHierarchy</id>
     <coordinates>
-      <x>224</x>
+      <x>128</x>
       <y>96</y>
       <w>400</w>
       <h>384</h>
     </coordinates>
     <panel_attributes>type=Package
-edu.ucr.rp.progra2.proyecto
+edu.ucr.rp.programacion.proyecto
 	main
 	domain
 		gui
