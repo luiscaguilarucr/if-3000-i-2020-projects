@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>7</zoom_level>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>0</x>
+      <y>0</y>
+      <w>826</w>
+      <h>763</h>
+    </coordinates>
+    <panel_attributes>domain</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>42</x>
+      <y>42</y>
+      <w>609</w>
+      <h>700</h>
+    </coordinates>
+    <panel_attributes>logic</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>98</x>
+      <y>434</y>
+      <w>287</w>
+      <h>98</h>
+    </coordinates>
+    <panel_attributes>Item
+--
+- name: String
+- features: ArrayList&lt;Feature&gt;
+--
+&lt;&lt;constructor&gt;&gt; Item(String name, ArrayList&lt;Feature&gt; features)
++ addFeature(Object feature): void
++ editFeature(Object feature): void
++ removeFeature(Object feature): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>112</x>
+      <y>119</y>
+      <w>273</w>
+      <h>105</h>
+    </coordinates>
+    <panel_attributes>Inventory
+--
+- name: String
+- catalogues: ArrayList&lt;Catalogue&gt;
+--
+&lt;&lt;constructor&gt;&gt; Inventory(String name)
++ addCatalogue(Catalgue...catalogues): void
++ removeCatalogue(String name): void
++ editCatalogue(String name): Catalogue</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>119</x>
+      <y>581</y>
+      <w>231</w>
+      <h>98</h>
+    </coordinates>
+    <panel_attributes>Feature
+--
+- name: String
+- value: Object
+- mandatory: boolean
+--
+&lt;&lt;constructor&gt;&gt; Feature(String name, Object value)
++ toString(): String
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>105</x>
+      <y>266</y>
+      <w>273</w>
+      <h>119</h>
+    </coordinates>
+    <panel_attributes>Catalogue
+--
+- name: String
+- items: ArrayList&lt;Item&gt;
+- properties: ArrayList&lt;String&gt;
+--
+&lt;&lt;constructor&gt;&gt; Catalogue(String name, ArrayList&lt;String&gt; properties)
++ addProperty(String name, Object type): void
++ removeProperty(String name): void
++ editProperty(String name): String</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
