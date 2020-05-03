@@ -1,6 +1,6 @@
-#Diagramas UML
+# UML Diagrams
 
-##Diagramas de  paquetes.
+## Packages.
 
 ![UML][Diagram]
 
