@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>8</zoom_level>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>120</x>
+      <y>0</y>
+      <w>1312</w>
+      <h>1136</h>
+    </coordinates>
+    <panel_attributes>domain</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>144</x>
+      <y>32</y>
+      <w>1216</w>
+      <h>1064</h>
+    </coordinates>
+    <panel_attributes>io</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>184</x>
+      <y>80</y>
+      <w>312</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>FilesManagement
+--
+- rootpath: String
+--
++ writeCatalogue(ArrayList&lt;Catalogue&gt; catalogues): void
++ writeInventory(ArrayList&lt;Inventory&gt; inventory): void
++ bufferedReader(): BufferedReader
++ removeCatalogue(Catalogue catalogues): void
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

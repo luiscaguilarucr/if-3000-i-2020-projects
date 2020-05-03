@@ -4,10 +4,10 @@
   <element>
     <id>UMLPackage</id>
     <coordinates>
-      <x>0</x>
+      <x>42</x>
       <y>0</y>
-      <w>826</w>
-      <h>763</h>
+      <w>1085</w>
+      <h>889</h>
     </coordinates>
     <panel_attributes>domain</panel_attributes>
     <additional_attributes/>
@@ -15,10 +15,10 @@
   <element>
     <id>UMLPackage</id>
     <coordinates>
-      <x>42</x>
-      <y>42</y>
-      <w>609</w>
-      <h>700</h>
+      <x>63</x>
+      <y>21</y>
+      <w>1029</w>
+      <h>840</h>
     </coordinates>
     <panel_attributes>logic</panel_attributes>
     <additional_attributes/>
@@ -26,8 +26,8 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>98</x>
-      <y>434</y>
+      <x>91</x>
+      <y>357</y>
       <w>287</w>
       <h>98</h>
     </coordinates>
@@ -45,8 +45,8 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>112</x>
-      <y>119</y>
+      <x>91</x>
+      <y>70</y>
       <w>273</w>
       <h>105</h>
     </coordinates>
@@ -64,8 +64,8 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>119</x>
-      <y>581</y>
+      <x>91</x>
+      <y>497</y>
       <w>231</w>
       <h>98</h>
     </coordinates>
@@ -83,9 +83,9 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>105</x>
-      <y>266</y>
-      <w>273</w>
+      <x>91</x>
+      <y>203</y>
+      <w>308</w>
       <h>119</h>
     </coordinates>
     <panel_attributes>Catalogue
@@ -98,6 +98,64 @@
 + addProperty(String name, Object type): void
 + removeProperty(String name): void
 + editProperty(String name): String</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>476</x>
+      <y>203</y>
+      <w>350</w>
+      <h>112</h>
+    </coordinates>
+    <panel_attributes>CatalogueGeneratorBuilder
+--
+- name: String
+- items: ArrayList&lt;Item&gt;
+- properties: ArrayList&lt;String&gt;
+--
++ withName(String name): CatalogueGeneratorBuilder
++ withItems(ArrayList&lt;Item&gt; items): CatalogueGeneratorBuilder
++ withProperties(ArrayList&lt;String&gt; properties): CatalogueGeneratorBuilder
++ build(): Catalogue</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>476</x>
+      <y>364</y>
+      <w>350</w>
+      <h>91</h>
+    </coordinates>
+    <panel_attributes>ItemBuilder
+--
+- name: String
+- features: ArrayList&lt;Feature&gt;
+--
++ withName(String name): ItemBuilder
++ withFeatures(ArrayList&lt;Feature&gt; features): ItemBuilder
++ build(): Item</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>476</x>
+      <y>504</y>
+      <w>350</w>
+      <h>91</h>
+    </coordinates>
+    <panel_attributes>FeatureBuilder
+--
+- name: String
+- value: Object
+- mandatory: boolean
+--
++ withName(String name): FeatureBuilder
++ withValue(Object value): FeatureBuilder
++ withMandatory(boolean mandatory): FeatureBuilder
++ build(): Feature</panel_attributes>
     <additional_attributes/>
   </element>
 </diagram>
