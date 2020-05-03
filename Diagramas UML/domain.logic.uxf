@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <diagram program="umlet" version="14.3.0">
-  <zoom_level>7</zoom_level>
+  <zoom_level>5</zoom_level>
   <element>
     <id>UMLPackage</id>
     <coordinates>
-      <x>42</x>
-      <y>0</y>
-      <w>1085</w>
-      <h>889</h>
+      <x>0</x>
+      <y>65</y>
+      <w>905</w>
+      <h>410</h>
     </coordinates>
     <panel_attributes>domain</panel_attributes>
     <additional_attributes/>
@@ -15,10 +15,10 @@
   <element>
     <id>UMLPackage</id>
     <coordinates>
-      <x>63</x>
-      <y>21</y>
-      <w>1029</w>
-      <h>840</h>
+      <x>15</x>
+      <y>85</y>
+      <w>865</w>
+      <h>370</h>
     </coordinates>
     <panel_attributes>logic</panel_attributes>
     <additional_attributes/>
@@ -26,10 +26,10 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>91</x>
-      <y>357</y>
-      <w>287</w>
-      <h>98</h>
+      <x>375</x>
+      <y>255</y>
+      <w>205</w>
+      <h>70</h>
     </coordinates>
     <panel_attributes>Item
 --
@@ -45,10 +45,10 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>91</x>
-      <y>70</y>
-      <w>273</w>
-      <h>105</h>
+      <x>35</x>
+      <y>115</y>
+      <w>150</w>
+      <h>75</h>
     </coordinates>
     <panel_attributes>Inventory
 --
@@ -64,10 +64,10 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>91</x>
-      <y>497</y>
-      <w>231</w>
-      <h>98</h>
+      <x>670</x>
+      <y>255</y>
+      <w>165</w>
+      <h>70</h>
     </coordinates>
     <panel_attributes>Feature
 --
@@ -83,10 +83,10 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>91</x>
-      <y>203</y>
-      <w>308</w>
-      <h>119</h>
+      <x>65</x>
+      <y>245</y>
+      <w>220</w>
+      <h>85</h>
     </coordinates>
     <panel_attributes>Catalogue
 --
@@ -103,10 +103,10 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>476</x>
-      <y>203</y>
-      <w>350</w>
-      <h>112</h>
+      <x>50</x>
+      <y>365</y>
+      <w>250</w>
+      <h>80</h>
     </coordinates>
     <panel_attributes>CatalogueGeneratorBuilder
 --
@@ -123,10 +123,10 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>476</x>
-      <y>364</y>
-      <w>350</w>
-      <h>91</h>
+      <x>380</x>
+      <y>365</y>
+      <w>195</w>
+      <h>65</h>
     </coordinates>
     <panel_attributes>ItemBuilder
 --
@@ -141,10 +141,10 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>476</x>
-      <y>504</y>
-      <w>350</w>
-      <h>91</h>
+      <x>665</x>
+      <y>365</y>
+      <w>180</w>
+      <h>65</h>
     </coordinates>
     <panel_attributes>FeatureBuilder
 --
@@ -157,5 +157,80 @@
 + withMandatory(boolean mandatory): FeatureBuilder
 + build(): Feature</panel_attributes>
     <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>105</x>
+      <y>185</y>
+      <w>25</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=1..1
+m2=0..n
+has </panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;120.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>280</x>
+      <y>275</y>
+      <w>105</w>
+      <h>25</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=1..1
+m2=0..n
+has </panel_attributes>
+    <additional_attributes>10.0;20.0;190.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>575</x>
+      <y>275</y>
+      <w>105</w>
+      <h>25</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=1..1
+m2=0..n
+has </panel_attributes>
+    <additional_attributes>10.0;20.0;190.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>170</x>
+      <y>325</y>
+      <w>15</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>475</x>
+      <y>320</y>
+      <w>15</w>
+      <h>55</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>745</x>
+      <y>320</y>
+      <w>15</w>
+      <h>55</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;90.0</additional_attributes>
   </element>
 </diagram>
