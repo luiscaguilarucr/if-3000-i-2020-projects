@@ -1,7 +1,6 @@
 #Diagramas UML
 
-##Diagramas de clase
-### Package: domain.io
+##Diagramas de  paquetes.
 
 ![UML][Diagram]
 
