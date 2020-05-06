@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <diagram program="umlet" version="14.3.0">
-  <zoom_level>5</zoom_level>
+  <zoom_level>11</zoom_level>
   <element>
     <id>UMLPackage</id>
     <coordinates>
       <x>0</x>
-      <y>65</y>
-      <w>905</w>
-      <h>410</h>
+      <y>0</y>
+      <w>1991</w>
+      <h>902</h>
     </coordinates>
     <panel_attributes>domain</panel_attributes>
     <additional_attributes/>
@@ -15,10 +15,10 @@
   <element>
     <id>UMLPackage</id>
     <coordinates>
-      <x>15</x>
-      <y>85</y>
-      <w>865</w>
-      <h>370</h>
+      <x>33</x>
+      <y>44</y>
+      <w>1903</w>
+      <h>814</h>
     </coordinates>
     <panel_attributes>logic</panel_attributes>
     <additional_attributes/>
@@ -26,10 +26,10 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>375</x>
-      <y>255</y>
-      <w>205</w>
-      <h>70</h>
+      <x>825</x>
+      <y>418</y>
+      <w>451</w>
+      <h>154</h>
     </coordinates>
     <panel_attributes>Item
 --
@@ -37,37 +37,39 @@
 - features: ArrayList&lt;Feature&gt;
 --
 &lt;&lt;constructor&gt;&gt; Item(String name, ArrayList&lt;Feature&gt; features)
-+ addFeature(Object feature): void
-+ editFeature(Object feature): void
-+ removeFeature(Object feature): void</panel_attributes>
++ addFeature(Feature feature): void
++ getFeature(String name): Feature
++ removeFeature(Feature feature): void</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>35</x>
-      <y>115</y>
-      <w>150</w>
-      <h>75</h>
+      <x>77</x>
+      <y>110</y>
+      <w>440</w>
+      <h>165</h>
     </coordinates>
     <panel_attributes>Inventory
 --
 - name: String
 - catalogues: ArrayList&lt;Catalogue&gt;
 --
-&lt;&lt;constructor&gt;&gt; Inventory(String name)
+&lt;&lt;constructor&gt;&gt; Inventory(String name, ArrayList&lt;Catagogue&gt;)
 + addCatalogue(Catalgue...catalogues): void
 + removeCatalogue(String name): void
-+ editCatalogue(String name): Catalogue</panel_attributes>
++ getCatalogue(String name): Catalogue
++ getName(): String
++ getCatalogues(): ArrayList&lt;Catalogue&gt;</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>670</x>
-      <y>255</y>
-      <w>165</w>
-      <h>70</h>
+      <x>1430</x>
+      <y>418</y>
+      <w>495</w>
+      <h>154</h>
     </coordinates>
     <panel_attributes>Feature
 --
@@ -75,7 +77,7 @@
 - value: Object
 - mandatory: boolean
 --
-&lt;&lt;constructor&gt;&gt; Feature(String name, Object value)
+&lt;&lt;constructor&gt;&gt; Feature(String name, Object value, boolean mandatory)
 + toString(): String
 </panel_attributes>
     <additional_attributes/>
@@ -83,10 +85,10 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>65</x>
-      <y>245</y>
-      <w>220</w>
-      <h>85</h>
+      <x>143</x>
+      <y>396</y>
+      <w>484</w>
+      <h>187</h>
     </coordinates>
     <panel_attributes>Catalogue
 --
@@ -94,7 +96,8 @@
 - items: ArrayList&lt;Item&gt;
 - properties: ArrayList&lt;String&gt;
 --
-&lt;&lt;constructor&gt;&gt; Catalogue(String name, ArrayList&lt;String&gt; properties)
+&lt;&lt;constructor&gt;&gt; Catalogue(String name, ArrayList&lt;Item&gt; items,
+ArrayList&lt;String&gt; properties)
 + addProperty(String name, Object type): void
 + removeProperty(String name): void
 + editProperty(String name): String</panel_attributes>
@@ -103,10 +106,10 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>50</x>
-      <y>365</y>
-      <w>250</w>
-      <h>80</h>
+      <x>110</x>
+      <y>660</y>
+      <w>550</w>
+      <h>176</h>
     </coordinates>
     <panel_attributes>CatalogueGeneratorBuilder
 --
@@ -123,10 +126,10 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>380</x>
-      <y>365</y>
-      <w>195</w>
-      <h>65</h>
+      <x>836</x>
+      <y>660</y>
+      <w>429</w>
+      <h>143</h>
     </coordinates>
     <panel_attributes>ItemBuilder
 --
@@ -141,10 +144,10 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>665</x>
-      <y>365</y>
-      <w>180</w>
-      <h>65</h>
+      <x>1463</x>
+      <y>660</y>
+      <w>396</w>
+      <h>176</h>
     </coordinates>
     <panel_attributes>FeatureBuilder
 --
@@ -161,10 +164,10 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>105</x>
-      <y>185</y>
-      <w>25</w>
-      <h>70</h>
+      <x>231</x>
+      <y>264</y>
+      <w>55</w>
+      <h>154</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=1..1
@@ -175,10 +178,10 @@ has </panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>280</x>
-      <y>275</y>
-      <w>105</w>
-      <h>25</h>
+      <x>616</x>
+      <y>462</y>
+      <w>231</w>
+      <h>55</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=1..1
@@ -189,24 +192,24 @@ has </panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>575</x>
-      <y>275</y>
-      <w>105</w>
-      <h>25</h>
+      <x>1265</x>
+      <y>462</y>
+      <w>187</w>
+      <h>55</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=1..1
 m2=0..n
 has </panel_attributes>
-    <additional_attributes>10.0;20.0;190.0;20.0</additional_attributes>
+    <additional_attributes>10.0;20.0;150.0;20.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>170</x>
-      <y>325</y>
-      <w>15</w>
-      <h>50</h>
+      <x>374</x>
+      <y>572</y>
+      <w>33</w>
+      <h>110</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;80.0</additional_attributes>
@@ -214,10 +217,10 @@ has </panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>475</x>
-      <y>320</y>
-      <w>15</w>
-      <h>55</h>
+      <x>1045</x>
+      <y>561</y>
+      <w>33</w>
+      <h>121</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;90.0</additional_attributes>
@@ -225,10 +228,10 @@ has </panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>745</x>
-      <y>320</y>
-      <w>15</w>
-      <h>55</h>
+      <x>1639</x>
+      <y>561</y>
+      <w>33</w>
+      <h>121</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;90.0</additional_attributes>
