@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>5</zoom_level>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>0</x>
+      <y>65</y>
+      <w>905</w>
+      <h>410</h>
+    </coordinates>
+    <panel_attributes>domain</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>15</x>
+      <y>85</y>
+      <w>865</w>
+      <h>370</h>
+    </coordinates>
+    <panel_attributes>logic</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>375</x>
+      <y>255</y>
+      <w>205</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>Item
+--
+- name: String
+- features: ArrayList&lt;Feature&gt;
+--
+&lt;&lt;constructor&gt;&gt; Item(String name, ArrayList&lt;Feature&gt; features)
++ addFeature(Object feature): void
++ editFeature(Object feature): void
++ removeFeature(Object feature): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>35</x>
+      <y>115</y>
+      <w>150</w>
+      <h>75</h>
+    </coordinates>
+    <panel_attributes>Inventory
+--
+- name: String
+- catalogues: ArrayList&lt;Catalogue&gt;
+--
+&lt;&lt;constructor&gt;&gt; Inventory(String name)
++ addCatalogue(Catalgue...catalogues): void
++ removeCatalogue(String name): void
++ editCatalogue(String name): Catalogue</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>670</x>
+      <y>255</y>
+      <w>165</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>Feature
+--
+- name: String
+- value: Object
+- mandatory: boolean
+--
+&lt;&lt;constructor&gt;&gt; Feature(String name, Object value)
++ toString(): String
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>65</x>
+      <y>245</y>
+      <w>220</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>Catalogue
+--
+- name: String
+- items: ArrayList&lt;Item&gt;
+- properties: ArrayList&lt;String&gt;
+--
+&lt;&lt;constructor&gt;&gt; Catalogue(String name, ArrayList&lt;String&gt; properties)
++ addProperty(String name, Object type): void
++ removeProperty(String name): void
++ editProperty(String name): String</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>50</x>
+      <y>365</y>
+      <w>250</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>CatalogueGeneratorBuilder
+--
+- name: String
+- items: ArrayList&lt;Item&gt;
+- properties: ArrayList&lt;String&gt;
+--
++ withName(String name): CatalogueGeneratorBuilder
++ withItems(ArrayList&lt;Item&gt; items): CatalogueGeneratorBuilder
++ withProperties(ArrayList&lt;String&gt; properties): CatalogueGeneratorBuilder
++ build(): Catalogue</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>380</x>
+      <y>365</y>
+      <w>195</w>
+      <h>65</h>
+    </coordinates>
+    <panel_attributes>ItemBuilder
+--
+- name: String
+- features: ArrayList&lt;Feature&gt;
+--
++ withName(String name): ItemBuilder
++ withFeatures(ArrayList&lt;Feature&gt; features): ItemBuilder
++ build(): Item</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>665</x>
+      <y>365</y>
+      <w>180</w>
+      <h>65</h>
+    </coordinates>
+    <panel_attributes>FeatureBuilder
+--
+- name: String
+- value: Object
+- mandatory: boolean
+--
++ withName(String name): FeatureBuilder
++ withValue(Object value): FeatureBuilder
++ withMandatory(boolean mandatory): FeatureBuilder
++ build(): Feature</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>105</x>
+      <y>185</y>
+      <w>25</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=1..1
+m2=0..n
+has </panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;120.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>280</x>
+      <y>275</y>
+      <w>105</w>
+      <h>25</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=1..1
+m2=0..n
+has </panel_attributes>
+    <additional_attributes>10.0;20.0;190.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>575</x>
+      <y>275</y>
+      <w>105</w>
+      <h>25</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=1..1
+m2=0..n
+has </panel_attributes>
+    <additional_attributes>10.0;20.0;190.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>170</x>
+      <y>325</y>
+      <w>15</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>475</x>
+      <y>320</y>
+      <w>15</w>
+      <h>55</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>745</x>
+      <y>320</y>
+      <w>15</w>
+      <h>55</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;90.0</additional_attributes>
+  </element>
+</diagram>

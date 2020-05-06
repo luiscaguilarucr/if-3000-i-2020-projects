@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>8</zoom_level>
+  <element>
+    <id>UMLHierarchy</id>
+    <coordinates>
+      <x>128</x>
+      <y>96</y>
+      <w>400</w>
+      <h>384</h>
+    </coordinates>
+    <panel_attributes>type=Package
+edu.ucr.rp.programacion.proyecto
+	main
+	domain
+		gui
+		io
+		logic
+
+	util
+		javafx
+		files
+test
+	domain</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
