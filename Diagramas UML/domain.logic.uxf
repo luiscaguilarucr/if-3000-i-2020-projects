@@ -48,7 +48,7 @@
       <x>77</x>
       <y>110</y>
       <w>440</w>
-      <h>165</h>
+      <h>198</h>
     </coordinates>
     <panel_attributes>Inventory
 --
@@ -94,11 +94,11 @@
 --
 - name: String
 - items: ArrayList&lt;Item&gt;
-- properties: ArrayList&lt;String&gt;
+- properties: ArrayList&lt;Feature&gt;
 --
 &lt;&lt;constructor&gt;&gt; Catalogue(String name, ArrayList&lt;Item&gt; items,
 ArrayList&lt;String&gt; properties)
-+ addProperty(String name, Object type): void
++ addItem(String name, Object type): void
 + removeProperty(String name): void
 + editProperty(String name): String</panel_attributes>
     <additional_attributes/>
@@ -165,15 +165,15 @@ ArrayList&lt;String&gt; properties)
     <id>Relation</id>
     <coordinates>
       <x>231</x>
-      <y>264</y>
+      <y>297</y>
       <w>55</w>
-      <h>154</h>
+      <h>121</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=1..1
 m2=0..n
 has </panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;120.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;90.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>

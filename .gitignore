@@ -20,7 +20,7 @@
 *.rar
 *.idea
 *.iml
-
+target/*
 # -- Symfony2 -----------------------------------------
 app/bootstrap.php.cache
 app/bootstrap_cache.php.cache
@@ -68,7 +68,6 @@ local.properties
  
 # phpstorm
 .idea/
- 
 # textmate
 *.tmproj
 *.tmproject
