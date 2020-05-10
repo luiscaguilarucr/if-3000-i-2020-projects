@@ -53,14 +53,14 @@
     <panel_attributes>Inventory
 --
 - name: String
-- catalogues: ArrayList&lt;Catalogue&gt;
+- catalogs: List&lt;Catalog&gt;
 --
-&lt;&lt;constructor&gt;&gt; Inventory(String name, ArrayList&lt;Catagogue&gt;)
-+ addCatalogue(Catalgue...catalogues): void
-+ removeCatalogue(String name): void
-+ getCatalogue(String name): Catalogue
+&lt;&lt;constructor&gt;&gt; Inventory(String name, List&lt;Catalog&gt;)
++ addCatalog(Catalog...catalogs): void
++ removeCatalog(String name): void
++ getCatalog(String name): Catalog
 + getName(): String
-+ getCatalogues(): ArrayList&lt;Catalogue&gt;</panel_attributes>
++ getCatalog(): List&lt;Catalog&gt;</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -235,5 +235,30 @@ has </panel_attributes>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>539</x>
+      <y>99</y>
+      <w>429</w>
+      <h>253</h>
+    </coordinates>
+    <panel_attributes>Note..
+bg=yellow
+Inventory:
+1. Convertirlo en JavaBean
+1.1 Eliminar parámentros.
+1.2 Mover los metodos de manejo de inventario a otra clase.
+1.3 Solo tener getters and setters.
+
+*Considerar*
+si se usára un builder, pordía funcionar 
+con setter en vez de parámetros en el 
+constuctor.  
+
+
+</panel_attributes>
+    <additional_attributes/>
   </element>
 </diagram>
