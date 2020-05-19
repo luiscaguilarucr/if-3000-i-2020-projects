@@ -1,4 +1,7 @@
-package edu.ucr.rp.programacion2.proyecto.domain.logic;
+package edu.ucr.rp.programacion2.proyecto.util.builder;
+
+import edu.ucr.rp.programacion2.proyecto.domain.logic.Feature;
+
 /**
  * @author Luis Carlos Aguilar Morales
  * @author Jeison David Araya Mena

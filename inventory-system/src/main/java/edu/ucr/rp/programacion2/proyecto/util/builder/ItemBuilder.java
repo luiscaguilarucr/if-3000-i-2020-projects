@@ -1,4 +1,7 @@
-package edu.ucr.rp.programacion2.proyecto.domain.logic;
+package edu.ucr.rp.programacion2.proyecto.util.builder;
+
+import edu.ucr.rp.programacion2.proyecto.domain.logic.Feature;
+import edu.ucr.rp.programacion2.proyecto.domain.logic.Item;
 
 import java.util.ArrayList;
 /**

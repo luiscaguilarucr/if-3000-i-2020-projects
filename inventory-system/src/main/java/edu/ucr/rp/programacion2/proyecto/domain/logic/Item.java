@@ -1,6 +1,8 @@
 package edu.ucr.rp.programacion2.proyecto.domain.logic;
 
 import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Luis Carlos Aguilar Morales
  * @author Jeison David Araya Mena
@@ -9,9 +11,9 @@ import java.util.ArrayList;
 
 public class Item {
     private String name;
-    private ArrayList<Feature> features;
+    private List<Feature> features;
 
-    public Item(String name, ArrayList<Feature> features) {
+    public Item(String name, List<Feature> features) {
         this.name = name;
         this.features = features;
     }
