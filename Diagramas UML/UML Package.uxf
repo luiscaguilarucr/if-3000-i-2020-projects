@@ -35,13 +35,13 @@ fontsize=10
     </coordinates>
     <panel_attributes>type=Package
 edu.ucr.rp.programacion.proyecto
-	main
-	domain
+	business_rules
 		gui
 			javafx
 		io
+	domain
 		logic
-
+	main
 	util
 		javafx
 		files
