@@ -27,7 +27,7 @@ public class CatalogPersistence {
     }
 
     public Boolean write(List attribute){
-
+        return false;
     }
     public List readAll(){
         ArrayList list = new ArrayList();
