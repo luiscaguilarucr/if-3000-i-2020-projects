@@ -29,7 +29,6 @@ public class FeatureBuilder {
 
     public Feature build(){
         return new Feature(name,
-                           value,
-                           mandatory);
+                           value);
     }
 }

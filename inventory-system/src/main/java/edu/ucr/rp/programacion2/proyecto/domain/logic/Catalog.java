@@ -8,7 +8,7 @@ public class Catalog implements Serializable {
 
     private String name;
     private List<Item> items;
-    private List<Feature> schema;//TODO revisar properties.
+    private List<Feature> schema;//TODO revisar schema.
 
     /**
      * @param name       name of the catalogue

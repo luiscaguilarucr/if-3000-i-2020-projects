@@ -2,6 +2,7 @@ package edu.ucr.rp.programacion2.proyecto.domain.logic;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Item {
     private String name;
@@ -17,36 +18,20 @@ public class Item {
         this.features = features;
     }
 
-    /**
-     * Add a new feature.
-     * @param feature
-     */
-    public void addFeature(Feature feature) {
-        features.add(feature);
+    public String getName() {
+        return name;
     }
 
-    /**
-     * Get a feature by name.
-     * @param name feature name
-     * @return
-     */
-    public Feature getFeature(String name) {
-        //Traverse the ArrayList of features until we find a feature name that we're looking for
-        for (int i = 0; i < features.size() - 1; i++) {
-            if(features.get(i).getName().equalsIgnoreCase(name)){
-                return features.get(i);
-            }
-        }
-        return null;
+    public List<Feature> getFeatures() {
+        return features;
     }
 
-    /**
-     * Removes a feature.
-     * @param feature
-     */
-    public void removeFeature(Feature feature) {
-        if (features.get(features.indexOf(feature)) != null) {
-            features.remove(feature);
-        }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Item item = (Item) o;
+        return Objects.equals(name, item.name);
     }
+
 }

@@ -1,4 +1,6 @@
-package edu.ucr.rp.programacion2.proyecto.domain.logic;
+package edu.ucr.rp.programacion2.proyecto.business_rules.io;
+
+import edu.ucr.rp.programacion2.proyecto.domain.logic.Catalog;
 
 import java.io.File;
 import java.io.OutputStream;
