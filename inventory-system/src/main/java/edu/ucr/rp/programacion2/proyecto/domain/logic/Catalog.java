@@ -1,22 +1,23 @@
 package edu.ucr.rp.programacion2.proyecto.domain.logic;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
-public class Catalog {
+public class Catalog implements Serializable {
 
     private String name;
     private List<Item> items;
-    private List<Feature> properties;//TODO revisar properties.
+    private List<Feature> schema;//TODO revisar properties.
 
     /**
      * @param name       name of the catalogue
-     * @param properties properties that are going to define the items.
+     * @param schema properties that are going to define the items.
      */
-    public Catalog(String name, List<Item> items, List<Feature> properties) {//TODO valorar el uso de Item...items
+    public Catalog(String name, List<Item> items, List<Feature> schema) {//TODO valorar el uso de Item...items
         this.name = name;
         this.items = items;
-        this.properties = properties;
+        this.schema = schema;
     }
 
     public String getName() {
@@ -35,12 +36,12 @@ public class Catalog {
         this.items = items;
     }
 
-    public List<Feature> getProperties() {
-        return properties;
+    public List<Feature> getSchema() {
+        return schema;
     }
 
-    public void setProperties(List<Feature> properties) {
-        this.properties = properties;
+    public void setSchema(List<Feature> schema) {
+        this.schema = schema;
     }
 
     public void addItem(Item item) {
@@ -76,7 +77,7 @@ public class Catalog {
         return "Catalog{" +
                 "name='" + name + '\'' +
                 ", items=" + items +
-                ", properties=" + properties +
+                ", properties=" + schema +
                 '}';
     }
 }
