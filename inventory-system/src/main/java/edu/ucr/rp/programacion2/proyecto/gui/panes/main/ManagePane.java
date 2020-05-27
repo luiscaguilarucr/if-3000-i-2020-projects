@@ -1,10 +1,12 @@
 package edu.ucr.rp.programacion2.proyecto.gui.panes.main;
 
+import edu.ucr.rp.programacion2.proyecto.gui.javafx.CatalogForm;
 import edu.ucr.rp.programacion2.proyecto.gui.javafx.ViewMenuBar;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneName;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.model.SceneName;
 import javafx.scene.control.Button;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -13,13 +15,13 @@ import javafx.stage.Stage;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BasePane implements PaneViewer {
+public class ManagePane implements PaneViewer {
 
     // Contains all the Panes.
     private static Map<PaneName, Pane> panes = new HashMap<>();
     private Stage stage;
-    private Pane basePane;
-    public BasePane(Stage stage){
+    private static Pane basePane;
+    public ManagePane(Stage stage){
         this.stage = stage;
         this.basePane = buildBasePane();
         initializePanes(stage, basePane);
@@ -31,7 +33,8 @@ public class BasePane implements PaneViewer {
      */
     private void initializePanes(Stage stage, Pane basePane){
         panes.put(PaneName.BASE, basePane);
-        panes.put(PaneName.MENU_BAR, viewMenuBar.getMenuVBox());
+        panes.put(PaneName.MENU_BAR, new ViewMenuBar(stage).getPane());
+        panes.put(PaneName.ADD_CATALOG, new CatalogForm().getPane());
         //panes.put(PaneName., new .getPane());
         //panes.put(PaneName., new .getPane());
 
@@ -48,8 +51,8 @@ public class BasePane implements PaneViewer {
      * @return the base pane.
      */
     private Pane buildBasePane(){
-        VBox vBox = new VBox();
-        return vBox;
+        GridPane gridPane = new GridPane();
+        return gridPane;
     }
 
     /**
@@ -57,8 +60,17 @@ public class BasePane implements PaneViewer {
      * @param pane
      */
     private void setupBasePane(Pane pane){
-
+        ((GridPane) pane).add(panes.get(PaneName.MENU_BAR), 0, 0);
     }
+
+    /**
+     * Change the current pane
+     * @param pane
+     */
+    public static void setCenterPane(Pane pane){
+        ((GridPane) basePane).add(pane, 0, 1);
+    }
+
     /** Returns a Map of the scenes by {@link SceneName}
      * @return*/
     public static Map<PaneName, Pane> getPanes() {

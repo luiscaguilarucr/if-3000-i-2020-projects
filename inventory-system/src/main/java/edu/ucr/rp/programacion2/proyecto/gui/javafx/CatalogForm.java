@@ -5,6 +5,7 @@ import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -83,6 +84,6 @@ public class CatalogForm implements PaneViewer {
 
     @Override
     public Pane getPane() {
-        return buildPane();
+        return getCatalogFormPane();
     }
 }

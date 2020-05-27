@@ -1,7 +1,8 @@
 package edu.ucr.rp.programacion2.proyecto.gui.javafx;
 
-import edu.ucr.rp.programacion2.proyecto.domain.logic.Catalog;
+import edu.ucr.rp.programacion2.proyecto.gui.model.PaneName;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
+import edu.ucr.rp.programacion2.proyecto.gui.panes.main.ManagePane;
 import javafx.application.Platform;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -63,9 +64,7 @@ public class ViewMenuBar implements PaneViewer {
         
         // Give action to MenuItems
         mI_AddCatalog.setOnAction((event) -> {
-            CatalogForm catalogForm = new CatalogForm();
-            catalogForm.getCatalogFormPane();
-
+            ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.ADD_CATALOG));
         });
         
         mI_ViewAllCatalogs.setOnAction((event) -> {
