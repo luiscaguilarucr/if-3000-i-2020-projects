@@ -22,7 +22,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.3</version>
                 <configuration>
-                    <mainClass>edu.ucr.rp.programacion2.proyecto.main</mainClass>
+                    <mainClass>edu.ucr.rp.programacion2.proyecto.gui</mainClass>
                 </configuration>
             </plugin>
         </plugins>
