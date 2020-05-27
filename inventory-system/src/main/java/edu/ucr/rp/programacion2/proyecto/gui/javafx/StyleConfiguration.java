@@ -1,4 +1,4 @@
-package edu.ucr.rp.programacion2.proyecto.business_rules.gui.javafx;
+package edu.ucr.rp.programacion2.proyecto.gui.javafx;
 
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
@@ -13,7 +13,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-import static edu.ucr.rp.programacion2.proyecto.business_rules.gui.javafx.PaletteDesign.*;
+import static edu.ucr.rp.programacion2.proyecto.gui.javafx.PaletteDesign.*;
 
 public class StyleConfiguration {
     public static final String FONT = "Merriweather";
