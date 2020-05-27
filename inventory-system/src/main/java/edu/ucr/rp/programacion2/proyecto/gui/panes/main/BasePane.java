@@ -2,7 +2,6 @@ package edu.ucr.rp.programacion2.proyecto.gui.panes.main;
 
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneName;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
-import edu.ucr.rp.programacion2.proyecto.gui.model.SceneName;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -12,30 +11,28 @@ import javafx.stage.Stage;
 import java.util.HashMap;
 import java.util.Map;
 
+import static edu.ucr.rp.programacion2.proyecto.gui.model.PaneName.MENU_BAR;
+
 public class BasePane implements PaneViewer {
 
     // Contains all the Panes.
     private static Map<PaneName, Pane> panes = new HashMap<>();
     private Stage stage;
-    private Pane basePane;
 
     public BasePane(Stage stage){
         this.stage = stage;
-        this.basePane = buildBasePane();
-        initializePanes(stage, basePane);
-        setupBasePane(basePane);
+        initializePanes(stage);
     }
     /**
      * Create and store all the scenes.
      * Set up the main pane.
      */
-    private void initializePanes(Stage stage, Pane basePane){
-        panes.put(PaneName.BASE, basePane);
+    private void initializePanes(Stage stage){
         //panes.put(PaneName.MENU_BAR, new ViewMenuBar.getPane());
         panes.put(PaneName.MENU_BAR, new HBox(new Button()));//Test
+        panes.put(PaneName.BASE, buildBasePane(stage));
+        //panes.put(PaneName., new      .getPane());
         //panes.put(PaneName., new .getPane());
-        //panes.put(PaneName., new .getPane());
-
     }
 
     @Override
@@ -44,25 +41,13 @@ public class BasePane implements PaneViewer {
     }
 
     /**
-     * Just inizialize the pane without children.
      * Build the base pane.
      * @return the base pane.
      */
-    private Pane buildBasePane(){
+    private Pane buildBasePane(Stage stage){
         VBox vBox = new VBox();
+        vBox.getChildren().addAll(panes.get(MENU_BAR));//TODO
         return vBox;
     }
 
-    /**
-     * Configure all the panes for the basePane.
-     * @param pane
-     */
-    private void setupBasePane(Pane pane){
-
-    }
-    /** Returns a Map of the scenes by {@link SceneName}
-     * @return*/
-    public static Map<PaneName, Pane> getPanes() {
-        return panes;
-    }
 }
