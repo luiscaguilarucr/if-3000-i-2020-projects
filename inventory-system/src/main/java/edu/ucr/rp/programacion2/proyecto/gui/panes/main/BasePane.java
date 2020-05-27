@@ -21,17 +21,17 @@ public class BasePane implements PaneViewer {
 
     public BasePane(Stage stage){
         this.stage = stage;
-        initializePanes();
+        initializePanes(stage);
     }
     /**
      * Create and store all the scenes.
      * Set up the main pane.
      */
-    private void initializePanes(){
+    private void initializePanes(Stage stage){
         //panes.put(PaneName.MENU_BAR, new ViewMenuBar.getPane());
         panes.put(PaneName.MENU_BAR, new HBox(new Button()));//Test
-        panes.put(PaneName.BASE, buildBasePane());
-        //panes.put(PaneName., new .getPane());
+        panes.put(PaneName.BASE, buildBasePane(stage));
+        //panes.put(PaneName., new      .getPane());
         //panes.put(PaneName., new .getPane());
     }
 
@@ -44,7 +44,7 @@ public class BasePane implements PaneViewer {
      * Build the base pane.
      * @return the base pane.
      */
-    private Pane buildBasePane(){
+    private Pane buildBasePane(Stage stage){
         VBox vBox = new VBox();
         vBox.getChildren().addAll(panes.get(MENU_BAR));//TODO
         return vBox;
