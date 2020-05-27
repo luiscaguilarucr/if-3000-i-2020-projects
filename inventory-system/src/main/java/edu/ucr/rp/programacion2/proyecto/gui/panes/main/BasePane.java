@@ -1,5 +1,6 @@
 package edu.ucr.rp.programacion2.proyecto.gui.panes.main;
 
+import edu.ucr.rp.programacion2.proyecto.gui.javafx.ViewMenuBar;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneName;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
 import javafx.scene.control.Button;
@@ -18,7 +19,7 @@ public class BasePane implements PaneViewer {
     // Contains all the Panes.
     private static Map<PaneName, Pane> panes = new HashMap<>();
     private Stage stage;
-
+    ViewMenuBar viewMenuBar = new ViewMenuBar();
     public BasePane(Stage stage){
         this.stage = stage;
         initializePanes(stage);
@@ -28,10 +29,9 @@ public class BasePane implements PaneViewer {
      * Set up the main pane.
      */
     private void initializePanes(Stage stage){
-        //panes.put(PaneName.MENU_BAR, new ViewMenuBar.getPane());
-        panes.put(PaneName.MENU_BAR, new HBox(new Button()));//Test
+        panes.put(PaneName.MENU_BAR, viewMenuBar.getMenuVBox());
         panes.put(PaneName.BASE, buildBasePane(stage));
-        //panes.put(PaneName., new      .getPane());
+        //panes.put(PaneName., new .getPane());
         //panes.put(PaneName., new .getPane());
     }
 
