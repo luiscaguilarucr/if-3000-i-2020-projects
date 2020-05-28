@@ -1,11 +1,8 @@
 package edu.ucr.rp.programacion2.proyecto.gui.panes.main;
 
-import edu.ucr.rp.programacion2.proyecto.gui.javafx.ViewMenuBar;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneName;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.model.SceneName;
-import javafx.scene.control.Button;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -31,7 +28,7 @@ public class BasePane implements PaneViewer {
      */
     private void initializePanes(Stage stage, Pane basePane){
         panes.put(PaneName.BASE, basePane);
-        panes.put(PaneName.MENU_BAR, viewMenuBar.getMenuVBox());
+        //panes.put(PaneName.MENU_BAR, viewMenuBar.getMenuVBox());
         //panes.put(PaneName., new .getPane());
         //panes.put(PaneName., new .getPane());
 
