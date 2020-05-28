@@ -1,5 +1,8 @@
 package edu.ucr.rp.programacion2.proyecto.gui.javafx;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
 public class LabelConstants {
     //  Buttons  \\
     public static final String ADD_LABEL = "Add";
@@ -17,8 +20,16 @@ public class LabelConstants {
 
 
     public static final String TITLE_CATALOG_LIST = "Catalog list";
+    public static final String TITLE_ITEM_LIST = "Items list";
+    public static final String TITLE_CATALOG = "Catalog";
     public static final String TITLE_CATALOG_ADD_FORM = "Add catalog";
     public static final String CATALOG_NAME_COLUMN = "Name";
     public static final String CATALOG_SCHEMA_COLUMN = "Schemma";
     public static final String SUBTITLE_CATALOG_INFO_FORM = "Catalog information";
+
+
+
+    public static final ImageView VIEW_ICON = new ImageView(new Image("seeIcon.png"));
+    public static final ImageView EDIT_ICON = new ImageView(new Image("editIcon.png"));
+    public static final ImageView DELETE_ICON = new ImageView(new Image("delete.png"));
 }

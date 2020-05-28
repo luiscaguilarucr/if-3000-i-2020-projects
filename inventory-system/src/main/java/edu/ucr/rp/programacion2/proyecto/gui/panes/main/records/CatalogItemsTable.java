@@ -1,16 +1,13 @@
-
 package edu.ucr.rp.programacion2.proyecto.gui.panes.main.records;
 
-import edu.ucr.rp.programacion2.proyecto.domain.logic.Catalog;
-import edu.ucr.rp.programacion2.proyecto.domain.logic.CatalogService;
-import edu.ucr.rp.programacion2.proyecto.domain.logic.Feature;
-import edu.ucr.rp.programacion2.proyecto.domain.logic.Service;
+import edu.ucr.rp.programacion2.proyecto.domain.logic.*;
 import edu.ucr.rp.programacion2.proyecto.gui.javafx.Style;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.ComboBoxTableCell;
@@ -28,21 +25,20 @@ import java.util.List;
 import static edu.ucr.rp.programacion2.proyecto.gui.javafx.LabelConstants.*;
 import static edu.ucr.rp.programacion2.proyecto.gui.javafx.PaletteDesign.*;
 import static edu.ucr.rp.programacion2.proyecto.gui.javafx.UIConstants.*;
+import static edu.ucr.rp.programacion2.proyecto.gui.javafx.UIConstants.BUTTON_DEFAULT_INSETS;
 import static edu.ucr.rp.programacion2.proyecto.gui.panes.main.records.Properties.CATALOG_NAME_PROPERTY;
 import static edu.ucr.rp.programacion2.proyecto.gui.panes.main.records.Properties.CATALOG_SCHEMA_PROPERTY;
 
-/**
- * @author Jeison Araya Mena | B90514
- * @version 2.0
- */
-public class CatalogRecords implements PaneViewer {
+public class CatalogItemsTable implements PaneViewer {
+
     //  Variables  \\
-    private TableView<Catalog> tableView;
-    private TableColumn catalogNameColumn;
+    private TableView<Item> tableView;
+    private ComboBox<String> catalogNameComboBox;
+    private TableColumn ItemNameColumn;
     private TableColumn catalogSchemaColumn;
     private Boolean adminAuthorization;
-    private TextField searchCatalogTextField;
-    private Button searchCatalogButton;
+    private TextField searchItemTextField;
+    private Button searchItemButton;
     private Button backButton;
     private GridPane pane;
     private Service catalogService = CatalogService.getInstance();
@@ -101,10 +97,13 @@ public class CatalogRecords implements PaneViewer {
      * @param pane for add components.
      */
     private void setupControls(GridPane pane) {
-        buildLabelTitle(TITLE_CATALOG_LIST, pane, 0);
-        searchCatalogTextField = buildTextInput(TYPE_HERE_PROMPT_TEXT, pane, 2, 0);
-        searchCatalogButton = buildButton(REFRESH_LABEL, pane, 3, 0);
-        tableView = buildTableView(pane, 0, 1);
+        buildLabelTitle(TITLE_CATALOG, pane, 0);
+        catalogNameComboBox = buildComboBox(TITLE_CATALOG, pane, 2, 0);
+        fillCatalogNameComboBox(catalogNameComboBox, catalogService.getAll());
+        buildLabelTitle(TITLE_ITEM_LIST, pane, 1);
+        searchItemTextField = buildTextInput(TYPE_HERE_PROMPT_TEXT, pane, 2, 1);
+        searchItemButton = buildButton(REFRESH_LABEL, pane, 3, 0);
+        tableView = buildTableView(pane, 0, 2);
         backButton = buildButton(BACK_LABEL, pane, 1, 3);
     }
 
@@ -123,7 +122,14 @@ public class CatalogRecords implements PaneViewer {
         pane.add(label, 0, row, 2, 1);
         GridPane.setHalignment(label, HPos.LEFT);
     }
-
+    private void buildLabelNormal(String text, GridPane pane, int column, int row) {
+        Label label = new Label(text);
+        label.setPadding(new Insets(5, 0, 10, 0));
+        Style.setLabelConfig(label, 3);
+        Style.setLabelColor(label, PRIMARY_TEXT);
+        pane.add(label, column, row);
+        GridPane.setHalignment(label, HPos.CENTER);
+    }
     /**
      * Add the settings to a table view.
      * It's in charge of:
@@ -161,6 +167,17 @@ public class CatalogRecords implements PaneViewer {
     }
 
 
+    private ComboBox buildComboBox(String text, GridPane pane, int column, int row, String... items) {
+        buildLabelNormal(text, pane, column - 1, row);
+        ComboBox comboBox = new ComboBox();
+        comboBox.setMaxSize(180, 40);
+        comboBox.setMinSize(150, 30);
+        comboBox.setPromptText(COMBO_BOX_SELECT_LABEL);
+        Style.settextFieldColor(comboBox, PRIMARY_COLOR_TEXTFIELD);
+        pane.add(comboBox, column, row);
+        addItems(comboBox, items);
+        return comboBox;
+    }
     /**
      * Create a table view and place it in a pane.
      *
@@ -169,8 +186,8 @@ public class CatalogRecords implements PaneViewer {
      * @param row    row where it will be assigned.
      * @return {@code TableView <>} table view ready to add columns and objects.
      */
-    private TableView<Catalog> buildTableView(GridPane pane, int column, int row) {
-        TableView<Catalog> tableView = new TableView<>();
+    private TableView<Item> buildTableView(GridPane pane, int column, int row) {
+        TableView<Item> tableView = new TableView<>();
         tableView.setTableMenuButtonVisible(true);//TODO revisar lo que hace
         tableView.setMinSize(TABLE_VIEW_DEFAULT_MIN_WIDTH, TABLE_VIEW_DEFAULT_MIN_HEIGHT);
         tableView.setEditable(true);
@@ -199,7 +216,21 @@ public class CatalogRecords implements PaneViewer {
         return tableColumn;
     }
 
+    private void addItems(ComboBox comboBox, String... items) {
+        for (String i : items) {
+            comboBox.getItems().add(i);
+        }
+    }
 
+    private void fillCatalogNameComboBox(ComboBox comboBox, List list) {
+        if(list!=null){
+            for (Object o: list) {
+                if(o instanceof Catalog) {
+                    comboBox.getItems().add(((Catalog) o).getName());
+                }
+            }
+        }
+    }
     /**
      * Add necessary columns to display object information.
      *
@@ -207,7 +238,7 @@ public class CatalogRecords implements PaneViewer {
      */
     private void addColumns(TableView tableView) {
         tableView.getColumns().clear();
-        catalogNameColumn = buildTableColumn(CATALOG_NAME_COLUMN, CATALOG_NAME_PROPERTY, tableView);
+        ItemNameColumn = buildTableColumn(Item_NAME_COLUMN, Item_NAME_PROPERTY, tableView);
         catalogSchemaColumn = buildTableColumn(CATALOG_SCHEMA_COLUMN, CATALOG_SCHEMA_PROPERTY, tableView);
     }
 
@@ -218,7 +249,7 @@ public class CatalogRecords implements PaneViewer {
      */
     private void fillTable(TableView tableView) {
         try {
-            ObservableList<Catalog> list = getList();
+            ObservableList<Item> list = getList();
             tableView.setItems(list);
 
         } catch (Exception e) {
@@ -252,7 +283,7 @@ public class CatalogRecords implements PaneViewer {
      */
     private void setTableEditable(Boolean adminAuthorization) {
         if (adminAuthorization) {
-            setEditableColumnTextFiled(catalogNameColumn);
+            setEditableColumnTextFiled(ItemNameColumn);
             setEditableColumnTextFiled(catalogSchemaColumn);
         }
     }
@@ -282,8 +313,8 @@ public class CatalogRecords implements PaneViewer {
      *
      * @return {@code ObservableList} observable list with existing objects.
      */
-    public ObservableList<Catalog> getList() {
-        ObservableList<Catalog> observableList;
+    public ObservableList<Item> getList() {
+        ObservableList<Item> observableList;
         List list = catalogService.getAll();
 
         observableList = FXCollections.observableArrayList(list);
@@ -298,13 +329,13 @@ public class CatalogRecords implements PaneViewer {
      * @param label Button text
      */
     private void addButtonToTable(String label, ImageView image, TableView tableView) {
-        TableColumn<Catalog, Void> tcAction = new TableColumn(label);
+        TableColumn<Item, Void> tcAction = new TableColumn(label);
         //tcAction.setStyle(TABLE_VIEW_BUTTONS_DEFAULT_STYLE);
 
-        Callback<TableColumn<Catalog, Void>, TableCell<Catalog, Void>> cellFactory = new Callback<TableColumn<Catalog, Void>, TableCell<Catalog, Void>>() {
+        Callback<TableColumn<Item, Void>, TableCell<Item, Void>> cellFactory = new Callback<TableColumn<Item, Void>, TableCell<Item, Void>>() {
             @Override
-            public TableCell<Catalog, Void> call(final TableColumn<Catalog, Void> param) {
-                final TableCell<Catalog, Void> cell = new TableCell<Catalog, Void>() {
+            public TableCell<Item, Void> call(final TableColumn<Item, Void> param) {
+                final TableCell<Item, Void> cell = new TableCell<Item, Void>() {
                     private final Button btn = new Button();
 
 
@@ -314,21 +345,21 @@ public class CatalogRecords implements PaneViewer {
                         switch (label) {
                             case VIEW_LABEL:
                                 btn.setOnAction(actionEvent -> {
-                                    Catalog data = getTableView().getItems().get(getIndex());
+                                    Item data = getTableView().getItems().get(getIndex());
                                     viewAction(data);
                                     refreshTable();
                                 });
                                 break;
                             case EDIT_LABEL:
                                 btn.setOnAction(actionEvent -> {
-                                    Catalog data = getTableView().getItems().get(getIndex());
+                                    Item data = getTableView().getItems().get(getIndex());
                                     editAction(data);
                                     refreshTable();
                                 });
                                 break;
                             case DELETE_LABEL:
                                 btn.setOnAction((event) -> {
-                                    Catalog data = getTableView().getItems().get(getIndex());
+                                    Item data = getTableView().getItems().get(getIndex());
                                     removeAction(data);
                                     refreshTable();
                                 });
@@ -351,7 +382,7 @@ public class CatalogRecords implements PaneViewer {
         tableView.getColumns().add(tcAction);
     }
 
-    private void viewAction(Catalog data) {//TODO
+    private void viewAction(Item data) {//TODO
     }
 
     //  HANDLERS  \\
@@ -361,17 +392,17 @@ public class CatalogRecords implements PaneViewer {
      */
     private void addHandlers() {
         backButton.setOnAction(actionEvent -> backAction());
-        searchCatalogButton.setOnAction(actionEvent -> refreshTable());
+        searchItemButton.setOnAction(actionEvent -> refreshTable());
     }
 
-    private void removeAction(Catalog object) {
+    private void removeAction(Item object) {
         if (catalogService.remove(object)) {
             System.out.println("Se eliminó correctamente: " + object);//TODO
         } else
             System.out.println("No se eliminó: " + object);//TODO
     }
 
-    private void editAction(Catalog data) {//TODO
+    private void editAction(Item data) {//TODO
 
     }
 
@@ -420,10 +451,10 @@ public class CatalogRecords implements PaneViewer {
                 Object object = event.getTableView().getItems().get(row);//Objeto a editar
 
                 //VALIDAR INSTANCIA
-                if (object instanceof Catalog) {
+                if (object instanceof Item) {
                     //Hacer cambiop según sea la columna
-                    if (changeValue(columnID, (Catalog) object, event.getNewValue()))
-                        editAction((Catalog) object);// Guardar
+                    if (changeValue(columnID, (Item) object, event.getNewValue()))
+                        editAction((Item) object);// Guardar
                     else
                         System.out.println("Error al modificar");//TODO mostrar respuesta.
                 }
@@ -439,10 +470,10 @@ public class CatalogRecords implements PaneViewer {
      * @param object   object who will make the change.
      * @param value    new value.
      */
-    private Boolean changeValue(String property, Catalog object, Object value) {
+    private Boolean changeValue(String property, Item object, Object value) {
         try {
             switch (property) {
-                case CATALOG_NAME_PROPERTY:
+                case ITEM_NAME_PROPERTY:
                     object.setName((String) value);
                     break;
                 case CATALOG_SCHEMA_PROPERTY:
@@ -459,6 +490,6 @@ public class CatalogRecords implements PaneViewer {
 
     @Override
     public Pane getPane() {
-        return getPane();
+        return null;
     }
 }
