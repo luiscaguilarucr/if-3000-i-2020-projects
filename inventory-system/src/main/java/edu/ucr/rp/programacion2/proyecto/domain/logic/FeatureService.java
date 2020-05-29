@@ -1,65 +1,75 @@
 package edu.ucr.rp.programacion2.proyecto.domain.logic;
 
 import java.util.List;
+import java.util.Map;
 
-public class FeatureService implements Service<Feature, String> {
-    private List<Feature> features;
+public class FeatureService {
+    private Map<String, Object> features;
+    private List schema;
 
-    @Override
-    public boolean add(Feature object) {
-        if(validateAddition(object)){
-            features.add(object);
+    public FeatureService(List schema) {
+        this.schema = schema;
+    }
+
+    public boolean add(String key, Object value) {
+        if (validateAddition(key)) {
+            features.put(key, value);
             return true;
         }
         return false;
     }
 
-    @Override
-    public boolean remove(Feature object) {
-        return features.remove(object);
+    public boolean remove(String key) {
+        if (features.containsKey(key)) {
+            features.remove(key);
+            return true;
+        }
+        return false;
     }
 
-    @Override
-    public Feature get(String name) {
-        for (int i = 0; i < features.size(); i++) {
-            if (features.get(i).getName().equalsIgnoreCase(name)) {
-                return features.get(i);
+    public boolean modify(String key, Object value) {
+        if (features.containsKey(key)) {
+            if (validateModify(key)){
+                features.replace(key, value);
+                return true;
             }
+        }
+        return false;
+    }
+
+    public Object get(String key) {
+        if(features.containsKey(key)){
+            return features.get(key);
         }
         return null;
     }
 
-    @Override
-    public List getAll() {
+    public Map<String, Object> getAll() {
         return features;
     }
 
-    @Override
-    public boolean modify(Feature object) {
-        //tiene que existir
-        //sea diferente de null
-        if (object == null || !features.contains(object)) {
-            return false;
-        }
-        features.add(features.indexOf(object), object);
-        return true;
-    }
-
-    private boolean validateAddition(Feature object) {
+    private boolean validateAddition(String key) {
         //para que se agregue no debe que existir otro igual
         //debe tener al menos una propiedad
         //validar que tenga nombre
         //que la propiedad sea igual al nombre del feature
-        if (object == null || features.contains(object) || validateItemName(object)) {
+        if (features.containsKey(key) || validateItemName(key)) {
             return false;
-        } else if (object.getName() == null || object.getName().isEmpty()) {
+        } else if (key == null) {
             return false;
         }
         return true;
     }
-
-    private boolean validateItemName(Feature object) {
+    private boolean validateModify(String key){
+        if (validateItemName(key)) {
+            return false;
+        } else if (key == null) {
+            return false;
+        }
+        return true;
+    }
+    private boolean validateItemName(String key) {
         //TODO validar espacios vacíos
-        return "".equals(object.getName());
+        return "".equals(key);
     }
 }

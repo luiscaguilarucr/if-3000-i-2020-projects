@@ -1,5 +1,5 @@
 package edu.ucr.rp.programacion2.proyecto.gui.model;
 
 public enum PaneName {
-    BASE, MENU_BAR, ADD_CATALOG;
+    BASE, MENU_BAR, ADD_CATALOG, ADD_ITEM;
 }

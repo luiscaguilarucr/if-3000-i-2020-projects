@@ -6,15 +6,21 @@ import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
 
 import static edu.ucr.rp.programacion2.proyecto.gui.javafx.UIConstants.*;
 
-public class CatalogForm implements PaneViewer {
+public class ItemForm implements PaneViewer {
     private TextField catalogNameTextField;
     private TextField featureNameTextField;
     private ComboBox featureTypeTextField;
@@ -24,7 +30,7 @@ public class CatalogForm implements PaneViewer {
     private ArrayList features;
     private ArrayList items;
 
-    public GridPane getCatalogFormPane() {
+    public GridPane getItemFormPane() {
         GridPane pane = buildPane();
         setupControls(pane);
         addHandlers();
@@ -87,6 +93,6 @@ public class CatalogForm implements PaneViewer {
 
     @Override
     public Pane getPane() {
-        return getCatalogFormPane();
+        return getItemFormPane();
     }
 }

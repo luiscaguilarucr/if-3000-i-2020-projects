@@ -1,12 +1,13 @@
 package edu.ucr.rp.programacion2.proyecto.domain.logic;
 
 import java.util.List;
+import java.util.Map;
 
 public class ItemService implements Service<Item, String> {
     private List<Item> itemList;
-    private List<Feature> schema;
+    private List schema;
 
-    public ItemService(List<Feature> schema) {
+    public ItemService(List schema) {
         this.schema = schema;
     }
 
@@ -71,10 +72,10 @@ public class ItemService implements Service<Item, String> {
         return validateFeatures(object.getFeatures());
     }
 
-    private boolean validateFeatures(List<Feature> features){
+    private boolean validateFeatures(Map<String, Object> features){
         int x = 0;
         while (x < schema.size()) {
-            if (!features.contains(schema.get(x))) { //valida si un feature no existe
+            if (!features.containsKey(schema.get(x))) { //valida si un feature no existe
                 return false;
             }
             x++;
