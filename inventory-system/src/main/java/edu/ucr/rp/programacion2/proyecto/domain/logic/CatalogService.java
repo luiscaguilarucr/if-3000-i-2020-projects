@@ -56,7 +56,7 @@ public class CatalogService implements Service<Inventory, String> {
     @Override
     public Inventory get(String name) {
         //tiene que existir
-        Inventory temp = new Inventory(name, null, null);
+        Inventory temp = new Inventory(name);
         int index = catalogs.indexOf(temp);
         if (index == -1) {
             return null;
@@ -75,9 +75,9 @@ public class CatalogService implements Service<Inventory, String> {
         //validar que tenga nombre
         if (object == null || catalogs.contains(object) || validateCatalogName(object)) {
             return false;
-        } else if (object.getSchema() == null || object.getSchema().isEmpty()) {
+        } /*else if (object.getSchema() == null || object.getSchema().isEmpty()) {
             return false;
-        }
+        }*/
         return true;
     }
 

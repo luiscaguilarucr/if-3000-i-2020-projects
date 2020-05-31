@@ -1,5 +1,6 @@
 package edu.ucr.rp.programacion2.proyecto.gui.javafx;
 
+import edu.ucr.rp.programacion2.proyecto.business_rules.io.InventoryPersistence;
 import edu.ucr.rp.programacion2.proyecto.gui.javafx.util.Utility;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
 import javafx.geometry.HPos;
@@ -18,6 +19,7 @@ import static edu.ucr.rp.programacion2.proyecto.gui.javafx.util.UIConstants.*;
 public class InventoryForm implements PaneViewer {
     private TextField inventoryNameTextField;
     private Button saveInventoryButton;
+
     public GridPane getInvetoryFormPane() {
         GridPane pane = buildPane();
         setupControls(pane);
@@ -59,14 +61,8 @@ public class InventoryForm implements PaneViewer {
             inventoryNameTextField.setPromptText("Obligatory field");
             inventoryNameTextField.setStyle("-fx-background-color: #FDC7C7");
         } else {
-           /* schema.add(0, catalogNameTextField.getText());
-            catalog = new Catalog(catalogNameTextField.getText(), new ArrayList<Item>(), schema);*/
+            //inventoryPersistence.createInventory(inventoryNameTextField.getText()+"");
         }
-        /*if (catalogService.add(catalog) && schema.size() > 1){
-            Utility.showAlert(Alert.AlertType.INFORMATION, "Catalog added", "The catalog "+ catalogNameTextField.getText() + "was added correctly");
-        }else {
-            Utility.showAlert(Alert.AlertType.INFORMATION, "Error when adding catalog", "The catalog "+ catalogNameTextField.getText() + "had an error when it was added");
-        }*/
     }
 
     @Override

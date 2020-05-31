@@ -10,14 +10,14 @@ import java.util.ArrayList;
  * */
 public class ItemBuilder {
     /*private String name;
-    private ArrayList<Feature> features;
+    private ArrayList<String> features;
 
     public ItemBuilder withName(String name) {
         this.name = name;
         return this;
     }
 
-    public ItemBuilder withFeatures (ArrayList<Feature> features){
+    public ItemBuilder withFeatures (ArrayList<String> features){
         this.features = features;
         return this;
     }

@@ -64,6 +64,7 @@ public class ManagePane implements PaneViewer {
      */
     private void setupBasePane(Pane pane) {
         ((GridPane) pane).add(panes.get(PaneName.MENU_BAR), 0, 0);
+
     }
 
     /**

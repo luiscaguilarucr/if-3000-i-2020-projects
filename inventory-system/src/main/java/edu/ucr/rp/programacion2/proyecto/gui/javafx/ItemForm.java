@@ -19,6 +19,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static edu.ucr.rp.programacion2.proyecto.gui.javafx.util.UIConstants.*;
 
@@ -47,8 +48,9 @@ public class ItemForm implements PaneViewer {
     private ComboBox builComboBox(GridPane pane) {
         Utility.buildLabel(pane, "Choose a catalog", 0, 0);
         Catalog test1 = new Catalog("Test1", new ArrayList<>(), new ArrayList<>());
-
-        comboBox = new ComboBox(FXCollections.observableArrayList(catalogService.getAll()));
+        ArrayList<String> catalogs = new ArrayList<>();
+        catalogs.add(test1.getName());
+        comboBox = new ComboBox(FXCollections.observableArrayList(catalogs));
         pane.add(comboBox, 1, 0);
         return comboBox;
     }
