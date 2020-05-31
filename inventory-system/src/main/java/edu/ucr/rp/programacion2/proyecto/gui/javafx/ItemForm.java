@@ -48,7 +48,7 @@ public class ItemForm implements PaneViewer {
     private ComboBox builComboBox(GridPane pane) {
         Utility.buildLabel(pane, "Choose a catalog", 0, 0);
         Catalog test1 = new Catalog("Test1", new ArrayList<>(), new ArrayList<>());
-        catalogService.add(test1);
+        //catalogService.add(test1);
         comboBox = new ComboBox(FXCollections.observableArrayList(catalogService.getAll()));
         pane.add(comboBox, 1, 0);
         return comboBox;

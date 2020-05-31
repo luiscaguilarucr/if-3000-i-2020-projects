@@ -1,18 +1,13 @@
 package edu.ucr.rp.programacion2.proyecto.gui.panes.main;
 
-<<<<<<< HEAD:inventory-system/src/main/java/edu/ucr/rp/programacion2/proyecto/gui/panes/main/BasePane.java
+import edu.ucr.rp.programacion2.proyecto.gui.javafx.ItemForm;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneName;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.model.SceneName;
-=======
 import edu.ucr.rp.programacion2.proyecto.gui.javafx.CatalogForm;
 import edu.ucr.rp.programacion2.proyecto.gui.javafx.ViewMenuBar;
 import edu.ucr.rp.programacion2.proyecto.gui.javafx.InventoryForm;
-import edu.ucr.rp.programacion2.proyecto.gui.model.PaneName;
-import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
-import edu.ucr.rp.programacion2.proyecto.gui.model.SceneName;
 import javafx.scene.layout.GridPane;
->>>>>>> 5ae9f7774d801c9db0b568ec37bc1a9312106f4f:inventory-system/src/main/java/edu/ucr/rp/programacion2/proyecto/gui/panes/main/ManagePane.java
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -39,15 +34,10 @@ public class ManagePane implements PaneViewer {
      */
     private void initializePanes(Stage stage, Pane basePane) {
         panes.put(PaneName.BASE, basePane);
-<<<<<<< HEAD:inventory-system/src/main/java/edu/ucr/rp/programacion2/proyecto/gui/panes/main/BasePane.java
-        //panes.put(PaneName.MENU_BAR, viewMenuBar.getMenuVBox());
-        //panes.put(PaneName., new .getPane());
-=======
         panes.put(PaneName.MENU_BAR, new ViewMenuBar(stage).getPane());
         panes.put(PaneName.ADD_INVENTORY, new InventoryForm().getPane());
         panes.put(PaneName.ADD_CATALOG, new CatalogForm().getPane());
-        //panes.put(PaneName.ADD_ITEM, new ItemForm().getPane());
->>>>>>> 5ae9f7774d801c9db0b568ec37bc1a9312106f4f:inventory-system/src/main/java/edu/ucr/rp/programacion2/proyecto/gui/panes/main/ManagePane.java
+        panes.put(PaneName.ADD_ITEM, new ItemForm().getPane());
         //panes.put(PaneName., new .getPane());
     }
 

@@ -1,7 +1,7 @@
 package edu.ucr.rp.programacion2.proyecto.gui.panes.main.records;
 
 import edu.ucr.rp.programacion2.proyecto.domain.logic.*;
-import edu.ucr.rp.programacion2.proyecto.gui.javafx.Style;
+import edu.ucr.rp.programacion2.proyecto.gui.javafx.util.Style;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -23,9 +23,9 @@ import javafx.util.Callback;
 import java.util.List;
 
 import static edu.ucr.rp.programacion2.proyecto.gui.javafx.LabelConstants.*;
-import static edu.ucr.rp.programacion2.proyecto.gui.javafx.PaletteDesign.*;
-import static edu.ucr.rp.programacion2.proyecto.gui.javafx.UIConstants.*;
-import static edu.ucr.rp.programacion2.proyecto.gui.javafx.UIConstants.BUTTON_DEFAULT_INSETS;
+import static edu.ucr.rp.programacion2.proyecto.gui.javafx.util.PaletteDesign.*;
+import static edu.ucr.rp.programacion2.proyecto.gui.javafx.util.UIConstants.*;
+import static edu.ucr.rp.programacion2.proyecto.gui.javafx.util.UIConstants.BUTTON_DEFAULT_INSETS;
 import static edu.ucr.rp.programacion2.proyecto.gui.panes.main.records.Properties.CATALOG_NAME_PROPERTY;
 import static edu.ucr.rp.programacion2.proyecto.gui.panes.main.records.Properties.CATALOG_SCHEMA_PROPERTY;
 
@@ -238,7 +238,7 @@ public class CatalogItemsTable implements PaneViewer {
      */
     private void addColumns(TableView tableView) {
         tableView.getColumns().clear();
-        ItemNameColumn = buildTableColumn(Item_NAME_COLUMN, Item_NAME_PROPERTY, tableView);
+        //ItemNameColumn = buildTableColumn(Item_NAME_COLUMN, Item_NAME_PROPERTY, tableView);
         catalogSchemaColumn = buildTableColumn(CATALOG_SCHEMA_COLUMN, CATALOG_SCHEMA_PROPERTY, tableView);
     }
 
@@ -473,11 +473,11 @@ public class CatalogItemsTable implements PaneViewer {
     private Boolean changeValue(String property, Item object, Object value) {
         try {
             switch (property) {
-                case ITEM_NAME_PROPERTY:
-                    object.setName((String) value);
-                    break;
+                //case ITEM_NAME_PROPERTY:
+                    //object.setName((String) value);
+                    //break;
                 case CATALOG_SCHEMA_PROPERTY:
-                    object.setSchema((List<Feature>) value);//TODO revisar si funciona en table view, por ser lista
+                   // object.setSchema((List<Feature>) value);//TODO revisar si funciona en table view, por ser lista
                     break;
 
             }
