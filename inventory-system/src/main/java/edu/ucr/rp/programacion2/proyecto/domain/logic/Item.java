@@ -1,9 +1,6 @@
 package edu.ucr.rp.programacion2.proyecto.domain.logic;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public class Item {
     private String name;

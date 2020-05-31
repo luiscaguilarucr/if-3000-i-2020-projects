@@ -2,8 +2,8 @@
 package edu.ucr.rp.programacion2.proyecto.gui.panes.main.records;
 
 import edu.ucr.rp.programacion2.proyecto.domain.logic.Catalog;
-import edu.ucr.rp.programacion2.proyecto.domain.logic.CatalogService;
-import edu.ucr.rp.programacion2.proyecto.domain.logic.Service;
+import edu.ucr.rp.programacion2.proyecto.logic.CatalogService;
+import edu.ucr.rp.programacion2.proyecto.logic.Service;
 import edu.ucr.rp.programacion2.proyecto.gui.javafx.util.Style;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
 import javafx.collections.FXCollections;

@@ -60,7 +60,7 @@ fontsize=10
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>408</x>
+      <x>372</x>
       <y>708</y>
       <w>300</w>
       <h>120</h>
@@ -118,16 +118,16 @@ List&lt;String&gt; schema)
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>696</x>
+      <x>660</x>
       <y>768</y>
-      <w>132</w>
+      <w>168</w>
       <h>48</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=1..1
 m2=0..*
 has </panel_attributes>
-    <additional_attributes>10.0;20.0;90.0;20.0</additional_attributes>
+    <additional_attributes>10.0;20.0;120.0;20.0</additional_attributes>
   </element>
   <element>
     <id>UMLNote</id>
@@ -308,5 +308,21 @@ constuctor.
     </coordinates>
     <panel_attributes>lt=&lt;&lt;.</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;140.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>60</x>
+      <y>708</y>
+      <w>300</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>Inventory
+--
+- name: String
+--
+
+</panel_attributes>
+    <additional_attributes/>
   </element>
 </diagram>
