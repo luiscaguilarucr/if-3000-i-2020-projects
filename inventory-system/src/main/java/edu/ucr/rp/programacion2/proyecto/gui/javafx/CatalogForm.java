@@ -1,6 +1,5 @@
 package edu.ucr.rp.programacion2.proyecto.gui.javafx;
 
-import edu.ucr.rp.programacion2.proyecto.domain.logic.Catalog;
 import edu.ucr.rp.programacion2.proyecto.gui.javafx.util.Utility;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.logic.CatalogService;
@@ -14,6 +13,8 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
+import edu.ucr.rp.programacion2.proyecto.domain.logic.Inventory;
+import edu.ucr.rp.programacion2.proyecto.util.builder.CatalogBuilder;
 
 import java.util.ArrayList;
 
@@ -27,8 +28,10 @@ public class CatalogForm implements PaneViewer {
     ArrayList<String> schema = new ArrayList<>();
     private int accountant = 1;
     private Boolean emptySpace = false;
-    private Catalog catalog;
+    private Inventory catalog;
     private CatalogService catalogService;
+    private CatalogBuilder catalogBuilder;
+    private Boolean wasAdded = false;
 
     public GridPane getCatalogFormPane() {
         GridPane pane = buildPane();
@@ -56,8 +59,8 @@ public class CatalogForm implements PaneViewer {
     private void setupControls(GridPane pane) {
         catalogNameTextField = Utility.buildTextInput("Catalog name: ", pane, 0);
         featureNameTextField = Utility.buildTextInput("Feature: ", pane, 4);
-        addFeatureButton = Utility.buildButton("Add feature", pane,3, 4);
-        saveCatalogButton = Utility.buildButton("Save catalog", pane, 1,6);
+        addFeatureButton = Utility.buildButton("Add feature", pane, 3, 4);
+        saveCatalogButton = Utility.buildButton("Save catalog", pane, 1, 6);
     }
 
     private void addHandlers(GridPane pane) {
@@ -79,11 +82,10 @@ public class CatalogForm implements PaneViewer {
             featureNameTextField.setStyle("-fx-background-color: #FDC7C7");
         } else {
             catalogNameTextField.setDisable(true);
-            schema.add(featureNameTextField.getText()+"");
+            schema.add(accountant, featureNameTextField.getText() + "");
             accountant++;
+            featureNameTextField.clear();
         }
-        //Utility.showAlert(Alert.AlertType.INFORMATION, stage, "Feature added", "The feature added is: " + featureBuilder.build().getName());
-        featureNameTextField.clear();
     }
 
     private void generateCatalog() {
@@ -93,15 +95,16 @@ public class CatalogForm implements PaneViewer {
         if (emptySpace) {
             catalogNameTextField.setPromptText("Obligatory field");
             catalogNameTextField.setStyle("-fx-background-color: #FDC7C7");
-        } else {
-            schema.add(0, catalogNameTextField.getText()+"");
-           //catalog = new Catalog(catalogNameTextField.getText()+"", new ArrayList<Item>(), schema);
-            catalogService.add(catalog);
+        } else if(schema.size() > 1) {
+            schema.add(0, catalogNameTextField.getText() + "");
+            catalogBuilder.withName(catalogNameTextField.getText() + "");
+            catalogBuilder.withSchema(schema);
+            wasAdded = true;
         }
-        if (catalogService.add(catalog) && schema.size() > 1){
-            Utility.showAlert(Alert.AlertType.INFORMATION, "Catalog added", "The catalog "+ catalogNameTextField.getText() + "was added correctly");
-        }else {
-            Utility.showAlert(Alert.AlertType.INFORMATION, "Error when adding catalog", "The catalog "+ catalogNameTextField.getText() + "had an error when it was added");
+        if (wasAdded) {
+            Utility.showAlert(Alert.AlertType.INFORMATION, "Catalog added", "The catalog " + catalogNameTextField.getText() + "was added correctly");
+        } else {
+            Utility.showAlert(Alert.AlertType.INFORMATION, "Error when adding catalog", "The catalog " + catalogNameTextField.getText() + "had an error when it was added");
         }
     }
 

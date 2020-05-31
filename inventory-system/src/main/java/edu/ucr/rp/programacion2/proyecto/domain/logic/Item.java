@@ -1,6 +1,7 @@
 package edu.ucr.rp.programacion2.proyecto.domain.logic;
 
 import java.util.Map;
+import java.util.Objects;
 
 public class Item {
     private String name;
@@ -30,5 +31,19 @@ public class Item {
 
     public void setFeatures(Map<String, Object> features) {
         this.features = features;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Item item = (Item) o;
+        return Objects.equals(name, item.name) &&
+                Objects.equals(features, item.features);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, features);
     }
 }

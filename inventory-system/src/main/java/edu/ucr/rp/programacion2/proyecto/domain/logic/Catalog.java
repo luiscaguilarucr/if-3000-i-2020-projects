@@ -7,7 +7,7 @@ public class Catalog implements Serializable {
     private int id;
     private String name;
     private List<Item> items;
-    private List<String> schema;//TODO revisar schema.
+    private List<String> schema; //TODO revisar schema.
 
 
     public Catalog(int id, String name, List<Item> items, List<String> schema) {

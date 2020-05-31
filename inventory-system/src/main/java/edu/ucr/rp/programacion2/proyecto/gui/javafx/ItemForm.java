@@ -19,6 +19,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static edu.ucr.rp.programacion2.proyecto.gui.javafx.util.UIConstants.*;
 
@@ -38,7 +39,7 @@ public class ItemForm implements PaneViewer {
         GridPane pane = buildPane();
         builComboBox(pane);
         if(comboBox.getValue() != null){
-            setupControls(pane, inventory.getCatalog(comboBox.getValue()+""));
+            //setupControls(pane, inventory.getCatalog(comboBox.getValue()+""));
             addHandlers(pane);
         }
         return pane;

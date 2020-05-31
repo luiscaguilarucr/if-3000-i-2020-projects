@@ -226,8 +226,8 @@ public class CatalogItemsTable implements PaneViewer {
     private void fillCatalogNameComboBox(ComboBox comboBox, List list) {
         if(list!=null){
             for (Object o: list) {
-                if(o instanceof Catalog) {
-                    comboBox.getItems().add(((Catalog) o).getName());
+                if(o instanceof Inventory) {
+                    comboBox.getItems().add(((Inventory) o).getName());
                 }
             }
         }
