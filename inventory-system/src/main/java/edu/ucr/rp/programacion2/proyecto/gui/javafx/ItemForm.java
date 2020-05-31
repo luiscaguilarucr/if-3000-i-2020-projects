@@ -3,7 +3,6 @@ package edu.ucr.rp.programacion2.proyecto.gui.javafx;
 import edu.ucr.rp.programacion2.proyecto.domain.logic.Catalog;
 import edu.ucr.rp.programacion2.proyecto.domain.logic.CatalogService;
 import edu.ucr.rp.programacion2.proyecto.domain.logic.Inventory;
-import edu.ucr.rp.programacion2.proyecto.domain.logic.Item;
 import edu.ucr.rp.programacion2.proyecto.gui.javafx.util.Utility;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
 import javafx.collections.FXCollections;
@@ -39,7 +38,7 @@ public class ItemForm implements PaneViewer {
         GridPane pane = buildPane();
         builComboBox(pane);
         if(comboBox.getValue() != null){
-            setupControls(pane, inventory.getCatalog(comboBox.getValue()+""));
+            //setupControls(pane, inventory.getCatalog(comboBox.getValue()+""));
             addHandlers(pane);
         }
         return pane;
@@ -48,7 +47,7 @@ public class ItemForm implements PaneViewer {
     private ComboBox builComboBox(GridPane pane) {
         Utility.buildLabel(pane, "Choose a catalog", 0, 0);
         Catalog test1 = new Catalog("Test1", new ArrayList<>(), new ArrayList<>());
-        //catalogService.add(test1);
+
         comboBox = new ComboBox(FXCollections.observableArrayList(catalogService.getAll()));
         pane.add(comboBox, 1, 0);
         return comboBox;

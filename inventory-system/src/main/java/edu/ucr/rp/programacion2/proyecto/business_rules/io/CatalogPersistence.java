@@ -1,9 +1,9 @@
 package edu.ucr.rp.programacion2.proyecto.business_rules.io;
 
 import edu.ucr.rp.programacion2.proyecto.domain.logic.Catalog;
+import edu.ucr.rp.programacion2.proyecto.domain.logic.Inventory;
 
 import java.io.File;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +21,7 @@ public class CatalogPersistence {
      * @param catalog guarda un catalogo.
      * @return {@<code>true</code>} Si se guardó correctamente {@<code>false</code>} no se guardo.
      */
-    public Boolean save(Catalog catalog){
+    public Boolean save(Inventory catalog){
         //Crear dir con nombre Tornillos
         //Guarda itmes
         //Guarda schema
@@ -69,7 +69,7 @@ public class CatalogPersistence {
             //jsonRead(catalog+attribute)
         return null;//TODO
     }
-    public Boolean remove(Catalog catalog){
+    public Boolean remove(Inventory catalog){
         return false;
     }
     public Boolean removeAll(){

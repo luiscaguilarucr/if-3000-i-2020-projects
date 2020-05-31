@@ -26,7 +26,6 @@ import static edu.ucr.rp.programacion2.proyecto.gui.javafx.LabelConstants.*;
 import static edu.ucr.rp.programacion2.proyecto.gui.javafx.util.PaletteDesign.*;
 import static edu.ucr.rp.programacion2.proyecto.gui.javafx.util.UIConstants.*;
 import static edu.ucr.rp.programacion2.proyecto.gui.javafx.util.UIConstants.BUTTON_DEFAULT_INSETS;
-import static edu.ucr.rp.programacion2.proyecto.gui.panes.main.records.Properties.CATALOG_NAME_PROPERTY;
 import static edu.ucr.rp.programacion2.proyecto.gui.panes.main.records.Properties.CATALOG_SCHEMA_PROPERTY;
 
 public class CatalogItemsTable implements PaneViewer {
@@ -225,8 +224,8 @@ public class CatalogItemsTable implements PaneViewer {
     private void fillCatalogNameComboBox(ComboBox comboBox, List list) {
         if(list!=null){
             for (Object o: list) {
-                if(o instanceof Catalog) {
-                    comboBox.getItems().add(((Catalog) o).getName());
+                if(o instanceof Inventory) {
+                    comboBox.getItems().add(((Inventory) o).getName());
                 }
             }
         }

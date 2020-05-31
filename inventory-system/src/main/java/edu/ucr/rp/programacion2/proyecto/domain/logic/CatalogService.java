@@ -2,10 +2,10 @@ package edu.ucr.rp.programacion2.proyecto.domain.logic;
 
 import java.util.List;
 
-public class CatalogService implements Service<Catalog, String> {
+public class CatalogService implements Service<Inventory, String> {
     private static CatalogService instance;
 
-    private List<Catalog> catalogs;
+    private List<Inventory> catalogs;
 
     private CatalogService(){
 
@@ -20,7 +20,7 @@ public class CatalogService implements Service<Catalog, String> {
 
     //CatalogPersistence catalogPersistence = new CatalogPersistence();
     @Override
-    public boolean add(Catalog object) {
+    public boolean add(Inventory object) {
         if (validateAddition(object)) {
             catalogs.add(object); //guardar el catálogo en la lista
             //catalogPersistence.save(catalogs); //TODO salvar en el archivo
@@ -30,7 +30,7 @@ public class CatalogService implements Service<Catalog, String> {
     }
 
     @Override
-    public boolean remove(Catalog object) {
+    public boolean remove(Inventory object) {
         //debe existir el catálogo
         //el objeto debe ser un catálogo
         if (object == null || !catalogs.contains(object)) {
@@ -42,7 +42,7 @@ public class CatalogService implements Service<Catalog, String> {
     }
 
     @Override
-    public boolean modify(Catalog object) {
+    public boolean modify(Inventory object) {
         //tiene que existir
         //sea diferente de null
         if (object == null || !catalogs.contains(object)) {
@@ -54,9 +54,9 @@ public class CatalogService implements Service<Catalog, String> {
     }
 
     @Override
-    public Catalog get(String name) {
+    public Inventory get(String name) {
         //tiene que existir
-        Catalog temp = new Catalog(name, null, null);
+        Inventory temp = new Inventory(name, null, null);
         int index = catalogs.indexOf(temp);
         if (index == -1) {
             return null;
@@ -69,7 +69,7 @@ public class CatalogService implements Service<Catalog, String> {
         return catalogs;
     }
 
-    private boolean validateAddition(Catalog object) {
+    private boolean validateAddition(Inventory object) {
         //para que se agregue no debe que existir otro igual
         //debe tener al menos una propiedad
         //validar que tenga nombre
@@ -81,7 +81,7 @@ public class CatalogService implements Service<Catalog, String> {
         return true;
     }
 
-    private boolean validateCatalogName(Catalog object) {
+    private boolean validateCatalogName(Inventory object) {
         //TODO validar espacios vacíos
         return "".equals(object.getName());
     }

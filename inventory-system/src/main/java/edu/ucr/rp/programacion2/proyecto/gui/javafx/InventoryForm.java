@@ -1,13 +1,10 @@
 package edu.ucr.rp.programacion2.proyecto.gui.javafx;
 
-import edu.ucr.rp.programacion2.proyecto.domain.logic.Catalog;
-import edu.ucr.rp.programacion2.proyecto.domain.logic.Item;
 import edu.ucr.rp.programacion2.proyecto.gui.javafx.util.Utility;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.ColumnConstraints;

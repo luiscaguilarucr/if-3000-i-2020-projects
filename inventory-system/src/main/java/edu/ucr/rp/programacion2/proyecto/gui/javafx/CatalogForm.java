@@ -1,18 +1,15 @@
 package edu.ucr.rp.programacion2.proyecto.gui.javafx;
 
-import edu.ucr.rp.programacion2.proyecto.domain.logic.Catalog;
+import edu.ucr.rp.programacion2.proyecto.domain.logic.Inventory;
 import edu.ucr.rp.programacion2.proyecto.domain.logic.CatalogService;
 import edu.ucr.rp.programacion2.proyecto.domain.logic.Item;
 import edu.ucr.rp.programacion2.proyecto.gui.javafx.util.Utility;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.stage.Stage;
 
 import java.util.ArrayList;
 
@@ -26,7 +23,7 @@ public class CatalogForm implements PaneViewer {
     ArrayList<String> schema = new ArrayList<>();
     private int accountant = 1;
     private Boolean emptySpace = false;
-    private Catalog catalog;
+    private Inventory catalog;
     private CatalogService catalogService;
 
     public GridPane getCatalogFormPane() {
@@ -94,7 +91,7 @@ public class CatalogForm implements PaneViewer {
             catalogNameTextField.setStyle("-fx-background-color: #FDC7C7");
         } else {
             schema.add(0, catalogNameTextField.getText()+"");
-            catalog = new Catalog(catalogNameTextField.getText()+"", new ArrayList<Item>(), schema);
+            //catalog = new Inventory(catalogNameTextField.getText()+"", new ArrayList<Item>(), schema);
             catalogService.add(catalog);
         }
         if (catalogService.add(catalog) && schema.size() > 1){

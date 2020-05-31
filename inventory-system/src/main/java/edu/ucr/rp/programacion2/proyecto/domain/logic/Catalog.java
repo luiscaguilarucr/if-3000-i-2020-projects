@@ -8,7 +8,7 @@ public class Catalog implements Serializable {
 
     private String name;
     private List<Item> items;
-    private List<String> schema;//TODO revisar schema.
+    private List<String> schema; //TODO revisar schema.
 
     /**
      * @param name       name of the catalogue
@@ -44,28 +44,12 @@ public class Catalog implements Serializable {
         this.schema = schema;
     }
 
-    public void addItem(Item item) {
-        items.add(item);
-    }
-
-    public void removeItem(Item item) {
-        items.remove(item);
-    }
-
-    public Item getItem(String name) {
-        return items.get(items.indexOf(new Item(name, null)));
-    }
-
-    public Boolean containsItem(String name){
-        return items.contains(new Item(name, null));
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Catalog catalog = (Catalog) o;
-        return Objects.equals(name, catalog.name);
+        Inventory catalog = (Inventory) o;
+        return Objects.equals(name, catalog.getName());
     }
 
     @Override
