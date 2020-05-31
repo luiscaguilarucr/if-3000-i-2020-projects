@@ -1,4 +1,4 @@
-package edu.ucr.rp.programacion2.proyecto.gui.javafx;
+package edu.ucr.rp.programacion2.proyecto.gui.javafx.util;
 
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
@@ -14,13 +14,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-
-import static edu.ucr.rp.programacion2.proyecto.gui.javafx.PaletteDesign.ERROR_COLOR_TEXTFIELD;
-import static edu.ucr.rp.programacion2.proyecto.gui.javafx.PaletteDesign.PRIMARY_COLOR;
-import static edu.ucr.rp.programacion2.proyecto.gui.javafx.UIConstants.*;
+import static edu.ucr.rp.programacion2.proyecto.gui.javafx.util.PaletteDesign.*;
+import static edu.ucr.rp.programacion2.proyecto.gui.javafx.util.UIConstants.*;
 
 
-public class Style {
+public class Style{
 
     /**
      * @param textfield

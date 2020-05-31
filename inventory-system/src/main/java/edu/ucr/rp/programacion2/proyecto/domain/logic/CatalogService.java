@@ -42,6 +42,18 @@ public class CatalogService implements Service<Catalog, String> {
     }
 
     @Override
+    public boolean modify(Catalog object) {
+        //tiene que existir
+        //sea diferente de null
+        if (object == null || !catalogs.contains(object)) {
+            return false;
+        }
+        catalogs.add(catalogs.indexOf(object), object);
+        //catalogPersistence.save(catalogs); //TODO salvar en el archivo
+        return true;
+    }
+
+    @Override
     public Catalog get(String name) {
         //tiene que existir
         Catalog temp = new Catalog(name, null, null);
@@ -55,18 +67,6 @@ public class CatalogService implements Service<Catalog, String> {
     @Override
     public List getAll() {
         return catalogs;
-    }
-
-    @Override
-    public boolean modify(Catalog object) {
-        //tiene que existir
-        //sea diferente de null
-        if (object == null || !catalogs.contains(object)) {
-            return false;
-        }
-        catalogs.add(catalogs.indexOf(object), object);
-        //catalogPersistence.save(catalogs); //TODO salvar en el archivo
-        return true;
     }
 
     private boolean validateAddition(Catalog object) {

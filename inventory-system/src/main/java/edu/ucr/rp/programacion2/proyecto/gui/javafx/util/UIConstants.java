@@ -1,4 +1,4 @@
-package edu.ucr.rp.programacion2.proyecto.gui.javafx;
+package edu.ucr.rp.programacion2.proyecto.gui.javafx.util;
 
 import javafx.geometry.Insets;
 

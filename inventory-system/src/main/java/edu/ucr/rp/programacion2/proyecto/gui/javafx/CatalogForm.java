@@ -1,40 +1,44 @@
 package edu.ucr.rp.programacion2.proyecto.gui.javafx;
 
-import edu.ucr.rp.programacion2.proyecto.domain.logic.Feature;
+import edu.ucr.rp.programacion2.proyecto.domain.logic.Catalog;
+import edu.ucr.rp.programacion2.proyecto.domain.logic.CatalogService;
+import edu.ucr.rp.programacion2.proyecto.domain.logic.Item;
+import edu.ucr.rp.programacion2.proyecto.gui.javafx.util.Utility;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-import java.util.List;
-import static edu.ucr.rp.programacion2.proyecto.gui.javafx.UIConstants.*;
+
+import java.util.ArrayList;
+
+import static edu.ucr.rp.programacion2.proyecto.gui.javafx.util.UIConstants.*;
 
 public class CatalogForm implements PaneViewer {
     private TextField catalogNameTextField;
-    private TextField featureTextField;
-    private TextField typeOfFeatureTextField;
-    private Button generateButton;
-    private Button saveButton;
-    private List<Feature> features;
-    private Stage stage;
-    private ListView viewFeatures;
+    private TextField featureNameTextField;
+    private Button addFeatureButton;
+    private Button saveCatalogButton;
+    ArrayList<String> schema = new ArrayList<>();
+    private int accountant = 1;
+    private Boolean emptySpace = false;
+    private Catalog catalog;
+    private CatalogService catalogService;
 
     public GridPane getCatalogFormPane() {
         GridPane pane = buildPane();
         setupControls(pane);
-        addFeature(pane);
-        featuresView(pane);
-        //addHandlers();
+        addHandlers(pane);
         return pane;
     }
 
     private GridPane buildPane() {
         GridPane gP_Catalog = new GridPane();
-        gP_Catalog.setAlignment(Pos.CENTER_LEFT);
+        gP_Catalog.setAlignment(Pos.CENTER);
         gP_Catalog.setPadding(new Insets(40, 40, 40, 40));
         gP_Catalog.setHgap(10);
         gP_Catalog.setVgap(10);
@@ -42,47 +46,66 @@ public class CatalogForm implements PaneViewer {
         columnOneConstraints.setHalignment(HPos.RIGHT);
         ColumnConstraints columnTwoConstrains = new ColumnConstraints(INPUT_WITH, INPUT_WITH, INPUT_WITH_MAX);
         columnTwoConstrains.setHgrow(Priority.ALWAYS);
+
         gP_Catalog.getColumnConstraints().addAll(columnOneConstraints, columnTwoConstrains);
+
         return gP_Catalog;
     }
 
     private void setupControls(GridPane pane) {
         catalogNameTextField = Utility.buildTextInput("Catalog name: ", pane, 0);
-        generateButton = Utility.buildButton("Add feature", pane, 6);
-        saveButton = Utility.buildButton("Save catalog", pane, 8);
-        setupButton(pane, generateButton);
+        featureNameTextField = Utility.buildTextInput("Feature: ", pane, 4);
+        addFeatureButton = Utility.buildButton("Add feature", pane,3, 4);
+        saveCatalogButton = Utility.buildButton("Save catalog", pane, 1,6);
     }
 
-    private void addFeature(GridPane pane) {
-        featureTextField = Utility.buildTextInput("Característica: ", pane, 4);
-        typeOfFeatureTextField = Utility.buildTextInput("Dato: ", pane, 5);
+    private void addHandlers(GridPane pane) {
+        addFeatureButton.setOnAction(actionEvent -> addFeature());
+        saveCatalogButton.setOnAction(actionEvent -> generateCatalog());
     }
 
-    private void setupButton(GridPane pane, Button button) {
-        button.setOnAction((arg0) -> {
-            addFeature(pane);
-            Utility.setView(viewFeatures, featureTextField.getText());
-        });
-    }
+    private void addFeature() {
+        emptySpace = false;
+        if (catalogNameTextField.getText().isEmpty()) {
+            emptySpace = true;
+        }
+        if (featureNameTextField.getText().isEmpty()) {
+            emptySpace = true;
+        }
 
-    private void saveButton(GridPane pane, Button button){
-        button.setOnAction((arg0) -> {
-        });
-    }
-
-    private void featuresView(GridPane pane) {
-        viewFeatures = Utility.buildListView(pane, 6);
+        if (emptySpace) {
+            featureNameTextField.setPromptText("Obligatory field");
+            featureNameTextField.setStyle("-fx-background-color: #FDC7C7");
+        } else {
+            catalogNameTextField.setDisable(true);
+            schema.add(featureNameTextField.getText()+"");
+            accountant++;
+        }
+        //Utility.showAlert(Alert.AlertType.INFORMATION, stage, "Feature added", "The feature added is: " + featureBuilder.build().getName());
+        featureNameTextField.clear();
     }
 
     private void generateCatalog() {
-    }
-
-    public void addHandlers() {
-        generateButton.setOnAction(actionEvent -> generateCatalog());
+        if (catalogNameTextField.getText().isEmpty()) {
+            emptySpace = true;
+        }
+        if (emptySpace) {
+            catalogNameTextField.setPromptText("Obligatory field");
+            catalogNameTextField.setStyle("-fx-background-color: #FDC7C7");
+        } else {
+            schema.add(0, catalogNameTextField.getText()+"");
+            catalog = new Catalog(catalogNameTextField.getText()+"", new ArrayList<Item>(), schema);
+            catalogService.add(catalog);
+        }
+        if (catalogService.add(catalog) && schema.size() > 1){
+            Utility.showAlert(Alert.AlertType.INFORMATION, "Catalog added", "The catalog "+ catalogNameTextField.getText() + "was added correctly");
+        }else {
+            Utility.showAlert(Alert.AlertType.INFORMATION, "Error when adding catalog", "The catalog "+ catalogNameTextField.getText() + "had an error when it was added");
+        }
     }
 
     @Override
     public Pane getPane() {
-        return buildPane();
+        return getCatalogFormPane();
     }
 }

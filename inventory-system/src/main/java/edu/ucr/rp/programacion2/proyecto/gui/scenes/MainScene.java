@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 public class MainScene implements SceneViewer {
 
     private Stage stage;
-    private BasePane basePane;
+    private ManagePane managePane;
     /**
      * Receive the main stage reference.
      *
@@ -16,7 +16,7 @@ public class MainScene implements SceneViewer {
      */
     public MainScene(Stage stage) {
         this.stage = stage;
-        basePane = new BasePane(stage);
+        managePane = new ManagePane(stage);
     }
 
     @Override
@@ -25,7 +25,7 @@ public class MainScene implements SceneViewer {
     }
 
     private Scene buildScene() {
-        Scene scene = new Scene(basePane.getPane(), 600, 600);
+        Scene scene = new Scene(managePane.getPane(), 600, 600);
         // more code...
         return scene;
     }

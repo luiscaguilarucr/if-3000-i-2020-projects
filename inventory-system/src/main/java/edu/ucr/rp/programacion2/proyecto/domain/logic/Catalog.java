@@ -8,13 +8,13 @@ public class Catalog implements Serializable {
 
     private String name;
     private List<Item> items;
-    private List<Feature> schema;//TODO revisar schema.
+    private List<String> schema;//TODO revisar schema.
 
     /**
      * @param name       name of the catalogue
      * @param schema properties that are going to define the items.
      */
-    public Catalog(String name, List<Item> items, List<Feature> schema) {//TODO valorar el uso de Item...items
+    public Catalog(String name, List<Item> items, List<String> schema) {//TODO valorar el uso de Item...items
         this.name = name;
         this.items = items;
         this.schema = schema;
@@ -36,11 +36,11 @@ public class Catalog implements Serializable {
         this.items = items;
     }
 
-    public List<Feature> getSchema() {
+    public List<String> getSchema() {
         return schema;
     }
 
-    public void setSchema(List<Feature> schema) {
+    public void setSchema(List<String> schema) {
         this.schema = schema;
     }
 
@@ -55,6 +55,7 @@ public class Catalog implements Serializable {
     public Item getItem(String name) {
         return items.get(items.indexOf(new Item(name, null)));
     }
+
     public Boolean containsItem(String name){
         return items.contains(new Item(name, null));
     }

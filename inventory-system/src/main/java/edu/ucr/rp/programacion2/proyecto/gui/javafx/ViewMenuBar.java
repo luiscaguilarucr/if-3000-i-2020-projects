@@ -1,7 +1,8 @@
 package edu.ucr.rp.programacion2.proyecto.gui.javafx;
 
-import edu.ucr.rp.programacion2.proyecto.domain.logic.Catalog;
+import edu.ucr.rp.programacion2.proyecto.gui.model.PaneName;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
+import edu.ucr.rp.programacion2.proyecto.gui.panes.main.ManagePane;
 import javafx.application.Platform;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -27,13 +28,21 @@ public class ViewMenuBar implements PaneViewer {
         Menu m_Inventory = new Menu("Inventory");
 
         ////////////////////////////////////////// MenuItems for m_Inventory
+        //MenuItem mI_CreateInventory
+        ImageView iV_mI_CreateInventory = new ImageView(new Image("addIcon.png"));
+        MenuItem mI_CreateInventory = new MenuItem("Create inventory", iV_mI_CreateInventory);
+
         //MenuItem mI_ChangeName
-        ImageView iV_mI_ChangeName = new ImageView(new Image("createdBy.png"));
+        ImageView iV_mI_ChangeName = new ImageView(new Image("editIcon.png"));
         MenuItem mI_ChangeName = new MenuItem("Change name", iV_mI_ChangeName);
         
         //MenuItem mI_DeleteInventory
-        ImageView iV_mI_DeleteInventory = new ImageView(new Image("about.png"));
+        ImageView iV_mI_DeleteInventory = new ImageView(new Image("delete.png"));
         MenuItem mI_DeleteInventory = new MenuItem("Delete inventory", iV_mI_DeleteInventory);
+
+        mI_CreateInventory.setOnAction((event)->{
+            ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.ADD_INVENTORY));
+        });
 
         mI_ChangeName.setOnAction((event) -> {
         });
@@ -54,7 +63,7 @@ public class ViewMenuBar implements PaneViewer {
         MenuItem mI_AddCatalog = new MenuItem("Add catalog", iV_mI_AddCatalog);
 
         //MenuItem mI_SeeItems
-        ImageView iV_mI_ViewAllCatalogs = new ImageView(new Image("delete.png"));
+        ImageView iV_mI_ViewAllCatalogs = new ImageView(new Image("seeIcon.png"));
         MenuItem mI_ViewAllCatalogs = new MenuItem("View catalogs", iV_mI_ViewAllCatalogs);
         
         //MenuItem mI_DeleteCatalog
@@ -63,9 +72,7 @@ public class ViewMenuBar implements PaneViewer {
         
         // Give action to MenuItems
         mI_AddCatalog.setOnAction((event) -> {
-            CatalogForm catalogForm = new CatalogForm();
-            catalogForm.getCatalogFormPane();
-
+            ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.ADD_CATALOG));
         });
         
         mI_ViewAllCatalogs.setOnAction((event) -> {
@@ -85,23 +92,24 @@ public class ViewMenuBar implements PaneViewer {
 
         ////////////////////////////////////////// MenuItems for m_Item
         //MenuItem mI_AddItem
-        ImageView iV_mI_AddItem = new ImageView(new Image("delete.png"));
+        ImageView iV_mI_AddItem = new ImageView(new Image("addIcon.png"));
         MenuItem mI_AddItem = new MenuItem("Add item", iV_mI_AddItem);
         
         //MenuItem mI_EditItem
-        ImageView iV_mI_EditItem = new ImageView(new Image("delete.png"));
+        ImageView iV_mI_EditItem = new ImageView(new Image("editIcon.png"));
         MenuItem mI_EditItem = new MenuItem("Edit item", iV_mI_EditItem);
 
         //MenuItem mI_ViewItems
-        ImageView iV_mI_ViewItems = new ImageView(new Image("delete.png"));
+        ImageView iV_mI_ViewItems = new ImageView(new Image("seeIcon.png"));
         MenuItem mI_ViewItems = new MenuItem("View items", iV_mI_ViewItems);
         
         //MenuItem mI_DeleteItem
         ImageView iV_mI_DeleteItem = new ImageView(new Image("delete.png"));
-        MenuItem mI_DeleteItem = new MenuItem("View item", iV_mI_DeleteItem);
+        MenuItem mI_DeleteItem = new MenuItem("Delete item", iV_mI_DeleteItem);
         
         //Give action to MenuItems
         mI_AddItem.setOnAction((event) -> {
+            ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.ADD_ITEM));
         });
         
         mI_ViewItems .setOnAction((event) -> {
@@ -125,7 +133,7 @@ public class ViewMenuBar implements PaneViewer {
 
         ////////////////////////////////////////// MenuItems for m_Search
         //MenuItem iV_mI_Searcher
-        ImageView iV_mI_Searcher = new ImageView(new Image("createdBy.png"));
+        ImageView iV_mI_Searcher = new ImageView(new Image("searchIcon.png"));
         MenuItem mI_Searcher = new MenuItem("Searcher", iV_mI_Searcher);
         
         mI_Searcher.setOnAction((event) -> {

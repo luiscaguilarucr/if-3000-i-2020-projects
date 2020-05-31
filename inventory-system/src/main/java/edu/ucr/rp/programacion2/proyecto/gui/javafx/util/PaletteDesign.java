@@ -1,4 +1,4 @@
-package edu.ucr.rp.programacion2.proyecto.gui.javafx;
+package edu.ucr.rp.programacion2.proyecto.gui.javafx.util;
 
 public class PaletteDesign {
     public static final String DARK_PRIMARY_COLOR =     "#00796B";
