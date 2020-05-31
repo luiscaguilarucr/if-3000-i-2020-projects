@@ -4,6 +4,7 @@ package edu.ucr.rp.programacion2.proyecto.gui.panes.main.records;
 import edu.ucr.rp.programacion2.proyecto.domain.logic.Catalog;
 import edu.ucr.rp.programacion2.proyecto.domain.logic.CatalogService;
 import edu.ucr.rp.programacion2.proyecto.domain.logic.Service;
+import edu.ucr.rp.programacion2.proyecto.gui.javafx.util.Style;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -24,7 +25,8 @@ import javafx.util.Callback;
 import java.util.List;
 
 import static edu.ucr.rp.programacion2.proyecto.gui.javafx.LabelConstants.*;
-import static edu.ucr.rp.programacion2.proyecto.gui.javafx.util.UIConstants.GRID_PANE_MIN_WIDTH;
+import static edu.ucr.rp.programacion2.proyecto.gui.javafx.util.PaletteDesign.*;
+import static edu.ucr.rp.programacion2.proyecto.gui.javafx.util.UIConstants.*;
 import static edu.ucr.rp.programacion2.proyecto.gui.panes.main.records.Properties.CATALOG_NAME_PROPERTY;
 import static edu.ucr.rp.programacion2.proyecto.gui.panes.main.records.Properties.CATALOG_SCHEMA_PROPERTY;
 
@@ -443,7 +445,7 @@ public class CatalogRecords implements PaneViewer {
                     object.setName((String) value);
                     break;
                 case CATALOG_SCHEMA_PROPERTY:
-                    object.setSchema((List<Feature>) value);//TODO revisar si funciona en table view, por ser lista
+                    object.setSchema((List<String>) value);//TODO revisar si funciona en table view, por ser lista
                     break;
 
             }
