@@ -1,7 +1,8 @@
-package edu.ucr.rp.programacion2.proyecto.gui.javafx;
+package edu.ucr.rp.programacion2.proyecto.gui.javafx.util;
 
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Window;
@@ -15,19 +16,18 @@ public class Utility {
         return textField;
     }
 
-    public static void showAlert(Alert.AlertType alertType, Window owner, String title, String message) {
+    public static void showAlert(Alert.AlertType alertType, String title, String message) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
-        alert.initOwner(owner);
         alert.show();
     }
 
-    public static Button buildButton(String text, GridPane pane, int row){
+    public static Button buildButton(String text, GridPane pane, int column, int row){
         Button button = new Button();
         button.setText(text);
-        pane.add(button, 1, row);
+        pane.add(button, column, row);
         return button;
     }
 
@@ -36,13 +36,19 @@ public class Utility {
         return listView;
     }
 
-    public Button buildGenerateButton(String label, GridPane pane, int row) {
+    public static Button buildGenerateButton(String label, GridPane pane, int row) {
         Button button = new Button(label);
-        pane.add(button, 0, row, 2, 1);
+        pane.add(button, 0, row, 1, 1);
         GridPane.setHalignment(button, HPos.CENTER);
         GridPane.setMargin(button, new Insets(20, 0, 20, 0));
         return button;
     }
 
+    public static Label buildLabel(GridPane pane, String text, int column,  int row){
+        Label label = new Label();
+        label.setText(text);
+        pane.add(label, column, row);
+        return label;
+    }
 
 }

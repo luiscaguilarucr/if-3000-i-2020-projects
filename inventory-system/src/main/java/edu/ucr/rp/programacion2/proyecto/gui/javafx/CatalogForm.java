@@ -1,5 +1,9 @@
 package edu.ucr.rp.programacion2.proyecto.gui.javafx;
 
+import edu.ucr.rp.programacion2.proyecto.domain.logic.Catalog;
+import edu.ucr.rp.programacion2.proyecto.domain.logic.CatalogService;
+import edu.ucr.rp.programacion2.proyecto.domain.logic.Item;
+import edu.ucr.rp.programacion2.proyecto.gui.javafx.util.Utility;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,22 +16,23 @@ import javafx.stage.Stage;
 
 import java.util.ArrayList;
 
-import static edu.ucr.rp.programacion2.proyecto.gui.javafx.UIConstants.*;
+import static edu.ucr.rp.programacion2.proyecto.gui.javafx.util.UIConstants.*;
 
 public class CatalogForm implements PaneViewer {
     private TextField catalogNameTextField;
     private TextField featureNameTextField;
-    private ComboBox featureTypeTextField;
     private Button addFeatureButton;
     private Button saveCatalogButton;
-    private Stage stage;
-    private ArrayList features;
-    private ArrayList items;
+    ArrayList<String> schema = new ArrayList<>();
+    private int accountant = 1;
+    private Boolean emptySpace = false;
+    private Catalog catalog;
+    private CatalogService catalogService;
 
     public GridPane getCatalogFormPane() {
         GridPane pane = buildPane();
         setupControls(pane);
-        addHandlers();
+        addHandlers(pane);
         return pane;
     }
 
@@ -50,39 +55,53 @@ public class CatalogForm implements PaneViewer {
     private void setupControls(GridPane pane) {
         catalogNameTextField = Utility.buildTextInput("Catalog name: ", pane, 0);
         featureNameTextField = Utility.buildTextInput("Feature: ", pane, 4);
-        addFeatureButton = Utility.buildButton("Add feature", pane, 6);
-        saveCatalogButton = Utility.buildButton("Save catalog", pane, 8);
-        addFeatureButton(pane, addFeatureButton);
+        addFeatureButton = Utility.buildButton("Add feature", pane,3, 4);
+        saveCatalogButton = Utility.buildButton("Save catalog", pane, 1,6);
     }
 
-    private void addFeatureButton(GridPane pane, Button button) {
-        button.setOnAction((arg0) -> {
-            featureView(pane, featureNameTextField.getText());
-
-            //featureBuilder.withName(featureNameTextField.getText());
-            //featureBuilder.withMandatory(true);
-
-            //Utility.showAlert(Alert.AlertType.INFORMATION, stage, "Feature added", "The feature added is: " + featureBuilder.build().getName());
-
-            catalogNameTextField.clear();
-            featureNameTextField.clear();
-        });
+    private void addHandlers(GridPane pane) {
+        addFeatureButton.setOnAction(actionEvent -> addFeature());
+        saveCatalogButton.setOnAction(actionEvent -> generateCatalog());
     }
 
-    private void featureView(GridPane pane, String text) {
-        ListView viewFeatures = new ListView<>();
-        viewFeatures.setPrefWidth(100);
-        viewFeatures.setPrefHeight(70);
-        ObservableList<String> data = FXCollections.observableArrayList(features);
-        viewFeatures.setItems(data);
-        Utility.controlListView(pane, viewFeatures, 4);
+    private void addFeature() {
+        emptySpace = false;
+        if (catalogNameTextField.getText().isEmpty()) {
+            emptySpace = true;
+        }
+        if (featureNameTextField.getText().isEmpty()) {
+            emptySpace = true;
+        }
+
+        if (emptySpace) {
+            featureNameTextField.setPromptText("Obligatory field");
+            featureNameTextField.setStyle("-fx-background-color: #FDC7C7");
+        } else {
+            catalogNameTextField.setDisable(true);
+            schema.add(featureNameTextField.getText()+"");
+            accountant++;
+        }
+        //Utility.showAlert(Alert.AlertType.INFORMATION, stage, "Feature added", "The feature added is: " + featureBuilder.build().getName());
+        featureNameTextField.clear();
     }
 
     private void generateCatalog() {
-    }
-
-    private void addHandlers() {
-        saveCatalogButton.setOnAction(actionEvent -> generateCatalog());
+        if (catalogNameTextField.getText().isEmpty()) {
+            emptySpace = true;
+        }
+        if (emptySpace) {
+            catalogNameTextField.setPromptText("Obligatory field");
+            catalogNameTextField.setStyle("-fx-background-color: #FDC7C7");
+        } else {
+            schema.add(0, catalogNameTextField.getText()+"");
+            catalog = new Catalog(catalogNameTextField.getText()+"", new ArrayList<Item>(), schema);
+            catalogService.add(catalog);
+        }
+        if (catalogService.add(catalog) && schema.size() > 1){
+            Utility.showAlert(Alert.AlertType.INFORMATION, "Catalog added", "The catalog "+ catalogNameTextField.getText() + "was added correctly");
+        }else {
+            Utility.showAlert(Alert.AlertType.INFORMATION, "Error when adding catalog", "The catalog "+ catalogNameTextField.getText() + "had an error when it was added");
+        }
     }
 
     @Override
