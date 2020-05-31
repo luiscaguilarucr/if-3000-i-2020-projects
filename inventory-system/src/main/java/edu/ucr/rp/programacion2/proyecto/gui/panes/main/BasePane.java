@@ -3,8 +3,6 @@ package edu.ucr.rp.programacion2.proyecto.gui.panes.main;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneName;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.model.SceneName;
-import javafx.scene.control.Button;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -18,7 +16,6 @@ public class BasePane implements PaneViewer {
     private static Map<PaneName, Pane> panes = new HashMap<>();
     private Stage stage;
     private Pane basePane;
-
     public BasePane(Stage stage){
         this.stage = stage;
         this.basePane = buildBasePane();
@@ -31,8 +28,7 @@ public class BasePane implements PaneViewer {
      */
     private void initializePanes(Stage stage, Pane basePane){
         panes.put(PaneName.BASE, basePane);
-        //panes.put(PaneName.MENU_BAR, new ViewMenuBar.getPane());
-        panes.put(PaneName.MENU_BAR, new HBox(new Button()));//Test
+        //panes.put(PaneName.MENU_BAR, viewMenuBar.getMenuVBox());
         //panes.put(PaneName., new .getPane());
         //panes.put(PaneName., new .getPane());
 

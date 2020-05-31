@@ -1,11 +1,22 @@
 package edu.ucr.rp.programacion2.proyecto.domain.logic;
 
-import edu.ucr.rp.programacion2.proyecto.business_rules.io.CatalogPersistence;
-
 import java.util.List;
 
 public class CatalogService implements Service<Catalog, String> {
+    private static CatalogService instance;
+
     private List<Catalog> catalogs;
+
+    private CatalogService(){
+
+    }
+
+    public static CatalogService getInstance(){
+        if( instance == null){
+            instance = new CatalogService();
+        }
+        return instance;
+    }
 
     //CatalogPersistence catalogPersistence = new CatalogPersistence();
     @Override
