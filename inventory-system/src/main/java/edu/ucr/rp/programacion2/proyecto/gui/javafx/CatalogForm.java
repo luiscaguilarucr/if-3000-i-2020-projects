@@ -1,15 +1,19 @@
 package edu.ucr.rp.programacion2.proyecto.gui.javafx;
 
 import edu.ucr.rp.programacion2.proyecto.domain.logic.Catalog;
-import edu.ucr.rp.programacion2.proyecto.logic.CatalogService;
-import edu.ucr.rp.programacion2.proyecto.domain.logic.Item;
 import edu.ucr.rp.programacion2.proyecto.gui.javafx.util.Utility;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
+import edu.ucr.rp.programacion2.proyecto.logic.CatalogService;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 
 import java.util.ArrayList;
 
@@ -91,7 +95,7 @@ public class CatalogForm implements PaneViewer {
             catalogNameTextField.setStyle("-fx-background-color: #FDC7C7");
         } else {
             schema.add(0, catalogNameTextField.getText()+"");
-            catalog = new Catalog(catalogNameTextField.getText()+"", new ArrayList<Item>(), schema);
+           //catalog = new Catalog(catalogNameTextField.getText()+"", new ArrayList<Item>(), schema);
             catalogService.add(catalog);
         }
         if (catalogService.add(catalog) && schema.size() > 1){

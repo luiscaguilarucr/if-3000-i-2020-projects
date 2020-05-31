@@ -8,9 +8,9 @@ import java.util.List;
  * This is a service to manage the Catalogs.
  *
  * @version 2.0
- * @implNote This has an singleton Pattern.
+ * Singleton Pattern added.
  */
-public class CatalogService implements Service<Catalog, String, List<Catalog>> {
+public class CatalogService implements Service<Catalog, String, List> {
     //  Variables  \\
     private static CatalogService instance;
     private List<Catalog> list;
@@ -28,14 +28,14 @@ public class CatalogService implements Service<Catalog, String, List<Catalog>> {
      * This method add a new element to the list.
      * The elements is colocate and validate before been added.
      *
-     * @param element to be added.
+     * @param catalog to be added.
      * @return {@code true} if the element has been added correctly. {@code false} Otherwise.
      */
     @Override
-    public boolean add(Catalog element) {
-        if (validateAddition(element)) {
+    public boolean add(Catalog catalog) {
+        if (validateAddition(catalog)) {
             // Generate ID
-            list.add(element);
+            list.add(catalog);
             //catalogPersistence.save(catalogs); //TODO salvar en el archivo
             // comprobate addition.
             return true;
@@ -47,13 +47,13 @@ public class CatalogService implements Service<Catalog, String, List<Catalog>> {
      * This method edits an element that most be in the list.
      * If the elements exists, is replaced.
      *
-     * @param element to remove.
+     * @param catalog to remove.
      * @return {@code true} if the element has been modified. {@code false} Otherwise.
      */
     @Override
-    public boolean edit(Catalog element) {
-        if(validateEdition(element))
-        list.add(list.indexOf(element), element);
+    public boolean edit(Catalog catalog) {
+        if(validateEdition(catalog))
+        list.add(list.indexOf(catalog), catalog);
         //catalogPersistence.save(catalogs); //TODO salvar en el archivo
         return true;
     }
@@ -62,15 +62,15 @@ public class CatalogService implements Service<Catalog, String, List<Catalog>> {
      * This method removes an element that most be in the list.
      * If the elements exists, is removed.
      *
-     * @param element to be remove.
+     * @param catalog to be remove.
      * @return {@code true} if the element has been removed. {@code false} Otherwise.
      */
     @Override
-    public boolean remove(Catalog element) {
-        if (element == null || !list.contains(element)) {//TODO check
+    public boolean remove(Catalog catalog) {
+        if (catalog == null || !list.contains(catalog)) {//TODO check
             return false;
         }
-        list.remove(element);
+        list.remove(catalog);
         //catalogPersistence.remove(catalogs); //TODO eliminar el archivo
         return true;
     }

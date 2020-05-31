@@ -27,6 +27,7 @@ public class MainScene implements SceneViewer {
     private Scene buildScene() {
         Scene scene = new Scene(managePane.getPane(), 600, 600);
         // more code...
+        scene.getStylesheets().add("Style.css");
         return scene;
     }
 }

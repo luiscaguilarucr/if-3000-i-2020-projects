@@ -1,0 +1,11 @@
+.root{
+    -fx-background-color: cornsilk;
+}
+.button{
+    -fx-background-color: darkgoldenrod;
+}
+.combo-box{
+    -fx-background-color: whitesmoke;
+    -fx-border-color: grey;
+    -fx-font-size: 12px;
+}

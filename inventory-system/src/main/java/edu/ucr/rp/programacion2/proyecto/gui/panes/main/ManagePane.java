@@ -8,6 +8,7 @@ import edu.ucr.rp.programacion2.proyecto.gui.javafx.CatalogForm;
 import edu.ucr.rp.programacion2.proyecto.gui.javafx.ViewMenuBar;
 import edu.ucr.rp.programacion2.proyecto.gui.javafx.InventoryForm;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -20,7 +21,7 @@ public class ManagePane implements PaneViewer {
     private static Map<PaneName, Pane> panes = new HashMap<>();
     private Stage stage;
     private static Pane basePane;
-
+    private static HBox hbox;
     public ManagePane(Stage stage) {
         this.stage = stage;
         this.basePane = buildBasePane();
@@ -64,6 +65,8 @@ public class ManagePane implements PaneViewer {
      */
     private void setupBasePane(Pane pane) {
         ((GridPane) pane).add(panes.get(PaneName.MENU_BAR), 0, 0);
+        hbox = new HBox();
+        ((GridPane) pane).add(hbox, 0, 1);
     }
 
     /**
@@ -72,7 +75,9 @@ public class ManagePane implements PaneViewer {
      * @param pane
      */
     public static void setCenterPane(Pane pane) {
-        ((GridPane) basePane).add(pane, 0, 1);
+        hbox.getChildren().clear();
+        hbox.getChildren().add(pane);
+
     }
 
     /**

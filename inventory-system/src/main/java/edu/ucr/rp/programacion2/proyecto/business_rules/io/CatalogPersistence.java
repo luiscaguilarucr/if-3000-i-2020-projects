@@ -3,7 +3,6 @@ package edu.ucr.rp.programacion2.proyecto.business_rules.io;
 import edu.ucr.rp.programacion2.proyecto.domain.logic.Catalog;
 
 import java.io.File;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,8 +48,8 @@ public class CatalogPersistence {
             List items = read(c.getName(), "items.json");//TODO cambiar a constante SCHEMA+EXT  // schema.json
 
             //Crear Catalog
-            Catalog catalog = new Catalog(c.getName(), items, schema);
-            list.add(catalog);
+        //    Catalog catalog = new Catalog(c.getName(), items, schema);
+           // list.add();
         }
 
 

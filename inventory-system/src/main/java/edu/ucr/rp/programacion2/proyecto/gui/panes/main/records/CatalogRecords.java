@@ -283,7 +283,7 @@ public class CatalogRecords implements PaneViewer {
      */
     public ObservableList<Catalog> getList() {
         ObservableList<Catalog> observableList;
-        List list = catalogService.getAll();
+        List list = (List) catalogService.getAll();
 
         observableList = FXCollections.observableArrayList(list);
 

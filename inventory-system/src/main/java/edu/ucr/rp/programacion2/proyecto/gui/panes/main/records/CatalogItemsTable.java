@@ -100,7 +100,7 @@ public class CatalogItemsTable implements PaneViewer {
     private void setupControls(GridPane pane) {
         buildLabelTitle(TITLE_CATALOG, pane, 0);
         catalogNameComboBox = buildComboBox(TITLE_CATALOG, pane, 2, 0);
-        fillCatalogNameComboBox(catalogNameComboBox, catalogService.getAll());
+        fillCatalogNameComboBox(catalogNameComboBox, (List) catalogService.getAll());
         buildLabelTitle(TITLE_ITEM_LIST, pane, 1);
         searchItemTextField = buildTextInput(TYPE_HERE_PROMPT_TEXT, pane, 2, 1);
         searchItemButton = buildButton(REFRESH_LABEL, pane, 3, 0);
@@ -316,7 +316,7 @@ public class CatalogItemsTable implements PaneViewer {
      */
     public ObservableList<Item> getList() {
         ObservableList<Item> observableList;
-        List list = catalogService.getAll();
+        List list = (List) catalogService.getAll();
 
         observableList = FXCollections.observableArrayList(list);
 
