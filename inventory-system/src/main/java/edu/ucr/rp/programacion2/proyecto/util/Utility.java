@@ -20,7 +20,7 @@ public class Utility {
         return list[random(list.length)-1];
     }
     public static Catalog randomCatalog(){
-        return new Catalog(0, randomCatalogName(), new ArrayList<>(), carsSchema());
+        return new Catalog(-1, randomCatalogName(), new ArrayList<>(), carsSchema());
     }
 
     public static String randomCatalogName(){

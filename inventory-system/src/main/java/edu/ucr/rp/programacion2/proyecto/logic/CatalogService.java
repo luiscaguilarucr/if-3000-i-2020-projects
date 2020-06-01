@@ -3,6 +3,7 @@ package edu.ucr.rp.programacion2.proyecto.logic;
 import edu.ucr.rp.programacion2.proyecto.business_rules.io.CatalogPersistence;
 import edu.ucr.rp.programacion2.proyecto.domain.logic.Catalog;
 import edu.ucr.rp.programacion2.proyecto.domain.logic.Inventory;
+import edu.ucr.rp.programacion2.proyecto.util.idgenerator.IDGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,12 +17,14 @@ import java.util.List;
 public class CatalogService implements Service<Catalog, String, List> {
     private List<Catalog> list;
     private CatalogPersistence catalogPersistence;
+    private IDGenerator idGenerator;
 
     //  Constructor \\
     public CatalogService(Inventory inventory) {
         list = new ArrayList<Catalog>();
         catalogPersistence = new CatalogPersistence(inventory.getName());
         refresh();
+        idGenerator = new IDGenerator(inventory);
     }
     //  Methods  \\
     /**
@@ -34,10 +37,11 @@ public class CatalogService implements Service<Catalog, String, List> {
     @Override
     public boolean add(Catalog catalog) {
         refresh();
+        catalog.setId(idGenerator.get());//TODO test
         if (validateAddition(catalog)) {
-            // TODO Generate ID
+            catalog.setId(idGenerator.generate());
             list.add(catalog);
-            catalogPersistence.save(catalog);
+            catalogPersistence.write(catalog);
             // TODO comprobate addition.
             return true;
         }
@@ -56,7 +60,7 @@ public class CatalogService implements Service<Catalog, String, List> {
         refresh();
         if(validateEdition(catalog)) {
             list.add(list.indexOf(catalog), catalog);
-            catalogPersistence.save(catalog); //TODO salvar en el archivo
+            catalogPersistence.write(catalog); //TODO salvar en el archivo
             return true;
         }
         return false;
@@ -184,7 +188,7 @@ public class CatalogService implements Service<Catalog, String, List> {
 
     private Boolean refresh(){
         //Lee el archivo
-        Object object = catalogPersistence.get();
+        Object object = catalogPersistence.read();
         //Valida que existe y lo sustituye por la lista en memoria
         if(object!=null){
             list = (List<Catalog>) object;

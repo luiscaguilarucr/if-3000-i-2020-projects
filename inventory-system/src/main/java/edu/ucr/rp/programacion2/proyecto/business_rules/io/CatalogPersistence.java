@@ -11,7 +11,7 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CatalogPersistence implements Persistence<Catalog, String, List> {
+public class CatalogPersistence implements Persistence<Catalog, List> {
 
     private String path;
     private final String suffix = ".json";
@@ -34,7 +34,7 @@ public class CatalogPersistence implements Persistence<Catalog, String, List> {
      * @return {@code true} if the catalog have been saved.{@code false} Otherwise.
      */
     @Override
-    public boolean save(Catalog catalog) {
+    public boolean write(Catalog catalog) {
         if (catalog == null) return false;                       // Not null
         if (!checkDirectory(catalog.getName())) return false;    // Check dir
         if (!saveID(catalog)) return false;                      // Save ID
@@ -48,7 +48,7 @@ public class CatalogPersistence implements Persistence<Catalog, String, List> {
      * @return {@code List<Catalog>} List of the catalogs.
      */
     @Override
-    public List get() {
+    public List read() {
         return readCatalogs();
     }
 

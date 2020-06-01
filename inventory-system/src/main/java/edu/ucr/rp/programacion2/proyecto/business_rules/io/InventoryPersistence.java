@@ -5,7 +5,7 @@ import edu.ucr.rp.programacion2.proyecto.domain.logic.Inventory;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-public class InventoryPersistence implements Persistence<Inventory, String, List> {
+public class InventoryPersistence implements Persistence<Inventory, List> {
     //  Variables  \\
     //private String path = System.getProperty("s");
     private final String path = "files/inventories/";
@@ -24,7 +24,7 @@ public class InventoryPersistence implements Persistence<Inventory, String, List
      * @return {@code true} if the directory have been created or saved.{@code false} Otherwise.
      */
     @Override
-    public boolean save(Inventory inventory) {
+    public boolean write(Inventory inventory) {
         if (inventory == null) return false;
         File file = new File(path + inventory.getName());
         if (file.exists())
@@ -39,7 +39,7 @@ public class InventoryPersistence implements Persistence<Inventory, String, List
      * @return {@code List<Inventory>} List of the inventories.
      */
     @Override
-    public List get() {
+    public List read() {
         return getInventories();
     }
 

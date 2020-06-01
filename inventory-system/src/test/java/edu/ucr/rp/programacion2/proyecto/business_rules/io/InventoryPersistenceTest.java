@@ -23,7 +23,7 @@ public class InventoryPersistenceTest extends TestCase {
         inventoryPersistence = new InventoryPersistence();
         for(int i = 0 ; i < 5; i++){
             Inventory inventory = Utility.randomInventory();
-            if(inventoryPersistence.save(inventory))
+            if(inventoryPersistence.write(inventory))
                 System.out.println("Se guardo: " + inventory);
             else
                 System.out.println("- No se guardo: " + inventory);
@@ -46,7 +46,7 @@ public class InventoryPersistenceTest extends TestCase {
     @Test
     public void testGet(){
         inventoryPersistence = new InventoryPersistence();
-        inventories = inventoryPersistence.get();
+        inventories = inventoryPersistence.read();
         System.out.println(inventories);
     }
     @Test
