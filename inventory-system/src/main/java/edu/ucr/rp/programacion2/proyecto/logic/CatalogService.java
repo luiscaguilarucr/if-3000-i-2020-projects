@@ -2,6 +2,7 @@ package edu.ucr.rp.programacion2.proyecto.logic;
 
 import edu.ucr.rp.programacion2.proyecto.domain.logic.Catalog;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,7 +16,7 @@ public class CatalogService implements Service<Catalog, String, List> {
     private static CatalogService instance;
     private List<Catalog> list;
     //  Constructor \\
-    private CatalogService() { }
+    public CatalogService() { }
     //  Singleton Pattern  \\
     public static CatalogService getInstance() {
         if (instance == null) {
@@ -176,4 +177,5 @@ public class CatalogService implements Service<Catalog, String, List> {
                     return false;
         return true;
     }
+
 }

@@ -5,7 +5,7 @@ public class SetupCatalog implements Setup<Catalog, String> {
      * This method renames a catalog
      * @param catalog
      * @param newName
-     * @return true if the catalogue was renamed, false if it was not
+     * @return true if the catalog was renamed, false if it was not
      */
     @Override
     public boolean rename(Catalog catalog, String newName) {
