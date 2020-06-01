@@ -1,7 +1,10 @@
 package edu.ucr.rp.programacion2.proyecto.logic;
 
+import edu.ucr.rp.programacion2.proyecto.business_rules.io.CatalogPersistence;
 import edu.ucr.rp.programacion2.proyecto.domain.logic.Catalog;
+import edu.ucr.rp.programacion2.proyecto.domain.logic.Inventory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,17 +14,14 @@ import java.util.List;
  * Singleton Pattern added.
  */
 public class CatalogService implements Service<Catalog, String, List> {
-    //  Variables  \\
-    private static CatalogService instance;
     private List<Catalog> list;
+    private CatalogPersistence catalogPersistence;
+
     //  Constructor \\
-    private CatalogService() { }
-    //  Singleton Pattern  \\
-    public static CatalogService getInstance() {
-        if (instance == null) {
-            instance = new CatalogService();
-        }
-        return instance;
+    public CatalogService(Inventory inventory) {
+        list = new ArrayList<Catalog>();
+        catalogPersistence = new CatalogPersistence(inventory.getName());
+        refresh();
     }
     //  Methods  \\
     /**
@@ -33,11 +33,12 @@ public class CatalogService implements Service<Catalog, String, List> {
      */
     @Override
     public boolean add(Catalog catalog) {
+        refresh();
         if (validateAddition(catalog)) {
-            // Generate ID
+            // TODO Generate ID
             list.add(catalog);
-            //catalogPersistence.save(catalogs); //TODO salvar en el archivo
-            // comprobate addition.
+            catalogPersistence.save(catalog);
+            // TODO comprobate addition.
             return true;
         }
         return false;
@@ -52,10 +53,13 @@ public class CatalogService implements Service<Catalog, String, List> {
      */
     @Override
     public boolean edit(Catalog catalog) {
-        if(validateEdition(catalog))
-        list.add(list.indexOf(catalog), catalog);
-        //catalogPersistence.save(catalogs); //TODO salvar en el archivo
-        return true;
+        refresh();
+        if(validateEdition(catalog)) {
+            list.add(list.indexOf(catalog), catalog);
+            catalogPersistence.save(catalog); //TODO salvar en el archivo
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -67,11 +71,12 @@ public class CatalogService implements Service<Catalog, String, List> {
      */
     @Override
     public boolean remove(Catalog catalog) {
-        if (catalog == null || !list.contains(catalog)) {//TODO check
+        refresh();
+        if (catalog == null || !list.contains(catalog)) {
             return false;
         }
         list.remove(catalog);
-        //catalogPersistence.remove(catalogs); //TODO eliminar el archivo
+        catalogPersistence.delete(catalog);
         return true;
     }
     /**
@@ -82,6 +87,7 @@ public class CatalogService implements Service<Catalog, String, List> {
      */
     @Override
     public Catalog get(String name) {
+        refresh();
         for(Catalog catalog: list)
             if(catalog.getName().equals(name))
                 return catalog;
@@ -96,6 +102,7 @@ public class CatalogService implements Service<Catalog, String, List> {
      */
     @Override
     public List<Catalog> getAll() {
+        refresh();
         return list;
     }
 
@@ -157,9 +164,9 @@ public class CatalogService implements Service<Catalog, String, List> {
      */
     private boolean containsByName(String name) {
         for (Catalog c : list)
-            if (c.getName().equals(name))
-                return false;
-        return true;
+            if (name.equalsIgnoreCase(c.getName()))
+                return true;
+        return false;
     }
     /**
      * Checks if the name is used used by other Catalog.
@@ -168,12 +175,21 @@ public class CatalogService implements Service<Catalog, String, List> {
      * @return {@code true} if the name is used by other catalog. {@code false} otherwise.
      */
     private boolean nameUsedByOtherCatalog(Catalog catalog) {
-        if(catalog==null) return false;
-
         for (Catalog c : list)
-            if(c!=catalog)
+            if(!c.equals(catalog))
                 if (c.getName().equals(catalog.getName()))
-                    return false;
-        return true;
+                    return true;
+        return false;
+    }
+
+    private Boolean refresh(){
+        //Lee el archivo
+        Object object = catalogPersistence.get();
+        //Valida que existe y lo sustituye por la lista en memoria
+        if(object!=null){
+            list = (List<Catalog>) object;
+            return true;
+        }
+        return false;
     }
 }

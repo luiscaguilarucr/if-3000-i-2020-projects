@@ -1,11 +1,10 @@
 
 package edu.ucr.rp.programacion2.proyecto.gui.panes.main.records;
 import edu.ucr.rp.programacion2.proyecto.domain.logic.Catalog;
-import edu.ucr.rp.programacion2.proyecto.logic.CatalogService;
-import edu.ucr.rp.programacion2.proyecto.logic.Service;
 import edu.ucr.rp.programacion2.proyecto.domain.logic.Inventory;
 import edu.ucr.rp.programacion2.proyecto.gui.javafx.util.Style;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
+import edu.ucr.rp.programacion2.proyecto.logic.Service;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -44,7 +43,7 @@ public class CatalogRecords implements PaneViewer {
     private Button searchCatalogButton;
     private Button backButton;
     private GridPane pane;
-    private Service catalogService = CatalogService.getInstance();
+    private Service catalogService;
     //  Methods  \\
 
     /**
