@@ -23,7 +23,7 @@ public class JsonUtil {
         try {
             return mapper.readValue(path, type);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
             return null;
         }
     }
@@ -46,11 +46,18 @@ public class JsonUtil {
         }
     }
 
+
+    /**
+     *
+     * @param file
+     * @param value
+     * @param <T>
+     */
     public <T> void toFile(File file,T value) {
         try {
             mapper.writeValue(file, value);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 }

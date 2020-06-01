@@ -1,9 +1,9 @@
 package edu.ucr.rp.programacion2.proyecto.gui.panes.main.records;
 
-import edu.ucr.rp.programacion2.proyecto.domain.logic.*;
+import edu.ucr.rp.programacion2.proyecto.domain.logic.Inventory;
+import edu.ucr.rp.programacion2.proyecto.domain.logic.Item;
 import edu.ucr.rp.programacion2.proyecto.gui.javafx.util.Style;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
-import edu.ucr.rp.programacion2.proyecto.logic.CatalogService;
 import edu.ucr.rp.programacion2.proyecto.logic.Service;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -27,7 +27,6 @@ import java.util.List;
 import static edu.ucr.rp.programacion2.proyecto.gui.javafx.LabelConstants.*;
 import static edu.ucr.rp.programacion2.proyecto.gui.javafx.util.PaletteDesign.*;
 import static edu.ucr.rp.programacion2.proyecto.gui.javafx.util.UIConstants.*;
-import static edu.ucr.rp.programacion2.proyecto.gui.javafx.util.UIConstants.BUTTON_DEFAULT_INSETS;
 import static edu.ucr.rp.programacion2.proyecto.gui.panes.main.records.Properties.CATALOG_SCHEMA_PROPERTY;
 
 public class CatalogItemsTable implements PaneViewer {
@@ -42,7 +41,7 @@ public class CatalogItemsTable implements PaneViewer {
     private Button searchItemButton;
     private Button backButton;
     private GridPane pane;
-    private Service catalogService = CatalogService.getInstance();
+    private Service catalogService;
     //  Methods  \\
 
     /**

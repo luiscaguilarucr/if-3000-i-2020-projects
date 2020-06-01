@@ -46,4 +46,12 @@ public class Item {
     public int hashCode() {
         return Objects.hash(name, features);
     }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "name='" + name + '\'' +
+                ", features=" + features +
+                '}';
+    }
 }

@@ -1,54 +1,33 @@
 package edu.ucr.rp.programacion2.proyecto.util;
 
+import edu.ucr.rp.programacion2.proyecto.domain.logic.Catalog;
 import edu.ucr.rp.programacion2.proyecto.domain.logic.Inventory;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Utility {
-
-
-    public static String instanceOf(Object a, Object b) {
-        if (a instanceof Integer && b instanceof Integer) {
-            return "integer";
-        }
-        if (a instanceof String && b instanceof String) {
-            return "string";
-        }
-        if (a instanceof Character && b instanceof Character) {
-            return "character";
-        }
-        if (a instanceof Inventory && b instanceof Inventory) {
-            return "inventory";
-        }
-
-        return "unknown"; //desconocido
+    public static int random(int bound) {
+        return 1 + (int) Math.floor(Math.random() * bound);
+    }
+    public static Inventory randomInventory(){
+        return new Inventory(randomInventoryName());
     }
 
-    public static boolean equals(Object a, Object b) {
-        switch (instanceOf(a, b)) {
-            case "integer":
-                return (Integer) a == (Integer) b;
-            case "string":
-                return ((String)a).compareToIgnoreCase((String) b) == 0;
-            case "character":
-                return ((Character) a).compareTo((Character) b) == 0;
-            case "inventory":
-                return ((Inventory)a).getName().equalsIgnoreCase( ((Inventory)b).getName() );
-
-        }
-        return false; //en cualquier otro caso
+    public static String randomInventoryName(){
+        String[] list = {"Carros", "Barcos", "Aviones", "Herramientas", "Repuestos"};
+        return list[random(list.length)-1];
     }
-    public static Object searchByName(ArrayList<Object> arrayList, Object object){
-        for(Object obj1: arrayList)
-            if(equals(obj1, object))
-                return obj1;
-        return null;
+    public static Catalog randomCatalog(){
+        return new Catalog(-1, randomCatalogName(), new ArrayList<>(), carsSchema());
     }
 
-    public static Object indexOf(ArrayList<Object> arrayList, Object object){
-        for(Object obj1: arrayList)
-            if(equals(obj1, object))
-                return obj1;
-        return null;
+    public static String randomCatalogName(){
+        String[] list = {"Deportivos", "Todo Terreno", "Clásicos", "SUVs", "Sedan", "Eléctricos", "Pick-ups"};
+        return list[random(list.length)-1];
+    }
+    private static List carsSchema(){
+        return new ArrayList<>(Arrays.asList("Marca", "Modelo", "Cant Pasajeros", "Puertas", "Tracción"));
     }
 }
