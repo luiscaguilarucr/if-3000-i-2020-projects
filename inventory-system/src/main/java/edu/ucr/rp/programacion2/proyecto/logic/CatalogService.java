@@ -43,6 +43,7 @@ public class CatalogService implements Service<Catalog, String, List> {
             catalog.setId(idGenerator.generate());
             list.add(catalog);
             catalogPersistence.write(catalog);
+            refresh();
             return list.contains(catalog);
         }
         return false;
@@ -60,8 +61,7 @@ public class CatalogService implements Service<Catalog, String, List> {
         refresh();
         if (validateEdition(catalog)) {
             list.add(list.indexOf(catalog), catalog);
-            catalogPersistence.write(catalog);
-            return true;
+            return catalogPersistence.write(catalog);
         }
         return false;
     }
@@ -80,8 +80,7 @@ public class CatalogService implements Service<Catalog, String, List> {
             return false;
         }
         list.remove(catalog);
-        catalogPersistence.delete(catalog);
-        return true;
+        return catalogPersistence.delete(catalog);
     }
 
     public boolean removeAll() {
@@ -119,6 +118,13 @@ public class CatalogService implements Service<Catalog, String, List> {
         return list;
     }
 
+    /**
+     * Validates if the list contains some catalog.
+     * @return {@code true} if the list contains more than one item. {@code false} the list is empty.
+     */
+    public boolean containsACatalog(){
+        return list.size() > 0;
+    }
 
     //  More methods \\
 

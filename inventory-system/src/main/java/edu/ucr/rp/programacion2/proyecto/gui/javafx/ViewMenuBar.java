@@ -3,6 +3,8 @@ package edu.ucr.rp.programacion2.proyecto.gui.javafx;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneName;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.panes.main.ManagePane;
+import edu.ucr.rp.programacion2.proyecto.logic.CatalogService;
+import edu.ucr.rp.programacion2.proyecto.logic.InventoryService;
 import javafx.application.Platform;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -14,20 +16,35 @@ import javafx.stage.Stage;
 
 public class ViewMenuBar implements PaneViewer {
     private Stage stage;
+    private InventoryService inventoryService;
+    private CatalogService catalogService;
+    private CatalogForm catalogForm;
 
     public ViewMenuBar(Stage stage){
         this.stage = stage;
     }
 
+    private void initializeInventoryService(){
+        inventoryService = InventoryService.getInstance();
+    }
+
+    //private void initializeCatalogService(Inventory inventory){catalogService = new CatalogService(inventory);}
+
     public VBox getMenuVBox() {
         VBox vB_MenuBar = new VBox();
-
+        initializeInventoryService();
+        //initializeCatalogService(catalogForm.inventorySelected());
         MenuBar mB_View_MenuBar = new MenuBar();
-        
+
         ////////////////////////////////////////////////////////////////////////// Menu "Inventory"
         Menu m_Inventory = new Menu("Inventory");
 
         ////////////////////////////////////////// MenuItems for m_Inventory
+        //MenuItem mI_SelectInventory
+        ImageView iV_mI_SelectInventory = new ImageView(new Image("addIcon.png"));
+        MenuItem mI_SelectInventory = new MenuItem("Select inventory", iV_mI_SelectInventory);
+
+
         //MenuItem mI_CreateInventory
         ImageView iV_mI_CreateInventory = new ImageView(new Image("addIcon.png"));
         MenuItem mI_CreateInventory = new MenuItem("Create inventory", iV_mI_CreateInventory);
@@ -35,10 +52,14 @@ public class ViewMenuBar implements PaneViewer {
         //MenuItem mI_ChangeName
         ImageView iV_mI_ChangeName = new ImageView(new Image("editIcon.png"));
         MenuItem mI_ChangeName = new MenuItem("Change name", iV_mI_ChangeName);
-        
+
         //MenuItem mI_DeleteInventory
         ImageView iV_mI_DeleteInventory = new ImageView(new Image("delete.png"));
         MenuItem mI_DeleteInventory = new MenuItem("Delete inventory", iV_mI_DeleteInventory);
+
+        mI_SelectInventory.setOnAction((event -> {
+            ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.SELECT_INVENTORY));
+        }));
 
         mI_CreateInventory.setOnAction((event)->{
             ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.ADD_INVENTORY));
@@ -51,9 +72,9 @@ public class ViewMenuBar implements PaneViewer {
         });
 
         //Get the MenuItems in m_Configutarion
-        m_Inventory.getItems().addAll(mI_ChangeName, mI_DeleteInventory);
+        m_Inventory.getItems().addAll(mI_SelectInventory, mI_CreateInventory, mI_ChangeName, mI_DeleteInventory);
 
-        
+
         ////////////////////////////////////////////////////////////////////////// Menu "Catalog"
         Menu m_Catalog = new Menu("Catalog");
 
@@ -65,28 +86,29 @@ public class ViewMenuBar implements PaneViewer {
         //MenuItem mI_SeeItems
         ImageView iV_mI_ViewAllCatalogs = new ImageView(new Image("seeIcon.png"));
         MenuItem mI_ViewAllCatalogs = new MenuItem("View catalogs", iV_mI_ViewAllCatalogs);
-        
+
         //MenuItem mI_DeleteCatalog
         ImageView iV_mI_DeleteCatalog = new ImageView(new Image("delete.png"));
         MenuItem mI_DeleteCatalog = new MenuItem("Delete catalog", iV_mI_DeleteCatalog);
-        
+
         // Give action to MenuItems
         mI_AddCatalog.setOnAction((event) -> {
             ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.ADD_CATALOG));
         });
-        
+
         mI_ViewAllCatalogs.setOnAction((event) -> {
         });
-        
+
         mI_DeleteCatalog.setOnAction((event) -> {
         });
 
         m_Catalog.setOnShowing((event) -> {
+            m_Catalog.setDisable(inventoryService.containsAnInventory());
         });
 
         m_Catalog.getItems().addAll(mI_AddCatalog, mI_ViewAllCatalogs, mI_DeleteCatalog);
 
-        
+
         ////////////////////////////////////////////////////////////////////////// Menu "Item"
         Menu m_Item = new Menu("Item");
 
@@ -94,7 +116,7 @@ public class ViewMenuBar implements PaneViewer {
         //MenuItem mI_AddItem
         ImageView iV_mI_AddItem = new ImageView(new Image("addIcon.png"));
         MenuItem mI_AddItem = new MenuItem("Add item", iV_mI_AddItem);
-        
+
         //MenuItem mI_EditItem
         ImageView iV_mI_EditItem = new ImageView(new Image("editIcon.png"));
         MenuItem mI_EditItem = new MenuItem("Edit item", iV_mI_EditItem);
@@ -102,32 +124,32 @@ public class ViewMenuBar implements PaneViewer {
         //MenuItem mI_ViewItems
         ImageView iV_mI_ViewItems = new ImageView(new Image("seeIcon.png"));
         MenuItem mI_ViewItems = new MenuItem("View items", iV_mI_ViewItems);
-        
+
         //MenuItem mI_DeleteItem
         ImageView iV_mI_DeleteItem = new ImageView(new Image("delete.png"));
         MenuItem mI_DeleteItem = new MenuItem("Delete item", iV_mI_DeleteItem);
-        
+
         //Give action to MenuItems
         mI_AddItem.setOnAction((event) -> {
             ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.ADD_ITEM));
         });
-        
+
         mI_ViewItems .setOnAction((event) -> {
         });
-        
+
         mI_EditItem .setOnAction((event) -> {
         });
 
         mI_DeleteItem .setOnAction((event) -> {
         });
-        
+
         m_Item.setOnShowing((event) -> {
         });
 
         m_Item.getItems().addAll(mI_AddItem, mI_ViewItems, mI_EditItem, mI_DeleteItem);
 
-       
-        
+
+
         ////////////////////////////////////////////////////////////////////////// Menu "Search"
         Menu m_Search = new Menu("Search");
 
@@ -135,20 +157,20 @@ public class ViewMenuBar implements PaneViewer {
         //MenuItem iV_mI_Searcher
         ImageView iV_mI_Searcher = new ImageView(new Image("searchIcon.png"));
         MenuItem mI_Searcher = new MenuItem("Searcher", iV_mI_Searcher);
-        
+
         mI_Searcher.setOnAction((event) -> {
         });
 
         //Get the MenuItems in m_Search
         m_Search.getItems().addAll(mI_Searcher);
-        
-        
-        
+
+
+
         ////////////////////////////////////////////////////////////////////////// Menu "Configuration"
         Menu m_Configutarion = new Menu("Configuration");
 
         ////////////////////////////////////////// MenuItems for m_Configutarion
-        //MenuItem iV_mI_About      
+        //MenuItem iV_mI_About
         ImageView iV_mI_About = new ImageView(new Image("about.png"));
         MenuItem mI_About = new MenuItem("About", iV_mI_About);
 
@@ -171,8 +193,8 @@ public class ViewMenuBar implements PaneViewer {
 
         //Get the MenuItems in m_Configutarion
         m_Configutarion.getItems().addAll(mI_About, mI_Credits, mI_Exit);
-        
-        
+
+
         // Get the Menus in MenuBar
         mB_View_MenuBar.getMenus().addAll(m_Configutarion, m_Inventory, m_Catalog, m_Item, m_Search);
 

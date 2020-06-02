@@ -1,12 +1,9 @@
 package edu.ucr.rp.programacion2.proyecto.gui.panes.main;
 
-import edu.ucr.rp.programacion2.proyecto.gui.javafx.ItemForm;
+import edu.ucr.rp.programacion2.proyecto.gui.javafx.*;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneName;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.model.SceneName;
-import edu.ucr.rp.programacion2.proyecto.gui.javafx.CatalogForm;
-import edu.ucr.rp.programacion2.proyecto.gui.javafx.ViewMenuBar;
-import edu.ucr.rp.programacion2.proyecto.gui.javafx.InventoryForm;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -36,6 +33,7 @@ public class ManagePane implements PaneViewer {
     private void initializePanes(Stage stage, Pane basePane) {
         panes.put(PaneName.BASE, basePane);
         panes.put(PaneName.MENU_BAR, new ViewMenuBar(stage).getPane());
+        panes.put(PaneName.SELECT_INVENTORY, new InventorySelection().getPane());
         panes.put(PaneName.ADD_INVENTORY, new InventoryForm().getPane());
         panes.put(PaneName.ADD_CATALOG, new CatalogForm().getPane());
         panes.put(PaneName.ADD_ITEM, new ItemForm().getPane());
