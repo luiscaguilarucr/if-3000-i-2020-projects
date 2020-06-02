@@ -29,6 +29,9 @@ import static edu.ucr.rp.programacion2.proyecto.gui.javafx.util.PaletteDesign.*;
 import static edu.ucr.rp.programacion2.proyecto.gui.javafx.util.UIConstants.*;
 import static edu.ucr.rp.programacion2.proyecto.gui.panes.main.records.Properties.CATALOG_SCHEMA_PROPERTY;
 
+/**
+ * This shows the list of items of one catalog.
+ */
 public class CatalogItemsTable implements PaneViewer {
 
     //  Variables  \\

@@ -6,6 +6,7 @@ import javafx.scene.image.ImageView;
 public class LabelConstants {
     //  Buttons  \\
     public static final String ADD_LABEL = "Add";
+    public static final String CREATE_LABEL = "Create";
     public static final String EDIT_LABEL = "Edit";
     public static final String VIEW_LABEL = "Ver";
     public static final String CHANGE_LABEL = "Change";
@@ -17,19 +18,25 @@ public class LabelConstants {
     public static final String SEARCH_LABEL = "Search";
     public static final String COMBO_BOX_SELECT_LABEL = "Select";
     public static final String TYPE_HERE_PROMPT_TEXT = "Type here";
-
+    public static final String SEARCH_RESULTS_LABEL = "Results 0.";
 
     public static final String TITLE_CATALOG_LIST = "Catalog list";
-    public static final String TITLE_ITEM_LIST = "Items list";
+    public static final String TITLE_ITEM_LIST = "Items";
     public static final String TITLE_CATALOG = "Catalog";
     public static final String TITLE_CATALOG_ADD_FORM = "Add catalog";
     public static final String CATALOG_NAME_COLUMN = "Name";
     public static final String CATALOG_SCHEMA_COLUMN = "Schemma";
     public static final String SUBTITLE_CATALOG_INFO_FORM = "Catalog information";
+    public static final String ITEMS_COLUMN = "Items";
 
+    public static final String INVENTORY_NAME_COLUMN = "Inventory";
+    public static final String TITLE_INVENTORY = "Inventory";
+    public static final String CONFIG_NAME_COLUMN = "Config";
 
 
     public static final ImageView VIEW_ICON = new ImageView(new Image("seeIcon.png"));
+    public static final ImageView ITEMS_ICON = new ImageView(new Image("seeIcon.png"));//TODO CHANGE
+    public static final ImageView CONFIG_ICON = new ImageView(new Image("seeIcon.png"));//TODO CHANGE
     public static final ImageView EDIT_ICON = new ImageView(new Image("editIcon.png"));
     public static final ImageView DELETE_ICON = new ImageView(new Image("delete.png"));
 }
