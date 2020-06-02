@@ -37,9 +37,14 @@ public class ItemForm implements PaneViewer {
 
     public GridPane getItemFormPane() {
         GridPane pane = PaneUtil.buildPane();
+        initializeCatalogService(new Inventory("Carros"));//TODO arreglar inventario
         setupControlsInventory(pane);
         addHandlers(pane);
         return pane;
+    }
+
+    public void initializeCatalogService(Inventory inventory){
+        catalogService = new CatalogService(inventory);
     }
 
     private void setupControlsInventory(GridPane pane){
@@ -109,7 +114,7 @@ public class ItemForm implements PaneViewer {
     private ComboBox buildComboBoxCatalog(GridPane pane, Inventory inventory) {
         PaneUtil.buildLabel(pane, "Choose a catalog", 0, 1);
         catalogComboBox = PaneUtil.buildComboBox(pane, catalogService.getAll(), 1,1);
-        
+
         return catalogComboBox;
     }
 
