@@ -3,12 +3,18 @@ package edu.ucr.rp.programacion2.proyecto.logic;
 import edu.ucr.rp.programacion2.proyecto.business_rules.io.InventoryPersistence;
 import edu.ucr.rp.programacion2.proyecto.domain.logic.Inventory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class InventoryService implements Service<Inventory, String, List>{
     private List<Inventory> list;
     private InventoryPersistence inventoryPersistence;
 
+    public InventoryService(){
+        list = new ArrayList<Inventory>();
+        inventoryPersistence = new InventoryPersistence();
+        refresh();
+    }
     /**
      * This method add a new inventory element to the list.
      * The elements is colocate and validate before been added.
