@@ -5,9 +5,7 @@ import edu.ucr.rp.programacion2.proyecto.domain.logic.Inventory;
 import edu.ucr.rp.programacion2.proyecto.gui.javafx.util.PaneUtil;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.logic.CatalogService;
-import edu.ucr.rp.programacion2.proyecto.util.Utility;
 import edu.ucr.rp.programacion2.proyecto.util.builder.ItemBuilder;
-import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
@@ -37,9 +35,14 @@ public class ItemForm implements PaneViewer {
 
     public GridPane getItemFormPane() {
         GridPane pane = PaneUtil.buildPane();
+        initializeCatalogService(new Inventory("Carros"));//TODO arreglar inventario
         setupControlsInventory(pane);
         addHandlers(pane);
         return pane;
+    }
+
+    public void initializeCatalogService(Inventory inventory){
+        catalogService = new CatalogService(inventory);
     }
 
     private void setupControlsInventory(GridPane pane){
@@ -95,9 +98,7 @@ public class ItemForm implements PaneViewer {
         });
     }
 
-    private void generateItem() {
 
-    }
 
     private ComboBox buildComboBoxInventory(GridPane pane) {
         PaneUtil.buildLabel(pane, "Choose an inventory", 0, 0);
@@ -109,7 +110,7 @@ public class ItemForm implements PaneViewer {
     private ComboBox buildComboBoxCatalog(GridPane pane, Inventory inventory) {
         PaneUtil.buildLabel(pane, "Choose a catalog", 0, 1);
         catalogComboBox = PaneUtil.buildComboBox(pane, catalogService.getAll(), 1,1);
-        
+
         return catalogComboBox;
     }
 

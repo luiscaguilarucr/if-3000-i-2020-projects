@@ -3,6 +3,7 @@ package edu.ucr.rp.programacion2.proyecto.util.builder;
 import edu.ucr.rp.programacion2.proyecto.domain.logic.Catalog;
 import edu.ucr.rp.programacion2.proyecto.domain.logic.Item;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CatalogBuilder {
@@ -32,6 +33,12 @@ public class CatalogBuilder {
     }
 
     public Catalog build(){
+        if(id == null){
+            id = -1;
+        }
+        if(items == null){
+            items = new ArrayList<>();
+        }
         return new Catalog(id, name,
                            items,
                            schema);

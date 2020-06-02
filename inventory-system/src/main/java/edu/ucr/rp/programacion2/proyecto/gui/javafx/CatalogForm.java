@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class CatalogForm implements PaneViewer {
     private Inventory catalog;
     private CatalogService catalogService;
-    private CatalogBuilder catalogBuilder;
+    private CatalogBuilder catalogBuilder = new CatalogBuilder();
     private TextField catalogNameTextField;
     private TextField featureNameTextField;
     private Button addFeatureButton;
@@ -31,6 +31,10 @@ public class CatalogForm implements PaneViewer {
         setupControls(pane);
         addHandlers(pane);
         return pane;
+    }
+
+    public void initializeCatalogService(Inventory inventory){
+        catalogService = new CatalogService(inventory);
     }
 
     private void setupControls(GridPane pane) {
@@ -79,13 +83,17 @@ public class CatalogForm implements PaneViewer {
         } else if(schema.size() > 0) {
             featureNameTextField.setPromptText("");
             featureNameTextField.setStyle("-fx-background-color: #FFFFFF");
+
+            initializeCatalogService(new Inventory("Carros")); //TODO cambiar lo de carros
             catalogBuilder.withName(catalogNameTextField.getText());
             catalogBuilder.withSchema(schema);
-            catalogBuilder.build();
+
+            Catalog catalog = catalogBuilder.build();
+            catalogService.add(catalog);
             wasAdded = true;
         }
         if (wasAdded) {
-            PaneUtil.showAlert(Alert.AlertType.INFORMATION, "Catalog added", "The catalog " + catalogNameTextField.getText().toString() + "was added correctly");
+            PaneUtil.showAlert(Alert.AlertType.INFORMATION, "Catalog added", "The catalog " + catalogNameTextField.getText().toString() + " was added correctly");
         }
     }
 
