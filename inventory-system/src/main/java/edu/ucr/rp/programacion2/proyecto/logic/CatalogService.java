@@ -60,7 +60,7 @@ public class CatalogService implements Service<Catalog, String, List> {
         refresh();
         if(validateEdition(catalog)) {
             list.add(list.indexOf(catalog), catalog);
-            catalogPersistence.write(catalog); //TODO salvar en el archivo
+            catalogPersistence.write(catalog);
             return true;
         }
         return false;
@@ -83,6 +83,8 @@ public class CatalogService implements Service<Catalog, String, List> {
         catalogPersistence.delete(catalog);
         return true;
     }
+
+    // TODO remove all
     /**
      * This method returns an element if this exists in the list.
      *

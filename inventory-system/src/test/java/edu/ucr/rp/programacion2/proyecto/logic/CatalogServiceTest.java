@@ -19,8 +19,8 @@ public class CatalogServiceTest extends TestCase {
 
     @Test
     public void testAddition() {
-        this.inventory = new Inventory("Carros");
-        this.catalogService = new CatalogService(inventory);
+        inventory = new Inventory("Carros");
+        catalogService = new CatalogService(inventory);
         for(int i = 0 ; i < 100; i++) {
             Catalog catalog = Utility.randomCatalog();
             if (catalogService.add(catalog))
@@ -34,7 +34,7 @@ public class CatalogServiceTest extends TestCase {
   //  @Test
     public void testDelete() {
         this.inventory = new Inventory("Carros");
-        this.catalogService = new CatalogService(inventory);
+        catalogService = new CatalogService(inventory);
         Catalog catalog = Utility.randomCatalog();
         if (catalogService.remove(catalog))
             System.out.println("Se elimino " + catalog);
@@ -45,7 +45,7 @@ public class CatalogServiceTest extends TestCase {
    // @Test
     public void testEdit() {
         this.inventory = new Inventory("Carros");
-        this.catalogService = new CatalogService(inventory);
+        catalogService = new CatalogService(inventory);
         Catalog catalog = Utility.randomCatalog();
         List<Item> itemList = new ArrayList<>();
         Map<String, Object> features = new HashMap<>();
@@ -69,7 +69,7 @@ public class CatalogServiceTest extends TestCase {
   //  @Test
     public void testShow(){
         this.inventory = new Inventory("Carros");
-        this.catalogService = new CatalogService(inventory);
+        catalogService = new CatalogService(inventory);
         System.out.println(catalogService.getAll());
         System.out.println(catalogService.getAll().size());
         System.out.println(catalogService.get("Sedan"));
