@@ -106,9 +106,7 @@ public class ItemForm implements PaneViewer {
         });
     }
 
-    private void generateItem() {
 
-    }
 
     private ComboBox<String> buildInventoryComboBox(GridPane pane) {
         PaneUtil.buildLabel(pane, "Choose an inventory", 0, 0);
