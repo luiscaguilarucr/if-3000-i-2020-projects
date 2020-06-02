@@ -27,8 +27,7 @@ public class InventoryService implements Service<Inventory, String, List>{
         refresh();
         if(validateAddition(inventory)){
             list.add(inventory);
-            inventoryPersistence.write(inventory);
-            return true;
+            return inventoryPersistence.write(inventory);
         }
         return false;
     }
@@ -45,8 +44,7 @@ public class InventoryService implements Service<Inventory, String, List>{
         refresh();
         if(validateEdition(inventory)){
             list.add(list.indexOf(inventory), inventory);
-            inventoryPersistence.write(inventory);
-            return true;
+            return inventoryPersistence.write(inventory);
         }
         return false;
     }
@@ -65,8 +63,15 @@ public class InventoryService implements Service<Inventory, String, List>{
             return false;
         }
         list.remove(inventory);
-        inventoryPersistence.delete(inventory);
-        return true;
+        return inventoryPersistence.delete(inventory);
+    }
+
+    /**
+     * Validates if the list contains some inventory.
+     * @return {@code true} if the list contains more than one item. {@code false} the list is empty.
+     */
+    public boolean containsAnInventory(){
+        return list.size() > 0;
     }
 
     /**

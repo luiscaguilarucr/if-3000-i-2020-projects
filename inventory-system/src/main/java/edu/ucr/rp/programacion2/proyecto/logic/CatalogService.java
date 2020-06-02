@@ -41,9 +41,8 @@ public class CatalogService implements Service<Catalog, String, List> {
         if (validateAddition(catalog)) {
             catalog.setId(idGenerator.generate());
             list.add(catalog);
-            catalogPersistence.write(catalog);
+            return catalogPersistence.write(catalog);
             // TODO comprobate addition.
-            return true;
         }
         return false;
     }
@@ -60,8 +59,7 @@ public class CatalogService implements Service<Catalog, String, List> {
         refresh();
         if(validateEdition(catalog)) {
             list.add(list.indexOf(catalog), catalog);
-            catalogPersistence.write(catalog); //TODO salvar en el archivo
-            return true;
+            return catalogPersistence.write(catalog); //TODO salvar en el archivo
         }
         return false;
     }
@@ -80,8 +78,7 @@ public class CatalogService implements Service<Catalog, String, List> {
             return false;
         }
         list.remove(catalog);
-        catalogPersistence.delete(catalog);
-        return true;
+        return catalogPersistence.delete(catalog);
     }
     /**
      * This method returns an element if this exists in the list.
@@ -110,6 +107,13 @@ public class CatalogService implements Service<Catalog, String, List> {
         return list;
     }
 
+    /**
+     * Validates if the list contains some catalog.
+     * @return {@code true} if the list contains more than one item. {@code false} the list is empty.
+     */
+    public boolean containsACatalog(){
+        return list.size() > 0;
+    }
 
     //  More methods \\
     /**
