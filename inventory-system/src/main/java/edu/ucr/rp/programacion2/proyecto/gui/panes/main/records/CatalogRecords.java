@@ -1,7 +1,7 @@
 
 package edu.ucr.rp.programacion2.proyecto.gui.panes.main.records;
-import edu.ucr.rp.programacion2.proyecto.domain.logic.Inventory;
-import edu.ucr.rp.programacion2.proyecto.domain.logic.InventoryControl;
+import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
+import edu.ucr.rp.programacion2.proyecto.domain.InventoryControl;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.logic.CatalogService;
 import edu.ucr.rp.programacion2.proyecto.logic.InventoryControlService;

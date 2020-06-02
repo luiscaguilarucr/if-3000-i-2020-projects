@@ -1,6 +1,6 @@
 package edu.ucr.rp.programacion2.proyecto.gui.panes.main.records;
 
-import edu.ucr.rp.programacion2.proyecto.domain.logic.Inventory;
+import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
 import edu.ucr.rp.programacion2.proyecto.gui.javafx.util.Style;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;

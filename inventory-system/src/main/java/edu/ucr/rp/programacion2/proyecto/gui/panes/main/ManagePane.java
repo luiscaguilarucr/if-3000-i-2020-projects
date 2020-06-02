@@ -39,6 +39,7 @@ public class ManagePane implements PaneViewer {
         panes.put(PaneName.ADD_INVENTORY, new InventoryForm().getPane());
         panes.put(PaneName.ADD_CATALOG, new CatalogForm().getPane());
         panes.put(PaneName.ADD_ITEM, new ItemForm().getPane());
+        //panes.put(PaneName.CATALOG_CONFIG, new);
         //panes.put(PaneName., new .getPane());
     }
 

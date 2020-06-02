@@ -1,11 +1,11 @@
 package edu.ucr.rp.programacion2.proyecto.gui.javafx;
 
-import edu.ucr.rp.programacion2.proyecto.domain.logic.Catalog;
-import edu.ucr.rp.programacion2.proyecto.domain.logic.Inventory;
+import edu.ucr.rp.programacion2.proyecto.domain.Catalog;
+import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
 import edu.ucr.rp.programacion2.proyecto.gui.javafx.util.PaneUtil;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.logic.CatalogService;
-import edu.ucr.rp.programacion2.proyecto.util.builder.ItemBuilder;
+import edu.ucr.rp.programacion2.proyecto.util.builders.ItemBuilder;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;

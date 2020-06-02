@@ -1,11 +1,11 @@
 package edu.ucr.rp.programacion2.proyecto.util;
 
-import edu.ucr.rp.programacion2.proyecto.domain.logic.Catalog;
-import edu.ucr.rp.programacion2.proyecto.domain.logic.Inventory;
+import edu.ucr.rp.programacion2.proyecto.domain.Catalog;
+import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
+import edu.ucr.rp.programacion2.proyecto.domain.Item;
+import edu.ucr.rp.programacion2.proyecto.util.builders.ItemBuilder;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class Utility {
     public static int random(int bound) {
@@ -22,12 +22,55 @@ public class Utility {
     public static Catalog randomCatalog(){
         return new Catalog(-1, randomCatalogName(), new ArrayList<>(), carsSchema());
     }
-
     public static String randomCatalogName(){
-        String[] list = {"Deportivos", "Todo Terreno", "Clásicos", "SUVs", "Sedan", "Eléctricos", "Pick-ups"};
+        String[] list = {"Deportivos", "Todo Terreno", "Clásicos", "SUVs", "Sedan", "Eléctricos", "Pick-ups", "Convertibles", "Híbridos",
+        "Vans", "MiniVans", "Autos de Lujo", "Coupé", "Crossover", "Hatchback"};
         return list[random(list.length)-1];
     }
     private static List carsSchema(){
-        return new ArrayList<>(Arrays.asList("Marca", "Modelo", "Cant Pasajeros", "Puertas", "Tracción"));
+        return new ArrayList<>(Arrays.asList("Modelo", "Cant Pasajeros", "Puertas", "Trasmisión"));
+
     }
+
+    //  Random Car items  \\
+    public static Item randomItem(){
+        return new ItemBuilder()
+                .setName(randomCarBrand())
+                .setFeatures(randomCarFeatures())
+                .build();
+    }
+
+
+    public static String randomCarBrand(){
+        String[] list = {"Ford", "Audi", "Toyota", "Suzuki", "Land Rover", "Hyundai", "Mitsubishi", "Nissan", "Fiat", "Ferrari", "Lamborghini",
+                "Tesla", "Kia", "Honda"};
+        return list[random(list.length)-1];
+    }
+
+    private static Map<String, Object> randomCarFeatures() {
+        List schema = carsSchema();
+        Map<String, Object> features = new HashMap<>();
+
+        features.put((String) schema.get(0), randomModel());
+        features.put((String) schema.get(1), randomSeatsNum());
+        features.put((String) schema.get(2), randomDoorsNum());
+        features.put((String) schema.get(3), randomCarTransmission());
+        return features;
+    }
+    public static Integer randomModel(){
+        return 1965+random(55);
+    }
+    public static String randomCarTransmission(){
+        String[] list = {"Automática", "Manual", "Dual"};
+        return list[random(list.length)-1];
+    }
+    public static Integer randomSeatsNum(){
+        Integer[] list = {2, 4, 5, 7};
+        return list[random(list.length)-1];
+    }
+    public static Integer randomDoorsNum(){
+        Integer[] list = {2, 4};
+        return list[random(list.length)-1];
+    }
+
 }

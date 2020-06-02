@@ -1,6 +1,6 @@
 package edu.ucr.rp.programacion2.proyecto.gui.javafx;
 
-import edu.ucr.rp.programacion2.proyecto.domain.logic.Catalog;
+import edu.ucr.rp.programacion2.proyecto.domain.Catalog;
 import edu.ucr.rp.programacion2.proyecto.gui.javafx.util.PaneUtil;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.logic.CatalogService;
@@ -9,8 +9,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import edu.ucr.rp.programacion2.proyecto.domain.logic.Inventory;
-import edu.ucr.rp.programacion2.proyecto.util.builder.CatalogBuilder;
+import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
+import edu.ucr.rp.programacion2.proyecto.util.builders.CatalogBuilder;
 
 import java.util.ArrayList;
 

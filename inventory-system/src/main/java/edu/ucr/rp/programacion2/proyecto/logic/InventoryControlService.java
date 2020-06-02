@@ -1,8 +1,8 @@
 package edu.ucr.rp.programacion2.proyecto.logic;
 
-import edu.ucr.rp.programacion2.proyecto.domain.logic.Catalog;
-import edu.ucr.rp.programacion2.proyecto.domain.logic.Inventory;
-import edu.ucr.rp.programacion2.proyecto.domain.logic.InventoryControl;
+import edu.ucr.rp.programacion2.proyecto.domain.Catalog;
+import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
+import edu.ucr.rp.programacion2.proyecto.domain.InventoryControl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +19,7 @@ public class InventoryControlService {//TODO change name(don't use Service)
 
     //  Constructor  \\
     private InventoryControlService() {
-        //inventoryService = InventoryService.getInstance();//TODO
+        inventoryService = InventoryService.getInstance();
         list = new ArrayList<>();
         updateList();
     }
