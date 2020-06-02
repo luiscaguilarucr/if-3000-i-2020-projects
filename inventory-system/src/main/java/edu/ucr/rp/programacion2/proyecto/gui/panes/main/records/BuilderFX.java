@@ -5,10 +5,8 @@ import edu.ucr.rp.programacion2.proyecto.gui.javafx.util.Style;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
@@ -65,6 +63,7 @@ public class BuilderFX {
         pane.add(label, column, row, numRows, 1);
         GridPane.setHalignment(label, HPos.LEFT);//TODO use css
     }
+
     public static void buildLabelNormal(String text, GridPane pane, int column, int row) {
         Label label = new Label(text);
         label.setPadding(new Insets(5, 0, 10, 0));
@@ -73,6 +72,7 @@ public class BuilderFX {
         pane.add(label, column, row);
         GridPane.setHalignment(label, HPos.CENTER);
     }
+
     public static Label buildLabelMinimal(String text, GridPane pane, int column, int row, int numRows) {//TODO css
         Label label = new Label(text);
         label.setPadding(new Insets(5, 0, 10, 0));
@@ -82,6 +82,7 @@ public class BuilderFX {
         GridPane.setHalignment(label, HPos.CENTER);
         return label;
     }
+
     public static ComboBox buildComboBox(String text, GridPane pane, int column, int row) {
         buildLabelNormal(text, pane, column - 1, row);
         ComboBox comboBox = new ComboBox();
@@ -121,7 +122,8 @@ public class BuilderFX {
      * @param row
      * @return
      */
-    private TextField buildTextInput(String text, GridPane pane, int column, int row) {
+    public static TextField buildTextInput(String text, GridPane pane, int column, int row) {
+        buildLabelNormal(text, pane, column - 1, row);
         TextField textField = new TextField();
         textField.setMaxSize(180, 40);//todo
         textField.setMinSize(150, 30);//todo
@@ -129,6 +131,46 @@ public class BuilderFX {
         Style.settextFieldColor(textField, PRIMARY_COLOR_TEXTFIELD);
         pane.add(textField, column, row);
         return textField;
+    }
+
+    /**
+     * Build a button and place it in a given position.
+     *
+     * @param text   Text that the button will have.
+     * @param pane   pane where it will be added.
+     * @param column column in which it will be located.
+     * @param row    row in which it will be located.
+     * @return {@code Button} button configured and located in the pane.
+     */
+    public static Button buildButton(String text, GridPane pane, int column, int row) {
+        Button button = new Button(text);
+        button.setMinSize(BUTTON_MIN_WIDTH, BUTTON_MIN_HEIGHT);
+        pane.add(button, column, row);
+        GridPane.setHalignment(button, HPos.CENTER);
+        GridPane.setMargin(button, BUTTON_DEFAULT_INSETS);
+        return button;
+    }
+
+    public static Pagination buildPagination(GridPane pane, int column, int row, int numColumns, int numRows) {
+        Pagination pagination = new Pagination();
+        pane.add(pagination, column, row, numColumns, numRows);
+        return pagination;
+    }
+
+    /**
+     * Build a button and place it in a given position.
+     *
+     * @param text   Text that the button will have.
+     * @param pane   pane where it will be added.
+     * @param column column in which it will be located.
+     * @param row    row in which it will be located.
+     * @return {@code Button} button configured and located in the pane.
+     */
+    public static Button buildIconButton(String text, ImageView imageView, GridPane pane, int column, int row) {
+        Button button = new Button(text);
+        button.setGraphic(imageView);
+        pane.add(button, column, row);
+        return button;
     }
 
 }
