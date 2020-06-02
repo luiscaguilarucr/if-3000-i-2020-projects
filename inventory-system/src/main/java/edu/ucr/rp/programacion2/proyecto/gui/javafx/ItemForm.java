@@ -5,9 +5,7 @@ import edu.ucr.rp.programacion2.proyecto.domain.logic.Inventory;
 import edu.ucr.rp.programacion2.proyecto.gui.javafx.util.PaneUtil;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.logic.CatalogService;
-import edu.ucr.rp.programacion2.proyecto.util.Utility;
 import edu.ucr.rp.programacion2.proyecto.util.builder.ItemBuilder;
-import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
@@ -100,9 +98,7 @@ public class ItemForm implements PaneViewer {
         });
     }
 
-    private void generateItem() {
 
-    }
 
     private ComboBox buildComboBoxInventory(GridPane pane) {
         PaneUtil.buildLabel(pane, "Choose an inventory", 0, 0);
