@@ -1,7 +1,6 @@
 package edu.ucr.rp.programacion2.proyecto.logic;
 
 import edu.ucr.rp.programacion2.proyecto.business_rules.io.InventoryPersistence;
-import edu.ucr.rp.programacion2.proyecto.domain.logic.Catalog;
 import edu.ucr.rp.programacion2.proyecto.domain.logic.Inventory;
 
 import java.util.List;
@@ -68,7 +67,7 @@ public class InventoryService implements Service<Inventory, String, List>{
      * This method returns an inventory element if this exists in the list.
      *
      * @param name of the inventory.
-     * @return {@code Catalog} if the inventory element's name is in the list. {@code null} Otherwise.
+     * @return {@code Inventory} if the inventory element's name is in the list. {@code null} Otherwise.
      */
     @Override
     public Inventory get(String name) {
@@ -83,7 +82,7 @@ public class InventoryService implements Service<Inventory, String, List>{
     /**
      * Returns the list with all the inventory elements.
      *
-     * @return {@code List<Catalog>} List with inventory elements
+     * @return {@code List<Inventory>} List with inventory elements
      */
     @Override
     public List getAll() {
@@ -112,7 +111,6 @@ public class InventoryService implements Service<Inventory, String, List>{
      *
      * Validations:
      * - Most exists in the list.
-     * - Most have a valid schema.
      * - The name can't be repeated.
      *
      * @param inventory to be validate.
@@ -125,7 +123,7 @@ public class InventoryService implements Service<Inventory, String, List>{
     }
 
     /**
-     * Checks if the name has been used by one Catalog.
+     * Checks if the name has been used by one inventory.
      *
      * @param name to search.
      * @return {@code true} if the name is used. {@code false} otherwise.
