@@ -53,7 +53,7 @@ public class ItemForm implements PaneViewer {
     }
 
     private void setupInventoryControls(GridPane pane) {
-        if (PaneUtil.setupInventoryControls(confirmInventoryButton, inventoryService)) {
+        if (PaneUtil.setupInventoryControls(inventoryService.getAll())) {
             buildInventoryComboBox(pane);
             confirmInventoryButton = PaneUtil.buildButtonImage(new Image("select.png"), pane, 2, 0);
         }

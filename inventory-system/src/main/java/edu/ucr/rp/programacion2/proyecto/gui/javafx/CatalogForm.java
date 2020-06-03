@@ -33,6 +33,7 @@ public class CatalogForm implements PaneViewer {
 
     public GridPane getCatalogFormPane() {
         GridPane pane = PaneUtil.buildPane();
+        initializeInventoryService();
         setupInventoryControls(pane);
         addInventoryHandlers(pane);
         return pane;
@@ -46,7 +47,7 @@ public class CatalogForm implements PaneViewer {
     }
 
     private void setupInventoryControls(GridPane pane){
-        if (PaneUtil.setupInventoryControls(confirmInventoryButton, inventoryService)) {
+        if (PaneUtil.setupInventoryControls(inventoryService.getAll())) {
             buildInventoryComboBox(pane);
             confirmInventoryButton = PaneUtil.buildButtonImage(new Image("select.png"), pane, 2, 0);
         }

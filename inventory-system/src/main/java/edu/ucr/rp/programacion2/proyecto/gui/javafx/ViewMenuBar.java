@@ -61,6 +61,7 @@ public class ViewMenuBar implements PaneViewer {
         });
 
         mI_DeleteInventory.setOnAction((event) -> {
+            ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.DELETE_INVENTORY));
         });
 
         //Get the MenuItems in m_Configutarion

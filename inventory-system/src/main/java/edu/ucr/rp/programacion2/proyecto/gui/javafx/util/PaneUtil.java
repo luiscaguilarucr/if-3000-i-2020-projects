@@ -81,8 +81,8 @@ public class PaneUtil {
         return comboBox;
     }
 
-    public static boolean setupInventoryControls(Button confirmInventoryButton, InventoryService inventoryService) {
-        if (inventoryService.getAll().size() > 0) {
+    public static boolean setupInventoryControls(List list) {
+        if (list.size() > 0) {
             return true;
         } else {
             PaneUtil.showAlert(Alert.AlertType.INFORMATION, "Error, there are no inventories", "You must add at least one inventory to be able to access this function");
