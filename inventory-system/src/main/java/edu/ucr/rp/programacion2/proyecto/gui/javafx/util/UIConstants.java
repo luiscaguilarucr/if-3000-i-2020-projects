@@ -31,13 +31,15 @@ public class UIConstants {
     public static final Integer GRID_PANE_DEFAULT_V_GAP = 10;
     public static final Insets GRID_PANE_DEFAULT_INSETS = new Insets(30,50,30,50);
 
-    public static final Integer GRID_PANE_MIN_WIDTH = 900;
-    public static final Integer GRID_PANE_MIN_HEIGHT = 640;
-    public static final Integer TABLE_VIEW_DEFAULT_MIN_WIDTH = 650;
-    public static final Integer TABLE_VIEW_DEFAULT_MIN_HEIGHT = 500;
+    public static final Integer GRID_PANE_MIN_WIDTH = 1000;
+    public static final Integer GRID_PANE_MIN_HEIGHT = 900;
+    public static final Integer TABLE_VIEW_DEFAULT_MIN_WIDTH = 700;
+    public static final Integer TABLE_VIEW_DEFAULT_MAX_WIDTH = 1000;
+    public static final Integer TABLE_VIEW_DEFAULT_MIN_HEIGHT = 600;
+    public static final Integer TABLE_VIEW_DEFAULT_MAX_HEIGHT = 600;
     public static final Insets TITLE_DEFAULT_INSETS = new Insets(10, 10, 10, 10);
     public static final Insets TABLE_VIEW_DEFAULT_INSETS = new Insets(10, 20, 10, 20);
-    public static final int RECORDS_COLUMN_MIN = 200;
+    public static final int RECORDS_COLUMN_MIN = 300;
     public static final int RECORDS_COLUMN_MAX = 350;
 
     public static final Integer BUTTON_MIN_WIDTH = 20;

@@ -1,7 +1,7 @@
 package edu.ucr.rp.programacion2.proyecto.gui.panes.main.records;
 
-import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
 import edu.ucr.rp.programacion2.proyecto.gui.javafx.util.Style;
+import javafx.collections.FXCollections;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -10,6 +10,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
+
+import java.util.List;
 
 import static edu.ucr.rp.programacion2.proyecto.gui.javafx.LabelConstants.COMBO_BOX_SELECT_LABEL;
 import static edu.ucr.rp.programacion2.proyecto.gui.javafx.util.PaletteDesign.*;
@@ -73,19 +75,19 @@ public class BuilderFX {
         GridPane.setHalignment(label, HPos.CENTER);
     }
 
-    public static Label buildLabelMinimal(String text, GridPane pane, int column, int row, int numRows) {//TODO css
+    public static Label buildLabelMinimal(String text, GridPane pane, int column, int row, int numColumns) {//TODO css
         Label label = new Label(text);
         label.setPadding(new Insets(5, 0, 10, 0));
         Style.setLabelConfig(label, 3);
         Style.setLabelColor(label, PRIMARY_TEXT);
-        pane.add(label, column, row, numRows, 1);
+        pane.add(label, column, row, numColumns, 1);
         GridPane.setHalignment(label, HPos.CENTER);
         return label;
     }
 
-    public static ComboBox buildComboBox(String text, GridPane pane, int column, int row) {
-        buildLabelNormal(text, pane, column - 1, row);
+    public static ComboBox buildComboBox(String promptText, GridPane pane, int column, int row) {
         ComboBox comboBox = new ComboBox();
+        comboBox.setPromptText(promptText);
         comboBox.setMaxSize(180, 40);
         comboBox.setMinSize(150, 30);
         comboBox.setPromptText(COMBO_BOX_SELECT_LABEL);
@@ -102,13 +104,8 @@ public class BuilderFX {
      * @param row    row where it will be assigned.
      * @return {@code TableView <>} table view ready to add columns and objects.
      */
-    public static TableView<Inventory> buildTableView(GridPane pane, int column, int row, int numColumns, int numRows) {
-        TableView<Inventory> tableView = new TableView<>();
-        tableView.setTableMenuButtonVisible(true);//TODO revisar lo que hace //css
-        tableView.setMinSize(TABLE_VIEW_DEFAULT_MIN_WIDTH, TABLE_VIEW_DEFAULT_MIN_HEIGHT);//css
-        tableView.setEditable(true);
-        //tableView.setStyle();
-        tableView.setPadding(TABLE_VIEW_DEFAULT_INSETS);//css
+    public static TableView buildTableView(GridPane pane, int column, int row, int numColumns, int numRows) {
+        TableView tableView = new TableView<>();
         pane.add(tableView, column, row, numColumns, numRows);
         return tableView;
     }
@@ -173,4 +170,15 @@ public class BuilderFX {
         return button;
     }
 
+    /**
+     * Fills one comboBox with the items in the list.
+     *
+     * @param comboBox to fill.
+     * @param list     list og items.
+     */
+    public static void fillComboBox(ComboBox comboBox, List list) {
+        comboBox.setItems(FXCollections.observableList(list));
+        comboBox.getItems().sorted();
+
+    }
 }

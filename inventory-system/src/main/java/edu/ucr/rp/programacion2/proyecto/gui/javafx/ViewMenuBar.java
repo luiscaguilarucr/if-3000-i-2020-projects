@@ -32,6 +32,10 @@ public class ViewMenuBar implements PaneViewer {
         ImageView iV_mI_CreateInventory = new ImageView(new Image("addIcon.png"));
         MenuItem mI_CreateInventory = new MenuItem("Create inventory", iV_mI_CreateInventory);
 
+        //MenuItem mI_SeeInventory
+        ImageView iV_mI_SeeInventory = new ImageView(new Image("seeIcon.png"));
+        MenuItem mI_SeeInventory = new MenuItem("List of inventories", iV_mI_SeeInventory);
+
         //MenuItem mI_ChangeName
         ImageView iV_mI_ChangeName = new ImageView(new Image("editIcon.png"));
         MenuItem mI_ChangeName = new MenuItem("Change name", iV_mI_ChangeName);
@@ -44,6 +48,10 @@ public class ViewMenuBar implements PaneViewer {
             ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.ADD_INVENTORY));
         });
 
+        mI_SeeInventory.setOnAction((event)->{
+            ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.INVENTORY_TABLE));
+        });
+
         mI_ChangeName.setOnAction((event) -> {
         });
 
@@ -51,7 +59,7 @@ public class ViewMenuBar implements PaneViewer {
         });
 
         //Get the MenuItems in m_Configutarion
-        m_Inventory.getItems().addAll(mI_ChangeName, mI_DeleteInventory);
+        m_Inventory.getItems().addAll(mI_SeeInventory, mI_ChangeName, mI_DeleteInventory);
 
         
         ////////////////////////////////////////////////////////////////////////// Menu "Catalog"

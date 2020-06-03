@@ -35,8 +35,8 @@ public class LabelConstants {
 
 
     public static final ImageView VIEW_ICON = new ImageView(new Image("seeIcon.png"));
-    public static final ImageView ITEMS_ICON = new ImageView(new Image("seeIcon.png"));//TODO CHANGE
-    public static final ImageView CONFIG_ICON = new ImageView(new Image("seeIcon.png"));//TODO CHANGE
+    public static final ImageView ITEMS_ICON = new ImageView(new Image("itemsIcon.png"));
+    public static final ImageView CONFIG_ICON = new ImageView(new Image("configIcon.png"));
     public static final ImageView EDIT_ICON = new ImageView(new Image("editIcon.png"));
     public static final ImageView DELETE_ICON = new ImageView(new Image("delete.png"));
 }

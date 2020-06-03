@@ -80,6 +80,6 @@ public class CatalogConfigurationForm {
         return pane;
     }
     private void addHandlers() {
-
+        
     }
 }

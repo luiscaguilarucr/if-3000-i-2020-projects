@@ -119,7 +119,17 @@ public class CatalogService implements Service<Catalog, String, List> {
         return list;
     }
 
-
+    /**
+     * Creates a list with the names of the catalogs.
+     *
+     * @return  {@code List<String>} List with names of catalogs.
+     */
+    public List getNamesList(){
+        List<String> namesList = new ArrayList();
+        for(Catalog catalog : list)
+            namesList.add(catalog.getName());
+        return namesList;
+    }
     //  More methods \\
 
     /**
