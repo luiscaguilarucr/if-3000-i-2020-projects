@@ -1,8 +1,8 @@
 package edu.ucr.rp.programacion2.proyecto.logic;
 
-import edu.ucr.rp.programacion2.proyecto.business_rules.io.CatalogPersistence;
-import edu.ucr.rp.programacion2.proyecto.domain.logic.Catalog;
-import edu.ucr.rp.programacion2.proyecto.domain.logic.Inventory;
+import edu.ucr.rp.programacion2.proyecto.persistance.CatalogPersistence;
+import edu.ucr.rp.programacion2.proyecto.domain.Catalog;
+import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
 import edu.ucr.rp.programacion2.proyecto.util.idgenerator.IDGenerator;
 
 import java.util.ArrayList;
@@ -27,6 +27,7 @@ public class CatalogService implements Service<Catalog, String, List> {
         idGenerator = new IDGenerator(inventory);
     }
     //  Methods  \\
+
     /**
      * This method add a new element to the list.
      * The elements is colocate and validate before been added.
@@ -37,12 +38,13 @@ public class CatalogService implements Service<Catalog, String, List> {
     @Override
     public boolean add(Catalog catalog) {
         refresh();
-        catalog.setId(idGenerator.get());//TODO test
+        catalog.setId(idGenerator.get());
         if (validateAddition(catalog)) {
             catalog.setId(idGenerator.generate());
             list.add(catalog);
-            return catalogPersistence.write(catalog);
-            // TODO comprobate addition.
+            catalogPersistence.write(catalog);
+            refresh();
+            return list.contains(catalog);
         }
         return false;
     }
@@ -57,9 +59,9 @@ public class CatalogService implements Service<Catalog, String, List> {
     @Override
     public boolean edit(Catalog catalog) {
         refresh();
-        if(validateEdition(catalog)) {
+        if (validateEdition(catalog)) {
             list.add(list.indexOf(catalog), catalog);
-            return catalogPersistence.write(catalog); //TODO salvar en el archivo
+            return catalogPersistence.write(catalog);
         }
         return false;
     }
@@ -80,6 +82,15 @@ public class CatalogService implements Service<Catalog, String, List> {
         list.remove(catalog);
         return catalogPersistence.delete(catalog);
     }
+
+    public boolean removeAll() {
+        if (!idGenerator.reset()) return false;
+        list.clear();
+        if (!catalogPersistence.deleteAll()) return false;
+        refresh();
+        return list.isEmpty();
+    }
+
     /**
      * This method returns an element if this exists in the list.
      *
@@ -89,8 +100,8 @@ public class CatalogService implements Service<Catalog, String, List> {
     @Override
     public Catalog get(String name) {
         refresh();
-        for(Catalog catalog: list)
-            if(catalog.getName().equals(name))
+        for (Catalog catalog : list)
+            if (catalog.getName().equals(name))
                 return catalog;
 
         return null;
@@ -112,13 +123,15 @@ public class CatalogService implements Service<Catalog, String, List> {
      * @return {@code true} if the list contains more than one item. {@code false} the list is empty.
      */
     public boolean containsACatalog(){
+        refresh();
         return list.size() > 0;
     }
 
     //  More methods \\
+
     /**
      * Check if the catalog can be added.
-     *
+     * <p>
      * Validations:
      * - Most have an unique id.
      * - Most have a valid schema.
@@ -128,15 +141,15 @@ public class CatalogService implements Service<Catalog, String, List> {
      * @return {@code true} if the element is valid. {@code false} otherwise.
      */
     private boolean validateAddition(Catalog catalog) {
-        if(catalog==null) return false;                         // Not null
-        if(list.contains(catalog)) return false;                // Unique ID
-        if(!validateSchema(catalog.getSchema())) return false;  // Valid schema
+        if (catalog == null) return false;                         // Not null
+        if (list.contains(catalog)) return false;                // Unique ID
+        if (!validateSchema(catalog.getSchema())) return false;  // Valid schema
         return !containsByName(catalog.getName());              // Unique Name
     }
 
     /**
      * Check if the catalog can be editing.
-     *
+     * <p>
      * Validations:
      * - Most exists in the list.
      * - Most have a valid schema.
@@ -145,25 +158,26 @@ public class CatalogService implements Service<Catalog, String, List> {
      * @param catalog to be validate.
      * @return {@code true} if the element is valid. {@code false} otherwise.
      */
-    private boolean validateEdition(Catalog catalog){
-        if(catalog==null) return false;                         // Not null
-        if(!list.contains(catalog)) return false;               // ID in list
-        if(!validateSchema(catalog.getSchema())) return false;  // Valid schema
+    private boolean validateEdition(Catalog catalog) {
+        if (catalog == null) return false;                         // Not null
+        if (!list.contains(catalog)) return false;               // ID in list
+        if (!validateSchema(catalog.getSchema())) return false;  // Valid schema
         return !nameUsedByOtherCatalog(catalog);                // Name used
     }
 
     /**
      * Validates the schema of one Catalog.
-     *
+     * <p>
      * Validations:
      * - Most have a schema and, at least, one property defined.
      *
      * @param schema to verify.
      * @return {@code true} if the schema is valid. {@code false} otherwise.
      */
-    private boolean validateSchema(List<String> schema){
-        return schema!=null && !schema.isEmpty();
+    private boolean validateSchema(List<String> schema) {
+        return schema != null && !schema.isEmpty();
     }
+
     /**
      * Checks if the name has been used by one Catalog.
      *
@@ -176,6 +190,7 @@ public class CatalogService implements Service<Catalog, String, List> {
                 return true;
         return false;
     }
+
     /**
      * Checks if the name is used used by other Catalog.
      *
@@ -184,17 +199,17 @@ public class CatalogService implements Service<Catalog, String, List> {
      */
     private boolean nameUsedByOtherCatalog(Catalog catalog) {
         for (Catalog c : list)
-            if(!c.equals(catalog))
+            if (!c.equals(catalog))
                 if (c.getName().equals(catalog.getName()))
                     return true;
         return false;
     }
 
-    private Boolean refresh(){
+    private Boolean refresh() {
         //Lee el archivo
         Object object = catalogPersistence.read();
         //Valida que existe y lo sustituye por la lista en memoria
-        if(object!=null){
+        if (object != null) {
             list = (List<Catalog>) object;
             return true;
         }

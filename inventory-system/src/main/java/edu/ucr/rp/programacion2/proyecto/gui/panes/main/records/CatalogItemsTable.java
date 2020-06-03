@@ -1,7 +1,7 @@
 package edu.ucr.rp.programacion2.proyecto.gui.panes.main.records;
 
-import edu.ucr.rp.programacion2.proyecto.domain.logic.Inventory;
-import edu.ucr.rp.programacion2.proyecto.domain.logic.Item;
+import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
+import edu.ucr.rp.programacion2.proyecto.domain.Item;
 import edu.ucr.rp.programacion2.proyecto.gui.javafx.util.Style;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.logic.Service;
@@ -29,6 +29,9 @@ import static edu.ucr.rp.programacion2.proyecto.gui.javafx.util.PaletteDesign.*;
 import static edu.ucr.rp.programacion2.proyecto.gui.javafx.util.UIConstants.*;
 import static edu.ucr.rp.programacion2.proyecto.gui.panes.main.records.Properties.CATALOG_SCHEMA_PROPERTY;
 
+/**
+ * This shows the list of items of one catalog.
+ */
 public class CatalogItemsTable implements PaneViewer {
 
     //  Variables  \\

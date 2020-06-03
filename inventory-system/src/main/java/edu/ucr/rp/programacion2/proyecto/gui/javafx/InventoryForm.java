@@ -1,6 +1,6 @@
 package edu.ucr.rp.programacion2.proyecto.gui.javafx;
 
-import edu.ucr.rp.programacion2.proyecto.domain.logic.Inventory;
+import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
 import edu.ucr.rp.programacion2.proyecto.gui.javafx.util.PaneUtil;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.logic.InventoryService;
@@ -25,7 +25,7 @@ public class InventoryForm implements PaneViewer {
     }
 
     private void initializeInventoryService(){
-        inventoryService = new InventoryService();
+        inventoryService = InventoryService.getInstance();
     }
 
     private void setupControls(GridPane pane) {

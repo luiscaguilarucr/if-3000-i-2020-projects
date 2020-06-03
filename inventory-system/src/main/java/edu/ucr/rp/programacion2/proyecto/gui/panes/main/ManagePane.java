@@ -33,10 +33,11 @@ public class ManagePane implements PaneViewer {
     private void initializePanes(Stage stage, Pane basePane) {
         panes.put(PaneName.BASE, basePane);
         panes.put(PaneName.MENU_BAR, new ViewMenuBar(stage).getPane());
-        panes.put(PaneName.SELECT_INVENTORY, new InventorySelection().getPane());
         panes.put(PaneName.ADD_INVENTORY, new InventoryForm().getPane());
+        panes.put(PaneName.DELETE_INVENTORY, new DeleteInventory().getPane());
         panes.put(PaneName.ADD_CATALOG, new CatalogForm().getPane());
         panes.put(PaneName.ADD_ITEM, new ItemForm().getPane());
+        //panes.put(PaneName.CATALOG_CONFIG, new);
         //panes.put(PaneName., new .getPane());
     }
 

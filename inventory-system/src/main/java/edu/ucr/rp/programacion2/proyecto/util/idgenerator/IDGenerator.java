@@ -1,9 +1,9 @@
 package edu.ucr.rp.programacion2.proyecto.util.idgenerator;
 
-import edu.ucr.rp.programacion2.proyecto.business_rules.io.IDGeneratorPersistence;
-import edu.ucr.rp.programacion2.proyecto.domain.logic.Inventory;
+import edu.ucr.rp.programacion2.proyecto.persistance.IDGeneratorPersistence;
+import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
 
-public class IDGenerator implements Generable<Integer>{
+public class IDGenerator implements Generable<Integer> {
     private Integer counter;
     private IDGeneratorPersistence persistence;
 
@@ -23,6 +23,7 @@ public class IDGenerator implements Generable<Integer>{
         save(++counter);
         return counter;
     }
+
     /**
      * This methods returns and without increase the ID counter.
      *
@@ -30,18 +31,31 @@ public class IDGenerator implements Generable<Integer>{
      */
     @Override
     public Integer get() {
-        return counter+1;
+        return counter + 1;
     }
 
 
-    private void save(Integer counter){
+    /**
+     * Reset the counter to zero.
+     *
+     * @return {@code true} the counter has become zero, {@code false} an error has occurred.
+     */
+    public boolean reset() {
+        counter = 0;
+        save(counter);
+        return counter.equals(0);
+    }
+
+    private void save(Integer counter) {
         persistence.write(counter);
     }
-    private Boolean refresh(){
+
+
+    private Boolean refresh() {
         //Lee el archivo
         Integer object = persistence.read();
         //Valida que existe y lo sustituye por la id en memoria
-        if(object!=null){
+        if (object != null) {
             counter = object;
             return true;
         }

@@ -1,20 +1,29 @@
 package edu.ucr.rp.programacion2.proyecto.logic;
 
-import edu.ucr.rp.programacion2.proyecto.business_rules.io.InventoryPersistence;
-import edu.ucr.rp.programacion2.proyecto.domain.logic.Inventory;
+import edu.ucr.rp.programacion2.proyecto.persistance.InventoryPersistence;
+import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class InventoryService implements Service<Inventory, String, List>{
+    //  Variables  \\
+    private static InventoryService instance;
     private List<Inventory> list;
     private InventoryPersistence inventoryPersistence;
-
-    public InventoryService(){
-        list = new ArrayList<Inventory>();
+    //  Constructor  \\
+    private InventoryService(){
+        list = new ArrayList<>();
         inventoryPersistence = new InventoryPersistence();
         refresh();
     }
+    //  Singleton Pattern  \\
+    public static InventoryService getInstance(){
+        if(instance == null)
+            instance = new InventoryService();
+        return instance;
+    }
+
     /**
      * This method add a new inventory element to the list.
      * The elements is colocate and validate before been added.
@@ -40,7 +49,7 @@ public class InventoryService implements Service<Inventory, String, List>{
      * @return {@code true} if the inventory element has been modified. {@code false} Otherwise.
      */
     @Override
-    public boolean edit(Inventory inventory) {
+    public boolean edit(Inventory inventory) {//TODO evalute how to change name. or identify witch object was selected.
         refresh();
         if(validateEdition(inventory)){
             list.add(list.indexOf(inventory), inventory);
@@ -71,7 +80,15 @@ public class InventoryService implements Service<Inventory, String, List>{
      * @return {@code true} if the list contains more than one item. {@code false} the list is empty.
      */
     public boolean containsAnInventory(){
+        refresh();
         return list.size() > 0;
+    }
+
+    public boolean removeAll() {
+        list.clear();
+        if (!inventoryPersistence.deleteAll()) return false;
+        refresh();
+        return list.isEmpty();
     }
 
     /**
