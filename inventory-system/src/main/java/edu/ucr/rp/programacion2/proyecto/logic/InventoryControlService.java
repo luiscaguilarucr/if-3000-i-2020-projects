@@ -59,9 +59,18 @@ public class InventoryControlService {//TODO change name(don't use Service)
         }
     }
 
+    /**
+     *
+     * @param inventory
+     * @return
+     */
     private List<Catalog> getCatalogsOf(Inventory inventory) {
         catalogService = new CatalogService(inventory);
         return catalogService.getAll();
+    }
+    public int size(){
+        updateList();
+        return list.size();
     }
 
 }

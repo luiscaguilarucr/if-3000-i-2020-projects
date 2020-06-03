@@ -119,16 +119,18 @@ public class CatalogService implements Service<Catalog, String, List> {
     }
 
     /**
-     * Validates if the list contains some catalog.
-     * @return {@code true} if the list contains more than one item. {@code false} the list is empty.
+     * Creates a list with the names of the catalogs.
+     *
+     * @return  {@code List<String>} List with names of catalogs.
      */
-    public boolean containsACatalog(){
-        refresh();
-        return list.size() > 0;
+    public List getNamesList(){
+        List<String> namesList = new ArrayList();
+        for(Catalog catalog : list)
+            namesList.add(catalog.getName());
+        return namesList;
     }
-
+    
     //  More methods \\
-
     /**
      * Check if the catalog can be added.
      * <p>

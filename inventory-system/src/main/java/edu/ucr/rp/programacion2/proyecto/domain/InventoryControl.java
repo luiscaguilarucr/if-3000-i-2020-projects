@@ -15,18 +15,16 @@ public class InventoryControl {
         return inventoryName;
     }
 
-    public InventoryControl setInventoryName(String inventoryName) {
+    public void setInventoryName(String inventoryName) {
         this.inventoryName = inventoryName;
-        return this;
     }
 
     public String getCatalogName() {
         return catalogName;
     }
 
-    public InventoryControl setCatalogName(String catalogName) {
+    public void setCatalogName(String catalogName) {
         this.catalogName = catalogName;
-        return this;
     }
 
     @Override
@@ -36,5 +34,13 @@ public class InventoryControl {
         InventoryControl that = (InventoryControl) o;
         return Objects.equals(inventoryName, that.inventoryName) &&
                 Objects.equals(catalogName, that.catalogName);
+    }
+
+    @Override
+    public String toString() {
+        return "InventoryControl{" +
+                "inventoryName='" + inventoryName + '\'' +
+                ", catalogName='" + catalogName + '\'' +
+                '}';
     }
 }
