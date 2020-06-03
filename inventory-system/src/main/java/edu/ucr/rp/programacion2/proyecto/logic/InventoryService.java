@@ -80,14 +80,17 @@ public class InventoryService implements Service<Inventory, String, List>{
      * @return {@code true} if the list contains more than one item. {@code false} the list is empty.
      */
     public boolean containsAnInventory(){
+        refresh();
         return list.size() > 0;
     }
+
     public boolean removeAll() {
         list.clear();
         if (!inventoryPersistence.deleteAll()) return false;
         refresh();
         return list.isEmpty();
     }
+
     /**
      * This method returns an inventory element if this exists in the list.
      *

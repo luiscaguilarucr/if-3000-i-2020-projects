@@ -37,6 +37,7 @@ public class InventoryServiceTest extends TestCase {
     }
 
     public void testGetAll() {
+        System.out.println(inventoryService.getAll());
     }
 
     public void deleteAll(){

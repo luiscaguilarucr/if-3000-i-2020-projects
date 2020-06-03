@@ -123,6 +123,7 @@ public class CatalogService implements Service<Catalog, String, List> {
      * @return {@code true} if the list contains more than one item. {@code false} the list is empty.
      */
     public boolean containsACatalog(){
+        refresh();
         return list.size() > 0;
     }
 

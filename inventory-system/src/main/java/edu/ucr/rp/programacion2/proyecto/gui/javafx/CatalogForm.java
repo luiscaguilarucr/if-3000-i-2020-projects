@@ -6,6 +6,7 @@ import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.logic.CatalogService;
 import edu.ucr.rp.programacion2.proyecto.logic.InventoryService;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
@@ -20,8 +21,7 @@ public class CatalogForm implements PaneViewer {
     private CatalogBuilder catalogBuilder = new CatalogBuilder();
     private TextField catalogNameTextField;
     private TextField featureNameTextField;
-    private Label inventoryNameLabel;
-    private Label inventoryNameSelectedLabel;
+    private Label inventoryIndicationLabel;
     private Button confirmInventoryButton;
     private Button addFeatureButton;
     private Button saveCatalogButton;
@@ -46,29 +46,25 @@ public class CatalogForm implements PaneViewer {
     }
 
     private void setupInventoryControls(GridPane pane){
-        initializeInventoryService();
-        buildInventoryComboBox(pane);
-        confirmInventoryButton = PaneUtil.buildButton("Select inventory", pane, 2, 0);
+        if (PaneUtil.setupInventoryControls(confirmInventoryButton, inventoryService)) {
+            buildInventoryComboBox(pane);
+            confirmInventoryButton = PaneUtil.buildButtonImage(new Image("select.png"), pane, 2, 0);
+        }
     }
 
-    private void setupCatalogControls(GridPane pane, Inventory inventory) {
-        inventoryNameLabel = PaneUtil.buildLabel(pane, "Inventory selected: ", 0, 1);
-        inventoryNameSelectedLabel = PaneUtil.buildLabel(pane, inventory.getName(), 1,1);
-        catalogNameTextField = PaneUtil.buildTextInput("Catalog name: ", pane, 0);
-        featureNameTextField = PaneUtil.buildTextInput("Feature: ", pane, 4);
-        addFeatureButton = PaneUtil.buildButton("Add feature", pane, 3, 4);
+    private void setupCatalogControls(GridPane pane) {
+        PaneUtil.buildInventorySelectedLabel(pane, inventoryComboBox.getValue());
+        catalogNameTextField = PaneUtil.buildTextInput("Catalog name: ", pane, 1);
+        featureNameTextField = PaneUtil.buildTextInput("Feature: ", pane, 2);
+        addFeatureButton = PaneUtil.buildButtonImage(new Image("add.png"), pane, 2, 2);
         saveCatalogButton = PaneUtil.buildButton("Save catalog", pane, 1, 6);
     }
 
     private void addInventoryHandlers(GridPane pane){
         confirmInventoryButton.setOnAction((event -> {
-            if (inventoryComboBox.getValue() == null) {
-                PaneUtil.showAlert(Alert.AlertType.INFORMATION, "Error, did not select an inventory", "You must select an inventory");
-            } else {
-                inventoryComboBox.setEditable(false);
-                confirmInventoryButton.setVisible(false);
+            if(PaneUtil.addInventoryHandlers(inventoryComboBox, inventoryIndicationLabel, confirmInventoryButton)){
                 initializeCatalogService(inventoryService.get(inventoryComboBox.getValue()));
-                setupCatalogControls(pane, inventoryService.get(inventoryComboBox.getValue()));
+                setupCatalogControls(pane);
                 addCatalogHandlers(pane);
             }
         }));
@@ -81,7 +77,7 @@ public class CatalogForm implements PaneViewer {
     }
 
     private ComboBox<String> buildInventoryComboBox(GridPane pane){
-        PaneUtil.buildLabel(pane, "Choose an inventory", 0, 0);
+        inventoryIndicationLabel = PaneUtil.buildLabel(pane, "Chose an inventory",0, 0);
         inventoryComboBox = PaneUtil.buildComboBox(pane, getInventoryNames(), 1,0);
         return inventoryComboBox;
     }
@@ -119,23 +115,18 @@ public class CatalogForm implements PaneViewer {
         } else if(schema.size() > 0) {
             featureNameTextField.setPromptText("");
             featureNameTextField.setStyle("-fx-background-color: #FFFFFF");
-
-            initializeCatalogService(new Inventory("Carros")); //TODO cambiar lo de carros
+            initializeCatalogService(inventoryService.get(inventoryComboBox.getValue()));
             catalogBuilder.withName(catalogNameTextField.getText());
             catalogBuilder.withSchema(schema);
-
             Catalog catalog = catalogBuilder.build();
             wasAdded = catalogService.add(catalog);
         }
         if (wasAdded) {
+            getCatalogFormPane();
             PaneUtil.showAlert(Alert.AlertType.INFORMATION, "Catalog added", "The catalog " + catalogNameTextField.getText().toString() + " was added correctly");
         }else {
             PaneUtil.showAlert(Alert.AlertType.INFORMATION, "ERROR when adding", "The catalog " + catalogNameTextField.getText().toString() + " was not added");
         }
-    }
-
-    public Inventory inventorySelected(){
-        return inventoryService.get(inventoryComboBox.getValue());
     }
 
     private List<String> getInventoryNames(){
