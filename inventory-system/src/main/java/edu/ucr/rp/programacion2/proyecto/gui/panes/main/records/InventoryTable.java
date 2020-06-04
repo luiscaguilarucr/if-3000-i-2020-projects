@@ -13,10 +13,13 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.util.Callback;
+
+import java.util.List;
 
 import static edu.ucr.rp.programacion2.proyecto.gui.javafx.LabelConstants.*;
 import static edu.ucr.rp.programacion2.proyecto.gui.javafx.util.UIConstants.*;
@@ -30,8 +33,8 @@ import static edu.ucr.rp.programacion2.proyecto.gui.javafx.util.UIConstants.*;
 public class InventoryTable implements PaneViewer {
     //  Variables  \\
     private Button createButton;
-    private ComboBox inventoryComboBox;
-    private TextField searchTextField;
+    private ChoiceBox inventoryChoiceBox;
+    private TextField filterField;
     private TableView tableView;
     private TableColumn inventoryNameColumn;
     private TableColumn catalogNameColumn;
@@ -68,8 +71,9 @@ public class InventoryTable implements PaneViewer {
         setupControls(pane);
         setupTableView(tableView);
         addHandlers();
-        updateInventoryComboBox();
+        updateInventoryFilter();
         setupStyles();
+        updateResultsLabel();
         return pane;
     }
 
@@ -82,10 +86,10 @@ public class InventoryTable implements PaneViewer {
         //BuilderFX.buildLabelTitle(TITLE_CATALOG_LIST, pane, 0, 0, 2);TODO use other pane.
         createButton = BuilderFX.buildButton(CREATE_LABEL, pane, 0, 0);
         BuilderFX.buildLabelTitle(TITLE_INVENTORY, pane, 0, 1, 1);
-        inventoryComboBox = BuilderFX.buildComboBox(COMBO_BOX_SELECT_LABEL, pane, 1, 1);
-        searchTextField = BuilderFX.buildTextInput(SEARCH_LABEL, pane, 3, 1);
+        inventoryChoiceBox = BuilderFX.buildChoiceBox(pane, 1, 1);
+        filterField = BuilderFX.buildTextInput(SEARCH_LABEL, pane, 3, 1);
         tableView = BuilderFX.buildTableView(pane, 0, 2, 4, 1);
-        resultsLabel = BuilderFX.buildLabelMinimal(SEARCH_RESULTS_LABEL, pane, 0, 3, 2);
+        resultsLabel = BuilderFX.buildLabelMinimal("", pane, 0, 3, 2);
         pagination = BuilderFX.buildPagination(pane, 2, 3, 2, 1);
     }
 
@@ -161,7 +165,7 @@ public class InventoryTable implements PaneViewer {
      */
     private void fillTable(TableView<InventoryControl> tableView) {
         try {
-            ObservableList<InventoryControl> listFiltered = getList();
+            ObservableList<InventoryControl> listFiltered = getFilteredList();
             tableView.setItems(listFiltered);
 
         } catch (Exception e) {
@@ -169,25 +173,72 @@ public class InventoryTable implements PaneViewer {
         }
     }
 
+
     /**
-     * Ask the service for the list of objects.
+     * @return
+     */
+    private FilteredList<InventoryControl> getFilteredList() {
+        //  Getting list
+        ObservableList<InventoryControl> items = getObservableList(getList());
+        FilteredList<InventoryControl> filteredList = new FilteredList<>(items);
+        // Adding filters
+        // Case #1 -> Show all
+        filteredList.setPredicate(b -> true);
+
+        // Case #2 -> Show content selected in choiceBox.
+        inventoryChoiceBox.valueProperty().addListener((observableValue, oldValue, newValue) -> {
+            filteredList.setPredicate(inventoryControl -> {
+                // SubCase #1 filter is empty or null
+                if (newValue == null || newValue.toString().isEmpty()) return true;
+
+                // Get the input.
+                String inputFilter = newValue.toString().toLowerCase();
+                // SubCase #2 filter the name of the inventories.
+                return inventoryControl.getInventoryName().toLowerCase().contains(inputFilter);
+            });
+            // Update results message.
+            updateResultsLabel();
+        });
+
+        // Case #3 -> Show content searched in filterField.
+        filterField.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredList.setPredicate(inventoryControl -> {
+                // SubCase #1 filter is empty or null
+                if (newValue == null || newValue.isEmpty()) return true;
+
+                // Get the input.
+                String inputFilter = newValue.toLowerCase();
+                // SubCase #2 filter the name of the inventories.
+                if (inventoryControl.getInventoryName().toLowerCase().contains(inputFilter)) {
+                    return true;
+                }
+                // SubCase #3 filter the name of the catalogs.
+                return inventoryControl.getCatalogName().toLowerCase().contains(inputFilter);
+
+            });
+            // Update results message.
+            updateResultsLabel();
+        });
+
+        return filteredList;
+    }
+
+    /**
+     * Converts the list of inventory Control into a ObservableList.
      *
      * @return {@code ObservableList} observable list with existing objects.
      */
-    private ObservableList<InventoryControl> getObservableList() {
-        return FXCollections.observableArrayList(inventoryControlService.getAll());
+    private ObservableList<InventoryControl> getObservableList(List<InventoryControl> inventoryControls) {
+        return FXCollections.observableArrayList(inventoryControls);
     }
 
-    private FilteredList<InventoryControl> filterList(ObservableList<InventoryControl> observableList) {
-        return new FilteredList<>(observableList).filtered(inventoryControl ->
-                (inventoryControl.getInventoryName().equalsIgnoreCase(inventoryComboBox.getValue().toString())));
-    }
-
-    private ObservableList<InventoryControl> getList() {
-        if (inventoryComboBox.getValue() != null)
-            return filterList(getObservableList());
-        else
-            return getObservableList();
+    /**
+     * Get the list of all the inventories and catalogs from InventoryControl Service.
+     *
+     * @return {@code List} list with register in inventory service.
+     */
+    private List<InventoryControl> getList() {
+        return inventoryControlService.getAll();
     }
 
     /**
@@ -195,15 +246,16 @@ public class InventoryTable implements PaneViewer {
      *
      * @param label Button text
      */
-    private TableColumn buildButtonColumn(String label, ImageView image, TableView tableView) {
+    private TableColumn buildButtonColumn(String label, String image, TableView tableView) {
         TableColumn tableColumn = new TableColumn(label);
         Callback<TableColumn<InventoryControl, Void>, TableCell<InventoryControl, Void>> cellFactory = new Callback<>() {
             @Override
             public TableCell<InventoryControl, Void> call(final TableColumn<InventoryControl, Void> param) {
                 final TableCell<InventoryControl, Void> cell = new TableCell<>() {
-                    private final Button btn = new Button("", image);
+                    private final Button btn = new Button("");
 
                     {// Definir funciones del botón
+                        btn.setGraphic(new ImageView(new Image(image)));
                         btn.getStyleClass().add("table-buttons");
                         switch (label) {
                             case ITEMS_COLUMN -> btn.setOnAction(actionEvent -> {
@@ -244,7 +296,7 @@ public class InventoryTable implements PaneViewer {
      * Add functionality to buttons or events.
      */
     private void addHandlers() {
-        inventoryComboBox.setOnAction(actionEvent -> updateInventoryComboBox());
+        inventoryChoiceBox.setOnAction(actionEvent -> updateInventoryFilter());
     }
 
     private void configAction(InventoryControl inventoryControl) {//TODO
@@ -258,10 +310,18 @@ public class InventoryTable implements PaneViewer {
 
     // Update ComboBoxes
 
-    private void updateInventoryComboBox() {
-        BuilderFX.fillComboBox(inventoryComboBox, inventoryService.getNamesList());
-        refreshTable();
-        resultsLabel.setText("Showing " + tableView.getItems().size() + " of " + inventoryControlService.size() + " catalogs.");
+    private void updateInventoryFilter() {
+        BuilderFX.fillChoiceBox(inventoryChoiceBox, inventoryService.getNamesList());
+    }
+
+    /**
+     * Updates the label of the matches and number of items showed in the table.
+     */
+    private void updateResultsLabel() {
+        int total = getList().size();                   // Total of inventories and catalogs.
+        int current = tableView.getItems().size();      // Number of inventories and catalogs in the table.
+        resultsLabel.setText("Showing " + current + " of " + total + " catalogs.");
+
     }
 
     @Override

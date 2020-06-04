@@ -15,6 +15,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -332,7 +333,7 @@ public class CatalogItemsTable implements PaneViewer {
      *
      * @param label Button text
      */
-    private void addButtonToTable(String label, ImageView image, TableView tableView) {
+    private void addButtonToTable(String label, String image, TableView tableView) {
         TableColumn<Item, Void> tcAction = new TableColumn(label);
         //tcAction.setStyle(TABLE_VIEW_BUTTONS_DEFAULT_STYLE);
 
@@ -344,7 +345,7 @@ public class CatalogItemsTable implements PaneViewer {
 
 
                     {// Definir funciones del botón
-                        btn.setGraphic(image); //agrega imagen
+                        btn.setGraphic(new ImageView(new Image(image))); //agrega imagen
                         //TODO Style and size
                         switch (label) {
                             case VIEW_LABEL:

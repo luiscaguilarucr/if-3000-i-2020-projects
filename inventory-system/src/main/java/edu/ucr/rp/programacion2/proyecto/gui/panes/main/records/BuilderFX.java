@@ -6,6 +6,7 @@ import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -13,7 +14,6 @@ import javafx.scene.layout.Priority;
 
 import java.util.List;
 
-import static edu.ucr.rp.programacion2.proyecto.gui.javafx.LabelConstants.COMBO_BOX_SELECT_LABEL;
 import static edu.ucr.rp.programacion2.proyecto.gui.javafx.util.PaletteDesign.*;
 import static edu.ucr.rp.programacion2.proyecto.gui.javafx.util.UIConstants.*;
 
@@ -88,13 +88,17 @@ public class BuilderFX {
     public static ComboBox buildComboBox(String promptText, GridPane pane, int column, int row) {
         ComboBox comboBox = new ComboBox();
         comboBox.setPromptText(promptText);
-        comboBox.setMaxSize(180, 40);
-        comboBox.setMinSize(150, 30);
-        comboBox.setPromptText(COMBO_BOX_SELECT_LABEL);
-        Style.settextFieldColor(comboBox, PRIMARY_COLOR_TEXTFIELD);
         pane.add(comboBox, column, row);
         return comboBox;
     }
+
+
+    public static ChoiceBox buildChoiceBox(GridPane pane, int column, int row) {
+        ChoiceBox choiceBox = new ChoiceBox();
+        pane.add(choiceBox, column, row);
+        return choiceBox;
+    }
+
 
     /**
      * Create a table view and place it in a pane.
@@ -163,9 +167,9 @@ public class BuilderFX {
      * @param row    row in which it will be located.
      * @return {@code Button} button configured and located in the pane.
      */
-    public static Button buildIconButton(String text, ImageView imageView, GridPane pane, int column, int row) {
+    public static Button buildIconButton(String text, String image, GridPane pane, int column, int row) {
         Button button = new Button(text);
-        button.setGraphic(imageView);
+        button.setGraphic(new ImageView(new Image(image)));
         pane.add(button, column, row);
         return button;
     }
@@ -180,5 +184,16 @@ public class BuilderFX {
         comboBox.setItems(FXCollections.observableList(list));
         comboBox.getItems().sorted();
 
+    }
+
+    /**
+     * Fills one choiceBox with the items in the list.
+     *
+     * @param choiceBox to fill.
+     * @param list     list og items.
+     */
+    public static void fillChoiceBox(ChoiceBox choiceBox, List list) {
+        choiceBox.setItems(FXCollections.observableList(list));
+        choiceBox.getItems().sorted();
     }
 }
