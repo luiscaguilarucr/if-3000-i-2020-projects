@@ -1,6 +1,7 @@
 package edu.ucr.rp.programacion2.proyecto.gui.javafx;
 
 import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
+import edu.ucr.rp.programacion2.proyecto.gui.javafx.catalog.CatalogForm;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneName;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.panes.main.ManagePane;
@@ -100,6 +101,7 @@ public class ViewMenuBar implements PaneViewer {
         });
 
         mI_DeleteCatalog.setOnAction((event) -> {
+            ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.DELETE_CATALOG));
         });
 
         m_Catalog.getItems().addAll(mI_AddCatalog, mI_ViewAllCatalogs, mI_DeleteCatalog);
@@ -137,6 +139,7 @@ public class ViewMenuBar implements PaneViewer {
         });
 
         mI_DeleteItem.setOnAction((event) -> {
+            ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.DELETE_ITEM));
         });
 
         m_Item.setOnShowing((event) -> {

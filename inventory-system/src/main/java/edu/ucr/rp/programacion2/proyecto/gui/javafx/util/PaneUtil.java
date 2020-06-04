@@ -1,10 +1,13 @@
 package edu.ucr.rp.programacion2.proyecto.gui.javafx.util;
 
+import org.controlsfx.control.CheckComboBox;
 import edu.ucr.rp.programacion2.proyecto.domain.Catalog;
 import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
 import edu.ucr.rp.programacion2.proyecto.logic.CatalogService;
 import edu.ucr.rp.programacion2.proyecto.logic.InventoryService;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -79,6 +82,14 @@ public class PaneUtil {
         comboBox.setMaxWidth(1000);
         pane.add(comboBox, column, row);
         return comboBox;
+    }
+
+    public static CheckComboBox buildCheckComboBox(GridPane pane, List<String> list, int column, int row){
+        ObservableList<String> strings = FXCollections.observableArrayList(list);
+        CheckComboBox<String> checkComboBox = new CheckComboBox<String>(strings);
+        checkComboBox.setMaxWidth(200);
+        pane.add(checkComboBox, column,row);
+        return checkComboBox;
     }
 
     public static boolean setupInventoryControls(List list) {
