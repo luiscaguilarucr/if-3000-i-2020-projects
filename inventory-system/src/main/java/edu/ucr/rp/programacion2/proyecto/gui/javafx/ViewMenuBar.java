@@ -49,7 +49,7 @@ public class ViewMenuBar implements PaneViewer {
         });
 
         mI_SeeInventory.setOnAction((event)->{
-            ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.INVENTORY_TABLE));
+            ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.SHOW_INVENTORY));
         });
 
         mI_ChangeName.setOnAction((event) -> {

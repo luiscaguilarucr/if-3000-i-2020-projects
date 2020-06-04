@@ -44,7 +44,7 @@ public class CatalogConfigurationForm {
         deleteCatalogButton =BuilderFX.buildIconButton("", DELETE_ICON, pane, 3, 2);
         BuilderFX.buildLabelNormal(ITEMS_COLUMN, pane, 0, 3);
         showItemsButton = BuilderFX.buildIconButton(ITEMS_COLUMN, ITEMS_ICON, pane, 1,3);
-        BuilderFX.buildLabelNormal(CATALOG_SCHEMA_COLUMN, pane, 0, 4);
+        BuilderFX.buildLabelNormal(TITLE_CATALOG_SCHEMA, pane, 0, 4);
         schemaPagination = BuilderFX.buildPagination(pane, 1, 4, 1, 1);
     }
 

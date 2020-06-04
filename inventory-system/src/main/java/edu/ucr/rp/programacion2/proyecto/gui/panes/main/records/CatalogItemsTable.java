@@ -104,7 +104,7 @@ public class CatalogItemsTable implements PaneViewer {
         buildLabelTitle(TITLE_CATALOG, pane, 0);
         catalogNameComboBox = buildComboBox(TITLE_CATALOG, pane, 2, 0);
         fillCatalogNameComboBox(catalogNameComboBox, (List) catalogService.getAll());
-        buildLabelTitle(TITLE_ITEM_LIST, pane, 1);
+        buildLabelTitle(TITLE_ITEMS, pane, 1);
         searchItemTextField = buildTextInput(TYPE_HERE_PROMPT_TEXT, pane, 2, 1);
         searchItemButton = buildButton(REFRESH_LABEL, pane, 3, 0);
         tableView = buildTableView(pane, 0, 2);
@@ -244,7 +244,7 @@ public class CatalogItemsTable implements PaneViewer {
     private void addColumns(TableView tableView) {
         tableView.getColumns().clear();
         //ItemNameColumn = buildTableColumn(Item_NAME_COLUMN, Item_NAME_PROPERTY, tableView);
-        catalogSchemaColumn = buildTableColumn(CATALOG_SCHEMA_COLUMN, CATALOG_SCHEMA_PROPERTY, tableView);
+        catalogSchemaColumn = buildTableColumn(TITLE_CATALOG_SCHEMA, CATALOG_SCHEMA_PROPERTY, tableView);
     }
 
     /**

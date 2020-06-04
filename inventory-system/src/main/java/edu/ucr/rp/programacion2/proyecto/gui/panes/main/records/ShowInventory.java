@@ -3,7 +3,9 @@ package edu.ucr.rp.programacion2.proyecto.gui.panes.main.records;
 
 import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
 import edu.ucr.rp.programacion2.proyecto.domain.InventoryControl;
+import edu.ucr.rp.programacion2.proyecto.gui.model.PaneName;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
+import edu.ucr.rp.programacion2.proyecto.gui.panes.main.ManagePane;
 import edu.ucr.rp.programacion2.proyecto.logic.CatalogService;
 import edu.ucr.rp.programacion2.proyecto.logic.InventoryControlService;
 import edu.ucr.rp.programacion2.proyecto.logic.InventoryService;
@@ -101,7 +103,7 @@ public class ShowInventory implements PaneViewer {
     /**
      * Set the styles of the components.
      */
-    private void setupStyles() { //TODO how to simplify.
+    private void setupStyles() { //TODO how to simplify. -> Agregar config en el builder de cada uno.
         // Pane
         pane.getStyleClass().add("show-inventory-pane");
         // Row Constraints
@@ -350,6 +352,7 @@ public class ShowInventory implements PaneViewer {
     }
 
     private void configAction(InventoryControl inventoryControl) {//TODO actionEvent
+        ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.CATALOG_CONFIG));
         System.out.println("Going to config table view.. of " + inventoryControl.getCatalogName());
     }
 

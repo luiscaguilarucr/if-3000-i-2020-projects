@@ -4,6 +4,7 @@ import edu.ucr.rp.programacion2.proyecto.gui.javafx.util.Style;
 import javafx.collections.FXCollections;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -60,6 +61,14 @@ public class BuilderFX {
         return label;
     }
 
+    /**
+     *
+     * @param promptText
+     * @param pane
+     * @param column
+     * @param row
+     * @return
+     */
     public static ComboBox buildComboBox(String promptText, GridPane pane, int column, int row) {
         ComboBox comboBox = new ComboBox();
         comboBox.setPromptText(promptText);
@@ -88,6 +97,7 @@ public class BuilderFX {
         pane.add(tableView, column, row, numColumns, numRows);
         return tableView;
     }
+
 
     /**
      * Builds and text input.
@@ -169,11 +179,28 @@ public class BuilderFX {
         choiceBox.getItems().sorted();
     }
 
+    /**
+     *
+     * @param label
+     * @param node
+     * @param pane
+     * @param column
+     * @param row
+     * @param numColumns
+     * @param numRows
+     * @return
+     */
     public static TitledPane buildTitledPane(String label, Node node, GridPane pane, int column, int row, int numColumns, int numRows) {
         TitledPane titledPane = new TitledPane(label, node);
         titledPane.setAnimated(true);
         titledPane.setExpanded(false);
         pane.add(titledPane, column, row, numColumns, numRows);
         return titledPane;
+    }
+
+    public static Separator buildSeparator(Orientation orientation, GridPane pane, int column, int row, int numColumns, int numRows) {
+        Separator separator = new Separator(orientation);
+        pane.add(separator, column, row, numColumns, numRows);
+        return separator;
     }
 }
