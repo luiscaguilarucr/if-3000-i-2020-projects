@@ -1,12 +1,13 @@
 .root{
-    -fx-background-color: cornsilk;
+    -fx-background-color: #009688;
 }
 .button{
-    -fx-background-color: darkgoldenrod;
+    -fx-background-color: whitesmoke;
+    -fx-animated: true;
+    -fx-text-fill: rgba(45,51,55,0.98);
 }
 .combo-box{
     -fx-background-color: whitesmoke;
-    -fx-border-color: grey;
     -fx-font-size: 12px;
 }
 /* Set style of cells */
@@ -22,9 +23,17 @@
     -fx-text-fill: #03A9F4;
     -fx-text-alignment: center;
 }
+
+/* Set style of column headers */
+.table-view-column-buttons{
+    -fx-alignment: center;
+}
+
+
 .table-row-cell .table-cell{
     -fx-border-width: 0.25px;
     -fx-border-color: transparent gray gray transparent;
+    -fx-text-alignment: center;
 }
 .table-row-cell:empty .table-cell{
     -fx-border-width: 0px;
@@ -32,6 +41,20 @@
 
 .table-buttons{
     -fx-alignment: center;
-    -fx-background-color: white;
-    -fx-background-image: icon\.png;
+    -fx-background-color: transparent;
+}
+/* Set style of inventory table pane */
+.show-inventory-pane {
+    -fx-vgap: 25px;
+    -fx-alignment: top-left;
+    /* top, right, button, left */
+    -fx-padding: 75px, 100px, 100px, 100px;
+    -fx-row-valignment: center;
+    -fx-hgap: 15px;
+}
+
+.results-label{
+    -fx-text-fill: #B2DFDB;
+    -fx-alignment: top-left;
+    -fx-padding: 10px, 10px, 10px, 10px;
 }

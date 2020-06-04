@@ -11,12 +11,13 @@ import edu.ucr.rp.programacion2.proyecto.logic.Service;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.geometry.HPos;
+import javafx.geometry.VPos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
 import javafx.util.Callback;
 
 import java.util.List;
@@ -30,10 +31,12 @@ import static edu.ucr.rp.programacion2.proyecto.gui.javafx.util.UIConstants.*;
  * @author Jeison Araya Mena | B90514
  * @version 2.0
  */
-public class InventoryTable implements PaneViewer {
+public class ShowInventory implements PaneViewer {
     //  Variables  \\
-    private Button createButton;
-    private ChoiceBox inventoryChoiceBox;
+    private TitledPane createTiledPane;
+    private HBox createOptionsHBox;
+    private Button createInventoryButton;
+    private Button createCatalogButton;
     private TextField filterField;
     private TableView tableView;
     private TableColumn inventoryNameColumn;
@@ -43,7 +46,7 @@ public class InventoryTable implements PaneViewer {
     private Pagination pagination;
     private Label resultsLabel;
     private GridPane pane;
-    private InventoryService inventoryService;//TODO que hacer como no reconoce la instancia.
+    private InventoryService inventoryService;
     private Service catalogService;
     private InventoryControlService inventoryControlService;
     //  Methods  \\
@@ -71,7 +74,6 @@ public class InventoryTable implements PaneViewer {
         setupControls(pane);
         setupTableView(tableView);
         addHandlers();
-        updateInventoryFilter();
         setupStyles();
         updateResultsLabel();
         return pane;
@@ -83,10 +85,13 @@ public class InventoryTable implements PaneViewer {
      * @param pane for add components.
      */
     private void setupControls(GridPane pane) {
-        //BuilderFX.buildLabelTitle(TITLE_CATALOG_LIST, pane, 0, 0, 2);TODO use other pane.
-        createButton = BuilderFX.buildButton(CREATE_LABEL, pane, 0, 0);
-        BuilderFX.buildLabelTitle(TITLE_INVENTORY, pane, 0, 1, 1);
-        inventoryChoiceBox = BuilderFX.buildChoiceBox(pane, 1, 1);
+        // Create
+        BuilderFX.buildLabelTitle(TITLE_VIEW_INVENTORY, pane, 0, 0, 2, 1);
+        createInventoryButton = new Button(TITLE_INVENTORY);
+        createCatalogButton = new Button(TITLE_CATALOG);
+        createOptionsHBox = new HBox(createInventoryButton, createCatalogButton);
+        createTiledPane = BuilderFX.buildTitledPane(CREATE_LABEL, createOptionsHBox, pane, 0, 1, 2, 1);
+        // Show
         filterField = BuilderFX.buildTextInput(SEARCH_LABEL, pane, 3, 1);
         tableView = BuilderFX.buildTableView(pane, 0, 2, 4, 1);
         resultsLabel = BuilderFX.buildLabelMinimal("", pane, 0, 3, 2);
@@ -96,13 +101,59 @@ public class InventoryTable implements PaneViewer {
     /**
      * Set the styles of the components.
      */
-    private void setupStyles() {
+    private void setupStyles() { //TODO how to simplify.
+        // Pane
+        pane.getStyleClass().add("show-inventory-pane");
+        // Row Constraints
+        // Row #0
+        RowConstraints rowConstraints = new RowConstraints(25, 25, 30);
+        rowConstraints.setValignment(VPos.TOP);
+        rowConstraints.setVgrow(Priority.SOMETIMES);
+        // Row #1
+        RowConstraints rowConstraints1 = new RowConstraints(50, 50, 150);
+        rowConstraints1.setValignment(VPos.TOP);
+        rowConstraints.setVgrow(Priority.ALWAYS);
+        // Row #2
+        RowConstraints rowConstraints2 = new RowConstraints(500, 600, 600);
+        rowConstraints2.setValignment(VPos.TOP);
+        rowConstraints.setVgrow(Priority.NEVER);
+        // Row #3
+        RowConstraints rowConstraints3 = new RowConstraints(25, 25, 40);
+        rowConstraints3.setValignment(VPos.TOP);
+        rowConstraints.setVgrow(Priority.NEVER);
+        // Add Row Constraints
+        pane.getRowConstraints().addAll(rowConstraints, rowConstraints1, rowConstraints2, rowConstraints3);
+
+        // Columns Constraints
+        ColumnConstraints columnConstraints = new ColumnConstraints(300, 300, 300);
+        columnConstraints.setHalignment(HPos.LEFT);
+        columnConstraints.setHgrow(Priority.ALWAYS);
+
+        ColumnConstraints columnConstraints2 = new ColumnConstraints(150, 175, 200);
+        columnConstraints.setHalignment(HPos.LEFT);
+        columnConstraints.setHgrow(Priority.ALWAYS);
+
+        ColumnConstraints columnConstraints3 = new ColumnConstraints(200, 200, 200);
+        columnConstraints3.setHalignment(HPos.RIGHT);
+        columnConstraints3.setHgrow(Priority.NEVER);
+
+        ColumnConstraints columnConstraints4 = new ColumnConstraints(75, 75, 150);
+        columnConstraints4.setHalignment(HPos.RIGHT);
+        columnConstraints4.setHgrow(Priority.ALWAYS);
+        pane.getColumnConstraints().addAll(columnConstraints, columnConstraints2, columnConstraints3, columnConstraints4);
+
         // Settings for Table Columns
+        // Inventory Column
         inventoryNameColumn.setMinWidth(100);
+        // Catalog Column
         catalogNameColumn.setMinWidth(100);
+        // Items Column
+        itemsActionColumn.getStyleClass().add("table-view-column-buttons");
         itemsActionColumn.setMaxWidth(70);
-        configActionColumn.setMaxWidth(70);
         itemsActionColumn.setMinWidth(70);
+        // Config Column
+        configActionColumn.getStyleClass().add("table-view-column-buttons");
+        configActionColumn.setMaxWidth(70);
         configActionColumn.setMinWidth(70);
         // Settings for Table View
         tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -110,6 +161,8 @@ public class InventoryTable implements PaneViewer {
         tableView.setMinSize(TABLE_VIEW_DEFAULT_MIN_WIDTH, TABLE_VIEW_DEFAULT_MIN_HEIGHT);
         tableView.setMaxSize(TABLE_VIEW_DEFAULT_MAX_WIDTH, TABLE_VIEW_DEFAULT_MAX_HEIGHT);
 
+        // Label
+        resultsLabel.getStyleClass().add("results-label");
     }
 
     /**
@@ -150,7 +203,7 @@ public class InventoryTable implements PaneViewer {
      *
      * @param tableView table where the columns will be added.
      */
-    private void addColumns(TableView<InventoryControl> tableView) {//TODO CHECK HOW TO ADD COLUMNS
+    private void addColumns(TableView<InventoryControl> tableView) {
         tableView.getColumns().clear();
         inventoryNameColumn = buildTableColumn(TITLE_INVENTORY, "inventoryName", tableView);
         catalogNameColumn = buildTableColumn(TITLE_CATALOG, "catalogName", tableView);
@@ -185,22 +238,7 @@ public class InventoryTable implements PaneViewer {
         // Case #1 -> Show all
         filteredList.setPredicate(b -> true);
 
-        // Case #2 -> Show content selected in choiceBox.
-        inventoryChoiceBox.valueProperty().addListener((observableValue, oldValue, newValue) -> {
-            filteredList.setPredicate(inventoryControl -> {
-                // SubCase #1 filter is empty or null
-                if (newValue == null || newValue.toString().isEmpty()) return true;
-
-                // Get the input.
-                String inputFilter = newValue.toString().toLowerCase();
-                // SubCase #2 filter the name of the inventories.
-                return inventoryControl.getInventoryName().toLowerCase().contains(inputFilter);
-            });
-            // Update results message.
-            updateResultsLabel();
-        });
-
-        // Case #3 -> Show content searched in filterField.
+        // Case #2 -> Show content searched in filterField.
         filterField.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredList.setPredicate(inventoryControl -> {
                 // SubCase #1 filter is empty or null
@@ -286,9 +324,6 @@ public class InventoryTable implements PaneViewer {
         return tableColumn;
     }
 
-    private void viewItemsAction(InventoryControl inventoryControl) {//TODO
-        System.out.println("Going to items table view.. of " + inventoryControl.getCatalogName());
-    }
 
     //  HANDLERS  \\
 
@@ -296,22 +331,30 @@ public class InventoryTable implements PaneViewer {
      * Add functionality to buttons or events.
      */
     private void addHandlers() {
-        inventoryChoiceBox.setOnAction(actionEvent -> updateInventoryFilter());
+        createCatalogButton.setOnAction(e -> createCatalogAction());
+        createInventoryButton.setOnAction(e -> createInventoryAction());
+
     }
 
-    private void configAction(InventoryControl inventoryControl) {//TODO
+    private void createInventoryAction() {// TODO actionEvent
+        System.out.println("Create Inventory Button pressed");
+    }
 
+    private void createCatalogAction() {// TODO actionEvent
+       System.out.println("Create Catalog Button pressed");
+    }
+
+    // Table Buttons
+    private void viewItemsAction(InventoryControl inventoryControl) {//TODO actionEvent
+        System.out.println("Going to items table view.. of " + inventoryControl.getCatalogName());
+    }
+
+    private void configAction(InventoryControl inventoryControl) {//TODO actionEvent
+        System.out.println("Going to config table view.. of " + inventoryControl.getCatalogName());
     }
 
     private void refreshTable() {
         fillTable(tableView);
-    }
-
-
-    // Update ComboBoxes
-
-    private void updateInventoryFilter() {
-        BuilderFX.fillChoiceBox(inventoryChoiceBox, inventoryService.getNamesList());
     }
 
     /**

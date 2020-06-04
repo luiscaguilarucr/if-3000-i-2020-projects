@@ -28,7 +28,7 @@ public class LabelConstants {
     public static final String INVENTORY_NAME_COLUMN = "Inventory";
     public static final String TITLE_INVENTORY = "Inventory";
     public static final String CONFIG_NAME_COLUMN = "Config";
-
+    public static final String TITLE_VIEW_INVENTORY = "View Inventory";
 
     public static final String VIEW_ICON = "seeIcon.png";
     public static final String ITEMS_ICON = "itemsIcon.png";
