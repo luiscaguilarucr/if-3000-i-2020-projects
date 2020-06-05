@@ -1,7 +1,5 @@
 package edu.ucr.rp.programacion2.proyecto.gui.javafx;
 
-import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
-import edu.ucr.rp.programacion2.proyecto.gui.App;
 import edu.ucr.rp.programacion2.proyecto.gui.javafx.catalog.CatalogForm;
 import edu.ucr.rp.programacion2.proyecto.gui.javafx.inventory.DeleteInventory;
 import edu.ucr.rp.programacion2.proyecto.gui.javafx.inventory.InventoryForm;
@@ -28,6 +26,7 @@ public class ViewMenuBar implements PaneViewer {
     private CatalogForm catalogForm = new CatalogForm();
     private DeleteInventory deleteInventory = new DeleteInventory();
     private ItemForm itemForm = new ItemForm();
+
     public ViewMenuBar(Stage stage) {
         this.stage = stage;
     }
@@ -142,9 +141,9 @@ public class ViewMenuBar implements PaneViewer {
 
 
         ////////////////////////////////////////////////////////////////////////// Menu "Configuration"
-        Menu m_Configutarion = new Menu("Configuration");
+        Menu m_Configuration = new Menu("Configuration");
 
-        ////////////////////////////////////////// MenuItems for m_Configutarion
+        ////////////////////////////////////////// MenuItems for m_Configuration
         //MenuItem iV_mI_About
         ImageView iV_mI_About = new ImageView(new Image("about.png"));
         MenuItem mI_About = new MenuItem("About", iV_mI_About);
@@ -166,12 +165,12 @@ public class ViewMenuBar implements PaneViewer {
         mI_Exit.setOnAction((event) -> Platform.exit());
         mI_Exit.setAccelerator(KeyCombination.keyCombination("Ctrl+S"));
 
-        //Get the MenuItems in m_Configutarion
-        m_Configutarion.getItems().addAll(mI_About, mI_Credits, mI_Exit);
+        //Get the MenuItems in m_Configuration
+        m_Configuration.getItems().addAll(mI_About, mI_Credits, mI_Exit);
 
 
         // Get the Menus in MenuBar
-        mB_View_MenuBar.getMenus().addAll(m_Configutarion, m_Inventory, m_Catalog, m_Item);
+        mB_View_MenuBar.getMenus().addAll(m_Configuration, m_Inventory, m_Catalog, m_Item);
         mB_View_MenuBar.setMinWidth(2000);
         /// Get the MenuBar in VBox
         vB_MenuBar.getChildren().addAll(mB_View_MenuBar);

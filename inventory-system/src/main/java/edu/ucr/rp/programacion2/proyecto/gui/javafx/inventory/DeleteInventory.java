@@ -38,14 +38,6 @@ public class DeleteInventory implements PaneViewer {
         }
     }
 
-    public void refresh() {
-        initializeInventoryService();
-        if (inventoryService.getAll().size() > 0) {
-            checkComboBox.setVisible(false);
-            setupControlsComboCox();
-        }
-    }
-
     private void clear() {
         deleteInventoryButton.setVisible(false);
         inventoryIndicationLabel.setVisible(false);
@@ -55,10 +47,6 @@ public class DeleteInventory implements PaneViewer {
 
     private void initializeInventoryService() {
         inventoryService = InventoryService.getInstance();
-    }
-
-    private void setupControlsComboCox() {
-        buildCheckComboBoxComboBox();
     }
 
     private void setupControls() {
@@ -79,7 +67,7 @@ public class DeleteInventory implements PaneViewer {
     private void addRefreshButtonHandler() {
         refreshButton = PaneUtil.buildButtonImage(new Image("refresh.png"), pane, 4, 0);
         refreshButton.setOnAction((actionEvent) -> {
-            refresh();
+            refresh2();
         });
     }
 
