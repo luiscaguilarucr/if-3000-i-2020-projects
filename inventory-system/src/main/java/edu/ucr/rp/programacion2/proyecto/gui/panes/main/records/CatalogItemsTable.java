@@ -193,6 +193,7 @@ public class CatalogItemsTable implements PaneViewer {
         TableView<Item> tableView = new TableView<>();
         tableView.setTableMenuButtonVisible(true);//TODO revisar lo que hace
         tableView.setMinSize(TABLE_VIEW_DEFAULT_MIN_WIDTH, TABLE_VIEW_DEFAULT_MIN_HEIGHT);
+        tableView.setMaxSize(TABLE_VIEW_DEFAULT_MIN_WIDTH, TABLE_VIEW_DEFAULT_MIN_HEIGHT);
         tableView.setEditable(true);
         //tableView.setStyle();
         tableView.setPadding(TABLE_VIEW_DEFAULT_INSETS);

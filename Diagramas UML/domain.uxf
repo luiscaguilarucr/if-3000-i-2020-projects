@@ -38,6 +38,7 @@ fontsize=10
 - id: int
 - name: String
 - items: List&lt;Item&gt;
+- schema: List&lt;String&gt;
 
 </panel_attributes>
     <additional_attributes/>
@@ -50,14 +51,14 @@ fontsize=10
       <w>184</w>
       <h>96</h>
     </coordinates>
-    <panel_attributes>Service&lt;E, K, T&gt;
+    <panel_attributes>Service&lt;E, K&gt;
 &lt;&lt;interface&gt;&gt;
 --
 + add(E object): Boolean
 + remove(K key): Boolean
 + modify(E object): Boolean
 + get(K key): E
-+ getAll(): P
++ getAll(): List
 </panel_attributes>
     <additional_attributes/>
   </element>
@@ -70,7 +71,7 @@ fontsize=10
       <h>48</h>
     </coordinates>
     <panel_attributes>CatalogService
-&lt;Catalog, String, List&gt;
+&lt;Catalog, String&gt;
 --
 - list: List&lt;Catalog&gt;
 </panel_attributes>
@@ -143,7 +144,7 @@ fontsize=10
       <h>48</h>
     </coordinates>
     <panel_attributes>InventoryService
-&lt;Inventory, Integer, List&gt;
+&lt;Inventory, Integer&gt;
 --
 - list: List&lt;Inventory&gt;</panel_attributes>
     <additional_attributes/>

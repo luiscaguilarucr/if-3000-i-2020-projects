@@ -1,9 +1,15 @@
 package edu.ucr.rp.programacion2.proyecto.gui.panes.main;
 
-import edu.ucr.rp.programacion2.proyecto.gui.javafx.*;
+import edu.ucr.rp.programacion2.proyecto.gui.javafx.catalog.DeleteCatalog;
+import edu.ucr.rp.programacion2.proyecto.gui.javafx.inventory.DeleteInventory;
+import edu.ucr.rp.programacion2.proyecto.gui.javafx.item.ItemForm;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneName;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.model.SceneName;
+import edu.ucr.rp.programacion2.proyecto.gui.javafx.catalog.CatalogForm;
+import edu.ucr.rp.programacion2.proyecto.gui.javafx.ViewMenuBar;
+import edu.ucr.rp.programacion2.proyecto.gui.javafx.inventory.InventoryForm;
+import edu.ucr.rp.programacion2.proyecto.gui.panes.main.records.InventoryTable;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -19,6 +25,7 @@ public class ManagePane implements PaneViewer {
     private Stage stage;
     private static Pane basePane;
     private static HBox hbox;
+
     public ManagePane(Stage stage) {
         this.stage = stage;
         this.basePane = buildBasePane();
@@ -36,8 +43,9 @@ public class ManagePane implements PaneViewer {
         panes.put(PaneName.ADD_INVENTORY, new InventoryForm().getPane());
         panes.put(PaneName.DELETE_INVENTORY, new DeleteInventory().getPane());
         panes.put(PaneName.ADD_CATALOG, new CatalogForm().getPane());
+        panes.put(PaneName.DELETE_CATALOG, new DeleteCatalog().getPane());
         panes.put(PaneName.ADD_ITEM, new ItemForm().getPane());
-        //panes.put(PaneName.CATALOG_CONFIG, new);
+        panes.put(PaneName.INVENTORY_TABLE, new InventoryTable().getPane());
         //panes.put(PaneName., new .getPane());
     }
 
@@ -76,7 +84,14 @@ public class ManagePane implements PaneViewer {
     public static void setCenterPane(Pane pane) {
         hbox.getChildren().clear();
         hbox.getChildren().add(pane);
+    }
 
+    /**
+     * Change the current pane
+     *
+     */
+    public static void clearPane() {
+        hbox.getChildren().clear();
     }
 
     /**

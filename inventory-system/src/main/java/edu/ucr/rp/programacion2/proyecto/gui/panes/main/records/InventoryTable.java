@@ -1,14 +1,16 @@
 
 package edu.ucr.rp.programacion2.proyecto.gui.panes.main.records;
+
 import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
 import edu.ucr.rp.programacion2.proyecto.domain.InventoryControl;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.logic.CatalogService;
 import edu.ucr.rp.programacion2.proyecto.logic.InventoryControlService;
+import edu.ucr.rp.programacion2.proyecto.logic.InventoryService;
 import edu.ucr.rp.programacion2.proyecto.logic.Service;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.geometry.HPos;
+import javafx.collections.transformation.FilteredList;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
@@ -16,12 +18,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.util.Callback;
 
-import java.util.List;
-
 import static edu.ucr.rp.programacion2.proyecto.gui.javafx.LabelConstants.*;
 import static edu.ucr.rp.programacion2.proyecto.gui.javafx.util.UIConstants.*;
-import static edu.ucr.rp.programacion2.proyecto.gui.panes.main.records.Properties.INVENTORY_CONTROL_CATALOG_PROPERTY;
-import static edu.ucr.rp.programacion2.proyecto.gui.panes.main.records.Properties.INVENTORY_CONTROL_INVENTORY_PROPERTY;
 
 /**
  * This shows the list of catalogs that belongs to an Inventory.
@@ -29,20 +27,20 @@ import static edu.ucr.rp.programacion2.proyecto.gui.panes.main.records.Propertie
  * @author Jeison Araya Mena | B90514
  * @version 2.0
  */
-public class CatalogRecords implements PaneViewer {
+public class InventoryTable implements PaneViewer {
     //  Variables  \\
-    private ComboBox createComboBox;
+    private Button createButton;
     private ComboBox inventoryComboBox;
-    private ComboBox catalogComboBox;
+    private TextField searchTextField;
     private TableView tableView;
     private TableColumn inventoryNameColumn;
     private TableColumn catalogNameColumn;
     private TableColumn itemsActionColumn;
     private TableColumn configActionColumn;
+    private Pagination pagination;
     private Label resultsLabel;
-    private Boolean adminAuthorization;//TODO mejorar
     private GridPane pane;
-    private Service inventoryService;
+    private InventoryService inventoryService;//TODO que hacer como no reconoce la instancia.
     private Service catalogService;
     private InventoryControlService inventoryControlService;
     //  Methods  \\
@@ -50,26 +48,28 @@ public class CatalogRecords implements PaneViewer {
     /**
      * This method initialize the services required.
      */
-    private void initializeServices(){
-        //inventoryService = InventoryService.getInstance();
+    private void initializeServices() {
+        inventoryService = InventoryService.getInstance();
         inventoryControlService = InventoryControlService.getInstance();
     }
 
-    private void updateCatalogService(Inventory inventory){
+    private void updateCatalogService(Inventory inventory) {
         catalogService = new CatalogService(inventory);
     }
+
     /**
      * Return the pane with all the components and styles added.
      *
-     * @param adminAuthorization allowed to edit and remove information.
      * @return {@code GridPane} pane with components.
      */
-    public GridPane getPane(Boolean adminAuthorization) {
-        this.adminAuthorization = adminAuthorization;// TODO sacar a una variable estática
+    public GridPane createPane() {
+        initializeServices();
         pane = BuilderFX.buildRecordsPane();
         setupControls(pane);
-        setupTableView(tableView, adminAuthorization);
+        setupTableView(tableView);
         addHandlers();
+        updateInventoryComboBox();
+        setupStyles();
         return pane;
     }
 
@@ -80,11 +80,32 @@ public class CatalogRecords implements PaneViewer {
      */
     private void setupControls(GridPane pane) {
         //BuilderFX.buildLabelTitle(TITLE_CATALOG_LIST, pane, 0, 0, 2);TODO use other pane.
-        createComboBox = BuilderFX.buildComboBox(CREATE_LABEL, pane, 0, 0);
-        inventoryComboBox = BuilderFX.buildComboBox(TITLE_INVENTORY, pane, 1, 1);
-        catalogComboBox = BuilderFX.buildComboBox(TITLE_CATALOG, pane, 3, 1);
-        tableView = BuilderFX.buildTableView(pane, 0, 2,4, 0);
+        createButton = BuilderFX.buildButton(CREATE_LABEL, pane, 0, 0);
+        BuilderFX.buildLabelTitle(TITLE_INVENTORY, pane, 0, 1, 1);
+        inventoryComboBox = BuilderFX.buildComboBox(COMBO_BOX_SELECT_LABEL, pane, 1, 1);
+        searchTextField = BuilderFX.buildTextInput(SEARCH_LABEL, pane, 3, 1);
+        tableView = BuilderFX.buildTableView(pane, 0, 2, 4, 1);
         resultsLabel = BuilderFX.buildLabelMinimal(SEARCH_RESULTS_LABEL, pane, 0, 3, 2);
+        pagination = BuilderFX.buildPagination(pane, 2, 3, 2, 1);
+    }
+
+    /**
+     * Set the styles of the components.
+     */
+    private void setupStyles() {
+        // Settings for Table Columns
+        inventoryNameColumn.setMinWidth(100);
+        catalogNameColumn.setMinWidth(100);
+        itemsActionColumn.setMaxWidth(70);
+        configActionColumn.setMaxWidth(70);
+        itemsActionColumn.setMinWidth(70);
+        configActionColumn.setMinWidth(70);
+        // Settings for Table View
+        tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        tableView.setEditable(false);
+        tableView.setMinSize(TABLE_VIEW_DEFAULT_MIN_WIDTH, TABLE_VIEW_DEFAULT_MIN_HEIGHT);
+        tableView.setMaxSize(TABLE_VIEW_DEFAULT_MAX_WIDTH, TABLE_VIEW_DEFAULT_MAX_HEIGHT);
+
     }
 
     /**
@@ -97,10 +118,9 @@ public class CatalogRecords implements PaneViewer {
      *
      * @param tableView table configured and full.
      */
-    private void setupTableView(TableView tableView, Boolean adminAuthorization) {
+    private void setupTableView(TableView tableView) {
         addColumns(tableView);
         fillTable(tableView);
-        addTableButtons(tableView, adminAuthorization);
     }
 
     /**
@@ -114,7 +134,6 @@ public class CatalogRecords implements PaneViewer {
      */
     public TableColumn buildTableColumn(String text, String property, TableView tableView) {
         TableColumn tableColumn = new TableColumn(text);
-        //tableColumn.setStyle(TABLE_COLUMN_DEFAULT_STYLE);//TODO css
         tableColumn.setId(property);
         tableColumn.setCellValueFactory(new PropertyValueFactory(property));
         tableView.getColumns().add(tableColumn);
@@ -127,10 +146,12 @@ public class CatalogRecords implements PaneViewer {
      *
      * @param tableView table where the columns will be added.
      */
-    private void addColumns(TableView tableView) {//TODO CHECK HOW TO ADD COLUMNS
+    private void addColumns(TableView<InventoryControl> tableView) {//TODO CHECK HOW TO ADD COLUMNS
         tableView.getColumns().clear();
-        inventoryNameColumn = buildTableColumn(INVENTORY_NAME_COLUMN, INVENTORY_CONTROL_INVENTORY_PROPERTY, tableView);
-        catalogNameColumn = buildTableColumn(CATALOG_NAME_COLUMN, INVENTORY_CONTROL_CATALOG_PROPERTY, tableView);
+        inventoryNameColumn = buildTableColumn(TITLE_INVENTORY, "inventoryName", tableView);
+        catalogNameColumn = buildTableColumn(TITLE_CATALOG, "catalogName", tableView);
+        itemsActionColumn = buildButtonColumn(ITEMS_COLUMN, ITEMS_ICON, tableView);
+        configActionColumn = buildButtonColumn(CONFIG_NAME_COLUMN, CONFIG_ICON, tableView);
     }
 
     /**
@@ -138,95 +159,60 @@ public class CatalogRecords implements PaneViewer {
      *
      * @param tableView table view to add items.
      */
-    private void fillTable(TableView tableView) {
+    private void fillTable(TableView<InventoryControl> tableView) {
         try {
-            ObservableList<InventoryControl> list = getList();
-            tableView.setItems(list);
+            ObservableList<InventoryControl> listFiltered = getList();
+            tableView.setItems(listFiltered);
 
         } catch (Exception e) {
-            System.err.println("Error: " + e.getMessage());
+            System.err.println("Error: " + e.getMessage() + ", in " + e.getCause());
         }
     }
-
-    /**
-     * Add buttons with functionalities to the table.
-     * Check if you have administrator permissions before enabling the function.
-     * Features:
-     * 1. Edit.
-     * 2. Delete.
-     *
-     * @param tableView          table to which the buttons will be added.
-     * @param adminAuthorization administrator permissions.
-     */
-    private void addTableButtons(TableView tableView, Boolean adminAuthorization) {
-        if (adminAuthorization) {
-            addButtonToTable(ITEMS_COLUMN, ITEMS_ICON, tableView);
-            addButtonToTable(CONFIG_NAME_COLUMN, CONFIG_ICON, tableView);
-        }
-    }
-
-    /**
-     * Build a button and place it in a given position.
-     *
-     * @param text   Text that the button will have.
-     * @param pane   pane where it will be added.
-     * @param column column in which it will be located.
-     * @param row    row in which it will be located.
-     * @return {@code Button} button configured and located in the pane.
-     */
-    private Button buildButton(String text, GridPane pane, int column, int row) {
-        Button button = new Button(text);
-        button.setMinSize(BUTTON_MIN_WIDTH, BUTTON_MIN_HEIGHT);
-        pane.add(button, column, row);
-        GridPane.setHalignment(button, HPos.CENTER);
-        GridPane.setMargin(button, BUTTON_DEFAULT_INSETS);
-        return button;
-    }
-
 
     /**
      * Ask the service for the list of objects.
      *
      * @return {@code ObservableList} observable list with existing objects.
      */
-    public ObservableList<InventoryControl> getList() {
-        ObservableList<InventoryControl> observableList;
-        List list = inventoryControlService.getAll();
-
-
-        observableList = FXCollections.observableArrayList(list);
-
-        return observableList;//TODO simplificar
+    private ObservableList<InventoryControl> getObservableList() {
+        return FXCollections.observableArrayList(inventoryControlService.getAll());
     }
 
+    private FilteredList<InventoryControl> filterList(ObservableList<InventoryControl> observableList) {
+        return new FilteredList<>(observableList).filtered(inventoryControl ->
+                (inventoryControl.getInventoryName().equalsIgnoreCase(inventoryComboBox.getValue().toString())));
+    }
+
+    private ObservableList<InventoryControl> getList() {
+        if (inventoryComboBox.getValue() != null)
+            return filterList(getObservableList());
+        else
+            return getObservableList();
+    }
 
     /**
      * Add buttons to a tableView.
      *
      * @param label Button text
      */
-    private void addButtonToTable(String label, ImageView image, TableView tableView) {
-        TableColumn tcAction = new TableColumn(label);
+    private TableColumn buildButtonColumn(String label, ImageView image, TableView tableView) {
+        TableColumn tableColumn = new TableColumn(label);
         Callback<TableColumn<InventoryControl, Void>, TableCell<InventoryControl, Void>> cellFactory = new Callback<>() {
             @Override
             public TableCell<InventoryControl, Void> call(final TableColumn<InventoryControl, Void> param) {
                 final TableCell<InventoryControl, Void> cell = new TableCell<>() {
-                    private final Button btn = new Button();
-
+                    private final Button btn = new Button("", image);
 
                     {// Definir funciones del botón
-                        btn.setGraphic(image); //agrega imagen
-                        //TODO Style and size
+                        btn.getStyleClass().add("table-buttons");
                         switch (label) {
                             case ITEMS_COLUMN -> btn.setOnAction(actionEvent -> {
                                 InventoryControl data = getTableView().getItems().get(getIndex());
                                 viewItemsAction(data);
-                                refreshTable();
                             });
                             case CONFIG_NAME_COLUMN -> btn.setOnAction(actionEvent -> {
                                 InventoryControl data = getTableView().getItems().get(getIndex());
                                 configAction(data);
-                                refreshTable();
                             });
                         }
                     }
@@ -243,8 +229,9 @@ public class CatalogRecords implements PaneViewer {
                 return cell;
             }
         };
-        tcAction.setCellFactory(cellFactory);
-        tableView.getColumns().add(tcAction);
+        tableColumn.setCellFactory(cellFactory);
+        tableView.getColumns().add(tableColumn);
+        return tableColumn;
     }
 
     private void viewItemsAction(InventoryControl inventoryControl) {//TODO
@@ -257,7 +244,7 @@ public class CatalogRecords implements PaneViewer {
      * Add functionality to buttons or events.
      */
     private void addHandlers() {
-
+        inventoryComboBox.setOnAction(actionEvent -> updateInventoryComboBox());
     }
 
     private void configAction(InventoryControl inventoryControl) {//TODO
@@ -269,8 +256,16 @@ public class CatalogRecords implements PaneViewer {
     }
 
 
+    // Update ComboBoxes
+
+    private void updateInventoryComboBox() {
+        BuilderFX.fillComboBox(inventoryComboBox, inventoryService.getNamesList());
+        refreshTable();
+        resultsLabel.setText("Showing " + tableView.getItems().size() + " of " + inventoryControlService.size() + " catalogs.");
+    }
+
     @Override
     public Pane getPane() {
-        return getPane();
+        return createPane();
     }
 }

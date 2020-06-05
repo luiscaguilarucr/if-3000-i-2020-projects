@@ -1,5 +1,6 @@
 package edu.ucr.rp.programacion2.proyecto.logic;
 
+import edu.ucr.rp.programacion2.proyecto.domain.Item;
 import edu.ucr.rp.programacion2.proyecto.persistance.CatalogPersistence;
 import edu.ucr.rp.programacion2.proyecto.domain.Catalog;
 import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
@@ -119,16 +120,32 @@ public class CatalogService implements Service<Catalog, String, List> {
     }
 
     /**
-     * Validates if the list contains some catalog.
-     * @return {@code true} if the list contains more than one item. {@code false} the list is empty.
+     * Creates a list with the names of the catalogs.
+     *
+     * @return  {@code List<String>} List with names of catalogs.
      */
-    public boolean containsACatalog(){
-        refresh();
-        return list.size() > 0;
+    public List getNamesList(){
+        List<String> namesList = new ArrayList();
+        for(Catalog catalog : list)
+            namesList.add(catalog.getName());
+        return namesList;
+    }
+
+    /**
+     * Creates a list whith the names of the items.
+     * @param catalog
+     * @return  {@code List<String>} List with names of items.
+     */
+    public List<String> getItemNames(Catalog catalog){
+        List<String> itemNames = new ArrayList<>();
+        List<Item> itemList = catalog.getItems();
+        for(Item i: itemList){
+            itemNames.add(i.getName());
+        }
+        return itemNames;
     }
 
     //  More methods \\
-
     /**
      * Check if the catalog can be added.
      * <p>

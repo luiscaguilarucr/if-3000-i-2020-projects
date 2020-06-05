@@ -1,11 +1,13 @@
-package edu.ucr.rp.programacion2.proyecto.gui.javafx;
+package edu.ucr.rp.programacion2.proyecto.gui.javafx.inventory;
 
 import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
 import edu.ucr.rp.programacion2.proyecto.gui.javafx.util.PaneUtil;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
+import edu.ucr.rp.programacion2.proyecto.gui.panes.main.ManagePane;
 import edu.ucr.rp.programacion2.proyecto.logic.InventoryService;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -14,13 +16,16 @@ public class InventoryForm implements PaneViewer {
     private Inventory inventory;
     private InventoryService inventoryService;
     private TextField inventoryNameTextField;
+    private Label inventoryNameLabel;
     private Button saveInventoryButton;
+    private Button cancelButton;
+    private GridPane pane;
 
-    public GridPane getInvetoryFormPane() {
-        GridPane pane = PaneUtil.buildPane();
+    public GridPane getInventoryFormPane() {
+        pane = PaneUtil.buildPane();
         initializeInventoryService();
-        setupControls(pane);
-        addHandlers(pane);
+        setupControls();
+        addHandlers();
         return pane;
     }
 
@@ -28,13 +33,27 @@ public class InventoryForm implements PaneViewer {
         inventoryService = InventoryService.getInstance();
     }
 
-    private void setupControls(GridPane pane) {
-        inventoryNameTextField = PaneUtil.buildTextInput("Inventory name: ", pane, 0);
-        saveInventoryButton = PaneUtil.buildButton("Save inventory", pane, 1,2);
+    public void refresh(){
+        inventoryNameTextField.clear();
     }
 
-    private void addHandlers(GridPane pane) {
-        saveInventoryButton.setOnAction(actionEvent -> generateInventory());
+    private void setupControls() {
+        inventoryNameLabel = PaneUtil.buildLabel(pane,"Inventory name: ", 0, 1);
+        inventoryNameTextField = PaneUtil.buildTextInput(pane, 1);
+        saveInventoryButton = PaneUtil.buildButton("Save inventory", pane, 2,1);
+        cancelButton = PaneUtil.buildButton("Cancel", pane, 3,1);
+    }
+
+    private void addHandlers() {
+        saveInventoryButton.setOnAction((actionEvent) -> {
+            generateInventory();
+            ManagePane.clearPane();
+            refresh();
+        });
+        cancelButton.setOnAction((actionEvent)->{
+            ManagePane.clearPane();
+            refresh();
+        });
     }
 
     private void generateInventory() {
@@ -57,7 +76,7 @@ public class InventoryForm implements PaneViewer {
     }
 
     @Override
-    public Pane getPane() {
-        return getInvetoryFormPane();
+    public GridPane getPane() {
+        return getInventoryFormPane();
     }
 }

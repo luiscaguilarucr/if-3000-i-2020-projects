@@ -17,9 +17,9 @@ public class CatalogServiceTest extends TestCase {
 
     @Test
     public void testAddition() {
-        inventory = new Inventory("Carros");
+        inventory = new Inventory("Barcos");
         catalogService = new CatalogService(inventory);
-        for(int i = 0 ; i < 10; i++) {
+        for(int i = 0 ; i < 5; i++) {
             Catalog catalog = Utility.randomCatalog();
             if (catalogService.add(catalog))
                 System.out.println("Se guardo: " + catalog);
