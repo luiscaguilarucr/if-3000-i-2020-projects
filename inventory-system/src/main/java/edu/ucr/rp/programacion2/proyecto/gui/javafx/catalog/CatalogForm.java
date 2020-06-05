@@ -21,8 +21,6 @@ public class CatalogForm implements PaneViewer {
     private TextField catalogNameTextField;
     private TextField featureNameTextField;
     private Label inventoryIndicationLabel;
-    private Label inventoryNameLabel;
-    private Label inventorySelectedNameLabel;
     private Label catalogNameLabel;
     private Label featureNameLabel;
     private Button confirmInventoryButton;
@@ -31,8 +29,8 @@ public class CatalogForm implements PaneViewer {
     private Button cancelButton;
     private ComboBox<String> inventoryComboBox;
     private ArrayList<String> schema = new ArrayList<>();
-    private Boolean emptySpace;
-    private Boolean wasAdded;
+    private Boolean emptySpace = false;
+    private Boolean wasAdded = false;
     private GridPane pane;
 
     public GridPane getCatalogFormPane() {
@@ -43,6 +41,14 @@ public class CatalogForm implements PaneViewer {
         return pane;
     }
 
+    public void validateShow(){
+        initializeInventoryService();
+        if(inventoryService.getAll().size() == 0){
+            ManagePane.clearPane();
+            PaneUtil.showAlert(Alert.AlertType.INFORMATION, "There are no inventories", "You must add at least one inventory to be able to access this function");
+        }
+    }
+
     public void refresh() {
         catalogNameTextField.setVisible(false);
         featureNameTextField.setVisible(false);
@@ -51,7 +57,6 @@ public class CatalogForm implements PaneViewer {
         confirmInventoryButton.setVisible(false);
         inventoryIndicationLabel.setVisible(false);
         inventoryIndicationLabel.setVisible(false);
-        inventoryNameLabel.setVisible(false);
         catalogNameLabel.setVisible(false);
         featureNameLabel.setVisible(false);
 
@@ -77,8 +82,6 @@ public class CatalogForm implements PaneViewer {
     }
 
     private void setupCatalogControls() {
-        inventoryNameLabel = PaneUtil.buildLabel(pane, "Inventory Selected", 0, 0);
-        inventorySelectedNameLabel = PaneUtil.buildLabel(pane, inventoryComboBox.getValue(), 1, 0);
         catalogNameLabel = PaneUtil.buildLabel(pane, "Catalog name: ", 0, 1);
         catalogNameTextField = PaneUtil.buildTextInput(pane, 1);
         featureNameLabel = PaneUtil.buildLabel(pane, "Feature:", 0, 2);
@@ -121,7 +124,6 @@ public class CatalogForm implements PaneViewer {
     }
 
     private void addFeature() {
-        emptySpace = false;
         if (catalogNameTextField.getText().isEmpty()) {
             emptySpace = true;
         }
@@ -133,7 +135,7 @@ public class CatalogForm implements PaneViewer {
             featureNameTextField.setPromptText("Obligatory field");
             featureNameTextField.setStyle("-fx-background-color: #FDC7C7");
         } else {
-            featureNameTextField.setPromptText("");
+            featureNameTextField.clear();
             featureNameTextField.setStyle("-fx-background-color: #FFFFFF");
             catalogNameTextField.setDisable(true);
             schema.add(featureNameTextField.getText() + "");
@@ -143,7 +145,6 @@ public class CatalogForm implements PaneViewer {
     }
 
     private void generateCatalog() {
-        emptySpace = false;
         if (catalogNameTextField.getText().isEmpty()) {
             emptySpace = true;
         }

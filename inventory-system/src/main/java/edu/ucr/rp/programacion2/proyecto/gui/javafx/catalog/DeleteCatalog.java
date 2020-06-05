@@ -35,6 +35,14 @@ public class DeleteCatalog implements PaneViewer {
         return pane;
     }
 
+    public void validateShow(){
+        initializeInventoryService();
+        if(inventoryService.getAll().size() == 0){
+            ManagePane.clearPane();
+            PaneUtil.showAlert(Alert.AlertType.INFORMATION, "There are no inventories", "You must add at least one inventory to be able to access this function");
+        }
+    }
+
     public void refresh(){
         confirmInventoryButton.setVisible(false);
         deleteCatalogButton.setVisible(false);

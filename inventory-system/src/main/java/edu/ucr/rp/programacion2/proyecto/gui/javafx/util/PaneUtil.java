@@ -1,5 +1,6 @@
 package edu.ucr.rp.programacion2.proyecto.gui.javafx.util;
 
+import edu.ucr.rp.programacion2.proyecto.gui.panes.main.ManagePane;
 import org.controlsfx.control.CheckComboBox;
 import edu.ucr.rp.programacion2.proyecto.domain.Catalog;
 import javafx.collections.FXCollections;
@@ -86,22 +87,22 @@ public class PaneUtil {
         return false;
     }
 
-    public static boolean setupCatalogControls(GridPane pane, ComboBox<String> inventoryComboBox, List<Catalog> catalogs) {
+    public static boolean setupCatalogControls(ComboBox<String> inventoryComboBox, List<Catalog> catalogs) {
         if (catalogs.size() > 0) {
             return true;
         } else {
             showAlert(Alert.AlertType.INFORMATION, "There are no catalogs", "You must add at least one catalog in the inventory " + inventoryComboBox.getValue() + " to be able to access this function");
+            ManagePane.clearPane();
             return false;
         }
     }
 
-    public static boolean addInventoryHandlers(ComboBox inventoryComboBox, Label inventoryIndicationLabel, Button confirmInventoryButton) {
+    public static boolean addInventoryHandlers(ComboBox inventoryComboBox, Button confirmInventoryButton) {
         if (inventoryComboBox.getValue() == null) {
             showAlert(Alert.AlertType.INFORMATION, "Error, did not select an inventory", "You must select an inventory");
             return false;
         } else {
-            inventoryIndicationLabel.setVisible(false);
-            inventoryComboBox.setVisible(false);
+            inventoryComboBox.setDisable(true);
             confirmInventoryButton.setVisible(false);
             return true;
         }

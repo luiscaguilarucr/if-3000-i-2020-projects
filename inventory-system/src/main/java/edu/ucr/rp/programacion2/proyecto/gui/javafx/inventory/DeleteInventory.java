@@ -28,13 +28,19 @@ public class DeleteInventory implements PaneViewer {
         return pane;
     }
 
-    public void refresh2() {
+    public void validateShow(){
+        initializeInventoryService();
+        if(inventoryService.getAll().size() == 0){
+            ManagePane.clearPane();
+            PaneUtil.showAlert(Alert.AlertType.INFORMATION, "There are no inventories", "You must add at least one inventory to be able to access this function");
+        }
+    }
+
+    public void refresh() {
         initializeInventoryService();
         if (inventoryService.getAll().size() > 0) {
             setupControls();
             addHandlers();
-        } else {
-            PaneUtil.showAlert(Alert.AlertType.INFORMATION, "ERROR", "No inventories");
         }
     }
 
@@ -59,7 +65,7 @@ public class DeleteInventory implements PaneViewer {
         if (PaneUtil.setupInventoryControls(inventoryService.getAll())) {
             deleteInventoryButton.setOnAction((actionEvent) -> {
                 deleteCatalog();
-                refresh2();
+                refresh();
             });
         }
     }
@@ -67,7 +73,7 @@ public class DeleteInventory implements PaneViewer {
     private void addRefreshButtonHandler() {
         refreshButton = PaneUtil.buildButtonImage(new Image("refresh.png"), pane, 4, 0);
         refreshButton.setOnAction((actionEvent) -> {
-            refresh2();
+            refresh();
         });
     }
 

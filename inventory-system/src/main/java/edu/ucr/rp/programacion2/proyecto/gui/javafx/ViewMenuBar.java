@@ -1,14 +1,13 @@
 package edu.ucr.rp.programacion2.proyecto.gui.javafx;
 
 import edu.ucr.rp.programacion2.proyecto.gui.javafx.catalog.CatalogForm;
+import edu.ucr.rp.programacion2.proyecto.gui.javafx.catalog.DeleteCatalog;
 import edu.ucr.rp.programacion2.proyecto.gui.javafx.inventory.DeleteInventory;
 import edu.ucr.rp.programacion2.proyecto.gui.javafx.inventory.InventoryForm;
 import edu.ucr.rp.programacion2.proyecto.gui.javafx.item.ItemForm;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneName;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.panes.main.ManagePane;
-import edu.ucr.rp.programacion2.proyecto.logic.CatalogService;
-import edu.ucr.rp.programacion2.proyecto.logic.InventoryService;
 import javafx.application.Platform;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -20,11 +19,9 @@ import javafx.stage.Stage;
 
 public class ViewMenuBar implements PaneViewer {
     private Stage stage;
-    private InventoryService inventoryService;
-    private CatalogService catalogService;
-    private InventoryForm inventoryForm = new InventoryForm();
-    private CatalogForm catalogForm = new CatalogForm();
     private DeleteInventory deleteInventory = new DeleteInventory();
+    private CatalogForm catalogForm = new CatalogForm();
+    private DeleteCatalog deleteCatalog = new DeleteCatalog();
     private ItemForm itemForm = new ItemForm();
 
     public ViewMenuBar(Stage stage) {
@@ -69,6 +66,7 @@ public class ViewMenuBar implements PaneViewer {
 
         mI_DeleteInventory.setOnAction((event) -> {
             ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.DELETE_INVENTORY));
+            deleteInventory.validateShow();
         });
 
         m_Inventory.getItems().addAll(mI_CreateInventory, mI_SeeInventory, mI_ChangeName, mI_DeleteInventory);
@@ -93,6 +91,7 @@ public class ViewMenuBar implements PaneViewer {
         // Give action to MenuItems
         mI_AddCatalog.setOnAction((event) -> {
             ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.ADD_CATALOG));
+            catalogForm.validateShow();
         });
 
         mI_ViewAllCatalogs.setOnAction((event) -> {
@@ -100,6 +99,7 @@ public class ViewMenuBar implements PaneViewer {
 
         mI_DeleteCatalog.setOnAction((event) -> {
             ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.DELETE_CATALOG));
+            deleteCatalog.validateShow();
         });
 
         m_Catalog.getItems().addAll(mI_AddCatalog, mI_ViewAllCatalogs, mI_DeleteCatalog);
@@ -123,9 +123,8 @@ public class ViewMenuBar implements PaneViewer {
 
         //Give action to MenuItems
         mI_AddItem.setOnAction((event) -> {
-
             ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.ADD_ITEM));
-            itemForm.refresh();
+            itemForm.validateShow();
         });
 
         mI_ViewItems.setOnAction((event) -> {
