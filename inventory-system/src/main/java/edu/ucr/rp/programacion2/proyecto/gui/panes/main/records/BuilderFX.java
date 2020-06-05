@@ -62,15 +62,14 @@ public class BuilderFX {
     }
 
     /**
-     *
      * @param promptText
      * @param pane
      * @param column
      * @param row
      * @return
      */
-    public static ComboBox buildComboBox(String promptText, GridPane pane, int column, int row) {
-        ComboBox comboBox = new ComboBox();
+    public static ComboBox<String> buildComboBox(String promptText, GridPane pane, int column, int row) {
+        ComboBox<String> comboBox = new ComboBox<>();
         comboBox.setPromptText(promptText);
         pane.add(comboBox, column, row);
         return comboBox;
@@ -92,8 +91,8 @@ public class BuilderFX {
      * @param row    row where it will be assigned.
      * @return {@code TableView <>} table view ready to add columns and objects.
      */
-    public static TableView buildTableView(GridPane pane, int column, int row, int numColumns, int numRows) {
-        TableView tableView = new TableView<>();
+    public static TableView<Object> buildTableView(GridPane pane, int column, int row, int numColumns, int numRows) {
+        TableView<Object> tableView = new TableView<>();
         pane.add(tableView, column, row, numColumns, numRows);
         return tableView;
     }
@@ -162,7 +161,7 @@ public class BuilderFX {
      * @param comboBox to fill.
      * @param list     list og items.
      */
-    public static void fillComboBox(ComboBox comboBox, List list) {
+    public static void fillComboBox(ComboBox<String> comboBox, List<String> list) {
         comboBox.setItems(FXCollections.observableList(list));
         comboBox.getItems().sorted();
 
@@ -175,12 +174,12 @@ public class BuilderFX {
      * @param list      list og items.
      */
     public static void fillChoiceBox(ChoiceBox choiceBox, List list) {
+        choiceBox.getItems().clear();
         choiceBox.setItems(FXCollections.observableList(list));
         choiceBox.getItems().sorted();
     }
 
     /**
-     *
      * @param label
      * @param node
      * @param pane
@@ -202,5 +201,11 @@ public class BuilderFX {
         Separator separator = new Separator(orientation);
         pane.add(separator, column, row, numColumns, numRows);
         return separator;
+    }
+
+    public static void fillListView(ListView listView, List<String> list) {
+        listView.getItems().clear();
+        listView.setItems(FXCollections.observableList(list));
+
     }
 }

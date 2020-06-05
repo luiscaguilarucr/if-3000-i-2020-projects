@@ -13,7 +13,7 @@ public class LabelConstants {
     public static final String BACK_LABEL = "Back";
     public static final String REFRESH_LABEL = "Refresh";
     public static final String SEARCH_LABEL = "Search";
-    public static final String COMBO_BOX_SELECT_LABEL = "Select";
+    public static final String SELECT_LABEL = "Select";
     public static final String TYPE_HERE_PROMPT_TEXT = "Type here";
 
     public static final String TITLE_CATALOG_LIST = "Catalog list";

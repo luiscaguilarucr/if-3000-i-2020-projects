@@ -176,7 +176,7 @@ public class CatalogItemsTable implements PaneViewer {
         ComboBox comboBox = new ComboBox();
         comboBox.setMaxSize(180, 40);
         comboBox.setMinSize(150, 30);
-        comboBox.setPromptText(COMBO_BOX_SELECT_LABEL);
+        comboBox.setPromptText(SELECT_LABEL);
         Style.settextFieldColor(comboBox, PRIMARY_COLOR_TEXTFIELD);
         pane.add(comboBox, column, row);
         addItems(comboBox, items);

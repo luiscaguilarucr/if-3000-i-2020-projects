@@ -3,7 +3,6 @@ package edu.ucr.rp.programacion2.proyecto.gui.panes.main.records;
 
 import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
 import edu.ucr.rp.programacion2.proyecto.domain.InventoryControl;
-import edu.ucr.rp.programacion2.proyecto.gui.model.PaneName;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.panes.main.ManagePane;
 import edu.ucr.rp.programacion2.proyecto.logic.CatalogService;
@@ -51,6 +50,7 @@ public class ShowInventory implements PaneViewer {
     private InventoryService inventoryService;
     private Service catalogService;
     private InventoryControlService inventoryControlService;
+    private CatalogConfig catalogConfig = new CatalogConfig();
     //  Methods  \\
 
     /**
@@ -344,6 +344,7 @@ public class ShowInventory implements PaneViewer {
 
     private void createCatalogAction() {// TODO actionEvent
        System.out.println("Create Catalog Button pressed");
+
     }
 
     // Table Buttons
@@ -352,7 +353,10 @@ public class ShowInventory implements PaneViewer {
     }
 
     private void configAction(InventoryControl inventoryControl) {//TODO actionEvent
-        ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.CATALOG_CONFIG));
+        ManagePane.setCenterPane(catalogConfig.getPane());
+        CatalogConfig.refresh();
+        //CatalogConfig.setCatalog(inventoryControl.getCatalogName());
+        //CatalogConfig.setInventory(inventoryControl.getInventoryName());
         System.out.println("Going to config table view.. of " + inventoryControl.getCatalogName());
     }
 
