@@ -5,6 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -72,6 +73,7 @@ public class BuilderFX {
         ComboBox<String> comboBox = new ComboBox<>();
         comboBox.setPromptText(promptText);
         pane.add(comboBox, column, row);
+        comboBox.setCursor(Cursor.HAND);
         return comboBox;
     }
 
@@ -127,6 +129,7 @@ public class BuilderFX {
     public static Button buildButton(String text, GridPane pane, int column, int row) {
         Button button = new Button(text);
         button.setMinSize(BUTTON_MIN_WIDTH, BUTTON_MIN_HEIGHT);
+        button.setCursor(Cursor.HAND);
         pane.add(button, column, row);
         GridPane.setHalignment(button, HPos.CENTER);
         GridPane.setMargin(button, BUTTON_DEFAULT_INSETS);
@@ -152,6 +155,7 @@ public class BuilderFX {
         Button button = new Button(text);
         button.setGraphic(new ImageView(new Image(image)));
         pane.add(button, column, row);
+        button.setCursor(Cursor.HAND);
         return button;
     }
 
@@ -194,6 +198,7 @@ public class BuilderFX {
         titledPane.setAnimated(true);
         titledPane.setExpanded(false);
         pane.add(titledPane, column, row, numColumns, numRows);
+        titledPane.setCursor(Cursor.HAND);titledPane.setCursor(Cursor.HAND);
         return titledPane;
     }
 

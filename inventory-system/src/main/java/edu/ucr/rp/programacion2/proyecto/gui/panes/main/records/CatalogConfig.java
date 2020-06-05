@@ -7,11 +7,11 @@ import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.logic.CatalogService;
 import edu.ucr.rp.programacion2.proyecto.logic.InventoryControlService;
 import edu.ucr.rp.programacion2.proyecto.logic.InventoryService;
+import javafx.geometry.HPos;
 import javafx.geometry.Orientation;
+import javafx.geometry.VPos;
 import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 
 import java.util.List;
 
@@ -56,6 +56,7 @@ public class CatalogConfig implements PaneViewer {
         pane = buildPane();
         setupControls(pane);
         addHandlers();
+        setupStyles();
         refresh();
 
     }
@@ -133,6 +134,79 @@ public class CatalogConfig implements PaneViewer {
         itemOptionsTitledPane = BuilderFX.buildTitledPane(VIEW_LABEL, itemsOptionsPane, pane, 3, 4, 1, 1);// TODO check text
     }
 
+    private static void setupStyles() {
+        // Pane
+        pane.getStyleClass().add("default-grid-pane");
+        // Row Constraints
+        // Row #0
+        RowConstraints rowConstraints = new RowConstraints(40, 45, 50);
+        rowConstraints.setValignment(VPos.TOP);
+        rowConstraints.setVgrow(Priority.ALWAYS);
+        // Row #1
+        RowConstraints rowConstraints1 = new RowConstraints(40, 60, 75);
+        rowConstraints1.setValignment(VPos.CENTER);
+        rowConstraints.setVgrow(Priority.ALWAYS);
+        // Row #2
+        RowConstraints rowConstraints2 = new RowConstraints(40, 60, 75);
+        rowConstraints2.setValignment(VPos.CENTER);
+        rowConstraints.setVgrow(Priority.ALWAYS);
+        // Row #3
+        RowConstraints rowConstraints3 = new RowConstraints(20, 20, 20);
+        rowConstraints3.setValignment(VPos.CENTER);
+        rowConstraints.setVgrow(Priority.ALWAYS);
+        // Row #4
+        RowConstraints rowConstraints4 = new RowConstraints(150, 175, 200);
+        rowConstraints4.setValignment(VPos.TOP);
+        rowConstraints.setVgrow(Priority.ALWAYS);
+        // Add Row Constraints
+        pane.getRowConstraints().addAll(rowConstraints, rowConstraints1, rowConstraints2, rowConstraints3, rowConstraints4);
+
+        // Columns Constraints
+        ColumnConstraints columnConstraints = new ColumnConstraints(75, 100, 200);
+        columnConstraints.setHalignment(HPos.RIGHT);
+        columnConstraints.setHgrow(Priority.ALWAYS);
+
+        ColumnConstraints columnConstraints2 = new ColumnConstraints(150, 175, 200);
+        columnConstraints.setHalignment(HPos.LEFT);
+        columnConstraints.setHgrow(Priority.ALWAYS);
+
+        ColumnConstraints columnConstraints3 = new ColumnConstraints(100, 200, 200);
+        columnConstraints3.setHalignment(HPos.RIGHT);
+        columnConstraints3.setHgrow(Priority.ALWAYS);
+
+        ColumnConstraints columnConstraints4 = new ColumnConstraints(100, 200, 200);
+        columnConstraints4.setHalignment(HPos.LEFT);
+        columnConstraints4.setHgrow(Priority.ALWAYS);
+        pane.getColumnConstraints().addAll(columnConstraints, columnConstraints2, columnConstraints3, columnConstraints4);
+
+        // Settings for Table Columns
+        // Inventory ComboBox
+        inventoryComboBox.setMinWidth(100);
+        // Catalog ComboBox
+        catalogComboBox.setMinWidth(100);
+        // Schema
+        schemaList.setMaxSize(250, 600);
+        schemaTitledPane.setMaxSize(250, 600);
+        // Items
+        itemOptionsTitledPane.setMaxSize(250, 600);
+        // Buttons
+        setButtonEffect(addItemButton);
+        setButtonEffect(deleteAllItemsButton);
+        setButtonEffect(showItemsButton);
+
+    }
+
+    private static void setButtonEffect(Button button){
+        button.getStyleClass().add("button-item-title-pane");
+        button.setOnMouseEntered(e->{
+            button.getStyleClass().clear();
+            button.getStyleClass().add("button-item-title-pane-entered");
+        });
+        button.setOnMouseExited(e->{
+            button.getStyleClass().clear();
+            button.getStyleClass().add("button-item-title-pane");
+        });
+    }
     /**
      * Create a List view and place it in a pane.
      *
@@ -152,7 +226,7 @@ public class CatalogConfig implements PaneViewer {
      */
     private VBox buildHBoxItemsOptions(Button... buttons) {
         VBox vBox = new VBox(buttons);
-        // More code...
+        vBox.getStyleClass().add("default-v-box");
         return vBox;
     }
 
@@ -185,13 +259,12 @@ public class CatalogConfig implements PaneViewer {
     }
 
 
-
     // Events
 
     /**
      * This event is triggered when the inventory box changes it's value.
      */
-    private static void inventoryChangedEvent(){
+    private static void inventoryChangedEvent() {
         // Inventory Config
         enableInventoryOptions(true);
         fillInventoryComboBox();//TODO considerar
@@ -211,7 +284,7 @@ public class CatalogConfig implements PaneViewer {
     /**
      * This event is triggered when the catalog box changes it's value.
      */
-    private static void catalogChangedEvent(){
+    private static void catalogChangedEvent() {
         enableCatalogOptions(true);
         fillSchemaList(catalogComboBox.getValue());
         enableTitles(true);
