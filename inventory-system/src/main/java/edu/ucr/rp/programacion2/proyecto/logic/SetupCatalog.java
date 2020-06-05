@@ -4,6 +4,7 @@ import edu.ucr.rp.programacion2.proyecto.domain.Catalog;
 import edu.ucr.rp.programacion2.proyecto.domain.Item;
 
 public class SetupCatalog implements Setup<Catalog, String> {
+
     /**
      * This method renames a catalog
      * @param catalog
@@ -25,12 +26,12 @@ public class SetupCatalog implements Setup<Catalog, String> {
      * @param item
      * @return true if the item was added to the catalogue, false if it was not
      */
-    public boolean addItem(Catalog catalog, Item item) {
-        if (!catalog.getItems().contains(item) && item != null) {
+    public Catalog addItem(Catalog catalog, Item item) {
+        if (!catalog.getItems().contains(item)){
             catalog.getItems().add(item);
-            return true;
+            return catalog;
         }
-        return false;
+        return null;
     }
 
     /**
@@ -39,12 +40,12 @@ public class SetupCatalog implements Setup<Catalog, String> {
      * @param item
      * @return true if the item was removed from the catalogue, false if it was not
      */
-    public boolean removeItem(Catalog catalog, Item item) {
+    public Catalog removeItem(Catalog catalog, Item item) {
         if (catalog.getItems().contains(item) && item != null) {
             catalog.getItems().remove(item);
-            return true;
+            return catalog;
         }
-        return false;
+        return null;
     }
 
     /**

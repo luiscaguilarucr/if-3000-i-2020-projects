@@ -2,18 +2,20 @@ package edu.ucr.rp.programacion2.proyecto.gui;
 
 import edu.ucr.rp.programacion2.proyecto.gui.model.SceneName;
 import edu.ucr.rp.programacion2.proyecto.gui.scenes.MainScene;
+import edu.ucr.rp.programacion2.proyecto.logic.CatalogService;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
  * Application with the Main Stage.
  */
 public class App extends Application {
-
     // Contains all the Scenes.
     private static Map<SceneName, Scene> scenes = new HashMap<>();
 
@@ -22,16 +24,16 @@ public class App extends Application {
         // Create and store all the scenes.
         scenes.put(SceneName.MAIN, new MainScene(stage).getScene()); //pasar stage como parámetro
         //scenes.put(SceneName.LOGIN, new ) //pasar stage como parámetro
-
         // Start with the main scene
         stage.setScene(scenes.get(SceneName.MAIN));
-        stage.setTitle("Sistema de inventarios");
+        stage.setTitle("Inventory System");
         stage.show();
     }
     /** Returns a Map of the scenes by {@link SceneName} */
     public static Map<SceneName, Scene> getScenes() {
         return scenes;
     }
+
     public void display(String... args) {
         launch(args);
     }
