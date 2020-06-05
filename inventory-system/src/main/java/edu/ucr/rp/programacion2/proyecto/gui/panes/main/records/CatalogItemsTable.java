@@ -15,6 +15,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -103,7 +104,7 @@ public class CatalogItemsTable implements PaneViewer {
         buildLabelTitle(TITLE_CATALOG, pane, 0);
         catalogNameComboBox = buildComboBox(TITLE_CATALOG, pane, 2, 0);
         fillCatalogNameComboBox(catalogNameComboBox, (List) catalogService.getAll());
-        buildLabelTitle(TITLE_ITEM_LIST, pane, 1);
+        buildLabelTitle(TITLE_ITEMS, pane, 1);
         searchItemTextField = buildTextInput(TYPE_HERE_PROMPT_TEXT, pane, 2, 1);
         searchItemButton = buildButton(REFRESH_LABEL, pane, 3, 0);
         tableView = buildTableView(pane, 0, 2);
@@ -175,7 +176,7 @@ public class CatalogItemsTable implements PaneViewer {
         ComboBox comboBox = new ComboBox();
         comboBox.setMaxSize(180, 40);
         comboBox.setMinSize(150, 30);
-        comboBox.setPromptText(COMBO_BOX_SELECT_LABEL);
+        comboBox.setPromptText(SELECT_LABEL);
         Style.settextFieldColor(comboBox, PRIMARY_COLOR_TEXTFIELD);
         pane.add(comboBox, column, row);
         addItems(comboBox, items);
@@ -243,7 +244,7 @@ public class CatalogItemsTable implements PaneViewer {
     private void addColumns(TableView tableView) {
         tableView.getColumns().clear();
         //ItemNameColumn = buildTableColumn(Item_NAME_COLUMN, Item_NAME_PROPERTY, tableView);
-        catalogSchemaColumn = buildTableColumn(CATALOG_SCHEMA_COLUMN, CATALOG_SCHEMA_PROPERTY, tableView);
+        catalogSchemaColumn = buildTableColumn(TITLE_CATALOG_SCHEMA, CATALOG_SCHEMA_PROPERTY, tableView);
     }
 
     /**
@@ -332,7 +333,7 @@ public class CatalogItemsTable implements PaneViewer {
      *
      * @param label Button text
      */
-    private void addButtonToTable(String label, ImageView image, TableView tableView) {
+    private void addButtonToTable(String label, String image, TableView tableView) {
         TableColumn<Item, Void> tcAction = new TableColumn(label);
         //tcAction.setStyle(TABLE_VIEW_BUTTONS_DEFAULT_STYLE);
 
@@ -344,7 +345,7 @@ public class CatalogItemsTable implements PaneViewer {
 
 
                     {// Definir funciones del botón
-                        btn.setGraphic(image); //agrega imagen
+                        btn.setGraphic(new ImageView(new Image(image))); //agrega imagen
                         //TODO Style and size
                         switch (label) {
                             case VIEW_LABEL:
