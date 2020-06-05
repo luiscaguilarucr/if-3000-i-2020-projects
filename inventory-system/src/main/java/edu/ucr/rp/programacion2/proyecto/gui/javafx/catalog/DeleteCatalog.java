@@ -87,7 +87,7 @@ public class DeleteCatalog implements PaneViewer {
     private void addInventoryHandlers() {
         if (PaneUtil.setupInventoryControls(inventoryService.getAll())) {
             confirmInventoryButton.setOnAction((event -> {
-                if (PaneUtil.addInventoryHandlers(inventoryComboBox, inventoryIndicationLabel, confirmInventoryButton)) {
+                if (PaneUtil.addInventoryHandlers(inventoryComboBox, confirmInventoryButton)) {
                     initializeCatalogService(inventoryService.get(inventoryComboBox.getValue()));
                     setupCatalogControls();
                     addCatalogHandlers();

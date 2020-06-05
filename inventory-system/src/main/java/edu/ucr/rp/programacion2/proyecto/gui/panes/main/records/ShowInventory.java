@@ -364,6 +364,8 @@ public class ShowInventory implements PaneViewer {
         fillTable(tableView);
     }
 
+
+
     /**
      * Updates the label of the matches and number of items showed in the table.
      */
