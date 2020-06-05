@@ -1,5 +1,6 @@
 package edu.ucr.rp.programacion2.proyecto.logic;
 
+import edu.ucr.rp.programacion2.proyecto.domain.Item;
 import edu.ucr.rp.programacion2.proyecto.persistance.CatalogPersistence;
 import edu.ucr.rp.programacion2.proyecto.domain.Catalog;
 import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
@@ -43,6 +44,7 @@ public class CatalogService implements Service<Catalog, String, List> {
             catalog.setId(idGenerator.generate());
             list.add(catalog);
             catalogPersistence.write(catalog);
+            refresh();
             return list.contains(catalog);
         }
         return false;
@@ -60,8 +62,7 @@ public class CatalogService implements Service<Catalog, String, List> {
         refresh();
         if (validateEdition(catalog)) {
             list.add(list.indexOf(catalog), catalog);
-            catalogPersistence.write(catalog);
-            return true;
+            return catalogPersistence.write(catalog);
         }
         return false;
     }
@@ -80,8 +81,7 @@ public class CatalogService implements Service<Catalog, String, List> {
             return false;
         }
         list.remove(catalog);
-        catalogPersistence.delete(catalog);
-        return true;
+        return catalogPersistence.delete(catalog);
     }
 
     public boolean removeAll() {
@@ -130,8 +130,22 @@ public class CatalogService implements Service<Catalog, String, List> {
             namesList.add(catalog.getName());
         return namesList;
     }
-    //  More methods \\
 
+    /**
+     * Creates a list whith the names of the items.
+     * @param catalog
+     * @return  {@code List<String>} List with names of items.
+     */
+    public List<String> getItemNames(Catalog catalog){
+        List<String> itemNames = new ArrayList<>();
+        List<Item> itemList = catalog.getItems();
+        for(Item i: itemList){
+            itemNames.add(i.getName());
+        }
+        return itemNames;
+    }
+
+    //  More methods \\
     /**
      * Check if the catalog can be added.
      * <p>

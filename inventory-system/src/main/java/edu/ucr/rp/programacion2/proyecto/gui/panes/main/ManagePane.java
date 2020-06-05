@@ -1,14 +1,16 @@
 package edu.ucr.rp.programacion2.proyecto.gui.panes.main;
 
-import edu.ucr.rp.programacion2.proyecto.gui.javafx.ItemForm;
+import edu.ucr.rp.programacion2.proyecto.gui.javafx.catalog.DeleteCatalog;
+import edu.ucr.rp.programacion2.proyecto.gui.javafx.inventory.DeleteInventory;
+import edu.ucr.rp.programacion2.proyecto.gui.javafx.item.ItemForm;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneName;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.model.SceneName;
-import edu.ucr.rp.programacion2.proyecto.gui.javafx.CatalogForm;
+import edu.ucr.rp.programacion2.proyecto.gui.javafx.catalog.CatalogForm;
 import edu.ucr.rp.programacion2.proyecto.gui.javafx.ViewMenuBar;
-import edu.ucr.rp.programacion2.proyecto.gui.javafx.InventoryForm;
 import edu.ucr.rp.programacion2.proyecto.gui.panes.main.records.CatalogConfig;
 import edu.ucr.rp.programacion2.proyecto.gui.panes.main.records.ShowInventory;
+import edu.ucr.rp.programacion2.proyecto.gui.javafx.inventory.InventoryForm;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -24,6 +26,7 @@ public class ManagePane implements PaneViewer {
     private Stage stage;
     private static Pane basePane;
     private static HBox hbox;
+
     public ManagePane(Stage stage) {
         this.stage = stage;
         this.basePane = buildBasePane();
@@ -39,7 +42,9 @@ public class ManagePane implements PaneViewer {
         panes.put(PaneName.BASE, basePane);
         panes.put(PaneName.MENU_BAR, new ViewMenuBar(stage).getPane());
         panes.put(PaneName.ADD_INVENTORY, new InventoryForm().getPane());
+        panes.put(PaneName.DELETE_INVENTORY, new DeleteInventory().getPane());
         panes.put(PaneName.ADD_CATALOG, new CatalogForm().getPane());
+        panes.put(PaneName.DELETE_CATALOG, new DeleteCatalog().getPane());
         panes.put(PaneName.ADD_ITEM, new ItemForm().getPane());
         panes.put(PaneName.SHOW_INVENTORY, new ShowInventory().getPane());
         panes.put(PaneName.CATALOG_CONFIG, new CatalogConfig().getPane());
@@ -80,7 +85,14 @@ public class ManagePane implements PaneViewer {
     public static void setCenterPane(Pane pane) {
         hbox.getChildren().clear();
         hbox.getChildren().add(pane);
+    }
 
+    /**
+     * Change the current pane
+     *
+     */
+    public static void clearPane() {
+        hbox.getChildren().clear();
     }
 
     /**

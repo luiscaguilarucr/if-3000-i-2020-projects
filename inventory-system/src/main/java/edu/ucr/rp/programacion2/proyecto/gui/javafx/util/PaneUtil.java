@@ -1,41 +1,41 @@
 package edu.ucr.rp.programacion2.proyecto.gui.javafx.util;
 
+import edu.ucr.rp.programacion2.proyecto.gui.panes.main.ManagePane;
+import org.controlsfx.control.CheckComboBox;
+import edu.ucr.rp.programacion2.proyecto.domain.Catalog;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
-import javafx.stage.Window;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import static edu.ucr.rp.programacion2.proyecto.gui.javafx.util.UIConstants.*;
 
 public class PaneUtil {
 
-    public static GridPane buildPane(){
-        GridPane gP_Catalog = new GridPane();
-        gP_Catalog.setAlignment(Pos.CENTER);
-        gP_Catalog.setPadding(new Insets(40, 40, 40, 40));
-        gP_Catalog.setHgap(10);
-        gP_Catalog.setVgap(10);
+    public static GridPane buildPane() {
+        GridPane gridPane = new GridPane();
+        gridPane.setAlignment(Pos.CENTER_RIGHT);
+        gridPane.setPadding(new Insets(40, 40, 40, 40));
+        gridPane.setHgap(5);
+        gridPane.setVgap(5);
         ColumnConstraints columnOneConstraints = new ColumnConstraints(LABEL_WITH, LABEL_WITH, LABEL_WITH_MAX);
         columnOneConstraints.setHalignment(HPos.RIGHT);
         ColumnConstraints columnTwoConstrains = new ColumnConstraints(INPUT_WITH, INPUT_WITH, INPUT_WITH_MAX);
         columnTwoConstrains.setHgrow(Priority.ALWAYS);
-
-        gP_Catalog.getColumnConstraints().addAll(columnOneConstraints, columnTwoConstrains);
-
-        return gP_Catalog;
+        gridPane.getColumnConstraints().addAll(columnOneConstraints, columnTwoConstrains);
+        return gridPane;
     }
 
-    public static TextField buildTextInput(String text, GridPane pane, int row) {
-        Label minNumberLabel = new Label(text);
-        pane.add(minNumberLabel, 0, row);
+
+    public static TextField buildTextInput(GridPane pane, int row) {
         TextField textField = new TextField();
         pane.add(textField, 1, row);
         return textField;
@@ -49,37 +49,92 @@ public class PaneUtil {
         alert.show();
     }
 
-    public static Button buildButton(String text, GridPane pane, int column, int row){
-        Button button = new Button();
-        button.setText(text);
+    public static Button buildButton(String text, GridPane pane, int column, int row) {
+        Button button = new Button(text);
         pane.setHalignment(button, HPos.CENTER);
-        pane.setMargin(button, new Insets(20, 0, 20, 0));
+        pane.setMargin(button, BUTTON_DEFAULT_INSETS);
         pane.add(button, column, row);
         return button;
     }
 
-    public static ListView controlListView(GridPane pane, ListView listView, int row){
-        pane.add(listView, 2, row);
-        return listView;
+    public static Button buildButtonImage(Image image, GridPane pane, int column, int row) {
+        Button button = new Button("", new ImageView(image));
+        pane.setHalignment(button, HPos.CENTER);
+        pane.setMargin(button, BUTTON_DEFAULT_INSETS);
+        pane.add(button, column, row);
+        return button;
     }
 
-    public static ComboBox buildComboBox(GridPane pane, List list, int column, int row){
+    public static ComboBox buildComboBox(GridPane pane, List<String> list, int column, int row) {
         ComboBox comboBox = new ComboBox(FXCollections.observableArrayList(list));
         comboBox.setMaxWidth(1000);
         pane.add(comboBox, column, row);
         return comboBox;
     }
 
-    public static Label buildLabel(GridPane pane, String text, int column,  int row){
-        Label label = new Label();
-        label.setText(text);
+    public static CheckComboBox buildCheckComboBox(GridPane pane, List<String> list, int column, int row) {
+        ObservableList<String> strings = FXCollections.observableArrayList(list);
+        CheckComboBox<String> checkComboBox = new CheckComboBox<String>(strings);
+        checkComboBox.setMaxWidth(200);
+        pane.add(checkComboBox, column, row);
+        return checkComboBox;
+    }
+
+    public static boolean setupInventoryControls(List list) {
+        if (list.size() > 0) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean setupCatalogControls(ComboBox<String> inventoryComboBox, List<Catalog> catalogs) {
+        if (catalogs.size() > 0) {
+            return true;
+        } else {
+            showAlert(Alert.AlertType.INFORMATION, "There are no catalogs", "You must add at least one catalog in the inventory " + inventoryComboBox.getValue() + " to be able to access this function");
+            ManagePane.clearPane();
+            return false;
+        }
+    }
+
+    public static boolean addInventoryHandlers(ComboBox inventoryComboBox, Button confirmInventoryButton) {
+        if (inventoryComboBox.getValue() == null) {
+            showAlert(Alert.AlertType.INFORMATION, "Error, did not select an inventory", "You must select an inventory");
+            return false;
+        } else {
+            inventoryComboBox.setDisable(true);
+            confirmInventoryButton.setVisible(false);
+            return true;
+        }
+    }
+
+    public static boolean addCatalogHandlers(ComboBox catalogComboBox, Label catalogIndicationLabel, Button confirmCatalogButton) {
+        if (catalogComboBox.getValue() == null) {
+            showAlert(Alert.AlertType.INFORMATION, "Error, did not select a catalog", "You must select a catalog");
+            return false;
+        } else {
+            catalogIndicationLabel.setVisible(false);
+            catalogComboBox.setVisible(false);
+            confirmCatalogButton.setVisible(false);
+            return true;
+        }
+    }
+
+    public static boolean addCatalogHandlerConfirm(List list) {
+        if (list.size() > 0) {
+            return true;
+        } else {
+            return true;
+        }
+    }
+
+    public static Label buildLabel(GridPane pane, String text, int column, int row) {
+        Label label = new Label(text);
         pane.add(label, column, row);
         return label;
     }
 
-    public static TextField buildTextField(GridPane pane, String text, int row){
-        Label minNumberLabel = new Label(text);
-        pane.add(minNumberLabel, 0, row);
+    public static TextField buildTextField(GridPane pane, int row) {
         TextField textField = new TextField();
         pane.add(textField, 1, row);
         return textField;

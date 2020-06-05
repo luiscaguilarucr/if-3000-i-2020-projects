@@ -35,7 +35,7 @@ public class InventoryPersistence implements Persistence<Inventory, List> {
         if (inventory == null) return false;
         File file = new File(path + inventory.getName());
         if (file.exists())
-            return true;
+            return false;
         else
             return file.mkdir();
     }
