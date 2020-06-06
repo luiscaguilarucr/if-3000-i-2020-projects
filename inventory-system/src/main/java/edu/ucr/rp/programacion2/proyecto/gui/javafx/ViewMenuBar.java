@@ -8,12 +8,14 @@ import edu.ucr.rp.programacion2.proyecto.gui.model.PaneName;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.panes.main.ManagePane;
 import javafx.application.Platform;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
 import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class ViewMenuBar implements PaneViewer {
@@ -132,7 +134,7 @@ public class ViewMenuBar implements PaneViewer {
 
 
         ////////////////////////////////////////////////////////////////////////// Menu "Configuration"
-        Menu m_Configuration = new Menu("Configuration");
+        Menu m_Configuration = new Menu("File");
 
         ////////////////////////////////////////// MenuItems for m_Configuration
         //MenuItem iV_mI_About
@@ -148,9 +150,11 @@ public class ViewMenuBar implements PaneViewer {
         MenuItem mI_Exit = new MenuItem("Exit", iV_mI_Exit);
 
         mI_About.setOnAction((event) -> {
+            ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.ABOUT_UI));
         });
 
         mI_Credits.setOnAction((event) -> {
+            ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.CREDITS_UI));
         });
 
         mI_Exit.setOnAction((event) -> Platform.exit());

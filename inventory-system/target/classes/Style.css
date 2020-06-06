@@ -94,3 +94,7 @@
     -fx-max-width: 80px;
     -fx-alignment: center;
 }
+.text {
+    -fx-text-alignment: justify;
+    -fx-text-fill: white;
+}

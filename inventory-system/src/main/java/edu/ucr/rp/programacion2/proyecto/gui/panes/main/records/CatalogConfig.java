@@ -50,8 +50,6 @@ public class CatalogConfig implements PaneViewer {
     private static CatalogService catalogService;
 
     // Constructor \\
-
-
     public CatalogConfig() {
         // Services
         initializeServices();
