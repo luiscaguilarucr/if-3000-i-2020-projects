@@ -17,7 +17,7 @@ public class DeleteInventory implements PaneViewer {
     private Button deleteInventoryButton;
     private Button refreshButton;
     private Label inventoryIndicationLabel;
-    private CheckComboBox checkComboBox;
+    private static CheckComboBox checkComboBox;
     private ObservableList observableList;
     GridPane pane;
 
