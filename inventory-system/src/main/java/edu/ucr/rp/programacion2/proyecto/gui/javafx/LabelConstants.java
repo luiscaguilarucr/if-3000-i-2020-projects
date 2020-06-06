@@ -1,5 +1,7 @@
 package edu.ucr.rp.programacion2.proyecto.gui.javafx;
 
+import edu.ucr.rp.programacion2.proyecto.util.files.IOUtility;
+
 public class LabelConstants {
     //  Buttons  \\
     public static final String ADD_LABEL = "Add";
@@ -36,4 +38,22 @@ public class LabelConstants {
     public static final String CONFIG_ICON = "configIcon.png";
     public static final String EDIT_ICON = "editIcon.png";
     public static final String DELETE_ICON = "delete.png";
+    // Others UI
+    public static final String TITLE_ABOUT = "About";
+    public static final String TITLE_CREDITS = "Credits";
+    public static final String TEXT_CREDITS = "Inventory System\n\n"
+            + "Assignment\n"
+            + "IF3000\n\n"
+            + "Developers:\n\n"
+            + "Jeison Araya Mena.\n"
+            + "ID: B90514\n\n"
+            + "Luis Carlos Aguilar Morales.\n"
+            + "ID: B90127\n\n"
+            + "2020";
+    public static final String TEXT_ABOUT = "Inventory System\n\n"
+            + "Description:\n\n"
+            + "Version 1.0 (2020)\n\n"
+            + "Size: " + IOUtility.getFileAppSize() + "\n\n"
+            + "Develop in JAVA.";
+
 }

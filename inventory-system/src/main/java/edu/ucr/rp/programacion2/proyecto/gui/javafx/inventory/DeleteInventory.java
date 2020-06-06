@@ -46,7 +46,7 @@ public class DeleteInventory implements PaneViewer {
 //         }
 //         checkComboBox.getCheckModel().clearChecks();//TODO colocar
 //     }
-
+//
 //     private void clear() {
 //         deleteInventoryButton.setVisible(false);
 //         inventoryIndicationLabel.setVisible(false);

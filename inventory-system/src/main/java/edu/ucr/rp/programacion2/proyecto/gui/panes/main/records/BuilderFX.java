@@ -11,6 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Text;
 
 import java.util.List;
 
@@ -213,5 +214,12 @@ public class BuilderFX {
         listView.getItems().clear();
         listView.setItems(FXCollections.observableList(list));
 
+    }
+
+
+    public static Text buildText(String message, GridPane pane, int column, int row, int numColumns, int numRows) {
+        Text text = new Text(message);
+        pane.add(text, column, row, numColumns, numRows);
+        return text;
     }
 }
