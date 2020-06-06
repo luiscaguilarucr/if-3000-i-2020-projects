@@ -42,22 +42,22 @@ public class CatalogForm implements PaneViewer {
         return pane;
     }
 
-    public void validateShow(){
+    public void validateShow() {
         initializeInventoryService();
-        if(inventoryService.getAll().size() == 0){
+        if (inventoryService.getAll().size() == 0) {
             ManagePane.clearPane();
             PaneUtil.showAlert(Alert.AlertType.INFORMATION, "There are no inventories", "You must add at least one inventory to be able to access this function");
-        }else {
+        } else {
             refreshInventory();
         }
     }
 
-    public void validateShowCatalog(Inventory inventory){
+    public void validateShowCatalog(Inventory inventory) {
         initializeCatalogService(inventory);
-        if(catalogService.getAll().size() == 0){
+        if (catalogService.getAll().size() == 0) {
             ManagePane.clearPane();
-            PaneUtil.showAlert(Alert.AlertType.INFORMATION, "There are no catalogs", "You must add at least one catalog to the inventory "+inventory.getName()+" to be able to access this function");
-        }else {
+            PaneUtil.showAlert(Alert.AlertType.INFORMATION, "There are no catalogs", "You must add at least one catalog to the inventory " + inventory.getName() + " to be able to access this function");
+        } else {
             ManagePane.clearPane();
         }
     }
@@ -68,7 +68,7 @@ public class CatalogForm implements PaneViewer {
         addInventoryHandlers();
     }
 
-    public void refreshCatalog(){
+    public void refreshCatalog() {
         inventoryIndicationLabel.setVisible(false);
         inventoryComboBox.setVisible(false);
         cancelButton.setVisible(false);
@@ -83,9 +83,9 @@ public class CatalogForm implements PaneViewer {
     }
 
     private void setupInventoryControls() {
-            buildInventoryComboBox(pane);
-            confirmInventoryButton = PaneUtil.buildButtonImage(new Image("select.png"), pane, 2, 0);
-            cancelButton = PaneUtil.buildButton("Cancel", pane, 4, 0);
+        buildInventoryComboBox(pane);
+        confirmInventoryButton = PaneUtil.buildButtonImage(new Image("select.png"), pane, 2, 0);
+        cancelButton = PaneUtil.buildButton("Cancel", pane, 4, 0);
     }
 
     private void setupCatalogControls() {
@@ -98,17 +98,16 @@ public class CatalogForm implements PaneViewer {
     }
 
     private void addInventoryHandlers() {
-            confirmInventoryButton.setOnAction((event) -> {
-                if (PaneUtil.addInventoryHandlers(inventoryComboBox, confirmInventoryButton)) {
-                    initializeCatalogService(inventoryService.get(inventoryComboBox.getValue()));
-                    setupCatalogControls();
-                    addCatalogHandlers();
-                }
-            });
-            cancelButton.setOnAction((actionEvent) -> {
-                ManagePane.clearPane();
-                refreshInventory();
-            });
+        confirmInventoryButton.setOnAction((event) -> {
+            initializeCatalogService(inventoryService.get(inventoryComboBox.getValue()));
+            setupCatalogControls();
+            addCatalogHandlers();
+
+        });
+        cancelButton.setOnAction((actionEvent) -> {
+            ManagePane.clearPane();
+            refreshInventory();
+        });
     }
 
     private void addRefreshButtonHandler() {
@@ -130,7 +129,7 @@ public class CatalogForm implements PaneViewer {
 
     private ComboBox<String> buildInventoryComboBox(GridPane pane) {
         inventoryIndicationLabel = PaneUtil.buildLabel(pane, "Chose an inventory", 0, 0);
-        inventoryComboBox = PaneUtil.buildComboBox(pane, inventoryService.getNamesList(), 1, 0);
+        //inventoryComboBox = PaneUtil.buildComboBox(pane, inventoryService.getNamesList(), 1, 0);
         return inventoryComboBox;
     }
 
