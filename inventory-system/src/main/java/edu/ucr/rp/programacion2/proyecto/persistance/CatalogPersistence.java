@@ -2,6 +2,7 @@ package edu.ucr.rp.programacion2.proyecto.persistance;
 
 import edu.ucr.rp.programacion2.proyecto.domain.Catalog;
 import edu.ucr.rp.programacion2.proyecto.domain.Item;
+import edu.ucr.rp.programacion2.proyecto.domain.Configuration;
 import edu.ucr.rp.programacion2.proyecto.util.builders.CatalogBuilder;
 import org.apache.commons.io.FileUtils;
 
@@ -42,7 +43,7 @@ public class CatalogPersistence implements Persistence<Catalog, List> {
     public boolean write(Catalog catalog) {
         if (catalog == null) return false;                       // Not null
         if (!checkDirectory(catalog.getName())) return false;    // Check dir
-        if (!saveID(catalog)) return false;                      // Save ID
+        if (!saveConfig(catalog)) return false;                      // Save ID
         if (!saveSchema(catalog)) return false;                  // Save Schema
         return saveItems(catalog);                               // Save Items
     }
@@ -104,14 +105,14 @@ public class CatalogPersistence implements Persistence<Catalog, List> {
     }
 
     /**
-     * It's responsible is to save the id of one catalog.
+     * It's responsible is to save the config of one catalog.
      *
      * @param catalog Catalog that contains one id.
      * @return {@code true} if the catalog's id have been saved.{@code false} Otherwise.
      */
-    private boolean saveID(Catalog catalog) {
+    private boolean saveConfig(Catalog catalog) {
         if (catalog == null) return false;                      // Not null catalog.
-        jsonUtil.toFile(new File(path + catalog.getName() + "/config" + suffix), catalog.getId());
+        jsonUtil.toFile(new File(path + catalog.getName() + "/config" + suffix), catalog.getConfiguration());
         return true; // TODO check if have been saved.
     }
 
@@ -163,33 +164,32 @@ public class CatalogPersistence implements Persistence<Catalog, List> {
      * @return {@code Catalog} built, {@code null} if an error has occurred.
      */
     private Catalog buildCatalog(String catalogName) {
-        Integer id = readID(catalogName);               // ID
-        List<String> schema = readSchema(catalogName);  // Schema
-        List<Item> items = readItems(catalogName);      // Items
-        if (id == null) return null;                    // Verify ID
-        if (schema == null) return null;                // Verify Schema
-        if (items == null) return null;                 // Verify Items
-        CatalogBuilder builder = new CatalogBuilder();  // Build Catalog.
+        Configuration config = readConfig(catalogName);  // ID
+        List<String> schema = readSchema(catalogName);          // Schema
+        List<Item> items = readItems(catalogName);              // Items
+        if (config == null) return null;                            // Verify ID
+        if (schema == null) return null;                        // Verify Schema
+        if (items == null) return null;                         // Verify Items
+        CatalogBuilder builder = new CatalogBuilder();          // Build Catalog.
         return builder
-                .withId(id)
+                .setConfig(config)
                 .withName(catalogName)
                 .withSchema(schema)
                 .withItems(items)
                 .build();
     }
 
-    // TODO make an abstraction of readID, readSchema, readItems.
     /**
-     * Reads the id's file and creates a Integer object.
+     * Reads the config file and creates a Configuration object.
      *
-     * @param catalogName to get the id.
-     * @return {@code Integer} id of the catalog, {@code null} if an error has occurred.
+     * @param catalogName to get the config.
+     * @return {@code Configuration} config of the catalog, {@code null} if an error has occurred.
      */
-    private Integer readID(String catalogName) {
-        File file = new File(path + catalogName + "/config" + suffix);//TODO extract extension.
+    private Configuration readConfig(String catalogName) {
+        File file = new File(path + catalogName + "/config" + suffix);
         if (file.exists()) {
             try {
-                return jsonUtil.asObject(file.toURI().toURL(), Integer.class);
+                return jsonUtil.asObject(file.toURI().toURL(), Configuration.class);
             } catch (MalformedURLException e) {
                 System.out.println(e.getMessage());
             }
@@ -204,7 +204,7 @@ public class CatalogPersistence implements Persistence<Catalog, List> {
      * @return {@code List} schema, {@code null} if an error has occurred.
      */
     private List readSchema(String catalogName) {
-        File file = new File(path + catalogName + "/schema" + suffix);//TODO extract extension.
+        File file = new File(path + catalogName + "/schema" + suffix);
         if (file.exists()) {
             try {
                 return jsonUtil.asObject(file.toURI().toURL(), List.class);

@@ -3,7 +3,10 @@ package edu.ucr.rp.programacion2.proyecto.gui.panes.main.records;
 
 import edu.ucr.rp.programacion2.proyecto.domain.Catalog;
 import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
+import edu.ucr.rp.programacion2.proyecto.gui.javafx.inventory.DeleteInventory;
+import edu.ucr.rp.programacion2.proyecto.gui.model.PaneName;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
+import edu.ucr.rp.programacion2.proyecto.gui.panes.main.ManagePane;
 import edu.ucr.rp.programacion2.proyecto.logic.CatalogService;
 import edu.ucr.rp.programacion2.proyecto.logic.InventoryControlService;
 import edu.ucr.rp.programacion2.proyecto.logic.InventoryService;
@@ -238,14 +241,23 @@ public class CatalogConfig implements PaneViewer {
     }
 
     //  Handlers  \\
-    private static void addHandlers() {
-        inventoryComboBox.setOnAction(event -> inventoryChangedEvent());
+    private void addHandlers() {
+        inventoryComboBox.setOnAction(event -> {
+            event.getEventType();
+            inventoryChangedEvent();
+        });
         catalogComboBox.setOnAction(e -> catalogChangedEvent());
+        deleteInventoryButton.setOnAction(e-> deleteInventoryAction());
         showItemsButton.setOnAction(e -> showItemsAction());
         addItemButton.setOnAction(e -> addItemsAction());
-        deleteAllItemsButton.setOnAction(e -> deleteAllItemsAction());
+        deleteAllItemsButton.setOnMouseEntered(e -> deleteAllItemsAction());
 
 
+    }
+
+    private void deleteInventoryAction() {
+        DeleteInventory.setInventory(inventoryComboBox.getValue());
+        ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.DELETE_INVENTORY));
     }
 
     private static void showItemsAction() {// TODO add new Item
@@ -255,7 +267,7 @@ public class CatalogConfig implements PaneViewer {
     }
 
     private static void deleteAllItemsAction() {// TODO deleteAll
-
+        System.out.println("deleteAll pressed.");
     }
 
 
@@ -264,21 +276,21 @@ public class CatalogConfig implements PaneViewer {
     /**
      * This event is triggered when the inventory box changes it's value.
      */
-    private static void inventoryChangedEvent() {
+    private void inventoryChangedEvent() {
         // Inventory Config
         enableInventoryOptions(true);
-        fillInventoryComboBox();//TODO considerar
+        //fillInventoryComboBox(); //TODO considerar
         // Catalog Config
         fillCatalogComboBox(inventoryComboBox.getValue());
         catalogComboBox.setDisable(false);
         enableCatalogOptions(false);
         enableTitles(false);
-        /*try {
+        try {
             Thread.sleep(1000);
             System.out.println("Inventory triggered.");
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }*/
+        }
     }
 
     /**

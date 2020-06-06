@@ -39,9 +39,9 @@ public class CatalogService implements Service<Catalog, String, List> {
     @Override
     public boolean add(Catalog catalog) {
         refresh();
-        catalog.setId(idGenerator.get());
+        catalog.getConfiguration().setId(idGenerator.get());
         if (validateAddition(catalog)) {
-            catalog.setId(idGenerator.generate());
+            catalog.getConfiguration().setId(idGenerator.generate());
             list.add(catalog);
             catalogPersistence.write(catalog);
             refresh();
@@ -122,30 +122,32 @@ public class CatalogService implements Service<Catalog, String, List> {
     /**
      * Creates a list with the names of the catalogs.
      *
-     * @return  {@code List<String>} List with names of catalogs.
+     * @return {@code List<String>} List with names of catalogs.
      */
-    public List getNamesList(){
+    public List getNamesList() {
         List<String> namesList = new ArrayList();
-        for(Catalog catalog : list)
+        for (Catalog catalog : list)
             namesList.add(catalog.getName());
         return namesList;
     }
 
     /**
      * Creates a list whith the names of the items.
+     *
      * @param catalog
-     * @return  {@code List<String>} List with names of items.
+     * @return {@code List<String>} List with names of items.
      */
-    public List<String> getItemNames(Catalog catalog){
+    public List<String> getItemNames(Catalog catalog) {
         List<String> itemNames = new ArrayList<>();
         List<Item> itemList = catalog.getItems();
-        for(Item i: itemList){
+        for (Item i : itemList) {
             itemNames.add(i.getName());
         }
         return itemNames;
     }
 
     //  More methods \\
+
     /**
      * Check if the catalog can be added.
      * <p>
@@ -158,10 +160,10 @@ public class CatalogService implements Service<Catalog, String, List> {
      * @return {@code true} if the element is valid. {@code false} otherwise.
      */
     private boolean validateAddition(Catalog catalog) {
-        if (catalog == null) return false;                         // Not null
-        if (list.contains(catalog)) return false;                // Unique ID
-        if (!validateSchema(catalog.getSchema())) return false;  // Valid schema
-        return !containsByName(catalog.getName());              // Unique Name
+        if (catalog == null) return false;                          // Not null
+        if (list.contains(catalog)) return false;                   // Unique ID
+        if (!validateSchema(catalog.getSchema())) return false;     // Valid schema
+        return !containsByName(catalog.getName());                  // Unique Name
     }
 
     /**
@@ -176,10 +178,10 @@ public class CatalogService implements Service<Catalog, String, List> {
      * @return {@code true} if the element is valid. {@code false} otherwise.
      */
     private boolean validateEdition(Catalog catalog) {
-        if (catalog == null) return false;                         // Not null
-        if (!list.contains(catalog)) return false;               // ID in list
-        if (!validateSchema(catalog.getSchema())) return false;  // Valid schema
-        return !nameUsedByOtherCatalog(catalog);                // Name used
+        if (catalog == null) return false;                          // Not null
+        if (!list.contains(catalog)) return false;                  // ID in list
+        if (!validateSchema(catalog.getSchema())) return false;     // Valid schema
+        return !nameUsedByOtherCatalog(catalog);                    // Name used
     }
 
     /**

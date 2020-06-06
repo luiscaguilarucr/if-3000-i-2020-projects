@@ -166,7 +166,8 @@ public class BuilderFX {
      * @param list     list og items.
      */
     public static void fillComboBox(ComboBox<String> comboBox, List<String> list) {
-        comboBox.setItems(FXCollections.observableList(list));
+        comboBox.getItems().clear();
+        comboBox.setItems(FXCollections.observableArrayList(list));
         comboBox.getItems().sorted();
 
     }

@@ -1,6 +1,7 @@
 package edu.ucr.rp.programacion2.proyecto.util;
 
 import edu.ucr.rp.programacion2.proyecto.domain.Catalog;
+import edu.ucr.rp.programacion2.proyecto.domain.Configuration;
 import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
 import edu.ucr.rp.programacion2.proyecto.domain.Item;
 import edu.ucr.rp.programacion2.proyecto.util.builders.ItemBuilder;
@@ -20,7 +21,7 @@ public class Utility {
         return list[random(list.length)-1];
     }
     public static Catalog randomCatalog(){
-        return new Catalog(-1, randomCatalogName(), new ArrayList<>(), carsSchema());
+        return new Catalog(new Configuration(-1), randomCatalogName(), new ArrayList<>(), carsSchema());
     }
     public static String randomCatalogName(){
         String[] list = {"Deportivos", "Todo Terreno", "Clásicos", "SUVs", "Sedan", "Eléctricos", "Pick-ups", "Convertibles", "Híbridos",

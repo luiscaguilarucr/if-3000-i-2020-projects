@@ -1,29 +1,29 @@
 package edu.ucr.rp.programacion2.proyecto.domain;
 
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-public class Catalog implements Serializable {
-    private int id;
+public class Catalog{
+    //  Variable  \\
+    private Configuration configuration;
     private String name;
     private List<Item> items;
     private List<String> schema;
-
-    public Catalog(int id, String name, List<Item> items, List<String> schema) {
-        this.id = id;
+    //  Constructor  \\
+    public Catalog(Configuration configuration, String name, List<Item> items, List<String> schema) {
+        this.configuration = configuration;
         this.name = name;
         this.items = items;
         this.schema = schema;
     }
 
-
-    public int getId() {
-        return id;
+    //  Methods  \\
+    public Configuration getConfiguration() {
+        return configuration;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setConfiguration(Configuration configuration) {
+        this.configuration = configuration;
     }
 
     public String getName() {
@@ -55,13 +55,13 @@ public class Catalog implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Catalog catalog = (Catalog) o;
-        return id == catalog.id;
+        return Objects.equals(configuration, catalog.configuration);
     }
 
     @Override
     public String toString() {
         return "Catalog{" +
-                "id=" + id +
+                "id=" + configuration +
                 ", name='" + name + '\'' +
                 ", items=" + items +
                 ", schema=" + schema +

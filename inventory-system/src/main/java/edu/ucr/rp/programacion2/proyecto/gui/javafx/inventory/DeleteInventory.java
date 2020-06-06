@@ -37,6 +37,22 @@ public class DeleteInventory implements PaneViewer {
         }
     }
 
+
+//     public void refresh() {
+//         initializeInventoryService();
+//         if (inventoryService.getAll().size() > 0) {
+//             setupControls();
+//             addHandlers();
+//         }
+//         checkComboBox.getCheckModel().clearChecks();//TODO colocar
+//     }
+
+//     private void clear() {
+//         deleteInventoryButton.setVisible(false);
+//         inventoryIndicationLabel.setVisible(false);
+//         inventoryIndicationLabel.setVisible(false);
+//         checkComboBox.setVisible(false);
+//     }
     private void initializeInventoryService() {
         inventoryService = InventoryService.getInstance();
     }
@@ -95,5 +111,11 @@ public class DeleteInventory implements PaneViewer {
     @Override
     public Pane getPane() {
         return getDeleteInventoryPane();
+    }
+
+    public static void setInventory(String inventory){
+
+        checkComboBox.getCheckModel().check(inventory);
+
     }
 }
