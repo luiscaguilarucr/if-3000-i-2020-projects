@@ -51,6 +51,7 @@ public class InventoryView implements PaneViewer {
     private Service catalogService;
     private InventoryControlService inventoryControlService;
     private CatalogConfig catalogConfig = new CatalogConfig();
+    private Button backButton;
     //  Methods  \\
 
     /**
@@ -97,7 +98,8 @@ public class InventoryView implements PaneViewer {
         filterField = BuilderFX.buildTextInput(SEARCH_LABEL, pane, 3, 1);
         tableView = BuilderFX.buildTableView(pane, 0, 2, 4, 1);
         resultsLabel = BuilderFX.buildLabelMinimal("", pane, 0, 3, 2);
-        pagination = BuilderFX.buildPagination(pane, 2, 3, 2, 1);
+        //pagination = BuilderFX.buildPagination(pane, 2, 3, 2, 1);// TODO
+        backButton = BuilderFX.buildButton(BACK_LABEL, pane, 2, 3);
     }
 
     /**
@@ -165,6 +167,8 @@ public class InventoryView implements PaneViewer {
 
         // Label
         resultsLabel.getStyleClass().add("results-label");
+        //Button
+        backButton.setMinWidth(70);
     }
 
     /**
@@ -336,7 +340,13 @@ public class InventoryView implements PaneViewer {
     private void addHandlers() {
         createCatalogButton.setOnAction(e -> createCatalogAction());
         createInventoryButton.setOnAction(e -> createInventoryAction());
+        backButton.setOnAction(e -> backAction());
 
+    }
+
+    private void backAction() {
+        ManagePane.clearPane();
+        // Refresh
     }
 
     private void createInventoryAction() {// TODO actionEvent
