@@ -32,7 +32,7 @@ import static edu.ucr.rp.programacion2.proyecto.gui.javafx.util.UIConstants.*;
  * @author Jeison Araya Mena | B90514
  * @version 2.0
  */
-public class ShowInventory implements PaneViewer {
+public class InventoryView implements PaneViewer {
     //  Variables  \\
     private TitledPane createTiledPane;
     private HBox createOptionsHBox;
@@ -253,8 +253,9 @@ public class ShowInventory implements PaneViewer {
                     return true;
                 }
                 // SubCase #3 filter the name of the catalogs.
-                return inventoryControl.getCatalogName().toLowerCase().contains(inputFilter);
-
+                if(inventoryControl.getCatalogName() != null)
+                    return inventoryControl.getCatalogName().toLowerCase().contains(inputFilter);
+                return false;
             });
             // Update results message.
             updateResultsLabel();

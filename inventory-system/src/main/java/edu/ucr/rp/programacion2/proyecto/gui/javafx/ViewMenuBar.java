@@ -38,13 +38,14 @@ public class ViewMenuBar implements PaneViewer {
         Menu m_Inventory = new Menu("Inventory");
 
         ////////////////////////////////////////// MenuItems for m_Inventory
+        //MenuItem mI_SeeInventory
+        ImageView iV_mI_SeeInventory = new ImageView(new Image("seeIcon.png"));
+        MenuItem mI_SeeInventory = new MenuItem("Search", iV_mI_SeeInventory);
+
         //MenuItem mI_CreateInventory
         ImageView iV_mI_CreateInventory = new ImageView(new Image("addIcon.png"));
         MenuItem mI_CreateInventory = new MenuItem("Create inventory", iV_mI_CreateInventory);
 
-        //MenuItem mI_SeeInventory
-        ImageView iV_mI_SeeInventory = new ImageView(new Image("seeIcon.png"));
-        MenuItem mI_SeeInventory = new MenuItem("List of inventories", iV_mI_SeeInventory);
 
         //MenuItem mI_DeleteInventory
         ImageView iV_mI_DeleteInventory = new ImageView(new Image("delete.png"));
@@ -63,7 +64,7 @@ public class ViewMenuBar implements PaneViewer {
             deleteInventory.validateShow();
         });
 
-        m_Inventory.getItems().addAll(mI_CreateInventory, mI_SeeInventory, mI_DeleteInventory);
+        m_Inventory.getItems().addAll(mI_SeeInventory, mI_CreateInventory, mI_DeleteInventory);
 
 
         ////////////////////////////////////////////////////////////////////////// Menu "Catalog"
