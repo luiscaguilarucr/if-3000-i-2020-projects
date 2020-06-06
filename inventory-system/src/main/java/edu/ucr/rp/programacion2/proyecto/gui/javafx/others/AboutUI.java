@@ -7,6 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 
 import static edu.ucr.rp.programacion2.proyecto.gui.javafx.LabelConstants.*;
 
@@ -51,7 +52,7 @@ public class AboutUI implements PaneViewer {
     }
     private void setupStyles() {
         pane.getStyleClass().add("default-grid-pane");
-        text.getStyleClass().add("text");
+        text.setTextAlignment(TextAlignment.JUSTIFY);
 
     }//TODO
     private void backAction() {

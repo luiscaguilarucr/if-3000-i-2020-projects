@@ -50,10 +50,10 @@ public class LabelConstants {
             + "Luis Carlos Aguilar Morales.\n"
             + "ID: B90127\n\n"
             + "2020";
-    public static final String TEXT_ABOUT = "Inventory System\n"
-            + "Description:\n"
-            + "Version 1.0 (2020)\n"
-            + "Size: " + IOUtility.getFileAppSize() + "\n"
+    public static final String TEXT_ABOUT = "Inventory System\n\n"
+            + "Description:\n\n"
+            + "Version 1.0 (2020)\n\n"
+            + "Size: " + IOUtility.getFileAppSize() + "\n\n"
             + "Develop in JAVA.";
 
 }
