@@ -59,18 +59,18 @@ public class ItemForm implements PaneViewer {
 
     private ComboBox<String> buildInventoryComboBox() {
         inventoryIndicationLabel = PaneUtil.buildLabel(pane, "Choose an inventory", 0, 0);
-        inventoryComboBox = PaneUtil.buildComboBox(pane, inventoryService.getNamesList(), 1, 0);
+        //inventoryComboBox = PaneUtil.buildComboBox(pane, inventoryService.getNamesList(), 1, 0);
         return inventoryComboBox;
     }
 
     private void addInventoryHandlers() {
         confirmInventoryButton.setOnAction((event -> {
-            if (PaneUtil.addInventoryHandlers(inventoryComboBox, confirmInventoryButton)) {
+            /*if (PaneUtil.addInventoryHandlers(inventoryComboBox, confirmInventoryButton)) {
                 initializeCatalogService(inventoryService.get(inventoryComboBox.getValue()));
                 setupCatalogControls(inventoryService.get(inventoryComboBox.getValue()));
                 addCatalogHandlers();
                 refresh();
-            }
+            }*/
             cancelButton.setOnAction((actionEvent) -> {
                 ManagePane.clearPane();
                 refresh();
@@ -103,7 +103,7 @@ public class ItemForm implements PaneViewer {
 
     private void buildCatalogComboBox(Inventory inventory) {
         catalogIndicationLabel = PaneUtil.buildLabel(pane, "Choose a catalog", 0, 1);
-        catalogComboBox = PaneUtil.buildComboBox(pane, catalogService.getNamesList(), 1, 1);
+        //catalogComboBox = PaneUtil.buildComboBox(pane, catalogService.getNamesList(), 1, 1);
     }
 
     private void setupItemControls(Catalog catalog) {

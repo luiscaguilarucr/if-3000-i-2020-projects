@@ -4,6 +4,7 @@ import edu.ucr.rp.programacion2.proyecto.gui.javafx.util.PaneUtil;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.panes.main.ManagePane;
 import edu.ucr.rp.programacion2.proyecto.logic.InventoryService;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -16,42 +17,42 @@ public class DeleteInventory implements PaneViewer {
     private Button deleteInventoryButton;
     private Button refreshButton;
     private Label inventoryIndicationLabel;
-    private static CheckComboBox checkComboBox;
+    private CheckComboBox checkComboBox;
+    private ObservableList observableList;
     GridPane pane;
 
     public GridPane getDeleteInventoryPane() {
-        initializeInventoryService();
         pane = PaneUtil.buildPane();
+        initializeInventoryService();
         setupControls();
         addHandlers();
-        addRefreshButtonHandler();
         return pane;
     }
 
-    public void validateShow(){
+    public void validateShow() {
         initializeInventoryService();
-        if(inventoryService.getAll().size() == 0){
+        if (inventoryService.getAll().size() == 0) {
             ManagePane.clearPane();
             PaneUtil.showAlert(Alert.AlertType.INFORMATION, "There are no inventories", "You must add at least one inventory to be able to access this function");
         }
     }
 
-    public void refresh() {
-        initializeInventoryService();
-        if (inventoryService.getAll().size() > 0) {
-            setupControls();
-            addHandlers();
-        }
-        checkComboBox.getCheckModel().clearChecks();//TODO colocar
-    }
 
-    private void clear() {
-        deleteInventoryButton.setVisible(false);
-        inventoryIndicationLabel.setVisible(false);
-        inventoryIndicationLabel.setVisible(false);
-        checkComboBox.setVisible(false);
-    }
+//     public void refresh() {
+//         initializeInventoryService();
+//         if (inventoryService.getAll().size() > 0) {
+//             setupControls();
+//             addHandlers();
+//         }
+//         checkComboBox.getCheckModel().clearChecks();//TODO colocar
+//     }
 
+//     private void clear() {
+//         deleteInventoryButton.setVisible(false);
+//         inventoryIndicationLabel.setVisible(false);
+//         inventoryIndicationLabel.setVisible(false);
+//         checkComboBox.setVisible(false);
+//     }
     private void initializeInventoryService() {
         inventoryService = InventoryService.getInstance();
     }
@@ -60,31 +61,37 @@ public class DeleteInventory implements PaneViewer {
         buildCheckComboBoxComboBox();
         inventoryIndicationLabel = PaneUtil.buildLabel(pane, "Select the inventory you want to remove", 0, 0);
         deleteInventoryButton = PaneUtil.buildButtonImage(new Image("delete.png"), pane, 2, 0);
+        refreshButton = PaneUtil.buildButtonImage(new Image("refresh.png"), pane, 4, 0);
     }
 
     private void addHandlers() {
-        if (PaneUtil.setupInventoryControls(inventoryService.getAll())) {
-            deleteInventoryButton.setOnAction((actionEvent) -> {
+        deleteInventoryButton.setOnAction((actionEvent) -> {
+            if (!checkComboBox.getCheckModel().isEmpty()) {
                 deleteCatalog();
-                refresh();
-            });
-        }
-    }
-
-    private void addRefreshButtonHandler() {
-        refreshButton = PaneUtil.buildButtonImage(new Image("refresh.png"), pane, 4, 0);
-        refreshButton.setOnAction((actionEvent) -> {
-            refresh();
+            } else {
+                PaneUtil.showAlert(Alert.AlertType.INFORMATION, "Error, did not select an inventory", "You must select one inventory to apply this action");
+            }
+            refreshItems();
         });
+        refreshButton.setOnAction(event -> refreshItems());
+        //checkComboBox.setOnMouseClicked(event -> refreshItems());
     }
 
-    private void buildCheckComboBoxComboBox() {
-        checkComboBox = PaneUtil.buildCheckComboBox(pane, inventoryService.getNamesList(), 1, 0);
+    private CheckComboBox buildCheckComboBoxComboBox() {
+        observableList = FXCollections.observableArrayList(inventoryService.getNamesList());
+        checkComboBox = PaneUtil.buildCheckComboBox(pane, observableList, 1, 0);
+        return checkComboBox;
+    }
+
+    private void refreshItems() {
+        initializeInventoryService();
+        observableList.clear();
+        observableList.addAll(inventoryService.getNamesList());
     }
 
     private void deleteCatalog() {
         int i = 0;
-        Boolean removed = false, clean = false;
+        Boolean removed = false;
         ObservableList<String> list = checkComboBox.getCheckModel().getCheckedItems();
         for (String s : list) {
             inventoryService.remove(inventoryService.get(s));
@@ -93,14 +100,9 @@ public class DeleteInventory implements PaneViewer {
         if (i == list.size()) {
             removed = true;
         }
-        if (inventoryService.getAll().size() == 0) {
-            clean = true;
-        }
         if (removed) {
-            if (clean) {
-                clear();
-            }
             PaneUtil.showAlert(Alert.AlertType.INFORMATION, "Inventory removed", "The inventory was removed correctly");
+            ManagePane.clearPane();
         } else {
             PaneUtil.showAlert(Alert.AlertType.INFORMATION, "ERROR when removing", "The inventory was not removed");
         }

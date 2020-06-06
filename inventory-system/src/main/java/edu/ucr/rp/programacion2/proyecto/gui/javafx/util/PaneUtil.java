@@ -65,26 +65,18 @@ public class PaneUtil {
         return button;
     }
 
-    public static ComboBox buildComboBox(GridPane pane, List<String> list, int column, int row) {
-        ComboBox comboBox = new ComboBox(FXCollections.observableArrayList(list));
-        comboBox.setMaxWidth(1000);
+    public static ComboBox buildComboBox(GridPane pane, ObservableList observableList, int column, int row) {
+        ComboBox comboBox = new ComboBox(observableList);
+        comboBox.setMaxWidth(INPUT_WITH_MAX);
         pane.add(comboBox, column, row);
         return comboBox;
     }
 
-    public static CheckComboBox buildCheckComboBox(GridPane pane, List<String> list, int column, int row) {
-        ObservableList<String> strings = FXCollections.observableArrayList(list);
-        CheckComboBox<String> checkComboBox = new CheckComboBox<String>(strings);
-        checkComboBox.setMaxWidth(200);
+    public static CheckComboBox buildCheckComboBox(GridPane pane, ObservableList<String> observableList, int column, int row) {
+        CheckComboBox<String> checkComboBox = new CheckComboBox<>(observableList);
+        checkComboBox.setMaxWidth(INPUT_WITH_MAX);
         pane.add(checkComboBox, column, row);
         return checkComboBox;
-    }
-
-    public static boolean setupInventoryControls(List list) {
-        if (list.size() > 0) {
-            return true;
-        }
-        return false;
     }
 
     public static boolean setupCatalogControls(ComboBox<String> inventoryComboBox, List<Catalog> catalogs) {
@@ -97,15 +89,12 @@ public class PaneUtil {
         }
     }
 
-    public static boolean addInventoryHandlers(ComboBox inventoryComboBox, Button confirmInventoryButton) {
+    public static boolean addInventoryHandlers(ComboBox inventoryComboBox) {
         if (inventoryComboBox.getValue() == null) {
             showAlert(Alert.AlertType.INFORMATION, "Error, did not select an inventory", "You must select an inventory");
             return false;
-        } else {
-            inventoryComboBox.setDisable(true);
-            confirmInventoryButton.setVisible(false);
-            return true;
         }
+        return true;
     }
 
     public static boolean addCatalogHandlers(ComboBox catalogComboBox, Label catalogIndicationLabel, Button confirmCatalogButton) {
@@ -120,13 +109,6 @@ public class PaneUtil {
         }
     }
 
-    public static boolean addCatalogHandlerConfirm(List list) {
-        if (list.size() > 0) {
-            return true;
-        } else {
-            return true;
-        }
-    }
 
     public static Label buildLabel(GridPane pane, String text, int column, int row) {
         Label label = new Label(text);
