@@ -6,6 +6,7 @@ public class LabelConstants {
     //  Buttons  \\
     public static final String ADD_LABEL = "Add";
     public static final String CREATE_LABEL = "Create";
+    public static final String NEW_LABEL = "New";
     public static final String EDIT_LABEL = "Edit";
     public static final String VIEW_LABEL = "View";
     public static final String CHANGE_LABEL = "Change";

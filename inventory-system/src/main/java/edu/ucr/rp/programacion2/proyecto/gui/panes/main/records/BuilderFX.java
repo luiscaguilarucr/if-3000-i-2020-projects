@@ -222,4 +222,17 @@ public class BuilderFX {
         pane.add(text, column, row, numColumns, numRows);
         return text;
     }
+
+
+    public static void setButtonEffect(Button button){
+        button.getStyleClass().add("button-item-title-pane");
+        button.setOnMouseEntered(e->{
+            button.getStyleClass().clear();
+            button.getStyleClass().add("button-item-title-pane-entered");
+        });
+        button.setOnMouseExited(e->{
+            button.getStyleClass().clear();
+            button.getStyleClass().add("button-item-title-pane");
+        });
+    }
 }

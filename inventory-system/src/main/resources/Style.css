@@ -5,6 +5,8 @@
     -fx-background-color: whitesmoke;
     -fx-animated: true;
     -fx-text-fill: rgba(45,51,55,0.98);
+    -fx-min-height: 30;
+    -fx-min-width: 65;
 }
 .combo-box{
     -fx-background-color: whitesmoke;
@@ -78,10 +80,9 @@
     -fx-border-width: 1px;
     -fx-animated: true;
     -fx-text-fill: gray;
-    -fx-min-width: 80px;
-    -fx-min-height: 25px;
-    -fx-max-width: 80px;
     -fx-alignment: center;
+    -fx-min-height: 30;
+    -fx-min-width: 65;
 }
 .button-item-title-pane-entered{
     -fx-background-color: snow;
@@ -89,8 +90,7 @@
     -fx-border-width: 1px;
     -fx-animated: true;
     -fx-text-fill: gray;
-    -fx-min-width: 80px;
-    -fx-min-height: 25px;
-    -fx-max-width: 80px;
     -fx-alignment: center;
+    -fx-min-height: 30;
+    -fx-min-width: 65;
 }

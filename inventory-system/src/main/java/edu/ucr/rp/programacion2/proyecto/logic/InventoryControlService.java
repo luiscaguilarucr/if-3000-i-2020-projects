@@ -34,6 +34,7 @@ public class InventoryControlService {//TODO change name(don't use Service)
 
     /**
      * Return a List with the inventories an their catalogs.
+     *
      * @return {@code List} list of names of catalogs linked with an Inventory.
      */
     public List<InventoryControl> getAll() {
@@ -53,14 +54,17 @@ public class InventoryControlService {//TODO change name(don't use Service)
         // SEARCH IN EACH INVENTORY
         for (Inventory inventory : inventories) {
             List<Catalog> catalogs = getCatalogsOf(inventory);
-            for(Catalog catalog: catalogs){
-                list.add(new InventoryControl(inventory.getName(),catalog.getName()));
+            if (catalogs.isEmpty()) {
+                list.add(new InventoryControl(inventory.getName(), null));
+            } else {
+                for (Catalog catalog : catalogs) {
+                    list.add(new InventoryControl(inventory.getName(), catalog.getName()));
+                }
             }
         }
     }
 
     /**
-     *
      * @param inventory
      * @return
      */
@@ -68,7 +72,8 @@ public class InventoryControlService {//TODO change name(don't use Service)
         catalogService = new CatalogService(inventory);
         return catalogService.getAll();
     }
-    public int size(){
+
+    public int size() {
         updateList();
         return list.size();
     }

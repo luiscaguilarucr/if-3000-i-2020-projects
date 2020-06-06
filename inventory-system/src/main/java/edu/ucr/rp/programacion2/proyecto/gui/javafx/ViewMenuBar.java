@@ -7,6 +7,7 @@ import edu.ucr.rp.programacion2.proyecto.gui.javafx.item.ItemForm;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneName;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.panes.main.ManagePane;
+import edu.ucr.rp.programacion2.proyecto.gui.panes.main.records.InventoryView;
 import javafx.application.Platform;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -38,13 +39,14 @@ public class ViewMenuBar implements PaneViewer {
         Menu m_Inventory = new Menu("Inventory");
 
         ////////////////////////////////////////// MenuItems for m_Inventory
+        //MenuItem mI_SeeInventory
+        ImageView iV_mI_SeeInventory = new ImageView(new Image("seeIcon.png"));
+        MenuItem mI_SeeInventory = new MenuItem("Search", iV_mI_SeeInventory);
+
         //MenuItem mI_CreateInventory
         ImageView iV_mI_CreateInventory = new ImageView(new Image("addIcon.png"));
         MenuItem mI_CreateInventory = new MenuItem("Create inventory", iV_mI_CreateInventory);
 
-        //MenuItem mI_SeeInventory
-        ImageView iV_mI_SeeInventory = new ImageView(new Image("seeIcon.png"));
-        MenuItem mI_SeeInventory = new MenuItem("List of inventories", iV_mI_SeeInventory);
 
         //MenuItem mI_DeleteInventory
         ImageView iV_mI_DeleteInventory = new ImageView(new Image("delete.png"));
@@ -52,6 +54,7 @@ public class ViewMenuBar implements PaneViewer {
 
         mI_CreateInventory.setOnAction((event) -> {
             ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.ADD_INVENTORY));
+            InventoryView.refresh();
         });
 
         mI_SeeInventory.setOnAction((event)->{
@@ -63,7 +66,7 @@ public class ViewMenuBar implements PaneViewer {
             deleteInventory.validateShow();
         });
 
-        m_Inventory.getItems().addAll(mI_CreateInventory, mI_SeeInventory, mI_DeleteInventory);
+        m_Inventory.getItems().addAll(mI_SeeInventory, mI_CreateInventory, mI_DeleteInventory);
 
 
         ////////////////////////////////////////////////////////////////////////// Menu "Catalog"
