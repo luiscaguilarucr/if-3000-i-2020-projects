@@ -19,6 +19,7 @@ import javafx.scene.layout.*;
 import java.util.List;
 
 import static edu.ucr.rp.programacion2.proyecto.gui.javafx.LabelConstants.*;
+import static edu.ucr.rp.programacion2.proyecto.gui.panes.main.records.BuilderFX.setButtonEffect;
 
 /**
  * /**
@@ -194,20 +195,9 @@ public class CatalogConfig implements PaneViewer {
         setButtonEffect(addItemButton);
         setButtonEffect(deleteAllItemsButton);
         setButtonEffect(showItemsButton);
-
     }
 
-    private static void setButtonEffect(Button button){
-        button.getStyleClass().add("button-item-title-pane");
-        button.setOnMouseEntered(e->{
-            button.getStyleClass().clear();
-            button.getStyleClass().add("button-item-title-pane-entered");
-        });
-        button.setOnMouseExited(e->{
-            button.getStyleClass().clear();
-            button.getStyleClass().add("button-item-title-pane");
-        });
-    }
+
     /**
      * Create a List view and place it in a pane.
      *

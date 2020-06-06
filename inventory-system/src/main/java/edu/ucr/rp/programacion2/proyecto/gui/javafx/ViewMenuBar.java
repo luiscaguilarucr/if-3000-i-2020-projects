@@ -7,6 +7,7 @@ import edu.ucr.rp.programacion2.proyecto.gui.javafx.item.ItemForm;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneName;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.panes.main.ManagePane;
+import edu.ucr.rp.programacion2.proyecto.gui.panes.main.records.InventoryView;
 import javafx.application.Platform;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -53,6 +54,7 @@ public class ViewMenuBar implements PaneViewer {
 
         mI_CreateInventory.setOnAction((event) -> {
             ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.ADD_INVENTORY));
+            InventoryView.refresh();
         });
 
         mI_SeeInventory.setOnAction((event)->{
