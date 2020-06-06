@@ -63,7 +63,6 @@ public class DeleteCatalog implements PaneViewer {
         catalogService = new CatalogService(inventory);
     }
 
-
     private void addHandlers() {
         confirmInventoryButton.setOnAction((event -> {
             if (PaneUtil.addInventoryHandlers(inventoryComboBox)) {
