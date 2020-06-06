@@ -3,7 +3,6 @@ package edu.ucr.rp.programacion2.proyecto.gui.javafx;
 import edu.ucr.rp.programacion2.proyecto.gui.javafx.catalog.CatalogForm;
 import edu.ucr.rp.programacion2.proyecto.gui.javafx.catalog.DeleteCatalog;
 import edu.ucr.rp.programacion2.proyecto.gui.javafx.inventory.DeleteInventory;
-import edu.ucr.rp.programacion2.proyecto.gui.javafx.inventory.InventoryForm;
 import edu.ucr.rp.programacion2.proyecto.gui.javafx.item.ItemForm;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneName;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
@@ -45,10 +44,6 @@ public class ViewMenuBar implements PaneViewer {
         ImageView iV_mI_SeeInventory = new ImageView(new Image("seeIcon.png"));
         MenuItem mI_SeeInventory = new MenuItem("List of inventories", iV_mI_SeeInventory);
 
-        //MenuItem mI_ChangeName
-        ImageView iV_mI_ChangeName = new ImageView(new Image("editIcon.png"));
-        MenuItem mI_ChangeName = new MenuItem("Change name", iV_mI_ChangeName);
-
         //MenuItem mI_DeleteInventory
         ImageView iV_mI_DeleteInventory = new ImageView(new Image("delete.png"));
         MenuItem mI_DeleteInventory = new MenuItem("Delete inventory", iV_mI_DeleteInventory);
@@ -61,15 +56,12 @@ public class ViewMenuBar implements PaneViewer {
             ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.SHOW_INVENTORY));
         });
 
-        mI_ChangeName.setOnAction((event) -> {
-        });
-
         mI_DeleteInventory.setOnAction((event) -> {
             ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.DELETE_INVENTORY));
             deleteInventory.validateShow();
         });
 
-        m_Inventory.getItems().addAll(mI_CreateInventory, mI_SeeInventory, mI_ChangeName, mI_DeleteInventory);
+        m_Inventory.getItems().addAll(mI_CreateInventory, mI_SeeInventory, mI_DeleteInventory);
 
 
         ////////////////////////////////////////////////////////////////////////// Menu "Catalog"
@@ -84,6 +76,10 @@ public class ViewMenuBar implements PaneViewer {
         ImageView iV_mI_ViewAllCatalogs = new ImageView(new Image("seeIcon.png"));
         MenuItem mI_ViewAllCatalogs = new MenuItem("View catalogs", iV_mI_ViewAllCatalogs);
 
+        //MenuItem mI_EditCatalog
+        ImageView iV_mI_EditCatalog = new ImageView(new Image("editIcon.png"));
+        MenuItem mI_EditCatalog = new MenuItem("Edit catalog", iV_mI_EditCatalog);
+
         //MenuItem mI_DeleteCatalog
         ImageView iV_mI_DeleteCatalog = new ImageView(new Image("delete.png"));
         MenuItem mI_DeleteCatalog = new MenuItem("Delete catalog", iV_mI_DeleteCatalog);
@@ -97,12 +93,15 @@ public class ViewMenuBar implements PaneViewer {
         mI_ViewAllCatalogs.setOnAction((event) -> {
         });
 
+        mI_EditCatalog.setOnAction((event) -> {
+        });
+
         mI_DeleteCatalog.setOnAction((event) -> {
             ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.DELETE_CATALOG));
             deleteCatalog.validateShow();
         });
 
-        m_Catalog.getItems().addAll(mI_AddCatalog, mI_ViewAllCatalogs, mI_DeleteCatalog);
+        m_Catalog.getItems().addAll(mI_AddCatalog, mI_ViewAllCatalogs, mI_EditCatalog, mI_DeleteCatalog);
 
 
         ////////////////////////////////////////////////////////////////////////// Menu "Item"
@@ -117,17 +116,10 @@ public class ViewMenuBar implements PaneViewer {
         ImageView iV_mI_EditItem = new ImageView(new Image("editIcon.png"));
         MenuItem mI_EditItem = new MenuItem("Edit item", iV_mI_EditItem);
 
-        //MenuItem mI_ViewItems
-        ImageView iV_mI_ViewItems = new ImageView(new Image("seeIcon.png"));
-        MenuItem mI_ViewItems = new MenuItem("View items", iV_mI_ViewItems);
-
         //Give action to MenuItems
         mI_AddItem.setOnAction((event) -> {
             ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.ADD_ITEM));
             itemForm.validateShow();
-        });
-
-        mI_ViewItems.setOnAction((event) -> {
         });
 
         mI_EditItem.setOnAction((event) -> {
@@ -136,7 +128,7 @@ public class ViewMenuBar implements PaneViewer {
         m_Item.setOnShowing((event) -> {
         });
 
-        m_Item.getItems().addAll(mI_AddItem, mI_ViewItems, mI_EditItem);
+        m_Item.getItems().addAll(mI_AddItem, mI_EditItem);
 
 
         ////////////////////////////////////////////////////////////////////////// Menu "Configuration"
@@ -171,6 +163,7 @@ public class ViewMenuBar implements PaneViewer {
         // Get the Menus in MenuBar
         mB_View_MenuBar.getMenus().addAll(m_Configuration, m_Inventory, m_Catalog, m_Item);
         mB_View_MenuBar.setMinWidth(2000);
+
         /// Get the MenuBar in VBox
         vB_MenuBar.getChildren().addAll(mB_View_MenuBar);
 

@@ -27,6 +27,7 @@ public class CatalogForm implements PaneViewer {
     private Button addFeatureButton;
     private Button saveCatalogButton;
     private Button cancelButton;
+    private Button refreshButton;
     private ComboBox<String> inventoryComboBox;
     private ArrayList<String> schema = new ArrayList<>();
     private Boolean emptySpace = false;
@@ -46,23 +47,31 @@ public class CatalogForm implements PaneViewer {
         if(inventoryService.getAll().size() == 0){
             ManagePane.clearPane();
             PaneUtil.showAlert(Alert.AlertType.INFORMATION, "There are no inventories", "You must add at least one inventory to be able to access this function");
+        }else {
+            refreshInventory();
         }
     }
 
-    public void refresh() {
-        catalogNameTextField.setVisible(false);
-        featureNameTextField.setVisible(false);
-        addFeatureButton.setVisible(false);
-        saveCatalogButton.setVisible(false);
-        confirmInventoryButton.setVisible(false);
-        inventoryIndicationLabel.setVisible(false);
-        inventoryIndicationLabel.setVisible(false);
-        catalogNameLabel.setVisible(false);
-        featureNameLabel.setVisible(false);
+    public void validateShowCatalog(Inventory inventory){
+        initializeCatalogService(inventory);
+        if(catalogService.getAll().size() == 0){
+            ManagePane.clearPane();
+            PaneUtil.showAlert(Alert.AlertType.INFORMATION, "There are no catalogs", "You must add at least one catalog to the inventory "+inventory.getName()+" to be able to access this function");
+        }else {
+            ManagePane.clearPane();
+        }
+    }
 
+    public void refreshInventory() {
         setupInventoryControls();
         initializeInventoryService();
         addInventoryHandlers();
+    }
+
+    public void refreshCatalog(){
+        inventoryIndicationLabel.setVisible(false);
+        inventoryComboBox.setVisible(false);
+        cancelButton.setVisible(false);
     }
 
     private void initializeInventoryService() {
@@ -74,11 +83,9 @@ public class CatalogForm implements PaneViewer {
     }
 
     private void setupInventoryControls() {
-        if (PaneUtil.setupInventoryControls(inventoryService.getAll())) {
             buildInventoryComboBox(pane);
             confirmInventoryButton = PaneUtil.buildButtonImage(new Image("select.png"), pane, 2, 0);
-            cancelButton = PaneUtil.buildButton("Cancel", pane, 4, 1);
-        }
+            cancelButton = PaneUtil.buildButton("Cancel", pane, 4, 0);
     }
 
     private void setupCatalogControls() {
@@ -91,9 +98,8 @@ public class CatalogForm implements PaneViewer {
     }
 
     private void addInventoryHandlers() {
-        if (PaneUtil.setupInventoryControls(inventoryService.getAll())) {
             confirmInventoryButton.setOnAction((event) -> {
-                if (PaneUtil.addInventoryHandlers(inventoryComboBox, inventoryIndicationLabel, confirmInventoryButton)) {
+                if (PaneUtil.addInventoryHandlers(inventoryComboBox, confirmInventoryButton)) {
                     initializeCatalogService(inventoryService.get(inventoryComboBox.getValue()));
                     setupCatalogControls();
                     addCatalogHandlers();
@@ -101,10 +107,15 @@ public class CatalogForm implements PaneViewer {
             });
             cancelButton.setOnAction((actionEvent) -> {
                 ManagePane.clearPane();
-                refresh();
+                refreshInventory();
             });
-        }
+    }
 
+    private void addRefreshButtonHandler() {
+        refreshButton = PaneUtil.buildButtonImage(new Image("refresh.png"), pane, 4, 0);
+        refreshButton.setOnAction((actionEvent) -> {
+            refreshInventory();
+        });
     }
 
     private void addCatalogHandlers() {
@@ -112,7 +123,7 @@ public class CatalogForm implements PaneViewer {
         saveCatalogButton.setOnAction((event) -> {
             generateCatalog();
             ManagePane.clearPane();
-            refresh();
+            refreshInventory();
         });
         saveCatalogButton.setVisible(false);
     }
