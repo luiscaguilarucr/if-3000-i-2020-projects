@@ -1,5 +1,6 @@
 package edu.ucr.rp.programacion2.proyecto.persistance;
 
+import edu.ucr.rp.programacion2.proyecto.domain.Configuration;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -19,7 +20,8 @@ public class IDGeneratorPersistence implements Persistence<Integer, Integer> {
     //  Methods  \\
     @Override
     public boolean write(Integer id) {
-        jsonUtil.toFile(new File(path +"config" + suffix), id);
+        Configuration config = new Configuration(id);
+        jsonUtil.toFile(new File(path +"config" + suffix), config);
         return true;
     }
 
@@ -28,7 +30,8 @@ public class IDGeneratorPersistence implements Persistence<Integer, Integer> {
         File file = new File(path +"/config" + suffix);
         if (file.exists()) {
             try {
-                return jsonUtil.asObject(file.toURI().toURL(), Integer.class);
+                Configuration configuration = jsonUtil.asObject(file.toURI().toURL(), Configuration.class);
+                return configuration.getId();
             } catch (MalformedURLException e) {
                 System.out.println(e.getMessage());
             }

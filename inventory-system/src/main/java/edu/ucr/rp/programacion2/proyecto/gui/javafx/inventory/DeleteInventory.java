@@ -16,7 +16,7 @@ public class DeleteInventory implements PaneViewer {
     private Button deleteInventoryButton;
     private Button refreshButton;
     private Label inventoryIndicationLabel;
-    private CheckComboBox checkComboBox;
+    private static CheckComboBox checkComboBox;
     GridPane pane;
 
     public GridPane getDeleteInventoryPane() {
@@ -42,6 +42,7 @@ public class DeleteInventory implements PaneViewer {
             setupControls();
             addHandlers();
         }
+        checkComboBox.getCheckModel().clearChecks();//TODO colocar
     }
 
     private void clear() {
@@ -108,5 +109,11 @@ public class DeleteInventory implements PaneViewer {
     @Override
     public Pane getPane() {
         return getDeleteInventoryPane();
+    }
+
+    public static void setInventory(String inventory){
+
+        checkComboBox.getCheckModel().check(inventory);
+
     }
 }

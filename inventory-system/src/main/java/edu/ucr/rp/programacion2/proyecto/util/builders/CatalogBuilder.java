@@ -2,18 +2,19 @@ package edu.ucr.rp.programacion2.proyecto.util.builders;
 
 import edu.ucr.rp.programacion2.proyecto.domain.Catalog;
 import edu.ucr.rp.programacion2.proyecto.domain.Item;
+import edu.ucr.rp.programacion2.proyecto.domain.Configuration;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CatalogBuilder {
-    private Integer id;
+    private Configuration config;
     private String name;
     private List<Item> items;
     private List<String> schema;
 
-    public CatalogBuilder withId(Integer id) {
-        this.id = id;
+    public CatalogBuilder setConfig(Configuration config) {
+        this.config = config;
         return this;
     }
 
@@ -33,13 +34,14 @@ public class CatalogBuilder {
     }
 
     public Catalog build(){
-        if(id == null){
-            id = -1;
-        }
+        if(config == null){
+            config = new Configuration(-1);
+        }else if(config.getId()==0)
+            config.setId(-1);
         if(items == null){
             items = new ArrayList<>();
         }
-        return new Catalog(id, name,
+        return new Catalog(config, name,
                            items,
                            schema);
     }
