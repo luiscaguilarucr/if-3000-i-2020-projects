@@ -12,6 +12,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 import java.util.List;
 
@@ -234,5 +235,41 @@ public class BuilderFX {
             button.getStyleClass().clear();
             button.getStyleClass().add("button-item-title-pane");
         });
+    }
+
+
+    /**
+     * Builds a default confirm alert, with icons title, and buttons
+     * @param title
+     * @param headerImage
+     * @param windowIcon
+     * @param buttonTypes
+     * @return
+     */
+    public static Alert buildConfirmDialog(String title, String headerImage, String windowIcon, ButtonType...buttonTypes){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        // Set components.
+        alert.setTitle(title);
+        alert.setGraphic(new ImageView(new Image(headerImage)));
+        alert.getButtonTypes().clear();
+        alert.getButtonTypes().setAll(buttonTypes);
+        //alert.getButtonTypes().addAll();
+        // Stage config
+        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+        stage.setAlwaysOnTop(true);
+        stage.getIcons().add(new Image(windowIcon));
+        return alert;
+    }
+
+    public static TextInputDialog buildInputDialog(String title, String headerImage, String windowIcon){
+        TextInputDialog textInputDialog = new TextInputDialog();
+        // Set components.
+        textInputDialog.setTitle(title);
+        textInputDialog.setGraphic(new ImageView(new Image(headerImage)));
+        // Stage config
+        Stage stage = (Stage) textInputDialog.getDialogPane().getScene().getWindow();
+        stage.setAlwaysOnTop(true);
+        stage.getIcons().add(new Image(windowIcon));
+        return textInputDialog;
     }
 }

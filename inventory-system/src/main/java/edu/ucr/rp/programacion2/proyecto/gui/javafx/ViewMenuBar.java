@@ -54,11 +54,11 @@ public class ViewMenuBar implements PaneViewer {
 
         mI_CreateInventory.setOnAction((event) -> {
             ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.ADD_INVENTORY));
-            InventoryView.refresh();
         });
 
         mI_SeeInventory.setOnAction((event)->{
             ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.SHOW_INVENTORY));
+            InventoryView.refresh();
         });
 
         mI_DeleteInventory.setOnAction((event) -> {
