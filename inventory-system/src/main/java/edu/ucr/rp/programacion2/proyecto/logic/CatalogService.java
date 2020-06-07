@@ -61,8 +61,12 @@ public class CatalogService implements Service<Catalog, String, List> {
     public boolean edit(Catalog catalog) {
         refresh();
         if (validateEdition(catalog)) {
-            list.add(list.indexOf(catalog), catalog);
-            return catalogPersistence.write(catalog);
+            // Delete the old value
+            if(catalogPersistence.delete(list.get(list.indexOf(catalog))))
+                if(catalogPersistence.write(catalog))//Write the newOne
+                    list.add(catalog);
+                    refresh();
+            return list.contains(catalog);
         }
         return false;
     }

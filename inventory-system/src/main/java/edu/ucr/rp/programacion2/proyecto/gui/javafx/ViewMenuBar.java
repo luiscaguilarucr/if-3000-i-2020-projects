@@ -7,6 +7,7 @@ import edu.ucr.rp.programacion2.proyecto.gui.javafx.item.ItemForm;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneName;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.panes.main.ManagePane;
+import edu.ucr.rp.programacion2.proyecto.gui.panes.main.records.CatalogConfig;
 import edu.ucr.rp.programacion2.proyecto.gui.panes.main.records.InventoryView;
 import javafx.application.Platform;
 import javafx.scene.control.Menu;
@@ -54,11 +55,11 @@ public class ViewMenuBar implements PaneViewer {
 
         mI_CreateInventory.setOnAction((event) -> {
             ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.ADD_INVENTORY));
-            InventoryView.refresh();
         });
 
         mI_SeeInventory.setOnAction((event)->{
             ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.SHOW_INVENTORY));
+            InventoryView.refresh();
         });
 
         mI_DeleteInventory.setOnAction((event) -> {
@@ -66,7 +67,7 @@ public class ViewMenuBar implements PaneViewer {
             deleteInventory.validateShow();
         });
 
-        m_Inventory.getItems().addAll(mI_SeeInventory, mI_CreateInventory, mI_DeleteInventory);
+        m_Inventory.getItems().addAll(mI_CreateInventory, mI_SeeInventory, mI_DeleteInventory);
 
 
         ////////////////////////////////////////////////////////////////////////// Menu "Catalog"
@@ -96,9 +97,14 @@ public class ViewMenuBar implements PaneViewer {
         });
 
         mI_ViewAllCatalogs.setOnAction((event) -> {
+            ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.SHOW_INVENTORY));
+            InventoryView.refresh();
         });
 
         mI_EditCatalog.setOnAction((event) -> {
+            CatalogConfig.refresh();
+            ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.CATALOG_CONFIG));
+
         });
 
         mI_DeleteCatalog.setOnAction((event) -> {

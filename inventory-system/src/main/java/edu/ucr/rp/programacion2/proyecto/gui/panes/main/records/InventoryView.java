@@ -376,12 +376,15 @@ public class InventoryView implements PaneViewer {
     private void configAction(InventoryControl inventoryControl) {//TODO actionEvent
         ManagePane.setCenterPane(catalogConfig.getPane());
         CatalogConfig.refresh();
-        CatalogConfig.setCatalog(inventoryControl.getCatalogName());
         CatalogConfig.setInventory(inventoryControl.getInventoryName());
+        CatalogConfig.setCatalog( inventoryControl.getCatalogName());
         System.out.println("Going to config table view.. of " + inventoryControl.getCatalogName());
         refresh();
     }
 
+    /**
+     * Refresh the pane. Cleans all the components.
+     */
     public static void refresh(){
         filterField.clear();
         refreshTable();

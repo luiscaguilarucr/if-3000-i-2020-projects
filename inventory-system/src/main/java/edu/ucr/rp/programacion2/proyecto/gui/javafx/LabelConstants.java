@@ -18,6 +18,8 @@ public class LabelConstants {
     public static final String SEARCH_LABEL = "Search";
     public static final String SELECT_LABEL = "Select";
     public static final String TYPE_HERE_PROMPT_TEXT = "Type here";
+    public static final String YES_LABEL = "Yes";
+    public static final String NO_LABEL = "No";
 
     public static final String TITLE_CATALOG_LIST = "Catalog list";
     public static final String TITLE_ITEMS = "Items";
