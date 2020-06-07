@@ -23,7 +23,8 @@ import static edu.ucr.rp.programacion2.proyecto.gui.javafx.LabelConstants.*;
 import static edu.ucr.rp.programacion2.proyecto.gui.panes.main.records.BuilderFX.setButtonEffect;
 
 /**
- * /**
+ * @author Jeison Araya Mena | B90514
+ *
  * This is a UI that shows the information of one catalog, also the user can edit and delete.
  * <p>
  * Can be redirected to other panes.
@@ -54,7 +55,6 @@ public class CatalogConfig implements PaneViewer {
     private static InventoryControlService inventoryControlService;
     private static InventoryService inventoryService;
     private static CatalogService catalogService;
-
     // Constructor \\
     public CatalogConfig() {
         // Services
@@ -67,21 +67,17 @@ public class CatalogConfig implements PaneViewer {
         refresh();
 
     }
-
     // Getter  \\
     @Override
     public Pane getPane() {
         return getUI();
     }
-
     // Methods  \\
     private GridPane getUI() {
         refresh();
         return pane;
     }
-
     // Setting Services  \\
-
     /**
      * This method initialize the services required.
      */
@@ -89,13 +85,10 @@ public class CatalogConfig implements PaneViewer {
         inventoryControlService = InventoryControlService.getInstance();
         inventoryService = InventoryService.getInstance();
     }
-
     private static void updateCatalogService(Inventory inventory) {
         catalogService = new CatalogService(inventory);
     }
-
     //  Builders  \\
-
     /**
      * Builds the main pane.
      *
@@ -106,7 +99,6 @@ public class CatalogConfig implements PaneViewer {
         // more code...
         return gridPane;
     }
-
     /**
      * Configure and add the required components in the pane.
      *
@@ -145,7 +137,9 @@ public class CatalogConfig implements PaneViewer {
         deleteAlert = BuilderFX.buildConfirmDialog(DELETE_LABEL, DELETE_ICON, CONFIG_ICON, buttonTypeYes, buttonTypeNo);
         textInputDialog = BuilderFX.buildInputDialog(EDIT_LABEL, EDIT_ICON, CONFIG_ICON);
     }
-
+    /**
+     * Configure the style to the panes and the components.
+     */
     private static void setupStyles() {
         // Pane
         pane.getStyleClass().add("default-grid-pane");
@@ -210,8 +204,6 @@ public class CatalogConfig implements PaneViewer {
         setButtonEffect(deleteAllItemsButton);
         setButtonEffect(showItemsButton);
     }
-
-
     /**
      * Create a List view and place it in a pane.
      *
@@ -222,7 +214,6 @@ public class CatalogConfig implements PaneViewer {
         // More code..
         return listView;
     }
-
     /**
      * Creates an VBox with buttons.
      *
@@ -234,15 +225,20 @@ public class CatalogConfig implements PaneViewer {
         vBox.getStyleClass().add("default-v-box");
         return vBox;
     }
-
-
+    /**
+     * Build
+     * @param text
+     * @return
+     */
     private Button buildItemButton(String text) {
         Button button = new Button(text);
         // More code..
         return button;
     }
-
     //  Handlers  \\
+    /**
+     * Add the handlers and set the events.
+     */
     private void addHandlers() {
         inventoryComboBox.setOnAction(event -> inventoryChangedEvent());
         catalogComboBox.setOnAction(e -> catalogChangedEvent());
@@ -251,11 +247,13 @@ public class CatalogConfig implements PaneViewer {
         deleteCatalogButton.setOnAction(e -> deleteCatalogAction());
         showItemsButton.setOnAction(e -> showItemsAction());
         addItemButton.setOnAction(e -> addItemsAction());
-        deleteAllItemsButton.setOnMouseEntered(e -> deleteAllItemsAction());
+        deleteAllItemsButton.setOnAction(e -> deleteAllItemsAction());
 
 
     }
-
+    /**
+     * This method edits a catalog using the values of the comboBox and one stage to ask for new values
+     */
     private void editCatalogAction() {
         // Validate selection
         if (catalogComboBox.getValue() != null) {
@@ -281,10 +279,12 @@ public class CatalogConfig implements PaneViewer {
             }
         }
     }
-
+    /**
+     * This method ask for a confirmation to delete the catalog selected.
+     */
     private void deleteCatalogAction() {
         // Validate selection
-        if (catalogComboBox.getValue() != null) {
+        if (notNullCatalog()) {
             // Set dialog details
             deleteAlert.setHeaderText("Delete catalog");
             deleteAlert.setContentText("Are you sure you want to delete " + catalogComboBox.getValue() + " from " + inventoryComboBox.getValue() + " catalogs list?");
@@ -311,26 +311,62 @@ public class CatalogConfig implements PaneViewer {
                 }
         }
     }
-
+    /**
+     *
+     */
     private void deleteInventoryAction() {
         DeleteInventory.setInventory(inventoryComboBox.getValue());
-        ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.DELETE_INVENTORY));//TODO REVISAR SI USAR ESTA FORMA O VENTANA EMERGENTE
+        ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.DELETE_INVENTORY));
     }
-
     private static void showItemsAction() {// TODO add new Item
-    }
 
+    }
     private static void addItemsAction() {// TODO showItems
     }
-
-
-    private static void deleteAllItemsAction() {// TODO deleteAll
+    /**
+     * This method deletes the items of one catalog, the catalog must be selected.
+     */
+    private static void deleteAllItemsAction() {
         System.out.println("deleteAll pressed.");
+        // Validate selection
+        if (notNullCatalog()) {
+            // Set dialog details
+            deleteAlert.setHeaderText("Delete Items");
+            deleteAlert.setContentText("Are you sure you want to delete all the items of " + catalogComboBox.getValue() + " from " + inventoryComboBox.getValue() + "?");
+            // Show alert
+            Optional<ButtonType> result = deleteAlert.showAndWait();
+            // Wait the result and select
+            if (result.isPresent())
+                // Case #1 Yes
+                if (result.get() == buttonTypeYes) {
+                    Catalog catalog = catalogService.get(catalogComboBox.getValue());
+                    // Validate edit
+                    if (catalog != null) {
+                        System.out.println("Before: "+catalog);
+                        catalog.getItems().clear();
+                        if (catalogService.edit(catalog)) {
+                            // Remove -> valid
+                            System.out.println("edited, items deleted");
+                            System.out.println("After: "+catalog);
+
+                            // Refresh catalogs list
+                            fillCatalogComboBox(inventoryComboBox.getValue());
+                        } else // Remove -> invalid
+                            System.out.println("Error: No edited");
+                    }
+                } else if (result.get() == buttonTypeNo) {
+                    // Case #2 No or cancel as answer.
+                    System.out.println("No");
+                }
+        }
     }
-
-
-    // Events
-
+    /**
+     *
+     * @return
+     */
+    private static boolean notNullCatalog() {
+        return catalogComboBox.getValue() != null;
+    }    // Events
     /**
      * This event is triggered when the inventory box changes it's value.
      */
@@ -349,7 +385,6 @@ public class CatalogConfig implements PaneViewer {
 //            e.printStackTrace();
 //        }
     }
-
     /**
      * This event is triggered when the catalog box changes it's value.
      */
@@ -359,7 +394,6 @@ public class CatalogConfig implements PaneViewer {
         enableTitles(true);
     }
     // Updaters
-
     /**
      * Fills the inventory Combo box
      */
@@ -378,7 +412,6 @@ public class CatalogConfig implements PaneViewer {
         }
 
     }
-
     /**
      * This methods fills the catalog combo Box with all catalog's names in the inventory selected.
      *
@@ -411,7 +444,6 @@ public class CatalogConfig implements PaneViewer {
 
 
     }
-
     /**
      * Updates the list of the list view if one catalog is selected.
      */
@@ -424,8 +456,6 @@ public class CatalogConfig implements PaneViewer {
             BuilderFX.fillListView(schemaList, catalog.getSchema());
         }
     }
-
-
     /**
      * Disable and collapse the titlePane
      *
@@ -439,8 +469,6 @@ public class CatalogConfig implements PaneViewer {
         schemaTitledPane.setExpanded(state);
         schemaTitledPane.setDisable(!state);
     }
-
-
     /**
      * Enables the inventory's edit and delete options
      */
@@ -448,7 +476,6 @@ public class CatalogConfig implements PaneViewer {
         editInventoryButton.setDisable(!state);
         deleteInventoryButton.setDisable(!state);
     }
-
     /**
      * Enables the catalog's edit and delete options
      */
@@ -456,7 +483,6 @@ public class CatalogConfig implements PaneViewer {
         editCatalogButton.setDisable(!state);
         deleteCatalogButton.setDisable(!state);
     }
-
     /**
      * This method refresh and cleans this UI.
      */
@@ -470,7 +496,6 @@ public class CatalogConfig implements PaneViewer {
         // collapse and disable titledPanes
         enableTitles(false);
     }
-
     /**
      * Sets the inventory combo Box default
      */
@@ -480,7 +505,6 @@ public class CatalogConfig implements PaneViewer {
         // #2 Fill with options
         fillInventoryComboBox();
     }
-
     /**
      * Sets the inventory combo Box default
      */
@@ -492,7 +516,10 @@ public class CatalogConfig implements PaneViewer {
         // #3 Block items
         catalogComboBox.setDisable(true);
     }
-
+    /**
+     * Select the inventory
+     * @param inventory to select.
+     */
     public static void setInventory(String inventory) {
         // Refresh
         refresh();
@@ -503,7 +530,10 @@ public class CatalogConfig implements PaneViewer {
         // Search catalogs
         fillCatalogComboBox(inventory);
     }
-
+    /**
+     * Select the catalog, the inventory most be selected first.
+     * @param catalog catalog to select.
+     */
     public static void setCatalog(String catalog) {
         // Refresh catalog.
         refreshCatalogBox();
