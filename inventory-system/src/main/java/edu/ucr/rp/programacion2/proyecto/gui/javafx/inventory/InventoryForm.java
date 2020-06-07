@@ -9,6 +9,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 
@@ -29,19 +30,19 @@ public class InventoryForm implements PaneViewer {
         return pane;
     }
 
-    private void initializeInventoryService(){
+    private void initializeInventoryService() {
         inventoryService = InventoryService.getInstance();
     }
 
-    public void refresh(){
+    public void refresh() {
         inventoryNameTextField.clear();
     }
 
     private void setupControls() {
-        inventoryNameLabel = PaneUtil.buildLabel(pane,"Inventory name: ", 0, 1);
+        inventoryNameLabel = PaneUtil.buildLabel(pane, "Inventory name: ", 0, 1);
         inventoryNameTextField = PaneUtil.buildTextInput(pane, 1);
-        saveInventoryButton = PaneUtil.buildButton("Save inventory", pane, 2,1);
-        cancelButton = PaneUtil.buildButton("Cancel", pane, 3,1);
+        saveInventoryButton = PaneUtil.buildButtonImage(new Image("save.png"), pane, 2, 1);
+        cancelButton = PaneUtil.buildButton("Cancel", pane, 3, 1);
     }
 
     private void addHandlers() {
@@ -50,7 +51,7 @@ public class InventoryForm implements PaneViewer {
             ManagePane.clearPane();
             refresh();
         });
-        cancelButton.setOnAction((actionEvent)->{
+        cancelButton.setOnAction((actionEvent) -> {
             ManagePane.clearPane();
             refresh();
         });
@@ -70,7 +71,7 @@ public class InventoryForm implements PaneViewer {
         }
         if (wasAdded) {
             PaneUtil.showAlert(Alert.AlertType.INFORMATION, "Inventory added", "The inventory " + inventoryNameTextField.getText() + " was added correctly");
-        }else {
+        } else {
             PaneUtil.showAlert(Alert.AlertType.INFORMATION, "ERROR when adding", "The inventory " + inventoryNameTextField.getText() + " was not added");
         }
     }

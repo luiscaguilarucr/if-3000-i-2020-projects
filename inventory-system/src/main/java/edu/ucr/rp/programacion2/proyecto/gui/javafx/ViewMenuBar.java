@@ -22,10 +22,6 @@ import javafx.stage.Stage;
 
 public class ViewMenuBar implements PaneViewer {
     private Stage stage;
-    private DeleteInventory deleteInventory = new DeleteInventory();
-    private CatalogForm catalogForm = new CatalogForm();
-    private DeleteCatalog deleteCatalog = new DeleteCatalog();
-    private ItemForm itemForm = new ItemForm();
 
     public ViewMenuBar(Stage stage) {
         this.stage = stage;
@@ -64,7 +60,7 @@ public class ViewMenuBar implements PaneViewer {
 
         mI_DeleteInventory.setOnAction((event) -> {
             ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.DELETE_INVENTORY));
-            deleteInventory.validateShow();
+            DeleteInventory.refresh();
         });
 
         m_Inventory.getItems().addAll(mI_CreateInventory, mI_SeeInventory, mI_DeleteInventory);
@@ -93,7 +89,7 @@ public class ViewMenuBar implements PaneViewer {
         // Give action to MenuItems
         mI_AddCatalog.setOnAction((event) -> {
             ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.ADD_CATALOG));
-            catalogForm.validateShow();
+            CatalogForm.refresh();
         });
 
         mI_ViewAllCatalogs.setOnAction((event) -> {
@@ -109,7 +105,7 @@ public class ViewMenuBar implements PaneViewer {
 
         mI_DeleteCatalog.setOnAction((event) -> {
             ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.DELETE_CATALOG));
-            deleteCatalog.validateShow();
+            DeleteCatalog.refresh();
         });
 
         m_Catalog.getItems().addAll(mI_AddCatalog, mI_ViewAllCatalogs, mI_EditCatalog, mI_DeleteCatalog);
@@ -130,7 +126,6 @@ public class ViewMenuBar implements PaneViewer {
         //Give action to MenuItems
         mI_AddItem.setOnAction((event) -> {
             ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.ADD_ITEM));
-            itemForm.validateShow();
         });
 
         mI_EditItem.setOnAction((event) -> {
