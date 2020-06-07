@@ -7,13 +7,17 @@ import edu.ucr.rp.programacion2.proyecto.gui.javafx.item.ItemForm;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneName;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.panes.main.ManagePane;
+import edu.ucr.rp.programacion2.proyecto.gui.panes.main.records.CatalogConfig;
+import edu.ucr.rp.programacion2.proyecto.gui.panes.main.records.InventoryView;
 import javafx.application.Platform;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
 import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class ViewMenuBar implements PaneViewer {
@@ -32,13 +36,14 @@ public class ViewMenuBar implements PaneViewer {
         Menu m_Inventory = new Menu("Inventory");
 
         ////////////////////////////////////////// MenuItems for m_Inventory
+        //MenuItem mI_SeeInventory
+        ImageView iV_mI_SeeInventory = new ImageView(new Image("seeIcon.png"));
+        MenuItem mI_SeeInventory = new MenuItem("Search", iV_mI_SeeInventory);
+
         //MenuItem mI_CreateInventory
         ImageView iV_mI_CreateInventory = new ImageView(new Image("addIcon.png"));
         MenuItem mI_CreateInventory = new MenuItem("Create inventory", iV_mI_CreateInventory);
 
-        //MenuItem mI_SeeInventory
-        ImageView iV_mI_SeeInventory = new ImageView(new Image("seeIcon.png"));
-        MenuItem mI_SeeInventory = new MenuItem("List of inventories", iV_mI_SeeInventory);
 
         //MenuItem mI_DeleteInventory
         ImageView iV_mI_DeleteInventory = new ImageView(new Image("delete.png"));
@@ -50,6 +55,7 @@ public class ViewMenuBar implements PaneViewer {
 
         mI_SeeInventory.setOnAction((event)->{
             ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.SHOW_INVENTORY));
+            InventoryView.refresh();
         });
 
         mI_DeleteInventory.setOnAction((event) -> {
@@ -87,9 +93,14 @@ public class ViewMenuBar implements PaneViewer {
         });
 
         mI_ViewAllCatalogs.setOnAction((event) -> {
+            ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.SHOW_INVENTORY));
+            InventoryView.refresh();
         });
 
         mI_EditCatalog.setOnAction((event) -> {
+            CatalogConfig.refresh();
+            ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.CATALOG_CONFIG));
+
         });
 
         mI_DeleteCatalog.setOnAction((event) -> {
@@ -127,7 +138,7 @@ public class ViewMenuBar implements PaneViewer {
 
 
         ////////////////////////////////////////////////////////////////////////// Menu "Configuration"
-        Menu m_Configuration = new Menu("Configuration");
+        Menu m_Configuration = new Menu("File");
 
         ////////////////////////////////////////// MenuItems for m_Configuration
         //MenuItem iV_mI_About
@@ -143,9 +154,11 @@ public class ViewMenuBar implements PaneViewer {
         MenuItem mI_Exit = new MenuItem("Exit", iV_mI_Exit);
 
         mI_About.setOnAction((event) -> {
+            ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.ABOUT_UI));
         });
 
         mI_Credits.setOnAction((event) -> {
+            ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.CREDITS_UI));
         });
 
         mI_Exit.setOnAction((event) -> Platform.exit());

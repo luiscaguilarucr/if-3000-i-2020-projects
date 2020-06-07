@@ -4,6 +4,7 @@ import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
 import junit.framework.TestCase;
 
 import static edu.ucr.rp.programacion2.proyecto.util.Utility.randomInventory;
+import static edu.ucr.rp.programacion2.proyecto.util.Utility.randomInventoryName;
 
 public class InventoryServiceTest extends TestCase {
     InventoryService inventoryService = InventoryService.getInstance();
@@ -19,6 +20,16 @@ public class InventoryServiceTest extends TestCase {
     }
 
     public void testEdit() {
+        Inventory inventory = inventoryService.get(randomInventoryName());
+        if(inventory!=null){
+            System.out.println("Old inventory: " + inventory);
+            inventory.setName("newName");
+            if(inventoryService.edit(inventory)){
+                System.out.println("Se editó el inventorio " + inventory );
+            }else {
+                System.out.println("No se editó el inventorio " + inventory);
+            }
+        }
     }
 
     public void testRemove() {

@@ -40,6 +40,15 @@ public class InventoryPersistence implements Persistence<Inventory, List> {
             return file.mkdir();
     }
 
+
+    public boolean rename(String oldValue, String newValue){
+        if (oldValue == null || oldValue.isEmpty()) return false;
+        if (newValue == null || newValue.isEmpty()) return false;
+        File oldFile = new File(path + oldValue);
+        File newFile = new File(path + newValue);
+        oldFile.renameTo(newFile);
+        return !oldFile.exists() && newFile.exists();
+    }
     /**
      * Search and return a list with inventories.
      *

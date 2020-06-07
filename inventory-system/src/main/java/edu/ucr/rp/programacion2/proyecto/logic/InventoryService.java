@@ -49,14 +49,14 @@ public class InventoryService implements Service<Inventory, String, List>{
      * @return {@code true} if the inventory element has been modified. {@code false} Otherwise.
      */
     @Override
-    public boolean edit(Inventory inventory) {//TODO evalute how to change name. or identify witch object was selected.
+    public boolean edit(Inventory inventory) {
         refresh();
         if(validateEdition(inventory)){
-            list.add(list.indexOf(inventory), inventory);
-            return inventoryPersistence.write(inventory);
+            Inventory oldInventory = list.get(list.indexOf(inventory));
+            return inventoryPersistence.rename(oldInventory.getName(), inventory.getName());
         }
         return false;
-    }
+    }//TODO evaluate how to change name. or identify witch object was selected. [id generator].
 
     /**
      * This method removes an inventory element that most be in the list.

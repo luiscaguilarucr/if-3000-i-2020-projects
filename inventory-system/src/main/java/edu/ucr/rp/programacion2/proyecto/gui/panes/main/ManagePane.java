@@ -3,13 +3,15 @@ package edu.ucr.rp.programacion2.proyecto.gui.panes.main;
 import edu.ucr.rp.programacion2.proyecto.gui.javafx.catalog.DeleteCatalog;
 import edu.ucr.rp.programacion2.proyecto.gui.javafx.inventory.DeleteInventory;
 import edu.ucr.rp.programacion2.proyecto.gui.javafx.item.ItemForm;
+import edu.ucr.rp.programacion2.proyecto.gui.javafx.others.AboutUI;
+import edu.ucr.rp.programacion2.proyecto.gui.javafx.others.CreditsUI;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneName;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.model.SceneName;
 import edu.ucr.rp.programacion2.proyecto.gui.javafx.catalog.CatalogForm;
 import edu.ucr.rp.programacion2.proyecto.gui.javafx.ViewMenuBar;
 import edu.ucr.rp.programacion2.proyecto.gui.panes.main.records.CatalogConfig;
-import edu.ucr.rp.programacion2.proyecto.gui.panes.main.records.ShowInventory;
+import edu.ucr.rp.programacion2.proyecto.gui.panes.main.records.InventoryView;
 import edu.ucr.rp.programacion2.proyecto.gui.javafx.inventory.InventoryForm;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -46,8 +48,10 @@ public class ManagePane implements PaneViewer {
         panes.put(PaneName.ADD_CATALOG, new CatalogForm().getPane());
         panes.put(PaneName.DELETE_CATALOG, new DeleteCatalog().getPane());
         panes.put(PaneName.ADD_ITEM, new ItemForm().getPane());
-        panes.put(PaneName.SHOW_INVENTORY, new ShowInventory().getPane());
+        panes.put(PaneName.SHOW_INVENTORY, new InventoryView().getPane());
         panes.put(PaneName.CATALOG_CONFIG, new CatalogConfig().getPane());
+        panes.put(PaneName.CREDITS_UI, CreditsUI.getInstance().getPane());
+        panes.put(PaneName.ABOUT_UI, AboutUI.getInstance().getPane());
     }
 
     @Override

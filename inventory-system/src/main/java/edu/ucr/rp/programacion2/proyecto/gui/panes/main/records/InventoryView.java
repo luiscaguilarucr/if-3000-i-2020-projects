@@ -3,6 +3,7 @@ package edu.ucr.rp.programacion2.proyecto.gui.panes.main.records;
 
 import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
 import edu.ucr.rp.programacion2.proyecto.domain.InventoryControl;
+import edu.ucr.rp.programacion2.proyecto.gui.model.PaneName;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.panes.main.ManagePane;
 import edu.ucr.rp.programacion2.proyecto.logic.CatalogService;
@@ -25,6 +26,7 @@ import java.util.List;
 
 import static edu.ucr.rp.programacion2.proyecto.gui.javafx.LabelConstants.*;
 import static edu.ucr.rp.programacion2.proyecto.gui.javafx.util.UIConstants.*;
+import static edu.ucr.rp.programacion2.proyecto.gui.panes.main.records.BuilderFX.setButtonEffect;
 
 /**
  * This shows the list of catalogs that belongs to an Inventory.
@@ -32,25 +34,26 @@ import static edu.ucr.rp.programacion2.proyecto.gui.javafx.util.UIConstants.*;
  * @author Jeison Araya Mena | B90514
  * @version 2.0
  */
-public class ShowInventory implements PaneViewer {
+public class InventoryView implements PaneViewer {
     //  Variables  \\
-    private TitledPane createTiledPane;
-    private HBox createOptionsHBox;
-    private Button createInventoryButton;
-    private Button createCatalogButton;
-    private TextField filterField;
-    private TableView tableView;
-    private TableColumn inventoryNameColumn;
-    private TableColumn catalogNameColumn;
-    private TableColumn itemsActionColumn;
-    private TableColumn configActionColumn;
-    private Pagination pagination;
-    private Label resultsLabel;
-    private GridPane pane;
-    private InventoryService inventoryService;
-    private Service catalogService;
-    private InventoryControlService inventoryControlService;
-    private CatalogConfig catalogConfig = new CatalogConfig();
+    private static TitledPane createTiledPane;
+    private static HBox createOptionsHBox;
+    private static Button createInventoryButton;
+    private static Button createCatalogButton;
+    private static TextField filterField;
+    private static TableView tableView;
+    private static TableColumn inventoryNameColumn;
+    private static TableColumn catalogNameColumn;
+    private static TableColumn itemsActionColumn;
+    private static TableColumn configActionColumn;
+    private static Pagination pagination;
+    private static Label resultsLabel;
+    private static GridPane pane;
+    private static InventoryService inventoryService;
+    private static Service catalogService;
+    private static InventoryControlService inventoryControlService;
+    private static CatalogConfig catalogConfig = new CatalogConfig();
+    private static Button backButton;
     //  Methods  \\
 
     /**
@@ -92,12 +95,13 @@ public class ShowInventory implements PaneViewer {
         createInventoryButton = new Button(TITLE_INVENTORY);
         createCatalogButton = new Button(TITLE_CATALOG);
         createOptionsHBox = new HBox(createInventoryButton, createCatalogButton);
-        createTiledPane = BuilderFX.buildTitledPane(CREATE_LABEL, createOptionsHBox, pane, 0, 1, 2, 1);
+        createTiledPane = BuilderFX.buildTitledPane(NEW_LABEL, createOptionsHBox, pane, 0, 1, 2, 1);
         // Show
         filterField = BuilderFX.buildTextInput(SEARCH_LABEL, pane, 3, 1);
         tableView = BuilderFX.buildTableView(pane, 0, 2, 4, 1);
         resultsLabel = BuilderFX.buildLabelMinimal("", pane, 0, 3, 2);
-        pagination = BuilderFX.buildPagination(pane, 2, 3, 2, 1);
+        //pagination = BuilderFX.buildPagination(pane, 2, 3, 2, 1);// TODO
+        backButton = BuilderFX.buildButton(BACK_LABEL, pane, 2, 3);
     }
 
     /**
@@ -165,6 +169,10 @@ public class ShowInventory implements PaneViewer {
 
         // Label
         resultsLabel.getStyleClass().add("results-label");
+        createOptionsHBox.setSpacing(10);
+        //Button
+        setButtonEffect(createInventoryButton);
+        setButtonEffect(createCatalogButton);
     }
 
     /**
@@ -218,7 +226,7 @@ public class ShowInventory implements PaneViewer {
      *
      * @param tableView table view to add items.
      */
-    private void fillTable(TableView<InventoryControl> tableView) {
+    private static void fillTable(TableView<InventoryControl> tableView) {
         try {
             ObservableList<InventoryControl> listFiltered = getFilteredList();
             tableView.setItems(listFiltered);
@@ -232,7 +240,7 @@ public class ShowInventory implements PaneViewer {
     /**
      * @return
      */
-    private FilteredList<InventoryControl> getFilteredList() {
+    private static FilteredList<InventoryControl> getFilteredList() {
         //  Getting list
         ObservableList<InventoryControl> items = getObservableList(getList());
         FilteredList<InventoryControl> filteredList = new FilteredList<>(items);
@@ -253,8 +261,9 @@ public class ShowInventory implements PaneViewer {
                     return true;
                 }
                 // SubCase #3 filter the name of the catalogs.
-                return inventoryControl.getCatalogName().toLowerCase().contains(inputFilter);
-
+                if(inventoryControl.getCatalogName() != null)
+                    return inventoryControl.getCatalogName().toLowerCase().contains(inputFilter);
+                return false;
             });
             // Update results message.
             updateResultsLabel();
@@ -268,7 +277,7 @@ public class ShowInventory implements PaneViewer {
      *
      * @return {@code ObservableList} observable list with existing objects.
      */
-    private ObservableList<InventoryControl> getObservableList(List<InventoryControl> inventoryControls) {
+    private static ObservableList<InventoryControl> getObservableList(List<InventoryControl> inventoryControls) {
         return FXCollections.observableArrayList(inventoryControls);
     }
 
@@ -277,7 +286,7 @@ public class ShowInventory implements PaneViewer {
      *
      * @return {@code List} list with register in inventory service.
      */
-    private List<InventoryControl> getList() {
+    private static List<InventoryControl> getList() {
         return inventoryControlService.getAll();
     }
 
@@ -336,31 +345,51 @@ public class ShowInventory implements PaneViewer {
         createCatalogButton.setOnAction(e -> createCatalogAction());
         createInventoryButton.setOnAction(e -> createInventoryAction());
 
+        backButton.setOnAction(e -> backAction());
+
+    }
+
+    private void backAction() {
+        ManagePane.clearPane();
+        refresh();
     }
 
     private void createInventoryAction() {// TODO actionEvent
+        refresh();
+        ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.ADD_INVENTORY));
         System.out.println("Create Inventory Button pressed");
     }
 
     private void createCatalogAction() {// TODO actionEvent
-       System.out.println("Create Catalog Button pressed");
+        refresh();
+        ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.ADD_CATALOG));
+        System.out.println("Create Catalog Button pressed");
 
     }
 
     // Table Buttons
     private void viewItemsAction(InventoryControl inventoryControl) {//TODO actionEvent
-        System.out.println("Going to items table view.. of " + inventoryControl.getCatalogName());
+        System.out.println("Showing to items of " + inventoryControl.getCatalogName());
+        refresh();
     }
 
     private void configAction(InventoryControl inventoryControl) {//TODO actionEvent
         ManagePane.setCenterPane(catalogConfig.getPane());
         CatalogConfig.refresh();
-        CatalogConfig.setCatalog(inventoryControl.getCatalogName());
         CatalogConfig.setInventory(inventoryControl.getInventoryName());
+        CatalogConfig.setCatalog( inventoryControl.getCatalogName());
         System.out.println("Going to config table view.. of " + inventoryControl.getCatalogName());
+        refresh();
     }
 
-    private void refreshTable() {
+    /**
+     * Refresh the pane. Cleans all the components.
+     */
+    public static void refresh(){
+        filterField.clear();
+        refreshTable();
+    }
+    private static void refreshTable() {
         fillTable(tableView);
     }
 
@@ -369,10 +398,10 @@ public class ShowInventory implements PaneViewer {
     /**
      * Updates the label of the matches and number of items showed in the table.
      */
-    private void updateResultsLabel() {
+    private static void updateResultsLabel() {
         int total = getList().size();                   // Total of inventories and catalogs.
         int current = tableView.getItems().size();      // Number of inventories and catalogs in the table.
-        resultsLabel.setText("Showing " + current + " of " + total + " catalogs.");
+        resultsLabel.setText("Showing " + current + " of " + total + " results.");
 
     }
 

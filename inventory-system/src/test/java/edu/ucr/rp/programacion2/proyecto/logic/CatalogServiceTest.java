@@ -50,7 +50,6 @@ public class CatalogServiceTest extends TestCase {
         this.inventory = new Inventory("Carros");
         catalogService = new CatalogService(inventory);
 
-
         for(int i = 0 ; i < 5; i++) {
             Catalog catalog = catalogService.get(Utility.randomCatalogName());
             if(catalog==null) continue;

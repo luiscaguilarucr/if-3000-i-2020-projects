@@ -36,7 +36,6 @@ public class DeleteInventory implements PaneViewer {
         }
         refreshItems();
     }
-
     private static void initializeInventoryService() {
         inventoryService = InventoryService.getInstance();
     }
