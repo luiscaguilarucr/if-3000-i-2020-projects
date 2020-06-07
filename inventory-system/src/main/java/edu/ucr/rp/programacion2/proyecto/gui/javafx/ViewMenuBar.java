@@ -67,7 +67,7 @@ public class ViewMenuBar implements PaneViewer {
             deleteInventory.validateShow();
         });
 
-        m_Inventory.getItems().addAll(mI_SeeInventory, mI_CreateInventory, mI_DeleteInventory);
+        m_Inventory.getItems().addAll(mI_CreateInventory, mI_SeeInventory, mI_DeleteInventory);
 
 
         ////////////////////////////////////////////////////////////////////////// Menu "Catalog"
@@ -97,6 +97,8 @@ public class ViewMenuBar implements PaneViewer {
         });
 
         mI_ViewAllCatalogs.setOnAction((event) -> {
+            ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.SHOW_INVENTORY));
+            InventoryView.refresh();
         });
 
         mI_EditCatalog.setOnAction((event) -> {
