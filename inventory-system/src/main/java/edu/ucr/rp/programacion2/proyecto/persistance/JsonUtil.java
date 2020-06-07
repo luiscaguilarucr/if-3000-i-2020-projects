@@ -55,7 +55,7 @@ public class JsonUtil {
      */
     public <T> void toFile(File file,T value) {
         try {
-            mapper.writeValue(file, value);
+            mapper.writerWithDefaultPrettyPrinter().writeValue(file, value);
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }

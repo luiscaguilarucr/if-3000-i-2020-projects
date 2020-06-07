@@ -63,7 +63,7 @@ public class DeleteInventory implements PaneViewer {
         checkComboBox = PaneUtil.buildCheckComboBox(pane, observableList, 1, 0);
         return checkComboBox;
     }
-
+    
     private static void refreshItems() {
         System.out.println(inventoryService.getNamesList());
         initializeInventoryService();
@@ -94,5 +94,11 @@ public class DeleteInventory implements PaneViewer {
     @Override
     public Pane getPane() {
         return getDeleteInventoryPane();
+    }
+
+    public static void setInventory(String inventory){
+
+        checkComboBox.getCheckModel().check(inventory);
+
     }
 }
