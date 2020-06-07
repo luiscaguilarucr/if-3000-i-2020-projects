@@ -15,20 +15,18 @@ import javafx.scene.layout.Pane;
 import org.controlsfx.control.CheckComboBox;
 
 public class DeleteCatalog implements PaneViewer {
-    private InventoryService inventoryService;
+    private static InventoryService inventoryService;
     private CatalogService catalogService;
-    private Label inventoryIndicationLabel;
-    private Label catalogIndicationLabel;
-    private Button confirmInventoryButton;
-    private Button deleteCatalogButton;
-    private Button refreshButton;
-    private Button cancelButton;
-    private ComboBox<String> inventoryComboBox;
-    private CheckComboBox catalogCheckComboBox;
-    private ObservableList inventoryObservableList;
-    private ObservableList catalogObservableList;
-    private Boolean notClean = false;
-    GridPane pane;
+    private static Label inventoryIndicationLabel;
+    private static Label catalogIndicationLabel;
+    private static Button deleteCatalogButton;
+    private static Button cancelButton;
+    private static ComboBox<String> inventoryComboBox;
+    private static CheckComboBox catalogCheckComboBox;
+    private static ObservableList inventoryObservableList;
+    private static ObservableList catalogObservableList;
+    private static Boolean notClean = false;
+    private static GridPane pane;
 
     public GridPane getDeleteCatalogPane() {
         pane = PaneUtil.buildPane();
@@ -38,25 +36,27 @@ public class DeleteCatalog implements PaneViewer {
         return pane;
     }
 
-    private void initializeInventoryService() {
+    private static void initializeInventoryService() {
         inventoryService = InventoryService.getInstance();
     }
 
     private void addControls() {
         inventoryIndicationLabel = PaneUtil.buildLabel(pane, "Chose an inventory", 0, 0);
-        catalogIndicationLabel = PaneUtil.buildLabel(pane, "Select the catalog you want to remove", 0, 1);
         deleteCatalogButton = PaneUtil.buildButtonImage(new Image("delete.png"), pane, 2, 1);
-        cancelButton = PaneUtil.buildButton("Cancel", pane, 2, 0);
+        cancelButton = PaneUtil.buildButton("Cancel", pane, 3, 0);
+        catalogIndicationLabel = PaneUtil.buildLabel(pane, "Select the catalog you want to remove", 0, 1);
         catalogIndicationLabel.setVisible(false);
         deleteCatalogButton.setVisible(false);
         buildInventoryComboBox();
+        buildCatalogCheckComboBox();
+        catalogCheckComboBox.setVisible(false);
     }
 
     private void addHandlers() {
         deleteCatalogButton.setOnAction(e -> {
-            if (!catalogCheckComboBox.getCheckModel().isEmpty()) {
-                ManagePane.clearPane();
+            if (!catalogObservableList.contains("There are not catalogs")) {
                 deleteCatalog();
+                ManagePane.clearPane();
                 refreshInventoryObservableList();
             } else {
                 PaneUtil.showAlert(Alert.AlertType.INFORMATION, "Error, did not select a catalog", "You must select one catalog to apply this action");
@@ -68,34 +68,10 @@ public class DeleteCatalog implements PaneViewer {
         });
 
         inventoryComboBox.setOnAction(e -> {
-            initializeInventoryService();
-            initializeCatalogService(inventoryService.get(inventoryComboBox.getValue()));
-            int size = catalogService.getAll().size();
-            if (size > 0) {
-                catalogObservableList = FXCollections.observableArrayList(catalogService.getNamesList());
-                notClean = true;
-                deleteCatalogButton.setVisible(true);
-                cancelButton.setOnAction(event -> {
-                    ManagePane.clearPane();
-                    catalogObservableList.clear();
-                    initializeInventoryService();
-                    deleteCatalogButton.setVisible(false);
-                });
-            }
-            buildCatalogCheckComboBox();
-            if (size == 0) {
-                if(notClean){
-                    catalogObservableList.clear();
-                    notClean = false;
-                }
-                catalogCheckComboBox.setDisable(true);
-            }
+            refreshCatalogObservableList();
             catalogIndicationLabel.setVisible(true);
-            cancelButton.setOnAction(event -> {
-                ManagePane.clearPane();
-                initializeInventoryService();
-                deleteCatalogButton.setVisible(false);
-            });
+            deleteCatalogButton.setVisible(true);
+            catalogCheckComboBox.setVisible(true);
         });
     }
 
@@ -120,23 +96,49 @@ public class DeleteCatalog implements PaneViewer {
     }
 
     private void buildCatalogCheckComboBox() {
+        catalogObservableList = FXCollections.observableArrayList();
         catalogCheckComboBox = PaneUtil.buildCheckComboBox(pane, catalogObservableList, 1, 1);
     }
 
     private void refreshInventoryObservableList() {
         initializeInventoryService();
         inventoryObservableList.clear();
-        inventoryObservableList.addAll(inventoryService.getNamesList());
-        catalogObservableList.clear();
+        inventoryObservableList.setAll(inventoryService.getNamesList());
         deleteCatalogButton.setVisible(false);
     }
 
-    public void validateShow() {
+    private void refreshCatalogObservableList() {
         initializeInventoryService();
-        if (inventoryService.getAll().size() == 0) {
+        Inventory inventory = inventoryService.get(inventoryComboBox.getValue());
+        System.out.println(inventory);
+        if (inventory != null) {
+            initializeCatalogService(inventory);
+            catalogObservableList.clear();
+            if (catalogService.getAll().isEmpty()) {
+                catalogObservableList.add("There are not catalogs");
+                catalogCheckComboBox.getCheckModel().check(0);
+                catalogCheckComboBox.setDisable(true);
+            } else {
+                catalogCheckComboBox.setDisable(false);
+                catalogObservableList.addAll(catalogService.getNamesList());
+            }
+        }
+    }
+
+    public static void refresh() {
+        initializeInventoryService();
+        if (inventoryService.getAll().isEmpty()) {
             ManagePane.clearPane();
             PaneUtil.showAlert(Alert.AlertType.INFORMATION, "There are no inventories", "You must add at least one inventory to be able to access this function");
         }
+        refreshItems();
+    }
+
+    public static void refreshItems() {
+        initializeInventoryService();
+        catalogCheckComboBox.getCheckModel().clearChecks();
+        inventoryObservableList.clear();
+        inventoryObservableList.addAll(inventoryService.getNamesList());
     }
 
     private void initializeCatalogService(Inventory inventory) {

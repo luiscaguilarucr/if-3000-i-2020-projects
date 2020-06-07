@@ -89,14 +89,6 @@ public class PaneUtil {
         }
     }
 
-    public static boolean addInventoryHandlers(ComboBox inventoryComboBox) {
-        if (inventoryComboBox.getValue() == null) {
-            showAlert(Alert.AlertType.INFORMATION, "Error, did not select an inventory", "You must select an inventory");
-            return false;
-        }
-        return true;
-    }
-
     public static boolean addCatalogHandlers(ComboBox catalogComboBox, Label catalogIndicationLabel, Button confirmCatalogButton) {
         if (catalogComboBox.getValue() == null) {
             showAlert(Alert.AlertType.INFORMATION, "Error, did not select a catalog", "You must select a catalog");
