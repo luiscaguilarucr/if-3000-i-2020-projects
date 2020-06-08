@@ -127,17 +127,19 @@ public class CreateItemForm implements PaneViewer {
         tableColumn.setId(property);
         tableColumn.setCellValueFactory(new MapValueFactory<>(property));
         Callback<TableColumn<Map, String>, TableCell<Map, String>>
-                cellFactoryForMap = param -> new TextFieldTableCell<>(new StringConverter<String>() {
-            @Override
-            public String toString(String object) {
-                return object;
-            }
+                cellFactoryForMap = param -> {
+            return new TextFieldTableCell<>(new StringConverter<String>() {
+                @Override
+                public String toString(String object) {
+                    return object;
+                }
 
-            @Override
-            public String fromString(String string) {
-                return string;
-            }
-        });
+                @Override
+                public String fromString(String string) {
+                    return string;
+                }
+            });
+        };
         tableColumn.setCellFactory(cellFactoryForMap);
         if (editable) {
             tableColumn.setEditable(editable);
@@ -153,11 +155,12 @@ public class CreateItemForm implements PaneViewer {
             @Override
             public void handle(TableColumn.CellEditEvent event) {
                 //  Variables  \\
+                Object oldValue = event.getOldValue();
                 Integer row = event.getTablePosition().getRow();//índice fila
 
                 Map<String, Object> feature = (Map<String, Object>) tableView.getItems().get(row);
                 feature.put(VALUE_KEY, event.getNewValue());
-                System.out.println("Se cambió " + event.getOldValue() + " por " + event.getNewValue() + " en la fila [" + row + "]");
+                System.out.println("Se cambió " + oldValue + " por " + event.getNewValue() + " en la fila [" + row + "]");
             }
         });
     }
