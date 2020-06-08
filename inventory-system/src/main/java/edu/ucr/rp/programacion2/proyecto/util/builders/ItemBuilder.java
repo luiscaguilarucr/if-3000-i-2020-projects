@@ -11,15 +11,9 @@ import java.util.Map;
  * */
 public class ItemBuilder {
     //  Variables  \\
-    private String name;
     private Map<String, Object> features;
 
     //  Setters  \\
-
-    public ItemBuilder setName(String name) {
-        this.name = name;
-        return this;
-    }
 
     public ItemBuilder setFeatures(Map<String, Object> features) {
         this.features = features;
@@ -29,6 +23,6 @@ public class ItemBuilder {
 
     //  Builder  \\
     public Item build(){
-        return new Item(name, features);
+        return new Item(features);
     }
 }

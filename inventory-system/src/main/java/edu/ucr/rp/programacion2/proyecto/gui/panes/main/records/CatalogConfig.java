@@ -4,6 +4,7 @@ package edu.ucr.rp.programacion2.proyecto.gui.panes.main.records;
 import edu.ucr.rp.programacion2.proyecto.domain.Catalog;
 import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
 import edu.ucr.rp.programacion2.proyecto.gui.javafx.inventory.DeleteInventory;
+import edu.ucr.rp.programacion2.proyecto.gui.javafx.item.CreateItemForm;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneName;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.panes.main.ManagePane;
@@ -322,6 +323,18 @@ public class CatalogConfig implements PaneViewer {
 
     }
     private static void addItemsAction() {// TODO showItems
+        // Validations
+        if(inventoryComboBox.getValue() == null) return;
+        if(catalogComboBox.getValue() == null) return;
+        Inventory inventory = inventoryService.get(inventoryComboBox.getValue());
+        Catalog catalog = catalogService.get(catalogComboBox.getValue());
+        if(inventory != null && catalog != null) {
+            CreateItemForm.refresh();
+            CreateItemForm.setInventory(inventory);
+            CreateItemForm.setCatalog(catalog);
+            CreateItemForm.setPreviousPane(pane);
+            ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.CREATE_ITEM));
+        }
     }
     /**
      * This method deletes the items of one catalog, the catalog must be selected.

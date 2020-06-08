@@ -36,6 +36,13 @@ public class LabelConstants {
     public static final String CONFIG_NAME_COLUMN = "Config";
     public static final String TITLE_VIEW_INVENTORY = "View Inventory";
 
+    // Items
+    public static final String TITLE_CREATE_ITEM = "Create Item";
+    public static final String TITLE_ITEM = "Item";
+    public static final String TITLE_FEATURE = "Feature";
+    public static final String TITLE_VALUE = "Value";
+
+
     public static final String VIEW_ICON = "seeIcon.png";
     public static final String ITEMS_ICON = "itemsIcon.png";
     public static final String CONFIG_ICON = "configIcon.png";

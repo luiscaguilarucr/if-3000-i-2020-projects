@@ -1,0 +1,22 @@
+[ {
+  "features" : {
+    "combusition capacity" : "100",
+    "model" : "777",
+    "first class" : "Disponible",
+    "capacity" : "300"
+  }
+}, {
+  "features" : {
+    "combusition capacity" : null,
+    "model" : null,
+    "first class" : null,
+    "capacity" : null
+  }
+}, {
+  "features" : {
+    "combusition capacity" : null,
+    "model" : null,
+    "first class" : null,
+    "capacity" : null
+  }
+} ]
