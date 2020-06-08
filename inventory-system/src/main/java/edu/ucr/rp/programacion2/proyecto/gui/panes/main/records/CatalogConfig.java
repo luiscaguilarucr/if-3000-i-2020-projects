@@ -301,8 +301,9 @@ public class CatalogConfig implements PaneViewer {
                         if (catalogService.remove(catalog)) {
                             // Remove -> valid
                             System.out.println("deleted");
-                            // Refresh catalogs list
-                            fillCatalogComboBox(inventoryComboBox.getValue());
+                            // Refresh catalogs list    
+                            inventoryChangedEvent();
+
                         } else // Remove -> invalid
                             System.out.println("Error: No deleted");
                     }
@@ -383,7 +384,7 @@ public class CatalogConfig implements PaneViewer {
     /**
      * This event is triggered when the inventory box changes it's value.
      */
-    private void inventoryChangedEvent() {
+    private static void inventoryChangedEvent() {
         // Inventory Config
         enableInventoryOptions(true);
         // Catalog Config
@@ -391,12 +392,7 @@ public class CatalogConfig implements PaneViewer {
         catalogComboBox.setDisable(false);
         enableCatalogOptions(false);
         enableTitles(false);
-//        try {
-//            Thread.sleep(1000);
-//            System.out.println("Inventory triggered.");
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
+
     }
     /**
      * This event is triggered when the catalog box changes it's value.
