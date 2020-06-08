@@ -2,17 +2,22 @@ package edu.ucr.rp.programacion2.proyecto.gui.javafx.item;
 
 import edu.ucr.rp.programacion2.proyecto.domain.Catalog;
 import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
+import edu.ucr.rp.programacion2.proyecto.domain.Item;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.panes.main.ManagePane;
 import edu.ucr.rp.programacion2.proyecto.gui.panes.main.records.BuilderFX;
+import edu.ucr.rp.programacion2.proyecto.logic.CatalogService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
+import javafx.geometry.HPos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 
@@ -21,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 import static edu.ucr.rp.programacion2.proyecto.gui.javafx.LabelConstants.*;
+import static edu.ucr.rp.programacion2.proyecto.gui.panes.main.records.BuilderFX.setButtonEffect;
 
 /**
  * This UI is desing to create a new Item for a Catalog previously selected.
@@ -30,11 +36,9 @@ public class CreateItemForm implements PaneViewer {
     private static CreateItemForm instance;
     private static Inventory inventorySelected;
     private static Catalog catalogSelected;
-    private static Map dataMap;
     private static String FEATURE_KEY = TITLE_FEATURE;
     private static String VALUE_KEY = TITLE_VALUE;
     // Components \\
-    private static Label informationLabel; // Information about the inventory and catalog selected.
     private static TableView tableView; // contains 2 columns [features and values].
     private static TableColumn featuresColumn;
     private static TableColumn valuesColumn;
@@ -42,6 +46,8 @@ public class CreateItemForm implements PaneViewer {
     private static Button cancelButton;
     private static GridPane pane;
     private static Pane previousPane;
+    // Service \\
+    CatalogService catalogService;
 
     // Constructor \\
     private CreateItemForm() {
@@ -60,6 +66,15 @@ public class CreateItemForm implements PaneViewer {
     }
     // Methods  \\
 
+    /**
+     * This method starts a new service for the inventory selected.
+     */
+    private void updateCatalogService() {
+        if (inventorySelected != null) {
+            catalogService = new CatalogService(inventorySelected);
+        }
+    }
+
     private GridPane buildPane() {
         pane = new GridPane();
         return pane;
@@ -74,14 +89,10 @@ public class CreateItemForm implements PaneViewer {
         // Row #0
         BuilderFX.buildLabelTitle(TITLE_CREATE_ITEM, pane, 0, 0, 2, 1);
         // Row #1
-        informationLabel = BuilderFX.buildLabelMinimal("Inventory/catalog/", pane, 0, 1, 1);// TODO Check if is looking good..
+        tableView = BuilderFX.buildTableView(pane, 0, 1, 2, 1);
         // Row #2
-        BuilderFX.buildLabelNormal(TITLE_ITEM, pane, 0, 2);
-        // Row #3
-        tableView = BuilderFX.buildTableView(pane, 0, 3, 2, 1);
-        // Row #4
-        createButton = BuilderFX.buildButton(CREATE_LABEL, pane, 0, 4);
-        cancelButton = BuilderFX.buildButton(CANCEL_LABEL, pane, 1, 4);
+        createButton = BuilderFX.buildButton(CREATE_LABEL, pane, 0, 2);
+        cancelButton = BuilderFX.buildButton(CANCEL_LABEL, pane, 1, 2);
         // Columns
         featuresColumn = buildTableColumn(TITLE_FEATURE, TITLE_FEATURE, tableView, false);
         valuesColumn = buildTableColumn(TITLE_VALUE, TITLE_VALUE, tableView, true);
@@ -128,7 +139,7 @@ public class CreateItemForm implements PaneViewer {
             }
         });
         tableColumn.setCellFactory(cellFactoryForMap);
-        if(editable){
+        if (editable) {
             tableColumn.setEditable(editable);
             editCellAction(tableColumn);
         }
@@ -146,10 +157,11 @@ public class CreateItemForm implements PaneViewer {
 
                 Map<String, Object> feature = (Map<String, Object>) tableView.getItems().get(row);
                 feature.put(VALUE_KEY, event.getNewValue());
-                System.out.println("Se cambió " + event.getOldValue()+ " por " + event.getNewValue() + " en la fila [" + row + "]");
+                System.out.println("Se cambió " + event.getOldValue() + " por " + event.getNewValue() + " en la fila [" + row + "]");
             }
         });
     }
+
     /**
      * This fills the the table with the schema keys.
      *
@@ -188,17 +200,18 @@ public class CreateItemForm implements PaneViewer {
      * This method brings the list of items in the table.
      * Then extract for each row the feature and the value.
      * Put each feature : value in a map.
+     *
      * @return
      */
-    private static Map<String, Object> getFeaturesMap(){
+    private static Map<String, Object> getFeaturesMap() {
         // Create Map
         Map<String, Object> features = new HashMap<>();
         // get table items.
         List<Map<String, Object>> items = tableView.getItems();
         // Validate table
-        if(tableView != null){
+        if (tableView != null) {
             // For each rom, get the feature and the value.
-            for(Map<String, Object> row : items){
+            for (Map<String, Object> row : items) {
                 // Feature : Value
                 String feature = (String) row.get(FEATURE_KEY);
                 Object value = row.get(VALUE_KEY);
@@ -209,19 +222,20 @@ public class CreateItemForm implements PaneViewer {
         return features;
 
     }
+
     /**
      * Add functionality to buttons or events.
      */
     private void addHandlers() {
         createButton.setOnAction(e -> createAction());
-        cancelButton.setOnAction(e -> cancelAction());
+        cancelButton.setOnAction(e -> backAction());
     }
 
     /**
      * This action finish and don't save the changes made in the table.
      * Also it goes to the previous pane.
      */
-    private void cancelAction() {
+    private void backAction() {
         if (previousPane != null) {
             ManagePane.setCenterPane(previousPane);
         } else {
@@ -232,10 +246,43 @@ public class CreateItemForm implements PaneViewer {
 
     /**
      * This actions takes the values form the table and save it has a new item.
+     * Also add the new if to the catalog, the show a successful or error message.
      */
     private void createAction() {
-        System.out.println("Items in table: " +tableView.getItems());
-        System.out.println("Map of features: " + getFeaturesMap() );
+        System.out.println("Items in table: " + tableView.getItems());
+        System.out.println("Map of features: " + getFeaturesMap());
+        // Create Features
+        Map<String, Object> features = getFeaturesMap();
+        // Create item
+        Item item = new Item(features);
+        System.out.println("Item creado : " + item);
+
+        if (catalogSelected != null) {
+            catalogSelected.getItems().add(item);
+            System.out.println("Item agregado al catalogo: " + catalogSelected);
+
+            if (saveChange(catalogSelected)) {
+                System.out.println("Cambios guardados correctamente");
+                backAction();
+            }else
+                System.out.println("Error al guardar el catálogo");
+        }
+    }
+
+    /**
+     * Ask the catalog service for save the changes done.
+     *
+     * @param catalogSelected catalog to save.
+     * @return {@code true} if has been saved correctly, {@code false} an error occurs.
+     */
+    private boolean saveChange(Catalog catalogSelected) {
+        // Update the service
+        updateCatalogService();
+        // Validate catalog and service
+        if (catalogSelected != null && catalogService != null) {
+            return catalogService.edit(catalogSelected);
+        }
+        return false;
     }
 
 
@@ -243,6 +290,25 @@ public class CreateItemForm implements PaneViewer {
      * Set the styles of the components.
      */
     private void setupStyles() {
+        // Pane
+        pane.getStyleClass().add("default-grid-pane");
+
+        // Columns Constraints
+        ColumnConstraints columnConstraints = new ColumnConstraints(200, 250, 300);
+        columnConstraints.setHalignment(HPos.LEFT);
+        columnConstraints.setHgrow(Priority.ALWAYS);
+
+        ColumnConstraints columnConstraints2 = new ColumnConstraints(200, 250, 300);
+        columnConstraints.setHalignment(HPos.LEFT);
+        columnConstraints.setHgrow(Priority.ALWAYS);
+
+        pane.getColumnConstraints().addAll(columnConstraints, columnConstraints2);
+        // Table
+        tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        // Buttons
+        setButtonEffect(createButton);
+        setButtonEffect(cancelButton);
     }
 
 
