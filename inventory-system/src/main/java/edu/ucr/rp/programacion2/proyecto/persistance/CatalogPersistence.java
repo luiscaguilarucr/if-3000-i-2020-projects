@@ -235,7 +235,7 @@ public class CatalogPersistence implements Persistence<Catalog, List> {
                 List<Item> items = new ArrayList<>();
                 List<Map> maps = jsonUtil.asObject(file.toURI().toURL(), List.class);
                 for (Map m:maps){
-                    items.add(new Item("", m));
+                    items.add(new Item(m));
                 }
                 return items;
             } catch (MalformedURLException e) {
