@@ -1,0 +1,36 @@
+[ {
+  "Cant Pasajeros" : "5",
+  "Trasmisión" : "Dual",
+  "Modelo" : "2008",
+  "Puertas" : "2"
+}, {
+  "Cant Pasajeros" : "4",
+  "Trasmisión" : "Automática",
+  "Modelo" : "1982",
+  "Puertas" : "2"
+}, {
+  "Cant Pasajeros" : "5",
+  "Trasmisión" : "Automática",
+  "Modelo" : "2020",
+  "Puertas" : "2"
+}, {
+  "Cant Pasajeros" : "2",
+  "Trasmisión" : "Dual",
+  "Modelo" : "1968",
+  "Puertas" : "4"
+}, {
+  "Cant Pasajeros" : "7",
+  "Trasmisión" : "Manual",
+  "Modelo" : "2019",
+  "Puertas" : "2"
+}, {
+  "Cant Pasajeros" : "4",
+  "Trasmisión" : "Dual",
+  "Modelo" : "1978",
+  "Puertas" : "4"
+}, {
+  "Cant Pasajeros" : "5",
+  "Trasmisión" : "Dual",
+  "Modelo" : "1982",
+  "Puertas" : "4"
+} ]

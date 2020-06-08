@@ -7,6 +7,7 @@ public class LabelConstants {
     public static final String ADD_LABEL = "Add";
     public static final String CREATE_LABEL = "Create";
     public static final String NEW_LABEL = "New";
+    public static final String CONFIG_LABEL = "Config";
     public static final String EDIT_LABEL = "Edit";
     public static final String VIEW_LABEL = "View";
     public static final String CHANGE_LABEL = "Change";
@@ -30,11 +31,16 @@ public class LabelConstants {
     public static final String TITLE_CATALOG_CONFIG = "Catalog Configuration";
     public static final String SUBTITLE_CATALOG_INFO_FORM = "Catalog information";
     public static final String ITEMS_COLUMN = "Items";
+    public static final String DELETE_COLUMN = "Delete";
 
     public static final String INVENTORY_NAME_COLUMN = "Inventory";
     public static final String TITLE_INVENTORY = "Inventory";
+    public static final String ID = "Inventory";
+    public static final String TITLE_NEW_ITEM = "New item";
+    public static final String TITLE_DELETE_ALL_ITEMS = "Delete all items";
     public static final String CONFIG_NAME_COLUMN = "Config";
     public static final String TITLE_VIEW_INVENTORY = "View Inventory";
+    public static final String TITLE_MANAGE_ITEM = "Manage Item";
 
     public static final String VIEW_ICON = "seeIcon.png";
     public static final String ITEMS_ICON = "itemsIcon.png";

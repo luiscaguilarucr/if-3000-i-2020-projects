@@ -8,6 +8,8 @@ public class UIConstants {
 
     public static final int ICONS_COLUMN_MIN = 25;
     public static final int ICONS_COLUMN_MAX = 30;
+    public static final int COLUMN_MIN = 25;
+    public static final int COLUMN_MAX = 30;
     public static final int LABEL_COLUMN_MIN = 100;
     public static final int LABEL_COLUMN_MAX = 150;
     public static final int ICON_HEIGHT = 16;

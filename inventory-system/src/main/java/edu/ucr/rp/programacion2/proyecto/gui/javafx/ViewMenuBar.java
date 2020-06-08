@@ -3,7 +3,7 @@ package edu.ucr.rp.programacion2.proyecto.gui.javafx;
 import edu.ucr.rp.programacion2.proyecto.gui.javafx.catalog.CatalogForm;
 import edu.ucr.rp.programacion2.proyecto.gui.javafx.catalog.DeleteCatalog;
 import edu.ucr.rp.programacion2.proyecto.gui.javafx.inventory.DeleteInventory;
-import edu.ucr.rp.programacion2.proyecto.gui.javafx.item.ItemForm;
+import edu.ucr.rp.programacion2.proyecto.gui.javafx.item.ManageItem;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneName;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.panes.main.ManagePane;
@@ -115,27 +115,17 @@ public class ViewMenuBar implements PaneViewer {
         Menu m_Item = new Menu("Item");
 
         ////////////////////////////////////////// MenuItems for m_Item
-        //MenuItem mI_AddItem
-        ImageView iV_mI_AddItem = new ImageView(new Image("addIcon.png"));
-        MenuItem mI_AddItem = new MenuItem("Add item", iV_mI_AddItem);
+        //MenuItem mI_ManageItem
+        ImageView iV_mI_ManageItem = new ImageView(new Image("addIcon.png"));
+        MenuItem mI_ManageItem = new MenuItem("Manage", iV_mI_ManageItem);
 
-        //MenuItem mI_EditItem
-        ImageView iV_mI_EditItem = new ImageView(new Image("editIcon.png"));
-        MenuItem mI_EditItem = new MenuItem("Edit item", iV_mI_EditItem);
-
-        //Give action to MenuItems
-        mI_AddItem.setOnAction((event) -> {
-            ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.ADD_ITEM));
+        mI_ManageItem.setOnAction(event -> {
+            ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.MANAGE_ITEM));
+            ManageItem.refresh();
+            ManageItem.refreshInventoryComboBox();
         });
 
-        mI_EditItem.setOnAction((event) -> {
-        });
-
-        m_Item.setOnShowing((event) -> {
-        });
-
-        m_Item.getItems().addAll(mI_AddItem, mI_EditItem);
-
+        m_Item.getItems().addAll(mI_ManageItem);
 
         ////////////////////////////////////////////////////////////////////////// Menu "Configuration"
         Menu m_Configuration = new Menu("File");

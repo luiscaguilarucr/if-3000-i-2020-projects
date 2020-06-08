@@ -10,7 +10,9 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CatalogPersistence implements Persistence<Catalog, List> {
 
@@ -139,7 +141,11 @@ public class CatalogPersistence implements Persistence<Catalog, List> {
     private boolean saveItems(Catalog catalog) {
         if (catalog == null) return false;                      // Not null catalog.
         if (catalog.getItems() == null) return false;           // Not null item list.
-        jsonUtil.toFile(new File(path + catalog.getName() + "/items" + suffix), catalog.getItems());
+
+        List<Map> maps = new ArrayList<>();
+        for(Item item : catalog.getItems())
+            maps.add(item.getFeatures());
+        jsonUtil.toFile(new File(path + catalog.getName() + "/items" + suffix), maps);
         return true; // TODO check if have been saved.
     }
 
@@ -223,9 +229,15 @@ public class CatalogPersistence implements Persistence<Catalog, List> {
      */
     private List readItems(String catalogName) {
         File file = new File(path + catalogName + "/items" + suffix);//TODO extract extension.
+
         if (file.exists()) {
             try {
-                return jsonUtil.asObject(file.toURI().toURL(), List.class);
+                List<Item> items = new ArrayList<>();
+                List<Map> maps = jsonUtil.asObject(file.toURI().toURL(), List.class);
+                for (Map m:maps){
+                    items.add(new Item("", m));
+                }
+                return items;
             } catch (MalformedURLException e) {
                 System.out.println(e.getMessage());
             }

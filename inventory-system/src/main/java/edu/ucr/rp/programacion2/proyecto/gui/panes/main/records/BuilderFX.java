@@ -15,6 +15,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.util.List;
+import java.util.Map;
 
 import static edu.ucr.rp.programacion2.proyecto.gui.javafx.util.PaletteDesign.PRIMARY_TEXT;
 import static edu.ucr.rp.programacion2.proyecto.gui.javafx.util.UIConstants.*;
@@ -28,8 +29,6 @@ public class BuilderFX {
     public static GridPane buildRecordsPane() {
         GridPane pane = new GridPane();
         pane.setMinSize(GRID_PANE_MIN_WIDTH, GRID_PANE_MIN_HEIGHT);
-
-
         return pane;
     }
 
@@ -101,6 +100,20 @@ public class BuilderFX {
         return tableView;
     }
 
+    /**
+     * Create a table view of maps and place it in a pane.
+     *
+     * @param pane   pane where it will be placed.
+     * @param column column where it will be assigned.
+     * @param row    row where it will be assigned.
+     * @return {@code TableView <>} table view ready to add columns and objects.
+     */
+    public static TableView<Map> buildMapTableView(GridPane pane, int column, int row, int numColumns, int numRows) {
+        TableView<Map> tableView = new TableView<>();
+        pane.add(tableView, column, row, numColumns, numRows);
+        return tableView;
+    }
+
 
     /**
      * Builds and text input.
@@ -113,6 +126,22 @@ public class BuilderFX {
      */
     public static TextField buildTextInput(String text, GridPane pane, int column, int row) {
         buildLabelNormal(text, pane, column - 1, row);
+        TextField textField = new TextField();
+        textField.setPromptText(text);
+        pane.add(textField, column, row);
+        return textField;
+    }
+
+    /**
+     * Builds and text input.
+     *
+     * @param text
+     * @param pane
+     * @param column
+     * @param row
+     * @return
+     */
+    public static TextField buildTextInput2(String text, GridPane pane, int column, int row) {
         TextField textField = new TextField();
         textField.setPromptText(text);
         pane.add(textField, column, row);
