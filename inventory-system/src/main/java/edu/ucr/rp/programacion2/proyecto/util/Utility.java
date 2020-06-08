@@ -36,7 +36,6 @@ public class Utility {
     //  Random Car items  \\
     public static Item randomItem(){
         return new ItemBuilder()
-                .setName(randomCarBrand())
                 .setFeatures(randomCarFeatures())
                 .build();
     }

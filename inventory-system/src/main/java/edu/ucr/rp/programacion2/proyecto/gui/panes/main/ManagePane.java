@@ -2,6 +2,7 @@ package edu.ucr.rp.programacion2.proyecto.gui.panes.main;
 
 import edu.ucr.rp.programacion2.proyecto.gui.javafx.catalog.DeleteCatalog;
 import edu.ucr.rp.programacion2.proyecto.gui.javafx.inventory.DeleteInventory;
+import edu.ucr.rp.programacion2.proyecto.gui.javafx.item.CreateItemForm;
 import edu.ucr.rp.programacion2.proyecto.gui.javafx.item.ItemForm;
 import edu.ucr.rp.programacion2.proyecto.gui.javafx.item.ManageItem;
 import edu.ucr.rp.programacion2.proyecto.gui.javafx.others.AboutUI;
@@ -54,6 +55,7 @@ public class ManagePane implements PaneViewer {
         panes.put(PaneName.CATALOG_CONFIG, new CatalogConfig().getPane());
         panes.put(PaneName.CREDITS_UI, CreditsUI.getInstance().getPane());
         panes.put(PaneName.ABOUT_UI, AboutUI.getInstance().getPane());
+        panes.put(PaneName.CREATE_ITEM, CreateItemForm.getInstance().getPane());
     }
 
     @Override

@@ -4,27 +4,15 @@ import java.util.Map;
 import java.util.Objects;
 
 public class Item {
-    private String name;
     private Map<String, Object> features;
 
     /**
      * Object Item that contains features.
      *
-     * @param name item name
      * @param features map of features.
      */
-    public Item(String name, Map<String, Object> features) {
-        this.name = name;
+    public Item(Map<String, Object> features) {
         this.features = features;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Item setName(String name) {
-        this.name = name;
-        return this;
     }
 
     public Map<String, Object> getFeatures() {
@@ -43,17 +31,11 @@ public class Item {
         Item item = (Item) o;
         return Objects.equals(features, item.features);
     }
-
-    @Override
-    public int hashCode() {
-        return 0;
-    }
-
+    
     @Override
     public String toString() {
         return "Item{" +
-                "name='" + name + '\'' +
-                ", features=" + features +
+                "features=" + features +
                 '}';
     }
 }
