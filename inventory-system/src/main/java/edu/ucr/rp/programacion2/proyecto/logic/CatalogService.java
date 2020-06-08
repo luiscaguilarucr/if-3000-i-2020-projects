@@ -1,9 +1,8 @@
 package edu.ucr.rp.programacion2.proyecto.logic;
 
-import edu.ucr.rp.programacion2.proyecto.domain.Item;
-import edu.ucr.rp.programacion2.proyecto.persistance.CatalogPersistence;
 import edu.ucr.rp.programacion2.proyecto.domain.Catalog;
 import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
+import edu.ucr.rp.programacion2.proyecto.persistance.CatalogPersistence;
 import edu.ucr.rp.programacion2.proyecto.util.idgenerator.IDGenerator;
 
 import java.util.ArrayList;
@@ -133,21 +132,6 @@ public class CatalogService implements Service<Catalog, String, List> {
         for (Catalog catalog : list)
             namesList.add(catalog.getName());
         return namesList;
-    }
-
-    /**
-     * Creates a list whith the names of the items.
-     *
-     * @param catalog
-     * @return {@code List<String>} List with names of items.
-     */
-    public List<String> getItemNames(Catalog catalog) {
-        List<String> itemNames = new ArrayList<>();
-        List<Item> itemList = catalog.getItems();
-        for (Item i : itemList) {
-            itemNames.add(i.getName());
-        }
-        return itemNames;
     }
 
     //  More methods \\
