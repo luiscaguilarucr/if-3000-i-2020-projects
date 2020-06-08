@@ -83,7 +83,9 @@ public class CatalogForm implements PaneViewer {
             ManagePane.clearPane();
         });
         inventoryComboBox.setOnAction(e -> {
-            initializeCatalogService(inventoryService.get(inventoryComboBox.getValue()));
+            if (inventoryComboBox.getValue() != null) {
+                initializeCatalogService(inventoryService.get(inventoryComboBox.getValue()));
+            }
         });
         saveCatalogButton.setOnAction(e -> {
             saveCatalogButton.setVisible(false);
@@ -93,7 +95,7 @@ public class CatalogForm implements PaneViewer {
         featureNameTextField.setOnMouseClicked(e -> {
             addFeatureButton.setVisible(true);
         });
-        addFeatureButton.setOnAction(e-> {
+        addFeatureButton.setOnAction(e -> {
             saveCatalogButton.setVisible(true);
             inventoryComboBox.setDisable(true);
             catalogNameTextField.setDisable(true);
