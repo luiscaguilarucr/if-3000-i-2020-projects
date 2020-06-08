@@ -1,14 +1,4 @@
 [ {
-  "Cant Pasajeros" : "2",
-  "Trasmisión" : "Dual",
-  "Modelo" : "1982",
-  "Puertas" : "4"
-}, {
-  "Cant Pasajeros" : "7",
-  "Trasmisión" : "Dual",
-  "Modelo" : "1991",
-  "Puertas" : "2"
-}, {
   "Cant Pasajeros" : "5",
   "Trasmisión" : "Automática",
   "Modelo" : "1995",
@@ -17,20 +7,10 @@
   "Cant Pasajeros" : "5",
   "Trasmisión" : "Automática",
   "Modelo" : "1981",
-  "Puertas" : "2"
+  "Puertas" : "789"
 }, {
   "Cant Pasajeros" : "2",
-  "Trasmisión" : "Automática",
+  "Trasmisión" : "fffff",
   "Modelo" : "1987",
   "Puertas" : "2"
-}, {
-  "Cant Pasajeros" : "2",
-  "Trasmisión" : "Dual",
-  "Modelo" : "1988",
-  "Puertas" : "2"
-}, {
-  "Cant Pasajeros" : "4",
-  "Trasmisión" : "Manual",
-  "Modelo" : "1991",
-  "Puertas" : "4"
 } ]
