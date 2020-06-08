@@ -3,6 +3,7 @@ package edu.ucr.rp.programacion2.proyecto.gui.panes.main.records;
 
 import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
 import edu.ucr.rp.programacion2.proyecto.domain.InventoryControl;
+import edu.ucr.rp.programacion2.proyecto.gui.javafx.item.CreateItemForm;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneName;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.panes.main.ManagePane;
@@ -354,13 +355,13 @@ public class InventoryView implements PaneViewer {
         refresh();
     }
 
-    private void createInventoryAction() {// TODO actionEvent
+    private void createInventoryAction() {
         refresh();
         ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.ADD_INVENTORY));
         System.out.println("Create Inventory Button pressed");
     }
 
-    private void createCatalogAction() {// TODO actionEvent
+    private void createCatalogAction() {
         refresh();
         ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.ADD_CATALOG));
         System.out.println("Create Catalog Button pressed");
