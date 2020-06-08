@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 public class InventoryPersistence implements Persistence<Inventory, List> {
     //  Variables  \\
+    //private String path = System.getProperty("s");
     private final String path = "files/inventories/";
     //  Constructor \\
 
@@ -18,12 +19,6 @@ public class InventoryPersistence implements Persistence<Inventory, List> {
 
     //  Methods  \\
     private void verifyCatalogsDir(String path){
-        // Validate files/
-        File root = new File("files");
-        if(!root.exists()) {
-            root.mkdir();
-        }
-        // Validate files/inventories/
         File file = new File(path);
         if(!file.exists())
             file.mkdir();

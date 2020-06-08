@@ -10,7 +10,7 @@ public class InventoryServiceTest extends TestCase {
     InventoryService inventoryService = InventoryService.getInstance();
 
     public void testAdd() {
-        for (int i = 0; i < 2 ; i++){
+        for (int i = 0; i < 5 ; i++){
             Inventory inventory = randomInventory();
             if ( inventoryService.add(inventory))
                 System.out.println("Se creó el inventario " + inventory);

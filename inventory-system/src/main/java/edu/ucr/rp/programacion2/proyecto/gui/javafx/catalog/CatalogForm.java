@@ -117,10 +117,10 @@ public class CatalogForm implements PaneViewer {
             featureNameTextField.setPromptText("Obligatory field");
             featureNameTextField.setStyle("-fx-background-color: #FDC7C7");
         } else {
-            schema.add(featureNameTextField.getText() + "");
             featureNameTextField.clear();
             featureNameTextField.setStyle("-fx-background-color: #FFFFFF");
             catalogNameTextField.setDisable(true);
+            schema.add(featureNameTextField.getText() + "");
             featureNameTextField.clear();
             saveCatalogButton.setVisible(true);
         }

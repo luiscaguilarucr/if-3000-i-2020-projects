@@ -139,7 +139,7 @@ public class ItemForm implements PaneViewer {
         for (int i = 0; i < catalog.getSchema().size(); i++) {
             features.put(catalogService.get(catalogComboBox.getValue()).getSchema().get(i), textFields.get(i).getText());
         }
-        Item item = new Item(features);
+        Item item = new Item(itemNameTextField.getText(), features);
         catalog = setupCatalog.addItem(catalog, item);
 
         if (catalog == null) {
