@@ -2,7 +2,6 @@ package edu.ucr.rp.programacion2.proyecto.persistance;
 
 import edu.ucr.rp.programacion2.proyecto.domain.Catalog;
 import edu.ucr.rp.programacion2.proyecto.util.inventorycontrol.Configuration;
-import edu.ucr.rp.programacion2.proyecto.domain.Item;
 import edu.ucr.rp.programacion2.proyecto.util.JsonUtil;
 import edu.ucr.rp.programacion2.proyecto.util.builders.CatalogBuilder;
 import org.apache.commons.io.FileUtils;
@@ -115,7 +114,7 @@ public class CatalogPersistence implements Persistence<Catalog, List> {
     private boolean saveConfig(Catalog catalog) {
         if (catalog == null) return false;                      // Not null catalog.
         jsonUtil.toFile(new File(path + catalog.getName() + "/config" + suffix), catalog.getConfiguration());
-        return true; // TODO check if have been saved.
+        return true;
     }
 
     /**
@@ -124,12 +123,12 @@ public class CatalogPersistence implements Persistence<Catalog, List> {
      * @param catalog Catalog that contains the schema.
      * @return {@code true} if the catalog's schema have been saved.{@code false} Otherwise.
      */
-    private boolean saveSchema(Catalog catalog) {   //TODO too many validations...?
+    private boolean saveSchema(Catalog catalog) {
         if (catalog == null) return false;                      // Not null catalog.
         if (catalog.getSchema() == null) return false;          // Not null schema.
         if (catalog.getSchema().isEmpty()) return false;        // Not empty schema.
         jsonUtil.toFile(new File(path + catalog.getName() + "/schema" + suffix), catalog.getSchema());
-        return true; // TODO check if have been saved.
+        return true;
     }
 
     /**
@@ -142,11 +141,8 @@ public class CatalogPersistence implements Persistence<Catalog, List> {
         if (catalog == null) return false;                      // Not null catalog.
         if (catalog.getItems() == null) return false;           // Not null item list.
 
-        List<Map> maps = new ArrayList<>();
-        for(Item item : catalog.getItems())
-            maps.add(item.getFeatures());
-        jsonUtil.toFile(new File(path + catalog.getName() + "/items" + suffix), maps);
-        return true; // TODO check if have been saved.
+        jsonUtil.toFile(new File(path + catalog.getName() + "/items" + suffix), catalog.getItems());
+        return true;
     }
 
     /**
@@ -172,7 +168,7 @@ public class CatalogPersistence implements Persistence<Catalog, List> {
     private Catalog buildCatalog(String catalogName) {
         Configuration config = readConfig(catalogName);  // ID
         List<String> schema = readSchema(catalogName);          // Schema
-        List<Item> items = readItems(catalogName);              // Items
+        List<Map> items = readItems(catalogName);              // Items
         if (config == null) return null;                            // Verify ID
         if (schema == null) return null;                        // Verify Schema
         if (items == null) return null;                         // Verify Items
@@ -228,16 +224,11 @@ public class CatalogPersistence implements Persistence<Catalog, List> {
      * @return {@code List} items, {@code null} if an error has occurred.
      */
     private List readItems(String catalogName) {
-        File file = new File(path + catalogName + "/items" + suffix);//TODO extract extension.
+        File file = new File(path + catalogName + "/items" + suffix);
 
         if (file.exists()) {
             try {
-                List<Item> items = new ArrayList<>();
-                List<Map> maps = jsonUtil.asObject(file.toURI().toURL(), List.class);
-                for (Map m:maps){
-                    items.add(new Item(m));
-                }
-                return items;
+                return jsonUtil.asObject(file.toURI().toURL(), List.class);
             } catch (MalformedURLException e) {
                 System.out.println(e.getMessage());
             }

@@ -11,24 +11,24 @@ import java.util.List;
 /**
  * This class is used to see make a relate one inventory with 1 o more catalogs.
  */
-public class InventoryControlService {//TODO change name(don't use Service)
+public class InventoryControlManager {
     //  Varaibles  \\
-    private static InventoryControlService instance;
+    private static InventoryControlManager instance;
     private List<InventoryControl> list;
     private InventoryService inventoryService;
     private CatalogService catalogService;
 
     //  Constructor  \\
-    private InventoryControlService() {
+    private InventoryControlManager() {
         inventoryService = InventoryService.getInstance();
         list = new ArrayList<>();
         updateList();
     }
 
     //  Singlenton Pattern  \\
-    public static InventoryControlService getInstance() {
+    public static InventoryControlManager getInstance() {
         if (instance == null)
-            instance = new InventoryControlService();
+            instance = new InventoryControlManager();
         return instance;
     }
     //  Methods  \\

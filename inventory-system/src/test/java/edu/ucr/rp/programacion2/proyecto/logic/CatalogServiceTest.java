@@ -2,7 +2,6 @@ package edu.ucr.rp.programacion2.proyecto.logic;
 
 import edu.ucr.rp.programacion2.proyecto.domain.Catalog;
 import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
-import edu.ucr.rp.programacion2.proyecto.domain.Item;
 import edu.ucr.rp.programacion2.proyecto.util.inventorycontrol.Configuration;
 import edu.ucr.rp.programacion2.proyecto.util.Utility;
 import junit.framework.TestCase;
@@ -10,6 +9,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 public class CatalogServiceTest extends TestCase {
@@ -63,10 +63,10 @@ public class CatalogServiceTest extends TestCase {
     }
 
     private List randomItemList(){
-        List<Item> items = new ArrayList<>();
+        List<Map> items = new ArrayList<>();
 
         for(int i = 0 ; i < 10; i++) {
-            Item item = Utility.randomItem();
+            Map item = Utility.randomItem();
 
             if(!items.contains(item)){
                 items.add(item);
