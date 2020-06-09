@@ -5,12 +5,16 @@ import edu.ucr.rp.programacion2.proyecto.gui.modules.util.PaneUtil;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.ManagePane;
 import edu.ucr.rp.programacion2.proyecto.logic.InventoryService;
+import edu.ucr.rp.programacion2.proyecto.util.builders.BuilderFX;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
+
+import static edu.ucr.rp.programacion2.proyecto.gui.modules.util.LabelConstants.TITLE_CATALOG_FORM;
+import static edu.ucr.rp.programacion2.proyecto.gui.modules.util.LabelConstants.TITLE_INVENTORY_FORM;
 
 /**
  * This class shows the actions to add new inventory.
@@ -58,6 +62,7 @@ public class InventoryForm implements PaneViewer {
      * Configure and add the required components in the pane.
      */
     private void addControls() {
+        BuilderFX.buildLabelTitleNormal(TITLE_INVENTORY_FORM, pane, 0, 0);
         inventoryNameLabel = PaneUtil.buildLabel(pane, "Inventory name: ", 0, 1);
         inventoryNameTextField = PaneUtil.buildTextInput(pane, 1);
         saveInventoryButton = PaneUtil.buildButtonImage(new Image("save.png"), pane, 2, 1);

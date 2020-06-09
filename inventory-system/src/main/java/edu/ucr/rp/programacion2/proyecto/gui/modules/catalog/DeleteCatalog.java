@@ -6,6 +6,7 @@ import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.ManagePane;
 import edu.ucr.rp.programacion2.proyecto.logic.CatalogService;
 import edu.ucr.rp.programacion2.proyecto.logic.InventoryService;
+import edu.ucr.rp.programacion2.proyecto.util.builders.BuilderFX;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
@@ -13,6 +14,9 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import org.controlsfx.control.CheckComboBox;
+
+import static edu.ucr.rp.programacion2.proyecto.gui.modules.util.LabelConstants.TITLE_DELETE_CATALOG;
+import static edu.ucr.rp.programacion2.proyecto.gui.modules.util.LabelConstants.TITLE_MANAGE_ITEM;
 
 /**
  * This class shows the actions to remove 1 or more catalogs.
@@ -76,6 +80,7 @@ public class DeleteCatalog implements PaneViewer {
     public static void refreshItems() {
         initializeInventoryService();
         catalogCheckComboBox.getCheckModel().clearChecks();
+        catalogObservableList.clear();
         inventoryObservableList.clear();
         inventoryObservableList.addAll(inventoryService.getNamesList());
     }
@@ -84,14 +89,15 @@ public class DeleteCatalog implements PaneViewer {
      * Configure and add the required components in the pane.
      */
     private void addControls() {
-        inventoryIndicationLabel = PaneUtil.buildLabel(pane, "Chose an inventory", 0, 0);
-        deleteCatalogButton = PaneUtil.buildButtonImage(new Image("delete.png"), pane, 2, 1);
-        cancelButton = PaneUtil.buildButton("Cancel", pane, 3, 0);
-        catalogIndicationLabel = PaneUtil.buildLabel(pane, "Select the catalog you want to remove", 0, 1);
+        BuilderFX.buildLabelTitleNormal(TITLE_DELETE_CATALOG, pane, 0, 0);
+        inventoryIndicationLabel = PaneUtil.buildLabel(pane, "Chose an inventory", 0, 1);
+        buildInventoryComboBox();
+        catalogIndicationLabel = PaneUtil.buildLabel(pane, "Select the catalog", 0, 2);
+        buildCatalogCheckComboBox();
+        deleteCatalogButton = PaneUtil.buildButtonImage(new Image("delete.png"), pane, 2, 2);
+        cancelButton = PaneUtil.buildButton("Cancel", pane, 2, 1);
         catalogIndicationLabel.setVisible(false);
         deleteCatalogButton.setVisible(false);
-        buildInventoryComboBox();
-        buildCatalogCheckComboBox();
         catalogCheckComboBox.setVisible(false);
     }
 
@@ -100,7 +106,7 @@ public class DeleteCatalog implements PaneViewer {
      */
     private void addHandlers() {
         deleteCatalogButton.setOnAction(e -> {
-            if (!catalogObservableList.contains("There are not catalogs")) {
+            if (!catalogCheckComboBox.getCheckModel().isEmpty()) {
                 deleteCatalog();
                 ManagePane.clearPane();
                 refreshInventoryObservableList();
@@ -126,7 +132,7 @@ public class DeleteCatalog implements PaneViewer {
      */
     private void buildInventoryComboBox() {
         inventoryObservableList = FXCollections.observableArrayList(inventoryService.getNamesList());
-        inventoryComboBox = PaneUtil.buildComboBox(pane, inventoryObservableList, 1, 0);
+        inventoryComboBox = PaneUtil.buildComboBox(pane, inventoryObservableList, 1, 1);
     }
 
     /**
@@ -134,7 +140,7 @@ public class DeleteCatalog implements PaneViewer {
      */
     private void buildCatalogCheckComboBox() {
         catalogObservableList = FXCollections.observableArrayList();
-        catalogCheckComboBox = PaneUtil.buildCheckComboBox(pane, catalogObservableList, 1, 1);
+        catalogCheckComboBox = PaneUtil.buildCheckComboBox(pane, catalogObservableList, 1, 2);
     }
 
     /**

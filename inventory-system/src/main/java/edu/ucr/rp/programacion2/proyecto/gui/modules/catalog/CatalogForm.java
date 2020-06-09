@@ -6,6 +6,7 @@ import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.ManagePane;
 import edu.ucr.rp.programacion2.proyecto.logic.CatalogService;
 import edu.ucr.rp.programacion2.proyecto.logic.InventoryService;
+import edu.ucr.rp.programacion2.proyecto.util.builders.BuilderFX;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
@@ -16,6 +17,9 @@ import edu.ucr.rp.programacion2.proyecto.util.builders.CatalogBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static edu.ucr.rp.programacion2.proyecto.gui.modules.util.LabelConstants.TITLE_CATALOG_FORM;
+import static edu.ucr.rp.programacion2.proyecto.gui.modules.util.LabelConstants.TITLE_MANAGE_ITEM;
 
 /**
  * This class shows the actions to add new catalog.
@@ -97,17 +101,18 @@ public class CatalogForm implements PaneViewer {
      * Configure and add the required components in the pane.
      */
     private void addControls() {
-        inventoryIndicationLabel = PaneUtil.buildLabel(pane, "Chose an inventory", 0, 0);
+        BuilderFX.buildLabelTitleNormal(TITLE_CATALOG_FORM, pane, 0, 0);
+        inventoryIndicationLabel = PaneUtil.buildLabel(pane, "Chose an inventory", 0, 1);
         buildInventoryComboBox();
-        catalogNameLabel = PaneUtil.buildLabel(pane, "Catalog name: ", 0, 1);
-        catalogNameTextField = PaneUtil.buildTextInput(pane, 1);
-        featureNameLabel = PaneUtil.buildLabel(pane, "Feature:", 0, 2);
-        featureNameTextField = PaneUtil.buildTextInput(pane, 2);
-        addFeatureButton = PaneUtil.buildButtonImage(new Image("add.png"), pane, 2, 2);
-        saveCatalogButton = PaneUtil.buildButton("Save catalog", pane, 1, 6);
+        catalogNameLabel = PaneUtil.buildLabel(pane, "Catalog name: ", 0, 2);
+        catalogNameTextField = PaneUtil.buildTextInput(pane, 2);
+        featureNameLabel = PaneUtil.buildLabel(pane, "Feature:", 0, 3);
+        featureNameTextField = PaneUtil.buildTextInput(pane, 3);
+        addFeatureButton = PaneUtil.buildButtonImage(new Image("add.png"), pane, 2, 3);
+        saveCatalogButton = PaneUtil.buildButton("Save catalog", pane, 1, 4);
         saveCatalogButton.setVisible(false);
         addFeatureButton.setVisible(false);
-        cancelButton = PaneUtil.buildButton("Cancel", pane, 3, 0);
+        cancelButton = PaneUtil.buildButton("Cancel", pane, 2, 1);
     }
 
     /**
@@ -143,7 +148,7 @@ public class CatalogForm implements PaneViewer {
      */
     private void buildInventoryComboBox() {
         inventoryObservableList = FXCollections.observableArrayList();
-        inventoryComboBox = PaneUtil.buildComboBox(pane, inventoryObservableList, 1, 0);
+        inventoryComboBox = PaneUtil.buildComboBox(pane, inventoryObservableList, 1, 1);
     }
 
     /**

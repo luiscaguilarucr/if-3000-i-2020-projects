@@ -43,6 +43,10 @@ public class LabelConstants {
     public static final String CONFIG_NAME_COLUMN = "Config";
     public static final String TITLE_VIEW_INVENTORY = "View Inventory";
     public static final String TITLE_MANAGE_ITEM = "Manage Item";
+    public static final String TITLE_CATALOG_FORM = "Catalog Form";
+    public static final String TITLE_INVENTORY_FORM = "Inventory Form";
+    public static final String TITLE_DELETE_CATALOG = "Delete Catalog";
+    public static final String TITLE_DELETE_INVENTORY = "Delete Inventory";
 
     // Items
     public static final String TITLE_CREATE_ITEM = "Create Item";
