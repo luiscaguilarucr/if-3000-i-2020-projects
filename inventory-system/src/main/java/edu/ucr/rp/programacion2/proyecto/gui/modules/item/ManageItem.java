@@ -3,14 +3,14 @@ package edu.ucr.rp.programacion2.proyecto.gui.modules.item;
 
 import edu.ucr.rp.programacion2.proyecto.domain.Catalog;
 import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
-import edu.ucr.rp.programacion2.proyecto.domain.Item;
-import edu.ucr.rp.programacion2.proyecto.gui.modules.util.PaneUtil;
+import edu.ucr.rp.programacion2.proyecto.gui.manage.ManagePane;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneName;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.ManagePane;
 import edu.ucr.rp.programacion2.proyecto.util.builders.BuilderFX;
 import edu.ucr.rp.programacion2.proyecto.logic.CatalogService;
 import edu.ucr.rp.programacion2.proyecto.logic.InventoryService;
+import edu.ucr.rp.programacion2.proyecto.util.builders.BuilderFX;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -51,7 +51,6 @@ public class ManageItem implements PaneViewer {
     private static GridPane pane;
     private static InventoryService inventoryService;
     private static CatalogService catalogService;
-    private static List<TableColumn> tableColumns = new ArrayList<>();
     private static ComboBox<String> inventoryComboBox;
     private static ComboBox<String> catalogComboBox;
     private static Alert deleteAlert;
@@ -112,7 +111,7 @@ public class ManageItem implements PaneViewer {
         filterField = BuilderFX.buildTextInput2(SEARCH_LABEL, pane, 3, 1);
         tableView = BuilderFX.buildTableView(pane, 0, 2, 4, 1);
         resultsLabel = BuilderFX.buildLabelMinimal("", pane, 0, 3, 2);
-        //pagination = BuilderFX.buildPagination(pane, 2, 3, 2, 1);// TODO
+        //pagination = BuilderFX.buildPagination(pane, 2, 3, 2, 1);// TODO pagination
         backButton = BuilderFX.buildButton(BACK_LABEL, pane, 2, 3);
         // None Row
         buttonTypeYes = new ButtonType(YES_LABEL);
@@ -124,7 +123,7 @@ public class ManageItem implements PaneViewer {
     /**
      * Set the styles of the components.
      */
-    private void setupStyles() {
+    private void setupStyles() { //TODO how to simplify.
         // Pane
         pane.getStyleClass().add("show-inventory-pane");
         // Row Constraints
@@ -135,15 +134,15 @@ public class ManageItem implements PaneViewer {
         // Row #1
         RowConstraints rowConstraints1 = new RowConstraints(50, 50, 150);
         rowConstraints1.setValignment(VPos.TOP);
-        rowConstraints.setVgrow(Priority.ALWAYS);
+        rowConstraints1.setVgrow(Priority.ALWAYS);
         // Row #2
         RowConstraints rowConstraints2 = new RowConstraints(500, 600, 600);
         rowConstraints2.setValignment(VPos.TOP);
-        rowConstraints.setVgrow(Priority.NEVER);
+        rowConstraints2.setVgrow(Priority.NEVER);
         // Row #3
         RowConstraints rowConstraints3 = new RowConstraints(25, 25, 40);
         rowConstraints3.setValignment(VPos.TOP);
-        rowConstraints.setVgrow(Priority.NEVER);
+        rowConstraints3.setVgrow(Priority.NEVER);
         // Add Row Constraints
         pane.getRowConstraints().addAll(rowConstraints, rowConstraints1, rowConstraints2, rowConstraints3);
 
@@ -152,18 +151,18 @@ public class ManageItem implements PaneViewer {
         columnConstraints.setHalignment(HPos.LEFT);
         columnConstraints.setHgrow(Priority.ALWAYS);
 
-        ColumnConstraints columnConstraints2 = new ColumnConstraints(150, 175, 200);
-        columnConstraints.setHalignment(HPos.LEFT);
-        columnConstraints.setHgrow(Priority.ALWAYS);
+        ColumnConstraints columnConstraints1 = new ColumnConstraints(150, 175, 200);
+        columnConstraints1.setHalignment(HPos.LEFT);
+        columnConstraints1.setHgrow(Priority.ALWAYS);
 
-        ColumnConstraints columnConstraints3 = new ColumnConstraints(200, 200, 200);
+        ColumnConstraints columnConstraints2 = new ColumnConstraints(200, 200, 200);
+        columnConstraints2.setHalignment(HPos.RIGHT);
+        columnConstraints2.setHgrow(Priority.NEVER);
+
+        ColumnConstraints columnConstraints3 = new ColumnConstraints(75, 75, 150);
         columnConstraints3.setHalignment(HPos.RIGHT);
-        columnConstraints3.setHgrow(Priority.NEVER);
-
-        ColumnConstraints columnConstraints4 = new ColumnConstraints(75, 75, 150);
-        columnConstraints4.setHalignment(HPos.RIGHT);
-        columnConstraints4.setHgrow(Priority.ALWAYS);
-        pane.getColumnConstraints().addAll(columnConstraints, columnConstraints2, columnConstraints3, columnConstraints4);
+        columnConstraints3.setHgrow(Priority.ALWAYS);
+        pane.getColumnConstraints().addAll(columnConstraints, columnConstraints1, columnConstraints2, columnConstraints3);
 
         // Settings for Table View
         tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -245,7 +244,7 @@ public class ManageItem implements PaneViewer {
                         switch (label) {
                             case DELETE_COLUMN -> btn.setOnAction(actionEvent -> {
                                 Map data = getTableView().getItems().get(getIndex());
-                                deleteOneItemAction(new Item(data));
+                                deleteOneItemAction(data);
                                 refreshTable();
                             });
                         }
@@ -484,30 +483,20 @@ public class ManageItem implements PaneViewer {
     }
 
     /**
+     * This methods creates a new observables list with items.
      * @param items
      * @return
      */
-    private static ObservableList<Map> generateDataInMap(List<Item> items) throws Exception {
-        ObservableList<Map> observableList = FXCollections.observableArrayList();
-        for (int i = 0; i < items.size(); i++) { //por cada item, tener un mapa, y el mapa es features.
-            if (items.get(i) instanceof Item) {
-                Item item = items.get(i);
-                observableList.add(item.getFeatures());
-                System.out.println("Item ->" + item.getFeatures());
-            }
-        }
-        System.out.println("observable L:¨" + observableList);
-        return observableList;
+    private ObservableList<Map> generateDataInMap(List<Map> items){
+        return FXCollections.observableArrayList(items);
     }
 
-    private List<Item> getItemsFromTable() {
-        List<Item> itemList = new ArrayList<>();
-        List<Map> itemTable = tableView.getItems();
-
-        for (Map m : itemTable) {
-            itemList.add(new Item(m));
-        }
-        return itemList;
+    /**
+     * This methods brings the items form the tables and set them as a List<Map>
+     * @return {@code List} of items.
+     */
+    private List<Map> getItemsFromTable() {
+        return new ArrayList<>(tableView.getItems());
     }
 
     private void saveChanges() {

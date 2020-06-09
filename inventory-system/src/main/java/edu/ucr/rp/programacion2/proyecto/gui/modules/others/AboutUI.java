@@ -58,7 +58,7 @@ public class AboutUI implements PaneViewer {
         pane.getStyleClass().add("default-grid-pane");
         text.setTextAlignment(TextAlignment.JUSTIFY);
 
-    }//TODO
+    }//TODO style
     private void backAction() {
         ManagePane.clearPane();
     }

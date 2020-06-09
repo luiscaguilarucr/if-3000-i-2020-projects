@@ -41,11 +41,11 @@ public class BuilderFX {
      */
     public static void buildLabelTitle(String text, GridPane pane, int column, int row, int numColumns, int numRows) {
         Label label = new Label(text);
-        label.setPadding(TITLE_DEFAULT_INSETS);//TODO use css
-        Style.setLabelConfig(label, 1);//TODO use css
-        Style.setLabelColor(label, PRIMARY_TEXT);//TODO use css
+        label.setPadding(TITLE_DEFAULT_INSETS);
+        Style.setLabelConfig(label, 1);
+        Style.setLabelColor(label, PRIMARY_TEXT);
         pane.add(label, column, row, numColumns, numRows);
-        GridPane.setHalignment(label, HPos.LEFT);//TODO use css
+        GridPane.setHalignment(label, HPos.LEFT);
     }
 
     public static void buildLabelNormal(String text, GridPane pane, int column, int row) {

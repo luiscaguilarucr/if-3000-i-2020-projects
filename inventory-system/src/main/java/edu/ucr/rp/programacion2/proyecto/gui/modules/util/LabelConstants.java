@@ -10,6 +10,8 @@ public class LabelConstants {
     public static final String CONFIG_LABEL = "Config";
     public static final String EDIT_LABEL = "Edit";
     public static final String VIEW_LABEL = "View";
+    public static final String DETAILS_LABEL = "Details";
+    public static final String OPTIONS_LABEL = "Options";
     public static final String CHANGE_LABEL = "Change";
     public static final String SAVE_LABEL = "Save";
     public static final String DELETE_LABEL = "Delete";

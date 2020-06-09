@@ -2,7 +2,6 @@ package edu.ucr.rp.programacion2.proyecto.gui.modules.item;
 
 import edu.ucr.rp.programacion2.proyecto.domain.Catalog;
 import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
-import edu.ucr.rp.programacion2.proyecto.domain.Item;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.ManagePane;
 import edu.ucr.rp.programacion2.proyecto.util.builders.BuilderFX;
@@ -191,7 +190,7 @@ public class CreateItemForm implements PaneViewer {
         ObservableList<Map> data = FXCollections.observableArrayList(); // List
         for (String feature : list) {
             Map<String, String> dataRow = new HashMap<>();
-            dataRow.put(FEATURE_KEY, feature);//Todo Test
+            dataRow.put(FEATURE_KEY, feature);
             dataRow.put(VALUE_KEY, null);
             data.add(dataRow);
         }
@@ -256,9 +255,8 @@ public class CreateItemForm implements PaneViewer {
         System.out.println("Items in table: " + tableView.getItems());
         System.out.println("Map of features: " + getFeaturesMap());
         // Create Features
-        Map<String, Object> features = getFeaturesMap();
+        Map<String, Object> item = getFeaturesMap();
         // Create item
-        Item item = new Item(features);
         System.out.println("Item creado : " + item);
 
         if (catalogSelected != null) {

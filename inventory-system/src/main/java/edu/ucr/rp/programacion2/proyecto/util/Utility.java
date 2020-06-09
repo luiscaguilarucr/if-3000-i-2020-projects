@@ -2,8 +2,6 @@ package edu.ucr.rp.programacion2.proyecto.util;
 
 import edu.ucr.rp.programacion2.proyecto.domain.Catalog;
 import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
-import edu.ucr.rp.programacion2.proyecto.domain.Item;
-import edu.ucr.rp.programacion2.proyecto.util.builders.ItemBuilder;
 import edu.ucr.rp.programacion2.proyecto.util.inventorycontrol.Configuration;
 
 import java.util.*;
@@ -34,10 +32,8 @@ public class Utility {
     }
 
     //  Random Car items  \\
-    public static Item randomItem(){
-        return new ItemBuilder()
-                .setFeatures(randomCarFeatures())
-                .build();
+    public static Map randomItem(){
+        return randomCarFeatures();
     }
 
 

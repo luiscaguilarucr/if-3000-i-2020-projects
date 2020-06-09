@@ -9,7 +9,7 @@ import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneName;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.ManagePane;
 import edu.ucr.rp.programacion2.proyecto.logic.CatalogService;
-import edu.ucr.rp.programacion2.proyecto.util.inventorycontrol.InventoryControlService;
+import edu.ucr.rp.programacion2.proyecto.util.inventorycontrol.InventoryControlManager;
 import edu.ucr.rp.programacion2.proyecto.logic.InventoryService;
 import edu.ucr.rp.programacion2.proyecto.util.builders.BuilderFX;
 import javafx.geometry.HPos;
@@ -54,7 +54,7 @@ public class CatalogConfig implements PaneViewer {
     private static ButtonType buttonTypeNo;
     private static TextInputDialog textInputDialog;
     //  Services
-    private static InventoryControlService inventoryControlService;
+    private static InventoryControlManager inventoryControlManager;
     private static InventoryService inventoryService;
     private static CatalogService catalogService;
     // Constructor \\
@@ -84,7 +84,7 @@ public class CatalogConfig implements PaneViewer {
      * This method initialize the services required.
      */
     private void initializeServices() {
-        inventoryControlService = InventoryControlService.getInstance();
+        inventoryControlManager = InventoryControlManager.getInstance();
         inventoryService = InventoryService.getInstance();
     }
     private static void updateCatalogService(Inventory inventory) {
@@ -125,14 +125,14 @@ public class CatalogConfig implements PaneViewer {
         // Schema
         schemaList = buildListView();
         BuilderFX.buildLabelNormal(TITLE_CATALOG_SCHEMA, pane, 0, 4);
-        schemaTitledPane = BuilderFX.buildTitledPane(VIEW_LABEL, schemaList, pane, 1, 4, 1, 1);// TODO check text
+        schemaTitledPane = BuilderFX.buildTitledPane(DETAILS_LABEL, schemaList, pane, 1, 4, 1, 1);
         // Items
         BuilderFX.buildLabelNormal(TITLE_ITEMS, pane, 2, 4);
         showItemsButton = buildItemButton(VIEW_LABEL);
         addItemButton = buildItemButton(ADD_LABEL);
         deleteAllItemsButton = buildItemButton(DELETE_LABEL);
         itemsOptionsPane = buildHBoxItemsOptions(addItemButton, showItemsButton, deleteAllItemsButton);
-        itemOptionsTitledPane = BuilderFX.buildTitledPane(VIEW_LABEL, itemsOptionsPane, pane, 3, 4, 1, 1);// TODO check text
+        itemOptionsTitledPane = BuilderFX.buildTitledPane(OPTIONS_LABEL, itemsOptionsPane, pane, 3, 4, 1, 1);
         // None Row
         buttonTypeYes = new ButtonType(YES_LABEL);
         buttonTypeNo = new ButtonType(NO_LABEL);
@@ -205,6 +205,8 @@ public class CatalogConfig implements PaneViewer {
         setButtonEffect(addItemButton);
         setButtonEffect(deleteAllItemsButton);
         setButtonEffect(showItemsButton);
+
+        editInventoryButton.setVisible(false);// TODO realizar funciones
     }
     /**
      * Create a List view and place it in a pane.
@@ -321,10 +323,10 @@ public class CatalogConfig implements PaneViewer {
         DeleteInventory.setInventory(inventoryComboBox.getValue());
         ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.DELETE_INVENTORY));
     }
-    private static void showItemsAction() {// TODO add new Item
+    private static void showItemsAction() {// TODO showItems
 
     }
-    private static void addItemsAction() {// TODO showItems
+    private static void addItemsAction() {
         // Validations
         if(inventoryComboBox.getValue() == null) return;
         if(catalogComboBox.getValue() == null) return;

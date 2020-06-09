@@ -8,7 +8,7 @@ import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.ManagePane;
 import edu.ucr.rp.programacion2.proyecto.gui.modules.catalog.CatalogConfig;
 import edu.ucr.rp.programacion2.proyecto.logic.CatalogService;
-import edu.ucr.rp.programacion2.proyecto.util.inventorycontrol.InventoryControlService;
+import edu.ucr.rp.programacion2.proyecto.util.inventorycontrol.InventoryControlManager;
 import edu.ucr.rp.programacion2.proyecto.logic.InventoryService;
 import edu.ucr.rp.programacion2.proyecto.logic.Service;
 import edu.ucr.rp.programacion2.proyecto.util.builders.BuilderFX;
@@ -53,7 +53,7 @@ public class InventoryView implements PaneViewer {
     private static GridPane pane;
     private static InventoryService inventoryService;
     private static Service catalogService;
-    private static InventoryControlService inventoryControlService;
+    private static InventoryControlManager inventoryControlManager;
     private static CatalogConfig catalogConfig = new CatalogConfig();
     private static Button backButton;
     //  Methods  \\
@@ -63,7 +63,7 @@ public class InventoryView implements PaneViewer {
      */
     private void initializeServices() {
         inventoryService = InventoryService.getInstance();
-        inventoryControlService = InventoryControlService.getInstance();
+        inventoryControlManager = InventoryControlManager.getInstance();
     }
 
     private void updateCatalogService(Inventory inventory) {
@@ -92,24 +92,25 @@ public class InventoryView implements PaneViewer {
      * @param pane for add components.
      */
     private void setupControls(GridPane pane) {
-        // Create
+        // Row #0
         BuilderFX.buildLabelTitle(TITLE_VIEW_INVENTORY, pane, 0, 0, 2, 1);
+        // Row #1
         createInventoryButton = new Button(TITLE_INVENTORY);
         createCatalogButton = new Button(TITLE_CATALOG);
         createOptionsHBox = new HBox(createInventoryButton, createCatalogButton);
-        createTiledPane = BuilderFX.buildTitledPane(NEW_LABEL, createOptionsHBox, pane, 1, 1, 2, 1);
-        // Show
-        filterField = BuilderFX.buildTextInput(SEARCH_LABEL, pane, 3, 1);
+        createTiledPane = BuilderFX.buildTitledPane(NEW_LABEL, createOptionsHBox, pane, 0, 1, 2, 1);
+        // Row #2
+        filterField = BuilderFX.buildTextInput("", pane, 3, 1);
         tableView = BuilderFX.buildTableView(pane, 0, 2, 4, 1);
         resultsLabel = BuilderFX.buildLabelMinimal("", pane, 0, 3, 2);
-        //pagination = BuilderFX.buildPagination(pane, 2, 3, 2, 1);// TODO
+        //pagination = BuilderFX.buildPagination(pane, 2, 3, 2, 1);// TODO pagination
         backButton = BuilderFX.buildButton(BACK_LABEL, pane, 2, 3);
     }
 
     /**
      * Set the styles of the components.
      */
-    private void setupStyles() { //TODO how to simplify. -> Agregar config en el builder de cada uno.
+    private void setupStyles() { //TODO how to simplify. ->
         // Pane
         pane.getStyleClass().add("show-inventory-pane");
         // Row Constraints
@@ -289,7 +290,7 @@ public class InventoryView implements PaneViewer {
      * @return {@code List} list with register in inventory service.
      */
     private static List<InventoryControl> getList() {
-        return inventoryControlService.getAll();
+        return inventoryControlManager.getAll();
     }
 
     /**
@@ -375,7 +376,7 @@ public class InventoryView implements PaneViewer {
         refresh();
     }
 
-    private void configAction(InventoryControl inventoryControl) {//TODO actionEvent
+    private void configAction(InventoryControl inventoryControl) {
         ManagePane.setCenterPane(catalogConfig.getPane());
         CatalogConfig.refresh();
         CatalogConfig.setInventory(inventoryControl.getInventoryName());
@@ -390,9 +391,15 @@ public class InventoryView implements PaneViewer {
     public static void refresh(){
         filterField.clear();
         refreshTable();
+        updateResultsLabel();
     }
+
+    /**
+     * This refresh the items in the table with the lastOnes.
+     */
     private static void refreshTable() {
         fillTable(tableView);
+        updateResultsLabel();
     }
 
 
