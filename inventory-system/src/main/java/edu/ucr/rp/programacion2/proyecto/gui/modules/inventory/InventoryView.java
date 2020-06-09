@@ -1,6 +1,9 @@
 
 package edu.ucr.rp.programacion2.proyecto.gui.modules.inventory;
 
+import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
+import edu.ucr.rp.programacion2.proyecto.gui.modules.item.ManageItem;
+import edu.ucr.rp.programacion2.proyecto.gui.modules.util.PaneUtil;
 import edu.ucr.rp.programacion2.proyecto.util.inventorycontrol.InventoryControl;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneName;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneViewer;
@@ -362,8 +365,16 @@ public class InventoryView implements PaneViewer {
 
     // Table Buttons
     private void viewItemsAction(InventoryControl inventoryControl) {//TODO actionEvent
-        System.out.println("Showing to items of " + inventoryControl.getCatalogName());
-        refresh();
+        if (inventoryControl.getCatalogName() != null) {
+            ManageItem.refresh();
+            ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.MANAGE_ITEM));
+            ManageItem.setInventorySelected(inventoryControl.getInventoryName());
+            ManageItem.setCatalogSelected(inventoryControl.getCatalogName());
+            ManageItem.setPreviousPane(getPane());
+            System.out.println("Showing to items of " + inventoryControl);
+            refresh();
+        } else
+            PaneUtil.showAlert(Alert.AlertType.INFORMATION, "There are no catalogs", "You must add at least one catalog on this inventory to be able to access this function");
     }
 
     private void configAction(InventoryControl inventoryControl) {
@@ -391,7 +402,6 @@ public class InventoryView implements PaneViewer {
         fillTable(tableView);
         updateResultsLabel();
     }
-
     /**
      * Updates the label of the matches and number of items showed in the table.
      */
