@@ -317,6 +317,7 @@ public class CatalogConfig implements PaneViewer {
                 }
         }
     }
+
     /**
      *
      */

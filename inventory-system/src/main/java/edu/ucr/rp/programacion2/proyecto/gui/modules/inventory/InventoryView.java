@@ -9,10 +9,8 @@ import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneName;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.ManagePane;
 import edu.ucr.rp.programacion2.proyecto.gui.modules.catalog.CatalogConfig;
-import edu.ucr.rp.programacion2.proyecto.logic.CatalogService;
 import edu.ucr.rp.programacion2.proyecto.util.inventorycontrol.InventoryControlManager;
 import edu.ucr.rp.programacion2.proyecto.logic.InventoryService;
-import edu.ucr.rp.programacion2.proyecto.logic.Service;
 import edu.ucr.rp.programacion2.proyecto.util.builders.BuilderFX;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -54,7 +52,6 @@ public class InventoryView implements PaneViewer {
     private static Label resultsLabel;
     private static GridPane pane;
     private static InventoryService inventoryService;
-    private static Service catalogService;
     private static InventoryControlManager inventoryControlManager;
     private static CatalogConfig catalogConfig = new CatalogConfig();
     private static Button backButton;
@@ -66,10 +63,6 @@ public class InventoryView implements PaneViewer {
     private void initializeServices() {
         inventoryService = InventoryService.getInstance();
         inventoryControlManager = InventoryControlManager.getInstance();
-    }
-
-    private void updateCatalogService(Inventory inventory) {
-        catalogService = new CatalogService(inventory);
     }
 
     /**
@@ -212,7 +205,6 @@ public class InventoryView implements PaneViewer {
         return tableColumn;
     }
 
-
     /**
      * Add necessary columns to display object information.
      *
@@ -240,7 +232,6 @@ public class InventoryView implements PaneViewer {
             System.err.println("Error: " + e.getMessage() + ", in " + e.getCause());
         }
     }
-
 
     /**
      * The list is filtered using the input in the searchTextInput.
@@ -352,9 +343,7 @@ public class InventoryView implements PaneViewer {
     private void addHandlers() {
         createCatalogButton.setOnAction(e -> createCatalogAction());
         createInventoryButton.setOnAction(e -> createInventoryAction());
-
         backButton.setOnAction(e -> backAction());
-
     }
 
     private void backAction() {
@@ -372,7 +361,6 @@ public class InventoryView implements PaneViewer {
         refresh();
         ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.ADD_CATALOG));
         System.out.println("Create Catalog Button pressed");
-
     }
 
     // Table Buttons
@@ -414,8 +402,6 @@ public class InventoryView implements PaneViewer {
         fillTable(tableView);
         updateResultsLabel();
     }
-
-
     /**
      * Updates the label of the matches and number of items showed in the table.
      */
@@ -423,7 +409,6 @@ public class InventoryView implements PaneViewer {
         int total = getList().size();                   // Total of inventories and catalogs.
         int current = tableView.getItems().size();      // Number of inventories and catalogs in the table.
         resultsLabel.setText("Showing " + current + " of " + total + " results.");
-
     }
 
     @Override
