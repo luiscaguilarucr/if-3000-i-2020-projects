@@ -1,15 +1,12 @@
 package edu.ucr.rp.programacion2.proyecto.gui;
 
-import edu.ucr.rp.programacion2.proyecto.gui.model.SceneName;
-import edu.ucr.rp.programacion2.proyecto.gui.scenes.MainScene;
-import edu.ucr.rp.programacion2.proyecto.logic.CatalogService;
+import edu.ucr.rp.programacion2.proyecto.gui.manage.model.SceneName;
+import edu.ucr.rp.programacion2.proyecto.gui.manage.MainScene;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**

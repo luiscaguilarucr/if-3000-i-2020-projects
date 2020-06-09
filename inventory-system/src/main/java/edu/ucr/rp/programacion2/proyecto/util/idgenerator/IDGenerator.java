@@ -1,15 +1,15 @@
 package edu.ucr.rp.programacion2.proyecto.util.idgenerator;
 
-import edu.ucr.rp.programacion2.proyecto.persistance.IDGeneratorPersistence;
+import edu.ucr.rp.programacion2.proyecto.util.inventorycontrol.ConfigurationPersistence;
 import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
 
 public class IDGenerator implements Generable<Integer> {
     private Integer counter;
-    private IDGeneratorPersistence persistence;
+    private ConfigurationPersistence persistence;
 
     public IDGenerator(Inventory inventory) {
         this.counter = 0;
-        this.persistence = new IDGeneratorPersistence(inventory.getName());
+        this.persistence = new ConfigurationPersistence(inventory.getName());
         refresh();
     }
 

@@ -1,8 +1,9 @@
 package edu.ucr.rp.programacion2.proyecto.persistance;
 
 import edu.ucr.rp.programacion2.proyecto.domain.Catalog;
+import edu.ucr.rp.programacion2.proyecto.util.inventorycontrol.Configuration;
 import edu.ucr.rp.programacion2.proyecto.domain.Item;
-import edu.ucr.rp.programacion2.proyecto.domain.Configuration;
+import edu.ucr.rp.programacion2.proyecto.util.JsonUtil;
 import edu.ucr.rp.programacion2.proyecto.util.builders.CatalogBuilder;
 import org.apache.commons.io.FileUtils;
 
@@ -10,7 +11,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
