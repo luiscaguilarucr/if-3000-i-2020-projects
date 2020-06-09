@@ -3,6 +3,7 @@ package edu.ucr.rp.programacion2.proyecto.gui.javafx.item;
 
 import edu.ucr.rp.programacion2.proyecto.domain.Catalog;
 import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
+import edu.ucr.rp.programacion2.proyecto.domain.InventoryControl;
 import edu.ucr.rp.programacion2.proyecto.domain.Item;
 import edu.ucr.rp.programacion2.proyecto.gui.javafx.util.PaneUtil;
 import edu.ucr.rp.programacion2.proyecto.gui.model.PaneName;
@@ -15,6 +16,7 @@ import edu.ucr.rp.programacion2.proyecto.logic.InventoryControlService;
 import edu.ucr.rp.programacion2.proyecto.logic.InventoryService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
@@ -127,7 +129,7 @@ public class ManageItem implements PaneViewer {
     /**
      * Set the styles of the components.
      */
-    private void setupStyles() { //TODO how to simplify. -> Agregar config en el builder de cada uno.
+    private void setupStyles() {
         // Pane
         pane.getStyleClass().add("show-inventory-pane");
         // Row Constraints
@@ -279,6 +281,7 @@ public class ManageItem implements PaneViewer {
         createItemButton.setOnAction(e -> createItemAction());
         inventoryComboBox.setOnAction(event -> {
             refreshCatalogComboBox();
+            refreshTable();
             catalogComboBox.setVisible(true);
         });
         catalogComboBox.setOnAction(event -> {
@@ -288,6 +291,10 @@ public class ManageItem implements PaneViewer {
             filterField.setVisible(true);
         });
         backButton.setOnAction(e -> backAction());
+        filterField.setOnMouseClicked(event -> {
+            tableView.getItems().clear();
+            tableView.setItems(getFilteredList());
+        });
     }
 
     private void backAction() {
@@ -295,7 +302,7 @@ public class ManageItem implements PaneViewer {
         refresh();
     }
 
-    private void createItemAction() {// TODO actionEvent
+    private void createItemAction() {
         // Validations
         if (inventoryComboBox.getValue() == null) return;
         if (catalogComboBox.getValue() == null) return;
@@ -308,12 +315,11 @@ public class ManageItem implements PaneViewer {
             CreateItemForm.setPreviousPane(pane);
             ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.CREATE_ITEM));
         }
-        refreshTable();
         System.out.println("Create item Button pressed");
     }
 
-    private void deleteItemAction() {// TODO actionEvent
-        System.out.println("deleteAll pressed.");
+    private void deleteItemAction() {
+        System.out.println("Delete all items pressed.");
         // Validate selection
         if (catalogComboBox.getValue() != null) {
             // Set dialog details
@@ -347,8 +353,7 @@ public class ManageItem implements PaneViewer {
         }
     }
 
-    private void deleteOneItemAction(Item item) {// TODO actionEvent
-
+    private void deleteOneItemAction(Item item) {
         System.out.println("Delete items Button pressed");
         Catalog catalog = catalogService.get(catalogComboBox.getValue());
         if (catalog != null) {
@@ -359,6 +364,41 @@ public class ManageItem implements PaneViewer {
             }
         }
         refreshTable();
+    }
+
+    /**
+     * @return
+     */
+    private static FilteredList<InventoryControl> getFilteredList() {
+        //  Getting list
+        ObservableList<InventoryControl> items = inventoryObservableList;
+        FilteredList<InventoryControl> filteredList = new FilteredList<>(items);
+        // Adding filters
+        // Case #1 -> Show all
+        filteredList.setPredicate(b -> true);
+
+        // Case #2 -> Show content searched in filterField.
+        filterField.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredList.setPredicate(inventoryControl -> {
+                // SubCase #1 filter is empty or null
+                if (newValue == null || newValue.isEmpty()) return true;
+
+                // Get the input.
+                String inputFilter = newValue.toLowerCase();
+                // SubCase #2 filter the name of the inventories.
+                if (inventoryControl.getInventoryName().toLowerCase().contains(inputFilter)) {
+                    return true;
+                }
+                // SubCase #3 filter the name of the catalogs.
+                if(inventoryControl.getCatalogName() != null)
+                    return inventoryControl.getCatalogName().toLowerCase().contains(inputFilter);
+                return false;
+            });
+            // Update results message.
+            updateResultsLabel();
+        });
+
+        return filteredList;
     }
 
     /**
@@ -448,7 +488,7 @@ public class ManageItem implements PaneViewer {
         Catalog catalog = catalogService.get(catalogComboBox.getValue());
         if (catalog != null) {
             catalog.setItems(getItemsFromTable());
-            System.out.println("Se actualizaron los cambios la lista");
+            System.out.println("Se actualizaron los cambios en la lista");
             if (catalogService.edit(catalog)) {
                 System.out.println("Se guardaron los cambios en la lista");
             }
