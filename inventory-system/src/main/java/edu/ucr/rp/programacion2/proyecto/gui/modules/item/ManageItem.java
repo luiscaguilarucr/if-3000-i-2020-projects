@@ -500,7 +500,7 @@ public class ManageItem implements PaneViewer {
      * @return {@code List} of items.
      */
     private List<Map> getItemsFromTable() {
-        return new ArrayList<>(tableView.getItems());
+        return itemsList;
     }
 
     /**
