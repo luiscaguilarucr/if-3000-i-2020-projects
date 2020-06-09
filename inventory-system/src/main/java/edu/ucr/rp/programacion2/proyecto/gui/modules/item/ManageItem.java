@@ -453,7 +453,7 @@ public class ManageItem implements PaneViewer {
     /**
      * Refresh the pane. Cleans all the components.
      */
-    public static void refresh() {
+    public static void refresh() {  
         //inventoryComboBox.getSelectionModel().clearSelection();///TODO está generando un IndexOutOfBounds
         catalogComboBox.getItems().clear();
         catalogObservableList.clear();
