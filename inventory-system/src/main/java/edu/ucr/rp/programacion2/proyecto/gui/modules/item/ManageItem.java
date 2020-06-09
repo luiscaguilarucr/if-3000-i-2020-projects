@@ -57,6 +57,15 @@ public class ManageItem implements PaneViewer {
     private static ButtonType buttonTypeYes;
     private static ButtonType buttonTypeNo;
 
+
+    public ManageItem(){
+        initializeServices();
+        pane = BuilderFX.buildRecordsPane();
+        setupControls(pane);
+        addHandlers();
+        setupStyles();
+
+    }
     /**
      * This method initialize the services required.
      */
@@ -74,14 +83,7 @@ public class ManageItem implements PaneViewer {
      * @return {@code GridPane} pane with components.
      */
     public GridPane createPane() {
-        initializeServices();
-        pane = BuilderFX.buildRecordsPane();
-        setupControls(pane);
-        addHandlers();
-        setupStyles();
-        if (catalogComboBox.getValue() != null) {
-            updateCatalogService(inventoryService.get(inventoryComboBox.getValue()));
-        }
+        refresh();
         return pane;
     }
 
@@ -272,26 +274,37 @@ public class ManageItem implements PaneViewer {
     private void addHandlers() {
         deleteAllItemsButton.setOnAction(e -> deleteItemAction());
         createItemButton.setOnAction(e -> createItemAction());
-        inventoryComboBox.setOnAction(event -> {
-            if (inventoryComboBox.getValue() != null) {
-                updateCatalogService(inventoryService.get(inventoryComboBox.getValue()));
-            }
-            if (catalogService.getAll().isEmpty()) {
-                refresh();
-                PaneUtil.showAlert(Alert.AlertType.INFORMATION, "There are no catalogs", "You must add at least one catalog on this inventory to be able to access this function");
-            } else {
-                refreshCatalogComboBox();
-                //refreshTable(); // TODO revisar, si se llama aquí, aún no se ha seleccionado un catálogo, por lo cual no se puede refrescar la table
-                catalogComboBox.setVisible(true);
-            }
-        });
-        catalogComboBox.setOnAction(event -> {
-            refreshTable();
-            updateResultsLabel();
-            createTiledPane.setVisible(true);
-            filterField.setVisible(true);
-        });
+        inventoryComboBox.setOnAction(event -> inventoryChangedAction());
+        catalogComboBox.setOnAction(event -> catalogChangedAction());
         backButton.setOnAction(e -> backAction());
+    }
+
+    /**
+     * This action is triggered when the inventory selected is changed to another.
+     */
+    private void inventoryChangedAction(){
+        if (inventoryComboBox.getValue() != null) {
+            updateCatalogService(inventoryService.get(inventoryComboBox.getValue()));
+        }
+        catalogObservableList.clear();
+        if (catalogService.getAll().isEmpty()) {
+            refresh();
+            PaneUtil.showAlert(Alert.AlertType.INFORMATION, "There are no catalogs", "You must add at least one catalog on this inventory to be able to access this function");
+        } else {
+            refreshCatalogComboBox();
+            //refreshTable(); // TODO revisar, si se llama aquí, aún no se ha seleccionado un catálogo, por lo cual no se puede refrescar la table
+            catalogComboBox.setVisible(true);
+        }
+    }
+
+    /**
+     * This action is triggered when the catalog selected is changed to another.
+     */
+    private void catalogChangedAction(){
+        refreshTable();
+        updateResultsLabel();
+        createTiledPane.setVisible(true);
+        filterField.setVisible(true);
     }
 
     private void backAction() {
@@ -441,8 +454,8 @@ public class ManageItem implements PaneViewer {
      * Refresh the pane. Cleans all the components.
      */
     public static void refresh() {
-        inventoryComboBox.getSelectionModel().clearSelection();
-        catalogComboBox.getSelectionModel().clearSelection();
+        //inventoryComboBox.getSelectionModel().clearSelection();///TODO está generando un IndexOutOfBounds
+        catalogComboBox.getItems().clear();
         catalogObservableList.clear();
         filterField.clear();
         filterField.setVisible(false);
@@ -454,16 +467,14 @@ public class ManageItem implements PaneViewer {
     public static void refreshInventoryComboBox() {
         initializeServices();
         if (!inventoryObservableList.isEmpty()) {
-            inventoryObservableList.clear();
-            inventoryObservableList.addAll(inventoryService.getNamesList());
+            inventoryObservableList.setAll(inventoryService.getNamesList());
         }
     }
 
     private void refreshCatalogComboBox() {
         if (inventoryComboBox.getValue() != null) {
             updateCatalogService(inventoryService.get(inventoryComboBox.getValue()));
-            catalogObservableList.clear();
-            catalogObservableList.addAll(catalogService.getNamesList());
+            catalogObservableList.setAll(catalogService.getNamesList());
         }
     }
 
