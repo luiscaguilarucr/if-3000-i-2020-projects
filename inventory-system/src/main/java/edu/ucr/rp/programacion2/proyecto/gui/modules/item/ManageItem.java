@@ -469,6 +469,11 @@ public class ManageItem implements PaneViewer {
      * Refresh the pane. Cleans all the components.
      */
     public static void refresh() {
+        /*initializeServices();
+        if (inventoryService.getAll().isEmpty()) {
+            ManagePane.clearPane();
+            PaneUtil.showAlert(Alert.AlertType.INFORMATION, "There are no inventories", "You must add at least one inventory to be able to access this function");
+        }*/ //TODO validar que no se pueda ingresar si no existen inventarios
         //inventoryComboBox.getSelectionModel().clearSelection();///TODO está generando un IndexOutOfBounds
         refreshInventoryComboBox();
         catalogComboBox.getItems().clear();

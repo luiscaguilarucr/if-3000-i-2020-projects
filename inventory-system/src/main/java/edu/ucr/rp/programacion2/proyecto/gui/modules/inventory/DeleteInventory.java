@@ -13,8 +13,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import org.controlsfx.control.CheckComboBox;
 
-import static edu.ucr.rp.programacion2.proyecto.gui.modules.util.LabelConstants.TITLE_CATALOG_FORM;
-import static edu.ucr.rp.programacion2.proyecto.gui.modules.util.LabelConstants.TITLE_DELETE_CATALOG;
+import static edu.ucr.rp.programacion2.proyecto.gui.modules.util.LabelConstants.*;
 
 /**
  * This class shows the actions to remove 1 or more inventories.
@@ -56,7 +55,7 @@ public class DeleteInventory implements PaneViewer {
      */
     public static void refresh() {
         initializeInventoryService();
-        if (inventoryService.getAll().size() == 0) {
+        if (inventoryService.getAll().isEmpty()) {
             ManagePane.clearPane();
             PaneUtil.showAlert(Alert.AlertType.INFORMATION, "There are no inventories", "You must add at least one inventory to be able to access this function");
         }
@@ -75,11 +74,11 @@ public class DeleteInventory implements PaneViewer {
      * Configure and add the required components in the pane.
      */
     private void addControls() {
-        BuilderFX.buildLabelTitleNormal(TITLE_DELETE_CATALOG, pane, 0, 0);
+        BuilderFX.buildLabelTitleNormal(TITLE_DELETE_INVENTORY, pane, 0, 0);
         inventoryIndicationLabel = PaneUtil.buildLabel(pane, "Select the inventory", 0, 1);
         buildCheckComboBoxComboBox();
         deleteInventoryButton = PaneUtil.buildButtonImage(new Image("delete.png"), pane, 2, 1);
-        cancelButton = PaneUtil.buildButton("Cancel", pane, 2, 1);
+        cancelButton = PaneUtil.buildButton("Cancel", pane, 3, 1);
     }
 
     /**
