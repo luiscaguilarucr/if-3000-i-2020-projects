@@ -1,5 +1,6 @@
 package edu.ucr.rp.programacion2.proyecto.logic;
 
+import edu.ucr.rp.programacion2.proyecto.util.inventorycontrol.InventoryControlService;
 import junit.framework.TestCase;
 
 public class InventoryControlServiceTest extends TestCase {

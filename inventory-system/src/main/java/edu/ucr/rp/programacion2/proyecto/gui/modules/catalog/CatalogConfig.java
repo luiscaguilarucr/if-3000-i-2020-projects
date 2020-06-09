@@ -9,7 +9,7 @@ import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneName;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.ManagePane;
 import edu.ucr.rp.programacion2.proyecto.logic.CatalogService;
-import edu.ucr.rp.programacion2.proyecto.logic.InventoryControlService;
+import edu.ucr.rp.programacion2.proyecto.util.inventorycontrol.InventoryControlService;
 import edu.ucr.rp.programacion2.proyecto.logic.InventoryService;
 import edu.ucr.rp.programacion2.proyecto.util.builders.BuilderFX;
 import javafx.geometry.HPos;

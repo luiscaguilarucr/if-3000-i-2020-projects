@@ -6,7 +6,7 @@ import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InventoryService implements Service<Inventory, String, List>{
+public class InventoryService implements Service<Inventory, String>{
     //  Variables  \\
     private static InventoryService instance;
     private List<Inventory> list;

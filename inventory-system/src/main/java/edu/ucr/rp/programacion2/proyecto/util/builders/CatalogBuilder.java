@@ -2,7 +2,7 @@ package edu.ucr.rp.programacion2.proyecto.util.builders;
 
 import edu.ucr.rp.programacion2.proyecto.domain.Catalog;
 import edu.ucr.rp.programacion2.proyecto.domain.Item;
-import edu.ucr.rp.programacion2.proyecto.domain.Configuration;
+import edu.ucr.rp.programacion2.proyecto.util.inventorycontrol.Configuration;
 
 import java.util.ArrayList;
 import java.util.List;

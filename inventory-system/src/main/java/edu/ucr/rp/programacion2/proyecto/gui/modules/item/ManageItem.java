@@ -11,7 +11,7 @@ import edu.ucr.rp.programacion2.proyecto.gui.manage.ManagePane;
 import edu.ucr.rp.programacion2.proyecto.util.builders.BuilderFX;
 import edu.ucr.rp.programacion2.proyecto.gui.modules.catalog.CatalogConfig;
 import edu.ucr.rp.programacion2.proyecto.logic.CatalogService;
-import edu.ucr.rp.programacion2.proyecto.logic.InventoryControlService;
+import edu.ucr.rp.programacion2.proyecto.util.inventorycontrol.InventoryControlService;
 import edu.ucr.rp.programacion2.proyecto.logic.InventoryService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

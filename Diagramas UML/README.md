@@ -1,6 +1,6 @@
 # UML Diagrams
 
-## Packages.
+## Domain Model Diagram.
 
 ![UML][Diagram]
 

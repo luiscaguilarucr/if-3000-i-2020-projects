@@ -1,4 +1,4 @@
-package edu.ucr.rp.programacion2.proyecto.domain;
+package edu.ucr.rp.programacion2.proyecto.util.inventorycontrol;
 
 import java.util.Objects;
 

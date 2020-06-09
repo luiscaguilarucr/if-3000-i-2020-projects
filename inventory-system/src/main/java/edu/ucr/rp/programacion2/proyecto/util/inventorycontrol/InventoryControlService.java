@@ -1,8 +1,9 @@
-package edu.ucr.rp.programacion2.proyecto.logic;
+package edu.ucr.rp.programacion2.proyecto.util.inventorycontrol;
 
 import edu.ucr.rp.programacion2.proyecto.domain.Catalog;
 import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
-import edu.ucr.rp.programacion2.proyecto.domain.InventoryControl;
+import edu.ucr.rp.programacion2.proyecto.logic.CatalogService;
+import edu.ucr.rp.programacion2.proyecto.logic.InventoryService;
 
 import java.util.ArrayList;
 import java.util.List;

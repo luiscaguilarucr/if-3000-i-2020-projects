@@ -1,7 +1,7 @@
 package edu.ucr.rp.programacion2.proyecto.persistance;
 
 import edu.ucr.rp.programacion2.proyecto.domain.Catalog;
-import edu.ucr.rp.programacion2.proyecto.domain.Configuration;
+import edu.ucr.rp.programacion2.proyecto.util.inventorycontrol.Configuration;
 import edu.ucr.rp.programacion2.proyecto.domain.Item;
 import edu.ucr.rp.programacion2.proyecto.util.JsonUtil;
 import edu.ucr.rp.programacion2.proyecto.util.builders.CatalogBuilder;
