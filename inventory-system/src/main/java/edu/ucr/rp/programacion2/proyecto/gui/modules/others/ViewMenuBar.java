@@ -116,7 +116,7 @@ public class ViewMenuBar implements PaneViewer {
 
         ////////////////////////////////////////// MenuItems for m_Item
         //MenuItem mI_ManageItem
-        ImageView iV_mI_ManageItem = new ImageView(new Image("addIcon.png"));
+        ImageView iV_mI_ManageItem = new ImageView(new Image("item.png"));
         MenuItem mI_ManageItem = new MenuItem("Manage", iV_mI_ManageItem);
 
         mI_ManageItem.setOnAction(event -> {

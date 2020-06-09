@@ -3,16 +3,13 @@ package edu.ucr.rp.programacion2.proyecto.gui.modules.item;
 
 import edu.ucr.rp.programacion2.proyecto.domain.Catalog;
 import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
-import edu.ucr.rp.programacion2.proyecto.domain.InventoryControl;
 import edu.ucr.rp.programacion2.proyecto.domain.Item;
 import edu.ucr.rp.programacion2.proyecto.gui.modules.util.PaneUtil;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneName;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.ManagePane;
 import edu.ucr.rp.programacion2.proyecto.util.builders.BuilderFX;
-import edu.ucr.rp.programacion2.proyecto.gui.modules.catalog.CatalogConfig;
 import edu.ucr.rp.programacion2.proyecto.logic.CatalogService;
-import edu.ucr.rp.programacion2.proyecto.util.inventorycontrol.InventoryControlService;
 import edu.ucr.rp.programacion2.proyecto.logic.InventoryService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -29,10 +26,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
 import static edu.ucr.rp.programacion2.proyecto.gui.modules.util.LabelConstants.*;
 import static edu.ucr.rp.programacion2.proyecto.gui.modules.util.UIConstants.*;
 import static edu.ucr.rp.programacion2.proyecto.util.builders.BuilderFX.setButtonEffect;
@@ -44,18 +43,14 @@ public class ManageItem implements PaneViewer {
     private static Button deleteAllItemsButton;
     private static Button backButton;
     private static TextField filterField;
-    private static TableColumn iDTableColumn;
     private static ObservableList inventoryObservableList;
     private static ObservableList catalogObservableList;
     private static TableView tableView;
     private static TableColumn deleteItemColumn;
-    private static Pagination pagination;
     private static Label resultsLabel;
     private static GridPane pane;
     private static InventoryService inventoryService;
     private static CatalogService catalogService;
-    private static InventoryControlService inventoryControlService;
-    private static CatalogConfig catalogConfig = new CatalogConfig();
     private static List<TableColumn> tableColumns = new ArrayList<>();
     private static ComboBox<String> inventoryComboBox;
     private static ComboBox<String> catalogComboBox;
@@ -85,7 +80,7 @@ public class ManageItem implements PaneViewer {
         setupControls(pane);
         addHandlers();
         setupStyles();
-        if(catalogComboBox.getValue() != null){
+        if (catalogComboBox.getValue() != null) {
             updateCatalogService(inventoryService.get(inventoryComboBox.getValue()));
         }
         return pane;
@@ -280,21 +275,26 @@ public class ManageItem implements PaneViewer {
         deleteAllItemsButton.setOnAction(e -> deleteItemAction());
         createItemButton.setOnAction(e -> createItemAction());
         inventoryComboBox.setOnAction(event -> {
-            refreshCatalogComboBox();
-            refreshTable();
-            catalogComboBox.setVisible(true);
+            if (inventoryComboBox.getValue() != null) {
+                updateCatalogService(inventoryService.get(inventoryComboBox.getValue()));
+            }
+            if (catalogService.getAll().isEmpty()) {
+                refresh();
+                PaneUtil.showAlert(Alert.AlertType.INFORMATION, "There are no catalogs", "You must add at least one catalog on this inventory to be able to access this function");
+            } else {
+                refreshCatalogComboBox();
+                refreshTable();
+                catalogComboBox.setVisible(true);
+            }
         });
         catalogComboBox.setOnAction(event -> {
             refreshTable();
             updateResultsLabel();
             createTiledPane.setVisible(true);
             filterField.setVisible(true);
+            fillTable(tableView);
         });
         backButton.setOnAction(e -> backAction());
-        filterField.setOnMouseClicked(event -> {
-            tableView.getItems().clear();
-            tableView.setItems(getFilteredList());
-        });
     }
 
     private void backAction() {
@@ -314,7 +314,10 @@ public class ManageItem implements PaneViewer {
             CreateItemForm.setCatalog(catalog);
             CreateItemForm.setPreviousPane(pane);
             ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.CREATE_ITEM));
+            refreshTable();
+            updateResultsLabel();
         }
+        refresh();
         System.out.println("Create item Button pressed");
     }
 
@@ -334,12 +337,12 @@ public class ManageItem implements PaneViewer {
                     Catalog catalog = catalogService.get(catalogComboBox.getValue());
                     // Validate edit
                     if (catalog != null) {
-                        System.out.println("Before: "+catalog);
+                        System.out.println("Before: " + catalog);
                         catalog.getItems().clear();
                         if (catalogService.edit(catalog)) {
                             // Remove -> valid
                             System.out.println("edited, items deleted");
-                            System.out.println("After: "+catalog);
+                            System.out.println("After: " + catalog);
 
                             // Refresh catalogs list
                             refresh();
@@ -367,31 +370,46 @@ public class ManageItem implements PaneViewer {
     }
 
     /**
+     * Fills the table with an list of objects.
+     *
+     * @param tableView table view to add items.
+     */
+    private static void fillTable(TableView tableView) {
+        try {
+            if (!catalogComboBox.getValue().isEmpty()) {
+                ObservableList listFiltered = getFilteredList(generateDataInMap(catalogService.get(catalogComboBox.getValue()).getItems()));
+                tableView.getItems().clear();
+                tableView.setItems(listFiltered);
+            }
+
+        } catch (Exception e) {
+            System.err.println("Error: " + e.getMessage() + ", in " + e.getCause());
+        }
+    }
+
+    /**
      * @return
      */
-    private static FilteredList<InventoryControl> getFilteredList() {
+    private static FilteredList getFilteredList(ObservableList observableList) throws Exception {
         //  Getting list
-        ObservableList<InventoryControl> items = inventoryObservableList;
-        FilteredList<InventoryControl> filteredList = new FilteredList<>(items);
+        ObservableList<Map> items = observableList;
+        FilteredList<Map> filteredList = new FilteredList(items);
+
         // Adding filters
         // Case #1 -> Show all
         filteredList.setPredicate(b -> true);
-
         // Case #2 -> Show content searched in filterField.
         filterField.textProperty().addListener((observable, oldValue, newValue) -> {
-            filteredList.setPredicate(inventoryControl -> {
+            filteredList.setPredicate(Features -> {
                 // SubCase #1 filter is empty or null
                 if (newValue == null || newValue.isEmpty()) return true;
 
                 // Get the input.
-                String inputFilter = newValue.toLowerCase();
+                String inputFilter = newValue;
                 // SubCase #2 filter the name of the inventories.
-                if (inventoryControl.getInventoryName().toLowerCase().contains(inputFilter)) {
+                if (Features.containsValue(inputFilter)) {
                     return true;
                 }
-                // SubCase #3 filter the name of the catalogs.
-                if(inventoryControl.getCatalogName() != null)
-                    return inventoryControl.getCatalogName().toLowerCase().contains(inputFilter);
                 return false;
             });
             // Update results message.
@@ -407,6 +425,8 @@ public class ManageItem implements PaneViewer {
     public static void refresh() {
         filterField.clear();
         catalogObservableList.clear();
+        inventoryComboBox.getSelectionModel().clearSelection();
+        catalogComboBox.getSelectionModel().clearSelection();
         filterField.setVisible(false);
         catalogComboBox.setVisible(false);
         createTiledPane.setVisible(false);
@@ -415,8 +435,10 @@ public class ManageItem implements PaneViewer {
 
     public static void refreshInventoryComboBox() {
         initializeServices();
-        inventoryObservableList.clear();
-        inventoryObservableList.addAll(inventoryService.getNamesList());
+        if (!inventoryObservableList.isEmpty()) {
+            inventoryObservableList.clear();
+            inventoryObservableList.addAll(inventoryService.getNamesList());
+        }
     }
 
     private void refreshCatalogComboBox() {
@@ -429,7 +451,9 @@ public class ManageItem implements PaneViewer {
 
     private void refreshTable() {
         tableView.getColumns().clear();
+
         tableView.getItems().clear();
+
         if (inventoryComboBox.getValue() != null) {
             updateCatalogService(inventoryService.get(inventoryComboBox.getValue()));
         }
@@ -452,6 +476,9 @@ public class ManageItem implements PaneViewer {
                         System.out.println(e.getMessage());
                     }
                 }
+                deleteItemColumn.getStyleClass().add("table-view-column-button");
+                deleteItemColumn.setMaxWidth(70);
+                deleteItemColumn.setMinWidth(70);
             }
         }
     }
@@ -460,7 +487,7 @@ public class ManageItem implements PaneViewer {
      * @param items
      * @return
      */
-    private ObservableList<Map> generateDataInMap(List<Item> items) throws Exception {
+    private static ObservableList<Map> generateDataInMap(List<Item> items) throws Exception {
         ObservableList<Map> observableList = FXCollections.observableArrayList();
         for (int i = 0; i < items.size(); i++) { //por cada item, tener un mapa, y el mapa es features.
             if (items.get(i) instanceof Item) {
