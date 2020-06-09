@@ -8,6 +8,7 @@ import edu.ucr.rp.programacion2.proyecto.gui.modules.item.CreateItemForm;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneName;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.ManagePane;
+import edu.ucr.rp.programacion2.proyecto.gui.modules.item.ManageItem;
 import edu.ucr.rp.programacion2.proyecto.logic.CatalogService;
 import edu.ucr.rp.programacion2.proyecto.util.inventorycontrol.InventoryControlManager;
 import edu.ucr.rp.programacion2.proyecto.logic.InventoryService;
@@ -316,6 +317,7 @@ public class CatalogConfig implements PaneViewer {
                 }
         }
     }
+
     /**
      *
      */
@@ -323,8 +325,12 @@ public class CatalogConfig implements PaneViewer {
         DeleteInventory.setInventory(inventoryComboBox.getValue());
         ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.DELETE_INVENTORY));
     }
-    private static void showItemsAction() {// TODO showItems
-
+    private void showItemsAction() {
+        ManageItem.refresh();
+        ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.MANAGE_ITEM));
+        ManageItem.setInventorySelected(inventoryComboBox.getValue());
+        ManageItem.setCatalogSelected(catalogComboBox.getValue());
+        ManageItem.setPreviousPane(pane);
     }
     private static void addItemsAction() {
         // Validations

@@ -122,7 +122,7 @@ public class ViewMenuBar implements PaneViewer {
         mI_ManageItem.setOnAction(event -> {
             ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.MANAGE_ITEM));
             ManageItem.refresh();
-            ManageItem.refreshInventoryComboBox();
+            ManageItem.setPreviousPane(null);
         });
 
         m_Item.getItems().addAll(mI_ManageItem);

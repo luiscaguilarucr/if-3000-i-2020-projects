@@ -5,6 +5,7 @@ import edu.ucr.rp.programacion2.proyecto.gui.modules.util.PaneUtil;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.ManagePane;
 import edu.ucr.rp.programacion2.proyecto.logic.InventoryService;
+import edu.ucr.rp.programacion2.proyecto.util.builders.BuilderFX;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -12,6 +13,15 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 
+import static edu.ucr.rp.programacion2.proyecto.gui.modules.util.LabelConstants.TITLE_CATALOG_FORM;
+import static edu.ucr.rp.programacion2.proyecto.gui.modules.util.LabelConstants.TITLE_INVENTORY_FORM;
+
+/**
+ * This class shows the actions to add new inventory.
+ *
+ * @author Luis Carlos Aguilar Morales | B90514
+ * @version 2.0
+ */
 public class InventoryForm implements PaneViewer {
     private Inventory inventory;
     private InventoryService inventoryService;
@@ -21,29 +31,47 @@ public class InventoryForm implements PaneViewer {
     private Button cancelButton;
     private GridPane pane;
 
+    /**
+     * Return the pane with all the components and styles added.
+     *
+     * @return {@code GridPane} pane with components.
+     */
     public GridPane getInventoryFormPane() {
         pane = PaneUtil.buildPane();
         initializeInventoryService();
-        setupControls();
+        addControls();
         addHandlers();
         return pane;
     }
 
+    /**
+     * This method initializes the inventory service.
+     */
     private void initializeInventoryService() {
         inventoryService = InventoryService.getInstance();
     }
 
+    /**
+     * This method restarts the GridPane to make it reusable.
+     */
     public void refresh() {
         inventoryNameTextField.clear();
     }
 
-    private void setupControls() {
+    /**
+     * Configure and add the required components in the pane.
+     */
+    private void addControls() {
+        BuilderFX.buildLabelTitleNormal(TITLE_INVENTORY_FORM, pane, 0, 0);
         inventoryNameLabel = PaneUtil.buildLabel(pane, "Inventory name: ", 0, 1);
         inventoryNameTextField = PaneUtil.buildTextInput(pane, 1);
         saveInventoryButton = PaneUtil.buildButtonImage(new Image("save.png"), pane, 2, 1);
         cancelButton = PaneUtil.buildButton("Cancel", pane, 3, 1);
     }
 
+    /**
+     * Add functionality to buttons or events.
+     */
     private void addHandlers() {
         saveInventoryButton.setOnAction((actionEvent) -> {
             generateInventory();
@@ -56,6 +84,9 @@ public class InventoryForm implements PaneViewer {
         });
     }
 
+    /**
+     * This method generates a new inventory based on the information entered.
+     */
     private void generateInventory() {
         Boolean emptySpace = false, wasAdded = false;
         if (inventoryNameTextField.getText().isEmpty()) {

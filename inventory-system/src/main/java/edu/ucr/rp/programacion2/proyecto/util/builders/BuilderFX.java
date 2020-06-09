@@ -48,6 +48,15 @@ public class BuilderFX {
         GridPane.setHalignment(label, HPos.LEFT);
     }
 
+    public static void buildLabelTitleNormal(String text, GridPane pane, int column, int row) {
+        Label label = new Label(text);
+        label.setPadding(TITLE_DEFAULT_INSETS);
+        Style.setLabelConfig(label, 1);
+        Style.setLabelColor(label, PRIMARY_TEXT);
+        pane.add(label, column, row);
+        GridPane.setHalignment(label, HPos.LEFT);
+    }
+
     public static void buildLabelNormal(String text, GridPane pane, int column, int row) {
         Label label = new Label(text);
         label.setPadding(new Insets(5, 0, 10, 0));

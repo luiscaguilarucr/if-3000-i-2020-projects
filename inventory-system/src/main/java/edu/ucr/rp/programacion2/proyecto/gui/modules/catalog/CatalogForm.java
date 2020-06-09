@@ -6,6 +6,7 @@ import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.ManagePane;
 import edu.ucr.rp.programacion2.proyecto.logic.CatalogService;
 import edu.ucr.rp.programacion2.proyecto.logic.InventoryService;
+import edu.ucr.rp.programacion2.proyecto.util.builders.BuilderFX;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
@@ -17,8 +18,14 @@ import edu.ucr.rp.programacion2.proyecto.util.builders.CatalogBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
+import static edu.ucr.rp.programacion2.proyecto.gui.modules.util.LabelConstants.TITLE_CATALOG_FORM;
+import static edu.ucr.rp.programacion2.proyecto.gui.modules.util.LabelConstants.TITLE_MANAGE_ITEM;
+
 /**
+ * This class shows the actions to add new catalog.
  *
+ * @author Luis Carlos Aguilar Morales | B90514
+ * @version 2.0
  */
 public class CatalogForm implements PaneViewer {
     private static InventoryService inventoryService;
@@ -39,20 +46,43 @@ public class CatalogForm implements PaneViewer {
     private static Boolean wasAdded = false;
     private static GridPane pane;
 
+    /**
+     * Return the pane with all the components and styles added.
+     *
+     * @return {@code GridPane} pane with components.
+     */
     public GridPane getCatalogFormPane() {
         pane = PaneUtil.buildPane();
         initializeInventoryService();
-        setupControls();
+        addControls();
         addHandlers();
         return pane;
     }
 
+    /**
+     * This method initializes the inventory service.
+     */
     private static void initializeInventoryService() {
         inventoryService = InventoryService.getInstance();
     }
 
-    private void initializeCatalogService(Inventory inventory) {
+    /**
+     * This method initializes the catalog service.
+     */
+    private void updateCatalogService(Inventory inventory) {
         catalogService = new CatalogService(inventory);
+    }
+
+    /**
+     * This methods restarts the GridPane to make it reusable and validates whether it is possible to remove a catalog.
+     */
+    public static void refresh() {
+        initializeInventoryService();
+        if (inventoryService.getAll().size() == 0) {
+            ManagePane.clearPane();
+            PaneUtil.showAlert(Alert.AlertType.INFORMATION, "There are no inventories", "You must add at least one inventory to be able to access this function");
+        }
+        refreshItems();
     }
 
     private static void refreshItems() {
@@ -67,27 +97,34 @@ public class CatalogForm implements PaneViewer {
         inventoryObservableList.addAll(inventoryService.getNamesList());
     }
 
-    private void setupControls() {
-        inventoryIndicationLabel = PaneUtil.buildLabel(pane, "Chose an inventory", 0, 0);
+    /**
+     * Configure and add the required components in the pane.
+     */
+    private void addControls() {
+        BuilderFX.buildLabelTitleNormal(TITLE_CATALOG_FORM, pane, 0, 0);
+        inventoryIndicationLabel = PaneUtil.buildLabel(pane, "Chose an inventory", 0, 1);
         buildInventoryComboBox();
-        catalogNameLabel = PaneUtil.buildLabel(pane, "Catalog name: ", 0, 1);
-        catalogNameTextField = PaneUtil.buildTextInput(pane, 1);
-        featureNameLabel = PaneUtil.buildLabel(pane, "Feature:", 0, 2);
-        featureNameTextField = PaneUtil.buildTextInput(pane, 2);
-        addFeatureButton = PaneUtil.buildButtonImage(new Image("add.png"), pane, 2, 2);
-        saveCatalogButton = PaneUtil.buildButton("Save catalog", pane, 1, 6);
+        catalogNameLabel = PaneUtil.buildLabel(pane, "Catalog name: ", 0, 2);
+        catalogNameTextField = PaneUtil.buildTextInput(pane, 2);
+        featureNameLabel = PaneUtil.buildLabel(pane, "Feature:", 0, 3);
+        featureNameTextField = PaneUtil.buildTextInput(pane, 3);
+        addFeatureButton = PaneUtil.buildButtonImage(new Image("add.png"), pane, 2, 3);
+        saveCatalogButton = PaneUtil.buildButton("Save catalog", pane, 1, 4);
         saveCatalogButton.setVisible(false);
         addFeatureButton.setVisible(false);
-        cancelButton = PaneUtil.buildButton("Cancel", pane, 3, 0);
+        cancelButton = PaneUtil.buildButton("Cancel", pane, 2, 1);
     }
 
+    /**
+     * Add functionality to buttons or events.
+     */
     private void addHandlers() {
         cancelButton.setOnAction(e -> {
             ManagePane.clearPane();
         });
         inventoryComboBox.setOnAction(e -> {
             if (inventoryComboBox.getValue() != null) {
-                initializeCatalogService(inventoryService.get(inventoryComboBox.getValue()));
+                updateCatalogService(inventoryService.get(inventoryComboBox.getValue()));
             }
         });
         saveCatalogButton.setOnAction(e -> {
@@ -106,11 +143,17 @@ public class CatalogForm implements PaneViewer {
         });
     }
 
+    /**
+     * This method builds a ComboBox that displays the inventory list.
+     */
     private void buildInventoryComboBox() {
         inventoryObservableList = FXCollections.observableArrayList();
-        inventoryComboBox = PaneUtil.buildComboBox(pane, inventoryObservableList, 1, 0);
+        inventoryComboBox = PaneUtil.buildComboBox(pane, inventoryObservableList, 1, 1);
     }
 
+    /**
+     * This method allows to add 1 or many characteristics to a given catalog.
+     */
     private void addFeature() {
         if (catalogNameTextField.getText().isEmpty()) {
             emptySpace = true;
@@ -131,6 +174,9 @@ public class CatalogForm implements PaneViewer {
         }
     }
 
+    /**
+     * This method generates a new catalog based on the information entered.
+     */
     private void generateCatalog() {
         if (catalogNameTextField.getText().isEmpty()) {
             emptySpace = true;
@@ -141,7 +187,7 @@ public class CatalogForm implements PaneViewer {
         } else if (schema.size() > 0) {
             featureNameTextField.setPromptText("");
             featureNameTextField.setStyle("-fx-background-color: #FFFFFF");
-            initializeCatalogService(inventoryService.get(inventoryComboBox.getValue()));
+            updateCatalogService(inventoryService.get(inventoryComboBox.getValue()));
             catalogBuilder.withName(catalogNameTextField.getText());
             catalogBuilder.withSchema(schema);
             Catalog catalog = catalogBuilder.build();
@@ -153,15 +199,6 @@ public class CatalogForm implements PaneViewer {
         } else {
             PaneUtil.showAlert(Alert.AlertType.INFORMATION, "ERROR when adding", "The catalog was not added");
         }
-    }
-
-    public static void refresh() {
-        initializeInventoryService();
-        if (inventoryService.getAll().size() == 0) {
-            ManagePane.clearPane();
-            PaneUtil.showAlert(Alert.AlertType.INFORMATION, "There are no inventories", "You must add at least one inventory to be able to access this function");
-        }
-        refreshItems();
     }
 
     @Override
