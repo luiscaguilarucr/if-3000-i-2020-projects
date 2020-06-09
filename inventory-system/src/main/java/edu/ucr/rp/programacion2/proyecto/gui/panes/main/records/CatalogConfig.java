@@ -301,7 +301,7 @@ public class CatalogConfig implements PaneViewer {
                         if (catalogService.remove(catalog)) {
                             // Remove -> valid
                             System.out.println("deleted");
-                            // Refresh catalogs list    
+                            // Refresh catalogs list
                             inventoryChangedEvent();
 
                         } else // Remove -> invalid
