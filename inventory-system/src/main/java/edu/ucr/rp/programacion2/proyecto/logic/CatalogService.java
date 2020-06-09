@@ -14,7 +14,7 @@ import java.util.List;
  * @version 2.0
  * Singleton Pattern added.
  */
-public class CatalogService implements Service<Catalog, String, List> {
+public class CatalogService implements Service<Catalog, String> {
     private List<Catalog> list;
     private CatalogPersistence catalogPersistence;
     private IDGenerator idGenerator;

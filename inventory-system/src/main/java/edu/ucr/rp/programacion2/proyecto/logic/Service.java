@@ -1,12 +1,13 @@
 package edu.ucr.rp.programacion2.proyecto.logic;
 
+import java.util.List;
+
 /**
  *
  * @param <E> Element
  * @param <K> key to identified an element
- * @param <T> Type of collection.
  */
-public interface Service<E, K, T> {
+public interface Service<E, K> {
     boolean add(E element);
 
     boolean edit(E element);
@@ -15,5 +16,5 @@ public interface Service<E, K, T> {
 
     E get(K key);
 
-    T getAll();
+    List getAll();
 }

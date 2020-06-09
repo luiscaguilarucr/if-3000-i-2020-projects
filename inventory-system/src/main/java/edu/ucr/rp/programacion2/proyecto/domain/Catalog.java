@@ -1,16 +1,19 @@
 package edu.ucr.rp.programacion2.proyecto.domain;
 
+import edu.ucr.rp.programacion2.proyecto.util.inventorycontrol.Configuration;
+
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class Catalog{
     //  Variable  \\
     private Configuration configuration;
     private String name;
-    private List<Item> items;
+    private List<Map> items;
     private List<String> schema;
     //  Constructor  \\
-    public Catalog(Configuration configuration, String name, List<Item> items, List<String> schema) {
+    public Catalog(Configuration configuration, String name, List<Map> items, List<String> schema) {
         this.configuration = configuration;
         this.name = name;
         this.items = items;
@@ -34,11 +37,11 @@ public class Catalog{
         this.name = name;
     }
 
-    public List<Item> getItems() {
+    public List<Map> getItems() {
         return items;
     }
 
-    public void setItems(List<Item> items) {
+    public void setItems(List<Map> items) {
         this.items = items;
     }
 
@@ -61,7 +64,7 @@ public class Catalog{
     @Override
     public String toString() {
         return "Catalog{" +
-                "id=" + configuration +
+                "configuration=" + configuration +
                 ", name='" + name + '\'' +
                 ", items=" + items +
                 ", schema=" + schema +

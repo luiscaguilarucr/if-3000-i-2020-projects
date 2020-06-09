@@ -1,16 +1,16 @@
 package edu.ucr.rp.programacion2.proyecto.util.builders;
 
 import edu.ucr.rp.programacion2.proyecto.domain.Catalog;
-import edu.ucr.rp.programacion2.proyecto.domain.Item;
-import edu.ucr.rp.programacion2.proyecto.domain.Configuration;
+import edu.ucr.rp.programacion2.proyecto.util.inventorycontrol.Configuration;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class CatalogBuilder {
     private Configuration config;
     private String name;
-    private List<Item> items;
+    private List<Map> items;
     private List<String> schema;
 
     public CatalogBuilder setConfig(Configuration config) {
@@ -23,7 +23,7 @@ public class CatalogBuilder {
         return this;
     }
 
-    public CatalogBuilder withItems(List<Item> items) {
+    public CatalogBuilder withItems(List<Map> items) {
         this.items = items;
         return this;
     }
@@ -39,7 +39,7 @@ public class CatalogBuilder {
         }else if(config.getId()==0)
             config.setId(-1);
         if(items == null){
-            items = new ArrayList<>();
+            items = new ArrayList<Map>();
         }
         return new Catalog(config, name,
                            items,
