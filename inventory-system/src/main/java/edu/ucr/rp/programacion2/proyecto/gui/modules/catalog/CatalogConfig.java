@@ -324,12 +324,12 @@ public class CatalogConfig implements PaneViewer {
         DeleteInventory.setInventory(inventoryComboBox.getValue());
         ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.DELETE_INVENTORY));
     }
-    private void showItemsAction() {// TODO showItems
+    private void showItemsAction() {
         ManageItem.refresh();
         ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.MANAGE_ITEM));
         ManageItem.setInventorySelected(inventoryComboBox.getValue());
         ManageItem.setCatalogSelected(catalogComboBox.getValue());
-        ManageItem.setPreviousPane(getPane());
+        ManageItem.setPreviousPane(pane);
     }
     private static void addItemsAction() {
         // Validations

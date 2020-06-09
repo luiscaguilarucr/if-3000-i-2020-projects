@@ -56,12 +56,9 @@ public class ManageItem implements PaneViewer {
     private static Alert deleteAlert;
     private static ButtonType buttonTypeYes;
     private static ButtonType buttonTypeNo;
-
-
-
     private static Pane previousPane;
 
-    public ManageItem(){
+    public ManageItem() {
         initializeServices();
         pane = BuilderFX.buildRecordsPane();
         setupControls(pane);
@@ -69,6 +66,7 @@ public class ManageItem implements PaneViewer {
         setupStyles();
 
     }
+
     /**
      * This method initialize the services required.
      */
@@ -289,7 +287,7 @@ public class ManageItem implements PaneViewer {
     /**
      * This action is triggered when the inventory selected is changed to another.
      */
-    private static void inventoryChangedAction(){
+    private static void inventoryChangedAction() {
         if (inventoryComboBox.getValue() != null) {
             updateCatalogService(inventoryService.get(inventoryComboBox.getValue()));
         }
@@ -307,7 +305,7 @@ public class ManageItem implements PaneViewer {
     /**
      * This action is triggered when the catalog selected is changed to another.
      */
-    private static void catalogChangedAction(){
+    private static void catalogChangedAction() {
         refreshTable();
         updateResultsLabel();
         createTiledPane.setVisible(true);
@@ -315,7 +313,10 @@ public class ManageItem implements PaneViewer {
     }
 
     private void backAction() {
-        ManagePane.clearPane();
+        if (previousPane == null) {
+            ManagePane.clearPane();
+        } else
+            ManagePane.setCenterPane(previousPane);
         refresh();
     }
 
@@ -362,7 +363,7 @@ public class ManageItem implements PaneViewer {
                             System.out.println("After: " + catalog);
 
                             // Refresh catalogs list
-                            refresh();
+                            refreshTable();
                         } else // Remove -> invalid
                             System.out.println("Error: No edited");
                     }
@@ -444,7 +445,7 @@ public class ManageItem implements PaneViewer {
                 // Get the input.
                 String inputFilter = newValue.toLowerCase();
                 // SubCase #2 filter by keys.
-                if( features.toString().toLowerCase().contains(inputFilter))
+                if (features.toString().toLowerCase().contains(inputFilter))
                     return true;
                 else
                     return false;
@@ -462,6 +463,7 @@ public class ManageItem implements PaneViewer {
      */
     public static void refresh() {
         //inventoryComboBox.getSelectionModel().clearSelection();///TODO está generando un IndexOutOfBounds
+        refreshInventoryComboBox();
         catalogComboBox.getItems().clear();
         catalogObservableList.clear();
         filterField.clear();
@@ -472,10 +474,8 @@ public class ManageItem implements PaneViewer {
     }
 
     public static void refreshInventoryComboBox() {
-        initializeServices();
-        if (!inventoryObservableList.isEmpty()) {
-            inventoryObservableList.setAll(inventoryService.getNamesList());
-        }
+        inventoryComboBox.setItems(FXCollections.observableList(inventoryService.getNamesList()));
+        inventoryComboBox.getSelectionModel().clearSelection();
     }
 
     private static void refreshCatalogComboBox() {
@@ -545,20 +545,23 @@ public class ManageItem implements PaneViewer {
             resultsLabel.setText("Showing " + current + " of " + total + " results.");
         }
     }
+
     public static void setPreviousPane(Pane previousPane) {
         ManageItem.previousPane = previousPane;
     }
 
 
-    public static void setInventorySelected(String inventorySelected){
+    public static void setInventorySelected(String inventorySelected) {
         inventoryComboBox.setValue(inventorySelected);
         inventoryChangedAction();
 
     }
-    public static void setCatalogSelected(String catalogSelected){
+
+    public static void setCatalogSelected(String catalogSelected) {
         catalogComboBox.setValue(catalogSelected);
         catalogChangedAction();
     }
+
     @Override
     public Pane getPane() {
         return createPane();
