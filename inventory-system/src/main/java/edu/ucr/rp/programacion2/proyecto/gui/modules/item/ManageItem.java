@@ -35,6 +35,13 @@ import static edu.ucr.rp.programacion2.proyecto.gui.modules.util.LabelConstants.
 import static edu.ucr.rp.programacion2.proyecto.gui.modules.util.UIConstants.*;
 import static edu.ucr.rp.programacion2.proyecto.util.builders.BuilderFX.setButtonEffect;
 
+/**
+ * This class displays a list of items from a selected inventory and catalog.
+ *
+ * @author Luis Carlos Aguilar Morales | B90127
+ * @author Jeison Araya Mena | B90514
+ * @version 2.0
+ */
 public class ManageItem implements PaneViewer {
     private static TitledPane createTiledPane;
     private static HBox createOptionsHBox;
@@ -57,15 +64,14 @@ public class ManageItem implements PaneViewer {
     private static ButtonType buttonTypeYes;
     private static ButtonType buttonTypeNo;
 
-
     public ManageItem(){
         initializeServices();
         pane = BuilderFX.buildRecordsPane();
         setupControls(pane);
         addHandlers();
         setupStyles();
-
     }
+
     /**
      * This method initialize the services required.
      */
@@ -211,6 +217,7 @@ public class ManageItem implements PaneViewer {
     }
 
     /**
+     * This method allows you to change the value of an item from the item table.
      * @param tableColumn
      */
     private void setEditableColumn(TableColumn tableColumn) {
