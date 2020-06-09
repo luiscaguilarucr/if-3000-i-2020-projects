@@ -38,8 +38,8 @@ public class LabelConstants {
     public static final String INVENTORY_NAME_COLUMN = "Inventory";
     public static final String TITLE_INVENTORY = "Inventory";
     public static final String ID = "Inventory";
-    public static final String TITLE_NEW_ITEM = "New item";
-    public static final String TITLE_DELETE_ALL_ITEMS = "Delete all items";
+    public static final String TITLE_NEW_ITEM = "New";
+    public static final String TITLE_DELETE_ALL_ITEMS = "Delete all";
     public static final String CONFIG_NAME_COLUMN = "Config";
     public static final String TITLE_VIEW_INVENTORY = "View Inventory";
     public static final String TITLE_MANAGE_ITEM = "Manage Item";
