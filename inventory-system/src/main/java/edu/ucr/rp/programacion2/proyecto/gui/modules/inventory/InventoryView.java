@@ -241,6 +241,7 @@ public class InventoryView implements PaneViewer {
 
 
     /**
+     * The list is filtered using the input in the searchTextInput.
      * @return
      */
     private static FilteredList<InventoryControl> getFilteredList() {
@@ -254,7 +255,7 @@ public class InventoryView implements PaneViewer {
         // Case #2 -> Show content searched in filterField.
         filterField.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredList.setPredicate(inventoryControl -> {
-                // SubCase #1 filter is empty or null
+                // SubCase #1 filter is empty or null -> show all
                 if (newValue == null || newValue.isEmpty()) return true;
 
                 // Get the input.
@@ -295,7 +296,7 @@ public class InventoryView implements PaneViewer {
 
     /**
      * Add buttons to a tableView.
-     *
+     *get
      * @param label Button text
      */
     private TableColumn buildButtonColumn(String label, String image, TableView tableView) {

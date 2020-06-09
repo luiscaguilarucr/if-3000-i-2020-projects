@@ -6,8 +6,7 @@ import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.ManagePane;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneName;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneViewer;
-import edu.ucr.rp.programacion2.proyecto.gui.manage.ManagePane;
-import edu.ucr.rp.programacion2.proyecto.util.builders.BuilderFX;
+import edu.ucr.rp.programacion2.proyecto.gui.modules.util.PaneUtil;
 import edu.ucr.rp.programacion2.proyecto.logic.CatalogService;
 import edu.ucr.rp.programacion2.proyecto.logic.InventoryService;
 import edu.ucr.rp.programacion2.proyecto.util.builders.BuilderFX;
@@ -355,7 +354,7 @@ public class ManageItem implements PaneViewer {
         }
     }
 
-    private void deleteOneItemAction(Item item) {
+    private void deleteOneItemAction(Map item) {
         System.out.println("Delete items Button pressed");
         Catalog catalog = catalogService.get(catalogComboBox.getValue());
         if (catalog != null) {
@@ -376,7 +375,7 @@ public class ManageItem implements PaneViewer {
     private static void fillTable(TableView tableView) {
         try {
             if (!catalogComboBox.getValue().isEmpty()) {
-                ObservableList listFiltered = getFilteredList(generateDataInMap(catalogService.get(catalogComboBox.getValue()).getItems()));
+                ObservableList listFiltered = getFilteredList();
                 tableView.getItems().clear();
                 tableView.setItems(listFiltered);
             }
@@ -385,13 +384,35 @@ public class ManageItem implements PaneViewer {
             System.err.println("Error: " + e.getMessage() + ", in " + e.getCause());
         }
     }
-
     /**
+     * This methods creates a new observables list with items.
+     * @param items
      * @return
      */
-    private static FilteredList getFilteredList(ObservableList observableList) throws Exception {
+    private static ObservableList<Map> getObservableList(List<Map> items){
+        return FXCollections.observableArrayList(items);
+    }
+    /**
+     * Get the list of all the inventories and catalogs from InventoryControl Service.
+     *
+     * @return {@code List} list with register in inventory service.
+     */
+    private static List<Map> getList() {
+        Catalog catalog = catalogService.get(catalogComboBox.getValue());
+        if(catalog != null) {
+            return catalog.getItems();
+        }
+        else{
+            return new ArrayList<Map>();
+        }
+    }
+    /**
+     * The list is filtered using the input in the searchTextInput.
+     * @return
+     */
+    private static FilteredList getFilteredList() {
         //  Getting list
-        ObservableList<Map> items = observableList;
+        ObservableList<Map> items = getObservableList(getList());
         FilteredList<Map> filteredList = new FilteredList(items);
 
         // Adding filters
@@ -399,17 +420,14 @@ public class ManageItem implements PaneViewer {
         filteredList.setPredicate(b -> true);
         // Case #2 -> Show content searched in filterField.
         filterField.textProperty().addListener((observable, oldValue, newValue) -> {
-            filteredList.setPredicate(Features -> {
+            filteredList.setPredicate(features -> {
                 // SubCase #1 filter is empty or null
                 if (newValue == null || newValue.isEmpty()) return true;
 
                 // Get the input.
-                String inputFilter = newValue;
-                // SubCase #2 filter the name of the inventories.
-                if (Features.containsValue(inputFilter)) {
-                    return true;
-                }
-                return false;
+                String inputFilter = newValue.toLowerCase();
+                // SubCase #2 filter by keys.
+                return features.toString().toLowerCase().contains(inputFilter);
             });
             // Update results message.
             updateResultsLabel();
@@ -423,9 +441,9 @@ public class ManageItem implements PaneViewer {
      */
     public static void refresh() {
         filterField.clear();
-        catalogObservableList.clear();
         inventoryComboBox.getSelectionModel().clearSelection();
         catalogComboBox.getSelectionModel().clearSelection();
+        catalogObservableList.clear();
         filterField.setVisible(false);
         catalogComboBox.setVisible(false);
         createTiledPane.setVisible(false);
@@ -449,9 +467,9 @@ public class ManageItem implements PaneViewer {
     }
 
     private void refreshTable() {
+        tableView.getItems().clear();
         tableView.getColumns().clear();
 
-        tableView.getItems().clear();
 
         if (inventoryComboBox.getValue() != null) {
             updateCatalogService(inventoryService.get(inventoryComboBox.getValue()));
@@ -470,7 +488,7 @@ public class ManageItem implements PaneViewer {
                 // Validate items
                 if (catalog.getItems() != null) {
                     try {
-                        tableView.getItems().addAll(generateDataInMap(catalog.getItems()));
+                        tableView.getItems().addAll(getObservableList(catalog.getItems()));
                     } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
@@ -482,14 +500,7 @@ public class ManageItem implements PaneViewer {
         }
     }
 
-    /**
-     * This methods creates a new observables list with items.
-     * @param items
-     * @return
-     */
-    private ObservableList<Map> generateDataInMap(List<Map> items){
-        return FXCollections.observableArrayList(items);
-    }
+
 
     /**
      * This methods brings the items form the tables and set them as a List<Map>
