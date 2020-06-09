@@ -63,8 +63,9 @@ public class ManageItem implements PaneViewer {
     private static Alert deleteAlert;
     private static ButtonType buttonTypeYes;
     private static ButtonType buttonTypeNo;
+    private static Pane previousPane;
 
-    public ManageItem(){
+    public ManageItem() {
         initializeServices();
         pane = BuilderFX.buildRecordsPane();
         setupControls(pane);
@@ -79,7 +80,7 @@ public class ManageItem implements PaneViewer {
         inventoryService = InventoryService.getInstance();
     }
 
-    private void updateCatalogService(Inventory inventory) {
+    private static void updateCatalogService(Inventory inventory) {
         catalogService = new CatalogService(inventory);
     }
 
@@ -125,6 +126,7 @@ public class ManageItem implements PaneViewer {
         buttonTypeYes = new ButtonType(YES_LABEL);
         buttonTypeNo = new ButtonType(NO_LABEL);
         deleteAlert = BuilderFX.buildConfirmDialog(DELETE_LABEL, DELETE_ICON, CONFIG_ICON, buttonTypeYes, buttonTypeNo);
+        deleteItemColumn = buildButtonColumn(DELETE_COLUMN, DELETE_ICON, tableView);
 
     }
 
@@ -185,6 +187,9 @@ public class ManageItem implements PaneViewer {
         //Button
         setButtonEffect(createItemButton);
         setButtonEffect(deleteAllItemsButton);
+        deleteItemColumn.getStyleClass().add("table-view-column-button");
+        deleteItemColumn.setMaxWidth(70);
+        deleteItemColumn.setMinWidth(70);
     }
 
     /**
@@ -195,7 +200,7 @@ public class ManageItem implements PaneViewer {
      * @return Column configured and placed.
      * @Param Property Property that identifies the column, with an attribute of the object.
      */
-    public TableColumn buildTableColumn(String text, String property, TableView tableView) {
+    public static TableColumn buildTableColumn(String text, String property, TableView tableView) {
         TableColumn<Map, String> tableColumn = new TableColumn(text);
         tableColumn.setId(property);
         tableColumn.setCellValueFactory(new MapValueFactory<>(property));
@@ -220,7 +225,7 @@ public class ManageItem implements PaneViewer {
      * This method allows you to change the value of an item from the item table.
      * @param tableColumn
      */
-    private void setEditableColumn(TableColumn tableColumn) {
+    private static void setEditableColumn(TableColumn tableColumn) {
         tableColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent>() {
             @Override
             public void handle(TableColumn.CellEditEvent cellEvent) {
@@ -289,7 +294,7 @@ public class ManageItem implements PaneViewer {
     /**
      * This action is triggered when the inventory selected is changed to another.
      */
-    private void inventoryChangedAction(){
+    private static void inventoryChangedAction() {
         if (inventoryComboBox.getValue() != null) {
             updateCatalogService(inventoryService.get(inventoryComboBox.getValue()));
         }
@@ -307,7 +312,7 @@ public class ManageItem implements PaneViewer {
     /**
      * This action is triggered when the catalog selected is changed to another.
      */
-    private void catalogChangedAction(){
+    private static void catalogChangedAction() {
         refreshTable();
         updateResultsLabel();
         createTiledPane.setVisible(true);
@@ -315,7 +320,10 @@ public class ManageItem implements PaneViewer {
     }
 
     private void backAction() {
-        ManagePane.clearPane();
+        if (previousPane == null) {
+            ManagePane.clearPane();
+        } else
+            ManagePane.setCenterPane(previousPane);
         refresh();
     }
 
@@ -362,7 +370,7 @@ public class ManageItem implements PaneViewer {
                             System.out.println("After: " + catalog);
 
                             // Refresh catalogs list
-                            refresh();
+                            refreshTable();
                         } else // Remove -> invalid
                             System.out.println("Error: No edited");
                     }
@@ -444,7 +452,7 @@ public class ManageItem implements PaneViewer {
                 // Get the input.
                 String inputFilter = newValue.toLowerCase();
                 // SubCase #2 filter by keys.
-                if( features.toString().toLowerCase().contains(inputFilter))
+                if (features.toString().toLowerCase().contains(inputFilter))
                     return true;
                 else
                     return false;
@@ -462,6 +470,7 @@ public class ManageItem implements PaneViewer {
      */
     public static void refresh() {
         //inventoryComboBox.getSelectionModel().clearSelection();///TODO está generando un IndexOutOfBounds
+        refreshInventoryComboBox();
         catalogComboBox.getItems().clear();
         catalogObservableList.clear();
         filterField.clear();
@@ -472,20 +481,18 @@ public class ManageItem implements PaneViewer {
     }
 
     public static void refreshInventoryComboBox() {
-        initializeServices();
-        if (!inventoryObservableList.isEmpty()) {
-            inventoryObservableList.setAll(inventoryService.getNamesList());
-        }
+        inventoryComboBox.setItems(FXCollections.observableList(inventoryService.getNamesList()));
+        inventoryComboBox.getSelectionModel().clearSelection();
     }
 
-    private void refreshCatalogComboBox() {
+    private static void refreshCatalogComboBox() {
         if (inventoryComboBox.getValue() != null) {
             updateCatalogService(inventoryService.get(inventoryComboBox.getValue()));
             catalogObservableList.setAll(catalogService.getNamesList());
         }
     }
 
-    private void refreshTable() {
+    public static void refreshTable() {
         tableView.getColumns().clear();
         //tableView.getItems().clear();
         if (inventoryComboBox.getValue() != null && !inventoryComboBox.getValue().isEmpty()) {
@@ -501,12 +508,10 @@ public class ManageItem implements PaneViewer {
                     buildTableColumn(s, s, tableView); //property es el key para encontrar el valor
                 }
                 // Delete Column
-                deleteItemColumn = buildButtonColumn(DELETE_COLUMN, DELETE_ICON, tableView);
+                tableView.getColumns().add(deleteItemColumn);
                 // Validate items
                 fillTable(tableView);
-                deleteItemColumn.getStyleClass().add("table-view-column-button");
-                deleteItemColumn.setMaxWidth(70);
-                deleteItemColumn.setMinWidth(70);
+
             }
         }
     }
@@ -517,14 +522,14 @@ public class ManageItem implements PaneViewer {
      *
      * @return {@code List} of items.
      */
-    private List<Map> getItemsFromTable() {
+    private static List<Map> getItemsFromTable() {
         return itemsList;
     }
 
     /**
      * Save changes done in the table.
      */
-    private void saveChanges() {
+    private static void saveChanges() {
         updateCatalogService(inventoryService.get(inventoryComboBox.getValue()));
         Catalog catalog = catalogService.get(catalogComboBox.getValue());
         if (catalog != null) {
@@ -546,6 +551,22 @@ public class ManageItem implements PaneViewer {
             int current = tableView.getItems().size();      // Number of inventories and catalogs in the table.
             resultsLabel.setText("Showing " + current + " of " + total + " results.");
         }
+    }
+
+    public static void setPreviousPane(Pane previousPane) {
+        ManageItem.previousPane = previousPane;
+    }
+
+
+    public static void setInventorySelected(String inventorySelected) {
+        inventoryComboBox.setValue(inventorySelected);
+        inventoryChangedAction();
+
+    }
+
+    public static void setCatalogSelected(String catalogSelected) {
+        catalogComboBox.setValue(catalogSelected);
+        catalogChangedAction();
     }
 
     @Override
