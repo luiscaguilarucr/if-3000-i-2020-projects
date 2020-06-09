@@ -2,6 +2,7 @@
 package edu.ucr.rp.programacion2.proyecto.gui.modules.inventory;
 
 import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
+import edu.ucr.rp.programacion2.proyecto.gui.modules.item.ManageItem;
 import edu.ucr.rp.programacion2.proyecto.util.inventorycontrol.InventoryControl;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneName;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneViewer;
@@ -373,7 +374,12 @@ public class InventoryView implements PaneViewer {
 
     // Table Buttons
     private void viewItemsAction(InventoryControl inventoryControl) {//TODO actionEvent
-        System.out.println("Showing to items of " + inventoryControl.getCatalogName());
+        ManageItem.refresh();
+        ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.MANAGE_ITEM));
+        ManageItem.setInventorySelected(inventoryControl.getInventoryName());
+        ManageItem.setCatalogSelected(inventoryControl.getCatalogName());
+        ManageItem.setPreviousPane(getPane());
+        System.out.println("Showing to items of " + inventoryControl);
         refresh();
     }
 
