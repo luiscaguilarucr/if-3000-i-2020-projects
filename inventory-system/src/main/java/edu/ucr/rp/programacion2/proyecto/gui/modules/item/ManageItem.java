@@ -492,7 +492,7 @@ public class ManageItem implements PaneViewer {
         }
     }
 
-    private static void refreshTable() {
+    public static void refreshTable() {
         tableView.getColumns().clear();
         //tableView.getItems().clear();
         if (inventoryComboBox.getValue() != null && !inventoryComboBox.getValue().isEmpty()) {

@@ -265,6 +265,7 @@ public class CreateItemForm implements PaneViewer {
 
             if (saveChange(catalogSelected)) {
                 System.out.println("Cambios guardados correctamente");
+                ManageItem.refreshTable();
                 backAction();
             }else
                 System.out.println("Error al guardar el catálogo");
