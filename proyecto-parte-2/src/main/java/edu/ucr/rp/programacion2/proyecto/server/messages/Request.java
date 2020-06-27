@@ -1,4 +1,4 @@
-package edu.ucr.rp.programacion2.proyecto.server;
+package edu.ucr.rp.programacion2.proyecto.server.messages;
 
 
 public class Request {

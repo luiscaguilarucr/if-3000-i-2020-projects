@@ -1,12 +1,11 @@
-package edu.ucr.rp.programacion2.proyecto.server;
+package edu.ucr.rp.programacion2.proyecto.server.messages;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
-@JsonFormat(shape = JsonFormat.Shape.OBJECT)
+
 public enum RequestType {
+    @JsonProperty("START")
     START("START"),
+    @JsonProperty("CLOSE")
     CLOSE("CLOSE");
 
     private String type;
@@ -14,7 +13,6 @@ public enum RequestType {
     RequestType(String type) {
         this.type = type;
     }
-
     public String getType() {
         return type;
     }

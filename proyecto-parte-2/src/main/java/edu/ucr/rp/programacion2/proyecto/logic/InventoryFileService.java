@@ -104,7 +104,7 @@ public class InventoryFileService implements InventoryService{
      * @return {@code List<Inventory>} List with inventory elements
      */
     @Override
-    public List getAll() {
+    public List<Inventory> getAll() {
         refresh();
         return list;
     }
@@ -114,7 +114,7 @@ public class InventoryFileService implements InventoryService{
      *
      * @return  {@code List<String>} List with names of inventories.
      */
-    public List getNamesList(){
+    public List<String> getNamesList(){
         List<String> namesList = new ArrayList();
         for(Inventory inventory : list)
             namesList.add(inventory.getName());

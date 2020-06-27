@@ -9,12 +9,10 @@ import java.util.List;
  */
 public interface Service<E, K> {
     boolean add(E element);
-
     boolean edit(E element);
-
     boolean remove(E element);
     boolean removeAll();
     E get(K key);
-
-    List getAll();
+    List<E> getAll();
+    List<String> getNamesList();
 }
