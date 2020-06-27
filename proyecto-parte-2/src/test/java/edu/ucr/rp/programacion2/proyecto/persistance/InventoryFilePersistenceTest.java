@@ -9,8 +9,8 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InventoryPersistenceTest extends TestCase {
-    private InventoryPersistence inventoryPersistence;
+public class InventoryFilePersistenceTest extends TestCase {
+    private InventoryFilePersistence inventoryFilePersistence;
     private List inventories;
     @Before
     public void initialize(){
@@ -20,10 +20,10 @@ public class InventoryPersistenceTest extends TestCase {
 
     @Test
     public void testSave(){
-        inventoryPersistence = new InventoryPersistence();
+        inventoryFilePersistence = new InventoryFilePersistence();
         for(int i = 0 ; i < 5; i++){
             Inventory inventory = Utility.randomInventory();
-            if(inventoryPersistence.write(inventory))
+            if(inventoryFilePersistence.write(inventory))
                 System.out.println("Se guardo: " + inventory);
             else
                 System.out.println("- No se guardo: " + inventory);
@@ -35,7 +35,7 @@ public class InventoryPersistenceTest extends TestCase {
     public void testDelete(){
         for(int i = 0 ; i < 5; i++){
             Inventory inventory = Utility.randomInventory();
-            if(inventoryPersistence.delete(inventory))
+            if(inventoryFilePersistence.delete(inventory))
                 System.out.println("Se eliminó: " + inventory);
             else
                 System.out.println("- No se eliminó: " + inventory);
@@ -45,14 +45,14 @@ public class InventoryPersistenceTest extends TestCase {
 
     @Test
     public void testGet(){
-        inventoryPersistence = new InventoryPersistence();
-        inventories = inventoryPersistence.read();
+        inventoryFilePersistence = new InventoryFilePersistence();
+        inventories = inventoryFilePersistence.read();
         System.out.println(inventories);
     }
     @Test
     public void testRemoveAll(){
-        inventoryPersistence = new InventoryPersistence();
-        System.out.println("deleteAll(): " + inventoryPersistence.deleteAll());
+        inventoryFilePersistence = new InventoryFilePersistence();
+        System.out.println("deleteAll(): " + inventoryFilePersistence.deleteAll());
     }
 
 }

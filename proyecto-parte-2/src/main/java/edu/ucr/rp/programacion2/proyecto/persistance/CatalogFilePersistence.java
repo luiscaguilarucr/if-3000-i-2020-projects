@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class CatalogPersistence implements Persistence<Catalog, List> {
+public class CatalogFilePersistence implements Persistence<Catalog, List<Catalog>> {
 
     private String path;
     private final String suffix = ".json";
@@ -25,7 +25,7 @@ public class CatalogPersistence implements Persistence<Catalog, List> {
      *
      * @param inventoryName of the list of catalogs
      */
-    public CatalogPersistence(String inventoryName) {
+    public CatalogFilePersistence(String inventoryName) {
         this.path = "files/inventories/" + inventoryName + "/catalogs/";
         verifyCatalogsDir(path);
     }
@@ -55,7 +55,7 @@ public class CatalogPersistence implements Persistence<Catalog, List> {
      * @return {@code List<Catalog>} List of the catalogs.
      */
     @Override
-    public List read() {
+    public List<Catalog> read() {
         return readCatalogs();
     }
 
@@ -235,7 +235,7 @@ public class CatalogPersistence implements Persistence<Catalog, List> {
         }
         return null;
     }
-
+    @Override
     public boolean deleteAll(){
         try {
             FileUtils.cleanDirectory(new File(path));

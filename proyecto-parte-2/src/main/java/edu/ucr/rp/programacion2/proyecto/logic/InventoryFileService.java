@@ -1,6 +1,6 @@
 package edu.ucr.rp.programacion2.proyecto.logic;
 
-import edu.ucr.rp.programacion2.proyecto.persistance.InventoryPersistence;
+import edu.ucr.rp.programacion2.proyecto.persistance.InventoryFilePersistence;
 import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
 
 import java.util.ArrayList;
@@ -10,11 +10,11 @@ public class InventoryFileService implements InventoryService{
     //  Variables  \\
     private static InventoryFileService instance;
     private List<Inventory> list;
-    private InventoryPersistence inventoryPersistence;
+    private InventoryFilePersistence inventoryFilePersistence;
     //  Constructor  \\
     private InventoryFileService(){
         list = new ArrayList<>();
-        inventoryPersistence = new InventoryPersistence();
+        inventoryFilePersistence = new InventoryFilePersistence();
         refresh();
     }
     //  Singleton Pattern  \\
@@ -36,7 +36,7 @@ public class InventoryFileService implements InventoryService{
         refresh();
         if(validateAddition(inventory)){
             list.add(inventory);
-            return inventoryPersistence.write(inventory);
+            return inventoryFilePersistence.write(inventory);
         }
         return false;
     }
@@ -53,7 +53,7 @@ public class InventoryFileService implements InventoryService{
         refresh();
         if(validateEdition(inventory)){
             Inventory oldInventory = list.get(list.indexOf(inventory));
-            return inventoryPersistence.rename(oldInventory.getName(), inventory.getName());
+            return inventoryFilePersistence.rename(oldInventory.getName(), inventory.getName());
         }
         return false;
     }//TODO evaluate how to change name. or identify witch object was selected. [id generator].
@@ -72,12 +72,12 @@ public class InventoryFileService implements InventoryService{
             return false;
         }
         list.remove(inventory);
-        return inventoryPersistence.delete(inventory);
+        return inventoryFilePersistence.delete(inventory);
     }
 
     public boolean removeAll() {
         list.clear();
-        if (!inventoryPersistence.deleteAll()) return false;
+        if (!inventoryFilePersistence.deleteAll()) return false;
         refresh();
         return list.isEmpty();
     }
@@ -181,7 +181,7 @@ public class InventoryFileService implements InventoryService{
 
     private Boolean refresh(){
         //Lee el archivo
-        Object object = inventoryPersistence.read();
+        Object object = inventoryFilePersistence.read();
         //Valida que existe y lo sustituye por la lista en memoria
         if(object!=null){
             list = (List<Inventory>) object;

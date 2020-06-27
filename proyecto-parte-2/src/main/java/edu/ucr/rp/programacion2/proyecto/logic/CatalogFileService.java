@@ -2,7 +2,7 @@ package edu.ucr.rp.programacion2.proyecto.logic;
 
 import edu.ucr.rp.programacion2.proyecto.domain.Catalog;
 import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
-import edu.ucr.rp.programacion2.proyecto.persistance.CatalogPersistence;
+import edu.ucr.rp.programacion2.proyecto.persistance.CatalogFilePersistence;
 import edu.ucr.rp.programacion2.proyecto.util.idgenerator.IDGenerator;
 
 import java.util.ArrayList;
@@ -16,13 +16,13 @@ import java.util.List;
  */
 public class CatalogFileService implements CatalogService {
     private List<Catalog> list;
-    private CatalogPersistence catalogPersistence;
+    private CatalogFilePersistence catalogFilePersistence;
     private IDGenerator idGenerator;
 
     //  Constructor \\
     public CatalogFileService(Inventory inventory) {
         list = new ArrayList<Catalog>();
-        catalogPersistence = new CatalogPersistence(inventory.getName());
+        catalogFilePersistence = new CatalogFilePersistence(inventory.getName());
         refresh();
         idGenerator = new IDGenerator(inventory);
     }
@@ -42,7 +42,7 @@ public class CatalogFileService implements CatalogService {
         if (validateAddition(catalog)) {
             catalog.getConfiguration().setId(idGenerator.generate());
             list.add(catalog);
-            catalogPersistence.write(catalog);
+            catalogFilePersistence.write(catalog);
             refresh();
             return list.contains(catalog);
         }
@@ -61,8 +61,8 @@ public class CatalogFileService implements CatalogService {
         refresh();
         if (validateEdition(catalog)) {
             // Delete the old value
-            if(catalogPersistence.delete(list.get(list.indexOf(catalog))))
-                if(catalogPersistence.write(catalog))//Write the newOne
+            if(catalogFilePersistence.delete(list.get(list.indexOf(catalog))))
+                if(catalogFilePersistence.write(catalog))//Write the newOne
                     list.add(catalog);
                     refresh();
             return list.contains(catalog);
@@ -84,13 +84,13 @@ public class CatalogFileService implements CatalogService {
             return false;
         }
         list.remove(catalog);
-        return catalogPersistence.delete(catalog);
+        return catalogFilePersistence.delete(catalog);
     }
 
     public boolean removeAll() {
         if (!idGenerator.reset()) return false;
         list.clear();
-        if (!catalogPersistence.deleteAll()) return false;
+        if (!catalogFilePersistence.deleteAll()) return false;
         refresh();
         return list.isEmpty();
     }
@@ -214,7 +214,7 @@ public class CatalogFileService implements CatalogService {
 
     private Boolean refresh() {
         //Lee el archivo
-        Object object = catalogPersistence.read();
+        Object object = catalogFilePersistence.read();
         //Valida que existe y lo sustituye por la lista en memoria
         if (object != null) {
             list = (List<Catalog>) object;

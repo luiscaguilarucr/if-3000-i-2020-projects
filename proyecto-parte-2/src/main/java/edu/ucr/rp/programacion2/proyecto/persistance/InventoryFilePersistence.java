@@ -7,12 +7,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-public class InventoryPersistence implements Persistence<Inventory, List> {
+public class InventoryFilePersistence implements Persistence<Inventory, List<Inventory>> {
     //  Variables  \\
     private final String path = "files/inventories/";
     //  Constructor \\
 
-    public InventoryPersistence() {
+    public InventoryFilePersistence() {
         verifyCatalogsDir(path);
     }
 
@@ -60,7 +60,7 @@ public class InventoryPersistence implements Persistence<Inventory, List> {
      * @return {@code List<Inventory>} List of the inventories.
      */
     @Override
-    public List read() {
+    public List<Inventory> read() {
         return getInventories();
     }
 
@@ -88,6 +88,7 @@ public class InventoryPersistence implements Persistence<Inventory, List> {
      * Deletes all the inventories.
      * @return {@code true} if the directory have been removed or doesn't exists.{@code false} Otherwise.
      */
+    @Override
     public boolean deleteAll(){
         File file = new File(path);
         if (!file.exists()) return true;
@@ -106,7 +107,7 @@ public class InventoryPersistence implements Persistence<Inventory, List> {
      *
      * @return {@code List<Inventory>} List of the inventories found.
      */
-    private List getInventories() {
+    private List<Inventory> getInventories() {
         File file = new File(path);
         List<Inventory> inventories = new ArrayList();
 
