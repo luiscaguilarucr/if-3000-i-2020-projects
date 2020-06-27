@@ -7,7 +7,7 @@ import static edu.ucr.rp.programacion2.proyecto.util.Utility.randomInventory;
 import static edu.ucr.rp.programacion2.proyecto.util.Utility.randomInventoryName;
 
 public class InventoryServiceTest extends TestCase {
-    InventoryService inventoryService = InventoryService.getInstance();
+    InventoryService inventoryService = InventoryFileService.getInstance();
 
     public void testAdd() {
         for (int i = 0; i < 2 ; i++){

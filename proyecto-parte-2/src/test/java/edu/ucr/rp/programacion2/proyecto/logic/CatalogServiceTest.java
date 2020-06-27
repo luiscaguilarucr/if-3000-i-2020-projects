@@ -20,7 +20,7 @@ public class CatalogServiceTest extends TestCase {
     @Test
     public void testAddition() {
         inventory = new Inventory("Carros");
-        catalogService = new CatalogService(inventory);
+        catalogService = new CatalogFileService(inventory);
         for(int i = 0 ; i < 5; i++) {
             Catalog catalog = Utility.randomCatalog();
             if (catalogService.add(catalog))
@@ -34,7 +34,7 @@ public class CatalogServiceTest extends TestCase {
   //  @Test
     public void testDelete() {
         this.inventory = new Inventory("Carros");
-        catalogService = new CatalogService(inventory);
+        catalogService = new CatalogFileService(inventory);
         for(int i = 0 ; i < 100; i++) {
             Catalog catalog = Utility.randomCatalog();
             catalog.setConfiguration(new Configuration(new Random().nextInt(15)));
@@ -48,7 +48,7 @@ public class CatalogServiceTest extends TestCase {
     @Test
     public void testEdit() {
         this.inventory = new Inventory("Carros");
-        catalogService = new CatalogService(inventory);
+        catalogService = new CatalogFileService(inventory);
 
         for(int i = 0 ; i < 5; i++) {
             Catalog catalog = catalogService.get(Utility.randomCatalogName());
@@ -79,7 +79,7 @@ public class CatalogServiceTest extends TestCase {
   //  @Test
     public void testShow(){
         this.inventory = new Inventory("Carros");
-        catalogService = new CatalogService(inventory);
+        catalogService = new CatalogFileService(inventory);
         System.out.println(catalogService.getAll());
         System.out.println(catalogService.getAll().size());
         System.out.println(catalogService.get("Sedan"));
@@ -87,7 +87,7 @@ public class CatalogServiceTest extends TestCase {
     @Test
     public void testDeleteAll(){
         this.inventory = new Inventory("Carros");
-        catalogService = new CatalogService(inventory);
+        catalogService = new CatalogFileService(inventory);
         if (catalogService.removeAll())
             System.out.println("Se eliminaron los Catalogos de " + inventory.getName());
         else

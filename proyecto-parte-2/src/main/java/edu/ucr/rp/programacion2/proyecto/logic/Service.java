@@ -13,7 +13,7 @@ public interface Service<E, K> {
     boolean edit(E element);
 
     boolean remove(E element);
-
+    boolean removeAll();
     E get(K key);
 
     List getAll();
