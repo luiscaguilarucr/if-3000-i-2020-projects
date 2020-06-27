@@ -5,7 +5,7 @@ import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.ManagePane;
 import edu.ucr.rp.programacion2.proyecto.util.builders.BuilderFX;
-import edu.ucr.rp.programacion2.proyecto.logic.CatalogService;
+import edu.ucr.rp.programacion2.proyecto.logic.CatalogFileService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -47,7 +47,7 @@ public class CreateItemForm implements PaneViewer {
     private static GridPane pane;
     private static Pane previousPane;
     // Service \\
-    CatalogService catalogService;
+    CatalogFileService catalogFileService;
 
     // Constructor \\
     private CreateItemForm() {
@@ -71,7 +71,7 @@ public class CreateItemForm implements PaneViewer {
      */
     private void updateCatalogService() {
         if (inventorySelected != null) {
-            catalogService = new CatalogService(inventorySelected);
+            catalogFileService = new CatalogFileService(inventorySelected);
         }
     }
 
@@ -282,8 +282,8 @@ public class CreateItemForm implements PaneViewer {
         // Update the service
         updateCatalogService();
         // Validate catalog and service
-        if (catalogSelected != null && catalogService != null) {
-            return catalogService.edit(catalogSelected);
+        if (catalogSelected != null && catalogFileService != null) {
+            return catalogFileService.edit(catalogSelected);
         }
         return false;
     }

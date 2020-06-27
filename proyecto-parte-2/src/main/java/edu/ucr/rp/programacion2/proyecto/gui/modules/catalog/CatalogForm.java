@@ -4,8 +4,8 @@ import edu.ucr.rp.programacion2.proyecto.domain.Catalog;
 import edu.ucr.rp.programacion2.proyecto.gui.modules.util.PaneUtil;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.ManagePane;
-import edu.ucr.rp.programacion2.proyecto.logic.CatalogService;
-import edu.ucr.rp.programacion2.proyecto.logic.InventoryService;
+import edu.ucr.rp.programacion2.proyecto.logic.CatalogFileService;
+import edu.ucr.rp.programacion2.proyecto.logic.InventoryFileService;
 import edu.ucr.rp.programacion2.proyecto.util.builders.BuilderFX;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static edu.ucr.rp.programacion2.proyecto.gui.modules.util.LabelConstants.TITLE_CATALOG_FORM;
-import static edu.ucr.rp.programacion2.proyecto.gui.modules.util.LabelConstants.TITLE_MANAGE_ITEM;
 
 /**
  * This class shows the actions to add new catalog.
@@ -28,8 +27,8 @@ import static edu.ucr.rp.programacion2.proyecto.gui.modules.util.LabelConstants.
  * @version 2.0
  */
 public class CatalogForm implements PaneViewer {
-    private static InventoryService inventoryService;
-    private static CatalogService catalogService;
+    private static InventoryFileService inventoryFileService;
+    private static CatalogFileService catalogFileService;
     private static CatalogBuilder catalogBuilder = new CatalogBuilder();
     private static TextField catalogNameTextField;
     private static TextField featureNameTextField;
@@ -63,14 +62,14 @@ public class CatalogForm implements PaneViewer {
      * This method initializes the inventory service.
      */
     private static void initializeInventoryService() {
-        inventoryService = InventoryService.getInstance();
+        inventoryFileService = InventoryFileService.getInstance();
     }
 
     /**
      * This method initializes the catalog service.
      */
     private void updateCatalogService(Inventory inventory) {
-        catalogService = new CatalogService(inventory);
+        catalogFileService = new CatalogFileService(inventory);
     }
 
     /**
@@ -78,7 +77,7 @@ public class CatalogForm implements PaneViewer {
      */
     public static void refresh() {
         initializeInventoryService();
-        if (inventoryService.getAll().size() == 0) {
+        if (inventoryFileService.getAll().size() == 0) {
             ManagePane.clearPane();
             PaneUtil.showAlert(Alert.AlertType.INFORMATION, "There are no inventories", "You must add at least one inventory to be able to access this function");
         }
@@ -94,7 +93,7 @@ public class CatalogForm implements PaneViewer {
         featureNameTextField.clear();
         schema.clear();
         inventoryObservableList.clear();
-        inventoryObservableList.addAll(inventoryService.getNamesList());
+        inventoryObservableList.addAll(inventoryFileService.getNamesList());
     }
 
     /**
@@ -124,7 +123,7 @@ public class CatalogForm implements PaneViewer {
         });
         inventoryComboBox.setOnAction(e -> {
             if (inventoryComboBox.getValue() != null) {
-                updateCatalogService(inventoryService.get(inventoryComboBox.getValue()));
+                updateCatalogService(inventoryFileService.get(inventoryComboBox.getValue()));
             }
         });
         saveCatalogButton.setOnAction(e -> {
@@ -187,11 +186,11 @@ public class CatalogForm implements PaneViewer {
         } else if (schema.size() > 0) {
             featureNameTextField.setPromptText("");
             featureNameTextField.setStyle("-fx-background-color: #FFFFFF");
-            updateCatalogService(inventoryService.get(inventoryComboBox.getValue()));
+            updateCatalogService(inventoryFileService.get(inventoryComboBox.getValue()));
             catalogBuilder.withName(catalogNameTextField.getText());
             catalogBuilder.withSchema(schema);
             Catalog catalog = catalogBuilder.build();
-            wasAdded = catalogService.add(catalog);
+            wasAdded = catalogFileService.add(catalog);
         }
         if (wasAdded) {
             wasAdded = false;

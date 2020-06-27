@@ -12,18 +12,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-public class CatalogServiceTest extends TestCase {
+public class CatalogFileServiceTest extends TestCase {
 
     private Inventory inventory;
-    private CatalogService catalogService;
+    private CatalogFileService catalogFileService;
 
     @Test
     public void testAddition() {
         inventory = new Inventory("Carros");
-        catalogService = new CatalogService(inventory);
+        catalogFileService = new CatalogFileService(inventory);
         for(int i = 0 ; i < 5; i++) {
             Catalog catalog = Utility.randomCatalog();
-            if (catalogService.add(catalog))
+            if (catalogFileService.add(catalog))
                 System.out.println("Se guardo: " + catalog);
             else
                 System.out.println("No se guardo: " + catalog);
@@ -34,11 +34,11 @@ public class CatalogServiceTest extends TestCase {
   //  @Test
     public void testDelete() {
         this.inventory = new Inventory("Carros");
-        catalogService = new CatalogService(inventory);
+        catalogFileService = new CatalogFileService(inventory);
         for(int i = 0 ; i < 100; i++) {
             Catalog catalog = Utility.randomCatalog();
             catalog.setConfiguration(new Configuration(new Random().nextInt(15)));
-            if (catalogService.remove(catalog))
+            if (catalogFileService.remove(catalog))
                 System.out.println("Se elimino: " + catalog);
             else
                 System.out.println("- No se elimino: " + catalog);
@@ -48,14 +48,14 @@ public class CatalogServiceTest extends TestCase {
     @Test
     public void testEdit() {
         this.inventory = new Inventory("Carros");
-        catalogService = new CatalogService(inventory);
+        catalogFileService = new CatalogFileService(inventory);
 
         for(int i = 0 ; i < 5; i++) {
-            Catalog catalog = catalogService.get(Utility.randomCatalogName());
+            Catalog catalog = catalogFileService.get(Utility.randomCatalogName());
             if(catalog==null) continue;
             List items = randomItemList();
             catalog.setItems(items);
-            if (catalogService.edit(catalog))
+            if (catalogFileService.edit(catalog))
                 System.out.println("Se edito: " + catalog);
             else
                 System.out.println("- No se edito: " + catalog);
@@ -79,16 +79,16 @@ public class CatalogServiceTest extends TestCase {
   //  @Test
     public void testShow(){
         this.inventory = new Inventory("Carros");
-        catalogService = new CatalogService(inventory);
-        System.out.println(catalogService.getAll());
-        System.out.println(catalogService.getAll().size());
-        System.out.println(catalogService.get("Sedan"));
+        catalogFileService = new CatalogFileService(inventory);
+        System.out.println(catalogFileService.getAll());
+        System.out.println(catalogFileService.getAll().size());
+        System.out.println(catalogFileService.get("Sedan"));
     }
     @Test
     public void testDeleteAll(){
         this.inventory = new Inventory("Carros");
-        catalogService = new CatalogService(inventory);
-        if (catalogService.removeAll())
+        catalogFileService = new CatalogFileService(inventory);
+        if (catalogFileService.removeAll())
             System.out.println("Se eliminaron los Catalogos de " + inventory.getName());
         else
             System.out.println("- No se elimino los Catalogos de " + inventory.getName());

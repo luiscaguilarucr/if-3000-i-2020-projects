@@ -7,8 +7,8 @@ import edu.ucr.rp.programacion2.proyecto.gui.manage.ManagePane;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneName;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.modules.util.PaneUtil;
-import edu.ucr.rp.programacion2.proyecto.logic.CatalogService;
-import edu.ucr.rp.programacion2.proyecto.logic.InventoryService;
+import edu.ucr.rp.programacion2.proyecto.logic.CatalogFileService;
+import edu.ucr.rp.programacion2.proyecto.logic.InventoryFileService;
 import edu.ucr.rp.programacion2.proyecto.util.builders.BuilderFX;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -56,8 +56,8 @@ public class ManageItem implements PaneViewer {
     private static TableColumn deleteItemColumn;
     private static Label resultsLabel;
     private static GridPane pane;
-    private static InventoryService inventoryService;
-    private static CatalogService catalogService;
+    private static InventoryFileService inventoryFileService;
+    private static CatalogFileService catalogFileService;
     private static ComboBox<String> inventoryComboBox;
     private static ComboBox<String> catalogComboBox;
     private static Alert deleteAlert;
@@ -77,11 +77,11 @@ public class ManageItem implements PaneViewer {
      * This method initialize the services required.
      */
     private static void initializeServices() {
-        inventoryService = InventoryService.getInstance();
+        inventoryFileService = InventoryFileService.getInstance();
     }
 
     private static void updateCatalogService(Inventory inventory) {
-        catalogService = new CatalogService(inventory);
+        catalogFileService = new CatalogFileService(inventory);
     }
 
     /**
@@ -109,7 +109,7 @@ public class ManageItem implements PaneViewer {
         createTiledPane.setMaxWidth(20);
         createTiledPane.setAlignment(Pos.TOP_LEFT);
         createTiledPane.setVisible(false);
-        inventoryObservableList = FXCollections.observableArrayList(inventoryService.getNamesList());
+        inventoryObservableList = FXCollections.observableArrayList(inventoryFileService.getNamesList());
         inventoryComboBox = PaneUtil.buildComboBox(pane, inventoryObservableList, 0, 1);
         inventoryComboBox.setTooltip(new Tooltip("Select an inventory"));
         catalogObservableList = FXCollections.observableArrayList();
@@ -296,10 +296,10 @@ public class ManageItem implements PaneViewer {
      */
     private static void inventoryChangedAction() {
         if (inventoryComboBox.getValue() != null) {
-            updateCatalogService(inventoryService.get(inventoryComboBox.getValue()));
+            updateCatalogService(inventoryFileService.get(inventoryComboBox.getValue()));
         }
         catalogObservableList.clear();
-        if (catalogService.getAll().isEmpty()) {
+        if (catalogFileService.getAll().isEmpty()) {
             refresh();
             PaneUtil.showAlert(Alert.AlertType.INFORMATION, "There are no catalogs", "You must add at least one catalog on this inventory to be able to access this function");
         } else {
@@ -331,8 +331,8 @@ public class ManageItem implements PaneViewer {
         // Validations
         if (inventoryComboBox.getValue() == null) return;
         if (catalogComboBox.getValue() == null) return;
-        Inventory inventory = inventoryService.get(inventoryComboBox.getValue());
-        Catalog catalog = catalogService.get(catalogComboBox.getValue());
+        Inventory inventory = inventoryFileService.get(inventoryComboBox.getValue());
+        Catalog catalog = catalogFileService.get(catalogComboBox.getValue());
         if (inventory != null && catalog != null) {
             CreateItemForm.refresh();
             CreateItemForm.setInventory(inventory);
@@ -359,12 +359,12 @@ public class ManageItem implements PaneViewer {
             if (result.isPresent())
                 // Case #1 Yes
                 if (result.get() == buttonTypeYes) {
-                    Catalog catalog = catalogService.get(catalogComboBox.getValue());
+                    Catalog catalog = catalogFileService.get(catalogComboBox.getValue());
                     // Validate edit
                     if (catalog != null) {
                         System.out.println("Before: " + catalog);
                         catalog.getItems().clear();
-                        if (catalogService.edit(catalog)) {
+                        if (catalogFileService.edit(catalog)) {
                             // Remove -> valid
                             System.out.println("edited, items deleted");
                             System.out.println("After: " + catalog);
@@ -383,11 +383,11 @@ public class ManageItem implements PaneViewer {
 
     private void deleteOneItemAction(Map item) {
         System.out.println("Delete items Button pressed");
-        Catalog catalog = catalogService.get(catalogComboBox.getValue());
+        Catalog catalog = catalogFileService.get(catalogComboBox.getValue());
         if (catalog != null) {
             catalog.getItems().remove(item);
             System.out.println("Se actualizaron los cambios la lista (eliminó)");
-            if (catalogService.edit(catalog)) {
+            if (catalogFileService.edit(catalog)) {
                 System.out.println("Se guardaron los cambios en la lista");
             }
         }
@@ -422,7 +422,7 @@ public class ManageItem implements PaneViewer {
      * @return {@code List} list with register in inventory service.
      */
     private static List<Map> getList() {
-        Catalog catalog = catalogService.get(catalogComboBox.getValue());
+        Catalog catalog = catalogFileService.get(catalogComboBox.getValue());
         if (catalog != null) {
             return catalog.getItems();
         } else {
@@ -486,14 +486,14 @@ public class ManageItem implements PaneViewer {
     }
 
     public static void refreshInventoryComboBox() {
-        inventoryComboBox.setItems(FXCollections.observableList(inventoryService.getNamesList()));
+        inventoryComboBox.setItems(FXCollections.observableList(inventoryFileService.getNamesList()));
         inventoryComboBox.getSelectionModel().clearSelection();
     }
 
     private static void refreshCatalogComboBox() {
         if (inventoryComboBox.getValue() != null) {
-            updateCatalogService(inventoryService.get(inventoryComboBox.getValue()));
-            catalogObservableList.setAll(catalogService.getNamesList());
+            updateCatalogService(inventoryFileService.get(inventoryComboBox.getValue()));
+            catalogObservableList.setAll(catalogFileService.getNamesList());
         }
     }
 
@@ -501,10 +501,10 @@ public class ManageItem implements PaneViewer {
         tableView.getColumns().clear();
         //tableView.getItems().clear();
         if (inventoryComboBox.getValue() != null && !inventoryComboBox.getValue().isEmpty()) {
-            updateCatalogService(inventoryService.get(inventoryComboBox.getValue()));
+            updateCatalogService(inventoryFileService.get(inventoryComboBox.getValue()));
         }
-        if (catalogService != null) {
-            Catalog catalog = catalogService.get(catalogComboBox.getValue());
+        if (catalogFileService != null) {
+            Catalog catalog = catalogFileService.get(catalogComboBox.getValue());
             // Validate catalog.
             if (catalog != null) {
                 tableView.setVisible(true);
@@ -535,12 +535,12 @@ public class ManageItem implements PaneViewer {
      * Save changes done in the table.
      */
     private static void saveChanges() {
-        updateCatalogService(inventoryService.get(inventoryComboBox.getValue()));
-        Catalog catalog = catalogService.get(catalogComboBox.getValue());
+        updateCatalogService(inventoryFileService.get(inventoryComboBox.getValue()));
+        Catalog catalog = catalogFileService.get(catalogComboBox.getValue());
         if (catalog != null) {
             catalog.setItems(getItemsFromTable());
             System.out.println("Se actualizaron los cambios en la lista");
-            if (catalogService.edit(catalog)) {
+            if (catalogFileService.edit(catalog)) {
                 System.out.println("Se guardaron los cambios en la lista");
             }
         }
@@ -551,7 +551,7 @@ public class ManageItem implements PaneViewer {
      */
     private static void updateResultsLabel() {
         if (catalogComboBox.getValue() != null) {
-            Catalog catalog = catalogService.get(catalogComboBox.getValue());
+            Catalog catalog = catalogFileService.get(catalogComboBox.getValue());
             int total = catalog.getItems().size();                   // Total of inventories and catalogs.
             int current = tableView.getItems().size();      // Number of inventories and catalogs in the table.
             resultsLabel.setText("Showing " + current + " of " + total + " results.");

@@ -1,7 +1,6 @@
 
 package edu.ucr.rp.programacion2.proyecto.gui.modules.inventory;
 
-import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
 import edu.ucr.rp.programacion2.proyecto.gui.modules.item.ManageItem;
 import edu.ucr.rp.programacion2.proyecto.gui.modules.util.PaneUtil;
 import edu.ucr.rp.programacion2.proyecto.util.inventorycontrol.InventoryControl;
@@ -10,7 +9,7 @@ import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.ManagePane;
 import edu.ucr.rp.programacion2.proyecto.gui.modules.catalog.CatalogConfig;
 import edu.ucr.rp.programacion2.proyecto.util.inventorycontrol.InventoryControlManager;
-import edu.ucr.rp.programacion2.proyecto.logic.InventoryService;
+import edu.ucr.rp.programacion2.proyecto.logic.InventoryFileService;
 import edu.ucr.rp.programacion2.proyecto.util.builders.BuilderFX;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -51,7 +50,7 @@ public class InventoryView implements PaneViewer {
     private static Pagination pagination;
     private static Label resultsLabel;
     private static GridPane pane;
-    private static InventoryService inventoryService;
+    private static InventoryFileService inventoryFileService;
     private static InventoryControlManager inventoryControlManager;
     private static CatalogConfig catalogConfig = new CatalogConfig();
     private static Button backButton;
@@ -61,7 +60,7 @@ public class InventoryView implements PaneViewer {
      * This method initialize the services required.
      */
     private void initializeServices() {
-        inventoryService = InventoryService.getInstance();
+        inventoryFileService = InventoryFileService.getInstance();
         inventoryControlManager = InventoryControlManager.getInstance();
     }
 

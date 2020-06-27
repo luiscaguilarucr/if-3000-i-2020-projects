@@ -2,8 +2,8 @@ package edu.ucr.rp.programacion2.proyecto.util.inventorycontrol;
 
 import edu.ucr.rp.programacion2.proyecto.domain.Catalog;
 import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
-import edu.ucr.rp.programacion2.proyecto.logic.CatalogService;
-import edu.ucr.rp.programacion2.proyecto.logic.InventoryService;
+import edu.ucr.rp.programacion2.proyecto.logic.CatalogFileService;
+import edu.ucr.rp.programacion2.proyecto.logic.InventoryFileService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,12 +15,12 @@ public class InventoryControlManager {
     //  Varaibles  \\
     private static InventoryControlManager instance;
     private List<InventoryControl> list;
-    private InventoryService inventoryService;
-    private CatalogService catalogService;
+    private InventoryFileService inventoryFileService;
+    private CatalogFileService catalogFileService;
 
     //  Constructor  \\
     private InventoryControlManager() {
-        inventoryService = InventoryService.getInstance();
+        inventoryFileService = InventoryFileService.getInstance();
         list = new ArrayList<>();
         updateList();
     }
@@ -51,7 +51,7 @@ public class InventoryControlManager {
      */
     private void updateList() {
         list = new ArrayList<>();
-        List<Inventory> inventories = inventoryService.getAll();
+        List<Inventory> inventories = inventoryFileService.getAll();
         // SEARCH IN EACH INVENTORY
         for (Inventory inventory : inventories) {
             List<Catalog> catalogs = getCatalogsOf(inventory);
@@ -70,8 +70,8 @@ public class InventoryControlManager {
      * @return
      */
     private List<Catalog> getCatalogsOf(Inventory inventory) {
-        catalogService = new CatalogService(inventory);
-        return catalogService.getAll();
+        catalogFileService = new CatalogFileService(inventory);
+        return catalogFileService.getAll();
     }
 
     public int size() {

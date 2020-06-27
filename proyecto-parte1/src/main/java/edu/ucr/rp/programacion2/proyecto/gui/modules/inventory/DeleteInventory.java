@@ -3,7 +3,7 @@ package edu.ucr.rp.programacion2.proyecto.gui.modules.inventory;
 import edu.ucr.rp.programacion2.proyecto.gui.modules.util.PaneUtil;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.ManagePane;
-import edu.ucr.rp.programacion2.proyecto.logic.InventoryService;
+import edu.ucr.rp.programacion2.proyecto.logic.InventoryFileService;
 import edu.ucr.rp.programacion2.proyecto.util.builders.BuilderFX;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -22,7 +22,7 @@ import static edu.ucr.rp.programacion2.proyecto.gui.modules.util.LabelConstants.
  * @version 2.0
  */
 public class DeleteInventory implements PaneViewer {
-    private static InventoryService inventoryService;
+    private static InventoryFileService inventoryFileService;
     private static Button deleteInventoryButton;
     private Button cancelButton;
     private static Label inventoryIndicationLabel;
@@ -47,7 +47,7 @@ public class DeleteInventory implements PaneViewer {
      * This method initializes the inventory service.
      */
     private static void initializeInventoryService() {
-        inventoryService = InventoryService.getInstance();
+        inventoryFileService = InventoryFileService.getInstance();
     }
 
     /**
@@ -55,7 +55,7 @@ public class DeleteInventory implements PaneViewer {
      */
     public static void refresh() {
         initializeInventoryService();
-        if (inventoryService.getAll().isEmpty()) {
+        if (inventoryFileService.getAll().isEmpty()) {
             ManagePane.clearPane();
             PaneUtil.showAlert(Alert.AlertType.INFORMATION, "There are no inventories", "You must add at least one inventory to be able to access this function");
         }
@@ -63,11 +63,11 @@ public class DeleteInventory implements PaneViewer {
     }
 
     private static void refreshItems() {
-        System.out.println(inventoryService.getNamesList());
+        System.out.println(inventoryFileService.getNamesList());
         initializeInventoryService();
         checkComboBox.getCheckModel().clearChecks();
         observableList.clear();
-        observableList.addAll(inventoryService.getNamesList());
+        observableList.addAll(inventoryFileService.getNamesList());
     }
 
     /**
@@ -103,7 +103,7 @@ public class DeleteInventory implements PaneViewer {
      * This method builds a CheckComboBox that displays the inventory list.
      */
     private void buildCheckComboBoxComboBox() {
-        observableList = FXCollections.observableArrayList(inventoryService.getNamesList());
+        observableList = FXCollections.observableArrayList(inventoryFileService.getNamesList());
         checkComboBox = PaneUtil.buildCheckComboBox(pane, observableList, 1, 1);
     }
 
@@ -115,7 +115,7 @@ public class DeleteInventory implements PaneViewer {
         Boolean removed = false;
         ObservableList<String> list = checkComboBox.getCheckModel().getCheckedItems();
         for (String s : list) {
-            inventoryService.remove(inventoryService.get(s));
+            inventoryFileService.remove(inventoryFileService.get(s));
             i++;
         }
         if (i == list.size()) {

@@ -4,8 +4,8 @@ import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
 import edu.ucr.rp.programacion2.proyecto.gui.modules.util.PaneUtil;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.ManagePane;
-import edu.ucr.rp.programacion2.proyecto.logic.CatalogService;
-import edu.ucr.rp.programacion2.proyecto.logic.InventoryService;
+import edu.ucr.rp.programacion2.proyecto.logic.CatalogFileService;
+import edu.ucr.rp.programacion2.proyecto.logic.InventoryFileService;
 import edu.ucr.rp.programacion2.proyecto.util.builders.BuilderFX;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,7 +16,6 @@ import javafx.scene.layout.Pane;
 import org.controlsfx.control.CheckComboBox;
 
 import static edu.ucr.rp.programacion2.proyecto.gui.modules.util.LabelConstants.TITLE_DELETE_CATALOG;
-import static edu.ucr.rp.programacion2.proyecto.gui.modules.util.LabelConstants.TITLE_MANAGE_ITEM;
 
 /**
  * This class shows the actions to remove 1 or more catalogs.
@@ -25,8 +24,8 @@ import static edu.ucr.rp.programacion2.proyecto.gui.modules.util.LabelConstants.
  * @version 2.0
  */
 public class DeleteCatalog implements PaneViewer {
-    private static InventoryService inventoryService;
-    private CatalogService catalogService;
+    private static InventoryFileService inventoryFileService;
+    private CatalogFileService catalogFileService;
     private static Label inventoryIndicationLabel;
     private static Label catalogIndicationLabel;
     private static Button deleteCatalogButton;
@@ -55,14 +54,14 @@ public class DeleteCatalog implements PaneViewer {
      * This method initializes the inventory service.
      */
     private static void initializeInventoryService() {
-        inventoryService = InventoryService.getInstance();
+        inventoryFileService = InventoryFileService.getInstance();
     }
 
     /**
      * This method initializes the catalog service.
      */
     private void updateCatalogService(Inventory inventory) {
-        catalogService = new CatalogService(inventory);
+        catalogFileService = new CatalogFileService(inventory);
     }
 
     /**
@@ -70,7 +69,7 @@ public class DeleteCatalog implements PaneViewer {
      */
     public static void refresh() {
         initializeInventoryService();
-        if (inventoryService.getAll().isEmpty()) {
+        if (inventoryFileService.getAll().isEmpty()) {
             ManagePane.clearPane();
             PaneUtil.showAlert(Alert.AlertType.INFORMATION, "There are no inventories", "You must add at least one inventory to be able to access this function");
         }
@@ -82,7 +81,7 @@ public class DeleteCatalog implements PaneViewer {
         catalogCheckComboBox.getCheckModel().clearChecks();
         catalogObservableList.clear();
         inventoryObservableList.clear();
-        inventoryObservableList.addAll(inventoryService.getNamesList());
+        inventoryObservableList.addAll(inventoryFileService.getNamesList());
     }
 
     /**
@@ -131,7 +130,7 @@ public class DeleteCatalog implements PaneViewer {
      * This method builds a ComboBox that displays the inventory list.
      */
     private void buildInventoryComboBox() {
-        inventoryObservableList = FXCollections.observableArrayList(inventoryService.getNamesList());
+        inventoryObservableList = FXCollections.observableArrayList(inventoryFileService.getNamesList());
         inventoryComboBox = PaneUtil.buildComboBox(pane, inventoryObservableList, 1, 1);
     }
 
@@ -149,7 +148,7 @@ public class DeleteCatalog implements PaneViewer {
     private void refreshInventoryObservableList() {
         initializeInventoryService();
         inventoryObservableList.clear();
-        inventoryObservableList.setAll(inventoryService.getNamesList());
+        inventoryObservableList.setAll(inventoryFileService.getNamesList());
         deleteCatalogButton.setVisible(false);
     }
 
@@ -158,18 +157,18 @@ public class DeleteCatalog implements PaneViewer {
      */
     private void refreshCatalogObservableList() {
         initializeInventoryService();
-        Inventory inventory = inventoryService.get(inventoryComboBox.getValue());
+        Inventory inventory = inventoryFileService.get(inventoryComboBox.getValue());
         System.out.println(inventory);
         if (inventory != null) {
             updateCatalogService(inventory);
             catalogObservableList.clear();
-            if (catalogService.getAll().isEmpty()) {
+            if (catalogFileService.getAll().isEmpty()) {
                 catalogObservableList.add("There are not catalogs");
                 catalogCheckComboBox.getCheckModel().check(0);
                 catalogCheckComboBox.setDisable(true);
             } else {
                 catalogCheckComboBox.setDisable(false);
-                catalogObservableList.addAll(catalogService.getNamesList());
+                catalogObservableList.addAll(catalogFileService.getNamesList());
             }
         }
     }
@@ -181,7 +180,7 @@ public class DeleteCatalog implements PaneViewer {
         Boolean removed = true;
         ObservableList<String> list = catalogCheckComboBox.getCheckModel().getCheckedItems();
         for (String s : list) {
-            if (!catalogService.remove(catalogService.get(s))) {
+            if (!catalogFileService.remove(catalogFileService.get(s))) {
                 removed = false;
             }
         }

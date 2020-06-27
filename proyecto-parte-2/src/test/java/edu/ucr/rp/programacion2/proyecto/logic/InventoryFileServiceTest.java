@@ -6,13 +6,13 @@ import junit.framework.TestCase;
 import static edu.ucr.rp.programacion2.proyecto.util.Utility.randomInventory;
 import static edu.ucr.rp.programacion2.proyecto.util.Utility.randomInventoryName;
 
-public class InventoryServiceTest extends TestCase {
-    InventoryService inventoryService = InventoryService.getInstance();
+public class InventoryFileServiceTest extends TestCase {
+    InventoryFileService inventoryFileService = InventoryFileService.getInstance();
 
     public void testAdd() {
         for (int i = 0; i < 2 ; i++){
             Inventory inventory = randomInventory();
-            if ( inventoryService.add(inventory))
+            if ( inventoryFileService.add(inventory))
                 System.out.println("Se creó el inventario " + inventory);
             else
                 System.out.println("No se creó el inventario " + inventory);
@@ -20,11 +20,11 @@ public class InventoryServiceTest extends TestCase {
     }
 
     public void testEdit() {
-        Inventory inventory = inventoryService.get(randomInventoryName());
+        Inventory inventory = inventoryFileService.get(randomInventoryName());
         if(inventory!=null){
             System.out.println("Old inventory: " + inventory);
             inventory.setName("newName");
-            if(inventoryService.edit(inventory)){
+            if(inventoryFileService.edit(inventory)){
                 System.out.println("Se editó el inventorio " + inventory );
             }else {
                 System.out.println("No se editó el inventorio " + inventory);
@@ -35,7 +35,7 @@ public class InventoryServiceTest extends TestCase {
     public void testRemove() {
         for (int i = 0; i < 0 ; i++){
             Inventory inventory = randomInventory();
-            if ( inventoryService.remove(inventory))
+            if ( inventoryFileService.remove(inventory))
                 System.out.println("Se eliminó el inventario " + inventory);
             else
                 System.out.println("No se eliminó el inventario " + inventory);
@@ -48,11 +48,11 @@ public class InventoryServiceTest extends TestCase {
     }
 
     public void testGetAll() {
-        System.out.println(inventoryService.getAll());
+        System.out.println(inventoryFileService.getAll());
     }
 
     public void deleteAll(){
-        if ( inventoryService.removeAll())
+        if ( inventoryFileService.removeAll())
             System.out.println("Se eliminaron los inventarios.");
         else
             System.out.println("No se eliminaron los inventarios.");

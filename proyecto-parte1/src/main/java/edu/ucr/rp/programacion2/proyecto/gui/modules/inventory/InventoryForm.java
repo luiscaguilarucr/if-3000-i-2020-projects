@@ -4,7 +4,7 @@ import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
 import edu.ucr.rp.programacion2.proyecto.gui.modules.util.PaneUtil;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.ManagePane;
-import edu.ucr.rp.programacion2.proyecto.logic.InventoryService;
+import edu.ucr.rp.programacion2.proyecto.logic.InventoryFileService;
 import edu.ucr.rp.programacion2.proyecto.util.builders.BuilderFX;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -13,7 +13,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 
-import static edu.ucr.rp.programacion2.proyecto.gui.modules.util.LabelConstants.TITLE_CATALOG_FORM;
 import static edu.ucr.rp.programacion2.proyecto.gui.modules.util.LabelConstants.TITLE_INVENTORY_FORM;
 
 /**
@@ -24,7 +23,7 @@ import static edu.ucr.rp.programacion2.proyecto.gui.modules.util.LabelConstants.
  */
 public class InventoryForm implements PaneViewer {
     private Inventory inventory;
-    private InventoryService inventoryService;
+    private InventoryFileService inventoryFileService;
     private TextField inventoryNameTextField;
     private Label inventoryNameLabel;
     private Button saveInventoryButton;
@@ -48,7 +47,7 @@ public class InventoryForm implements PaneViewer {
      * This method initializes the inventory service.
      */
     private void initializeInventoryService() {
-        inventoryService = InventoryService.getInstance();
+        inventoryFileService = InventoryFileService.getInstance();
     }
 
     /**
@@ -97,7 +96,7 @@ public class InventoryForm implements PaneViewer {
             inventoryNameTextField.setStyle("-fx-background-color: #FDC7C7");
         } else {
             inventory = new Inventory(inventoryNameTextField.getText());
-            wasAdded = inventoryService.add(inventory);
+            wasAdded = inventoryFileService.add(inventory);
         }
         if (wasAdded) {
             PaneUtil.showAlert(Alert.AlertType.INFORMATION, "Inventory added", "The inventory " + inventoryNameTextField.getText() + " was added correctly");
