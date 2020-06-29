@@ -259,7 +259,7 @@ public class ManageItem implements PaneViewer {
                         btn.setGraphic(new ImageView(new Image(image)));
                         btn.getStyleClass().add("table-buttons");
                         switch (label) {
-                            case DELETE_COLUMN -> btn.setOnAction(actionEvent -> {
+                            case DELETE_COLUMN : btn.setOnAction(actionEvent -> {
                                 Map data = getTableView().getItems().get(getIndex());
                                 deleteOneItemAction(data);
                             });

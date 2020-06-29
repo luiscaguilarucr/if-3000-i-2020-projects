@@ -1,8 +1,10 @@
 
 package edu.ucr.rp.programacion2.proyecto.gui.modules.inventory;
 
+import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
 import edu.ucr.rp.programacion2.proyecto.gui.modules.item.ManageItem;
 import edu.ucr.rp.programacion2.proyecto.gui.modules.util.PaneUtil;
+import edu.ucr.rp.programacion2.proyecto.logic.ServiceException;
 import edu.ucr.rp.programacion2.proyecto.util.inventorycontrol.InventoryControl;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneName;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneViewer;
@@ -305,11 +307,11 @@ public class InventoryView implements PaneViewer {
                         btn.setGraphic(new ImageView(new Image(image)));
                         btn.getStyleClass().add("table-buttons");
                         switch (label) {
-                            case ITEMS_COLUMN -> btn.setOnAction(actionEvent -> {
+                            case ITEMS_COLUMN: btn.setOnAction(actionEvent -> {
                                 InventoryControl data = getTableView().getItems().get(getIndex());
                                 viewItemsAction(data);
                             });
-                            case CONFIG_NAME_COLUMN -> btn.setOnAction(actionEvent -> {
+                            case CONFIG_NAME_COLUMN: btn.setOnAction(actionEvent -> {
                                 InventoryControl data = getTableView().getItems().get(getIndex());
                                 configAction(data);
                             });
@@ -379,10 +381,18 @@ public class InventoryView implements PaneViewer {
     private void configAction(InventoryControl inventoryControl) {
         ManagePane.setCenterPane(catalogConfig.getPane());
         CatalogConfig.refresh();
-        CatalogConfig.setInventory(inventoryControl.getInventoryName());
-        CatalogConfig.setCatalog(inventoryControl.getCatalogName());
-        System.out.println("Going to config table view.. of " + inventoryControl.getCatalogName());
-        refresh();
+        try {
+            Inventory inventory = inventoryFileService.get(inventoryControl.getInventoryName());
+            if (inventory != null) {
+                CatalogConfig.setInventory(inventory);
+                CatalogConfig.setCatalog(inventoryControl.getCatalogName());
+                System.out.println("Going to config table view.. of " + inventoryControl.getCatalogName());
+                refresh();
+            }
+        }catch (ServiceException e){
+            System.out.println(e.getMessage());
+        }
+
     }
 
     /**
