@@ -4,6 +4,7 @@ import edu.ucr.rp.programacion2.proyecto.gui.modules.util.PaneUtil;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.ManagePane;
 import edu.ucr.rp.programacion2.proyecto.logic.InventoryFileService;
+import edu.ucr.rp.programacion2.proyecto.logic.ServiceException;
 import edu.ucr.rp.programacion2.proyecto.util.builders.BuilderFX;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -55,11 +56,15 @@ public class DeleteInventory implements PaneViewer {
      */
     public static void refresh() {
         initializeInventoryService();
-        if (inventoryFileService.getAll().isEmpty()) {
-            ManagePane.clearPane();
-            PaneUtil.showAlert(Alert.AlertType.INFORMATION, "There are no inventories", "You must add at least one inventory to be able to access this function");
+        try {
+            if (inventoryFileService.getAll().isEmpty()) {
+                ManagePane.clearPane();
+                PaneUtil.showAlert(Alert.AlertType.INFORMATION, "There are no inventories", "You must add at least one inventory to be able to access this function");
+            }
+            refreshItems();
+        }catch (ServiceException e){
+            System.out.println(e.getMessage());
         }
-        refreshItems();
     }
 
     private static void refreshItems() {
@@ -114,18 +119,24 @@ public class DeleteInventory implements PaneViewer {
         int i = 0;
         Boolean removed = false;
         ObservableList<String> list = checkComboBox.getCheckModel().getCheckedItems();
-        for (String s : list) {
-            inventoryFileService.remove(inventoryFileService.get(s));
-            i++;
-        }
-        if (i == list.size()) {
-            removed = true;
-        }
-        if (removed) {
-            PaneUtil.showAlert(Alert.AlertType.INFORMATION, "Inventory removed", "The inventory was removed correctly");
-            ManagePane.clearPane();
-        } else {
-            PaneUtil.showAlert(Alert.AlertType.INFORMATION, "ERROR when removing", "The inventory was not removed");
+        try {
+
+
+            for (String s : list) {
+                inventoryFileService.remove(inventoryFileService.get(s));
+                i++;
+            }
+            if (i == list.size()) {
+                removed = true;
+            }
+            if (removed) {
+                PaneUtil.showAlert(Alert.AlertType.INFORMATION, "Inventory removed", "The inventory was removed correctly");
+                ManagePane.clearPane();
+            } else {
+                PaneUtil.showAlert(Alert.AlertType.INFORMATION, "ERROR when removing", "The inventory was not removed");
+            }
+        }catch (ServiceException e){
+            System.out.println(e.getMessage());
         }
     }
 

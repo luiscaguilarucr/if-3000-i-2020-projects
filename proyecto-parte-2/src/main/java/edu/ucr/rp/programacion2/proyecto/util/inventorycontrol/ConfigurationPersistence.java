@@ -50,4 +50,9 @@ public class ConfigurationPersistence implements Persistence<Integer, Integer> {
         }
 
     }
+
+    @Override
+    public boolean deleteAll() {
+        throw new UnsupportedOperationException("Method deleteAll hasn't been implement yet.");
+    }
 }

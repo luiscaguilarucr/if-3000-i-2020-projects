@@ -4,6 +4,7 @@ import edu.ucr.rp.programacion2.proyecto.domain.Catalog;
 import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.ManagePane;
+import edu.ucr.rp.programacion2.proyecto.logic.ServiceException;
 import edu.ucr.rp.programacion2.proyecto.util.builders.BuilderFX;
 import edu.ucr.rp.programacion2.proyecto.logic.CatalogFileService;
 import javafx.collections.FXCollections;
@@ -282,8 +283,12 @@ public class CreateItemForm implements PaneViewer {
         // Update the service
         updateCatalogService();
         // Validate catalog and service
-        if (catalogSelected != null && catalogFileService != null) {
-            return catalogFileService.edit(catalogSelected);
+        try {
+            if (catalogSelected != null && catalogFileService != null) {
+                return catalogFileService.edit(catalogSelected);
+            }
+        }catch (ServiceException e){
+            System.out.println(e.getMessage());
         }
         return false;
     }

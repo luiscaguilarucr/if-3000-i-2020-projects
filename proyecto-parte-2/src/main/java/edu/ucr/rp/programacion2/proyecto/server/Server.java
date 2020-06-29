@@ -27,9 +27,7 @@ public class Server {
 
                 Request request = receive(Request.class, socket); // Select the request type.
                 System.out.println("Message Recibido: " + jsonUtil.asJson(request));//
-                if (request.getType().equals("INSERT_CATALOG")) {
-                    request = insertCatalog(socket);
-                }
+
                 if (request.getType().equals("CLOSE")) {
                     socket.close();
                 }

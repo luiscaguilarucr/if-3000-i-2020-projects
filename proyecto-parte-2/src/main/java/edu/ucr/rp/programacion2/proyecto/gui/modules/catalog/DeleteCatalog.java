@@ -6,6 +6,8 @@ import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.ManagePane;
 import edu.ucr.rp.programacion2.proyecto.logic.CatalogFileService;
 import edu.ucr.rp.programacion2.proyecto.logic.InventoryFileService;
+import edu.ucr.rp.programacion2.proyecto.logic.Service;
+import edu.ucr.rp.programacion2.proyecto.logic.ServiceException;
 import edu.ucr.rp.programacion2.proyecto.util.builders.BuilderFX;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -69,11 +71,15 @@ public class DeleteCatalog implements PaneViewer {
      */
     public static void refresh() {
         initializeInventoryService();
-        if (inventoryFileService.getAll().isEmpty()) {
-            ManagePane.clearPane();
-            PaneUtil.showAlert(Alert.AlertType.INFORMATION, "There are no inventories", "You must add at least one inventory to be able to access this function");
+        try {
+            if (inventoryFileService.getAll().isEmpty()) {
+                ManagePane.clearPane();
+                PaneUtil.showAlert(Alert.AlertType.INFORMATION, "There are no inventories", "You must add at least one inventory to be able to access this function");
+            }
+            refreshItems();
+        }catch (ServiceException e){
+            System.out.println(e.getMessage());
         }
-        refreshItems();
     }
 
     public static void refreshItems() {
@@ -157,19 +163,28 @@ public class DeleteCatalog implements PaneViewer {
      */
     private void refreshCatalogObservableList() {
         initializeInventoryService();
-        Inventory inventory = inventoryFileService.get(inventoryComboBox.getValue());
-        System.out.println(inventory);
-        if (inventory != null) {
-            updateCatalogService(inventory);
-            catalogObservableList.clear();
-            if (catalogFileService.getAll().isEmpty()) {
-                catalogObservableList.add("There are not catalogs");
-                catalogCheckComboBox.getCheckModel().check(0);
-                catalogCheckComboBox.setDisable(true);
-            } else {
-                catalogCheckComboBox.setDisable(false);
-                catalogObservableList.addAll(catalogFileService.getNamesList());
+        try {
+            Inventory inventory = inventoryFileService.get(inventoryComboBox.getValue());
+            System.out.println(inventory);
+            if (inventory != null) {
+                updateCatalogService(inventory);
+                catalogObservableList.clear();
+                try {
+                    if (catalogFileService.getAll().isEmpty()) {
+                        catalogObservableList.add("There are not catalogs");
+                        catalogCheckComboBox.getCheckModel().check(0);
+                        catalogCheckComboBox.setDisable(true);
+                    } else {
+                        catalogCheckComboBox.setDisable(false);
+                        catalogObservableList.addAll(catalogFileService.getNamesList());
+                    }
+                } catch (ServiceException e) {
+                    System.out.println(e.getMessage());
+                }
+
             }
+        }catch (ServiceException e){
+            System.out.println(e.getMessage());
         }
     }
 
@@ -179,15 +194,20 @@ public class DeleteCatalog implements PaneViewer {
     private void deleteCatalog() {
         Boolean removed = true;
         ObservableList<String> list = catalogCheckComboBox.getCheckModel().getCheckedItems();
-        for (String s : list) {
-            if (!catalogFileService.remove(catalogFileService.get(s))) {
-                removed = false;
+        try {
+            for (String s : list) {
+                if (!catalogFileService.remove(catalogFileService.get(s))) {
+                    removed = false;
+                }
             }
-        }
-        if (removed) {
-            PaneUtil.showAlert(Alert.AlertType.INFORMATION, "Catalog removed", "The selected catalog was removed correctly");
-        } else {
-            PaneUtil.showAlert(Alert.AlertType.INFORMATION, "ERROR when removing", "The selected catalog was not removed");
+
+            if (removed) {
+                PaneUtil.showAlert(Alert.AlertType.INFORMATION, "Catalog removed", "The selected catalog was removed correctly");
+            } else {
+                PaneUtil.showAlert(Alert.AlertType.INFORMATION, "ERROR when removing", "The selected catalog was not removed");
+            }
+        }catch (ServiceException e){
+            System.out.println(e.getMessage());
         }
     }
 

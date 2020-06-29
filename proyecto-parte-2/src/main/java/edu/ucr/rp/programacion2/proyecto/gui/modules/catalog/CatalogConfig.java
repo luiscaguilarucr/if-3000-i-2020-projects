@@ -10,6 +10,8 @@ import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.ManagePane;
 import edu.ucr.rp.programacion2.proyecto.gui.modules.item.ManageItem;
 import edu.ucr.rp.programacion2.proyecto.logic.CatalogFileService;
+import edu.ucr.rp.programacion2.proyecto.logic.ServiceException;
+import edu.ucr.rp.programacion2.proyecto.server.Server;
 import edu.ucr.rp.programacion2.proyecto.util.inventorycontrol.InventoryControlManager;
 import edu.ucr.rp.programacion2.proyecto.logic.InventoryFileService;
 import edu.ucr.rp.programacion2.proyecto.util.builders.BuilderFX;
@@ -266,21 +268,27 @@ public class CatalogConfig implements PaneViewer {
             textInputDialog.setHeaderText("Edit catalog");
             textInputDialog.setContentText("Change name: ");
             // Get catalog
-            Catalog catalog = catalogFileService.get(catalogComboBox.getValue());
-            if(catalog!=null) {
-                // Show alert
-                Optional<String> result = textInputDialog.showAndWait();
-                // Wait the result and select
-                if (result.isPresent() && !result.get().isEmpty()) {
-                    catalog.setName(result.get());
-                    if(catalogFileService.edit(catalog)) {
-                        System.out.println(catalog + " edited...");
-                        // Remove -> invalid
-                        fillCatalogComboBox(inventoryComboBox.getValue());
+            Catalog catalog = null;
+            try {
+                catalog = catalogFileService.get(catalogComboBox.getValue());
+                if (catalog != null) {
+                    // Show alert
+                    Optional<String> result = textInputDialog.showAndWait();
+                    // Wait the result and select
+                    if (result.isPresent() && !result.get().isEmpty()) {
+                        catalog.setName(result.get());
+                        if (catalogFileService.edit(catalog)) {
+                            System.out.println(catalog + " edited...");
+                            // Remove -> invalid
+                            fillCatalogComboBox(inventoryComboBox.getValue());
+                        } else
+                            System.out.println(catalog + " no edited...");
                     }
-                    else
-                        System.out.println(catalog+ " no edited...");
                 }
+
+
+            } catch (ServiceException e) {
+                System.out.println(e.getMessage());
             }
         }
     }
@@ -298,22 +306,26 @@ public class CatalogConfig implements PaneViewer {
             // Wait the result and select
             if (result.isPresent())
                 // Case #1 Yes
-                if (result.get() == buttonTypeYes) {
-                    Catalog catalog = catalogFileService.get(catalogComboBox.getValue());
-                    // Validate remove
-                    if (catalog != null) {
-                        if (catalogFileService.remove(catalog)) {
-                            // Remove -> valid
-                            System.out.println("deleted");
-                            // Refresh catalogs list
-                            inventoryChangedEvent();
+                try {
+                    if (result.get() == buttonTypeYes) {
+                        Catalog catalog = catalogFileService.get(catalogComboBox.getValue());
+                        // Validate remove
+                        if (catalog != null) {
+                            if (catalogFileService.remove(catalog)) {
+                                // Remove -> valid
+                                System.out.println("deleted");
+                                // Refresh catalogs list
+                                inventoryChangedEvent();
 
-                        } else // Remove -> invalid
-                            System.out.println("Error: No deleted");
+                            } else // Remove -> invalid
+                                System.out.println("Error: No deleted");
+                        }
+                    } else if (result.get() == buttonTypeNo) {
+                        // Case #2 No or cancel as answer.
+                        System.out.println("No");
                     }
-                } else if (result.get() == buttonTypeNo) {
-                    // Case #2 No or cancel as answer.
-                    System.out.println("No");
+                }catch (ServiceException e){
+                    System.out.println(e.getMessage());
                 }
         }
     }
@@ -336,14 +348,19 @@ public class CatalogConfig implements PaneViewer {
         // Validations
         if(inventoryComboBox.getValue() == null) return;
         if(catalogComboBox.getValue() == null) return;
-        Inventory inventory = inventoryFileService.get(inventoryComboBox.getValue());
-        Catalog catalog = catalogFileService.get(catalogComboBox.getValue());
-        if(inventory != null && catalog != null) {
-            CreateItemForm.refresh();
-            CreateItemForm.setInventory(inventory);
-            CreateItemForm.setCatalog(catalog);
-            CreateItemForm.setPreviousPane(pane);
-            ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.CREATE_ITEM));
+        try {
+            Inventory inventory = inventoryFileService.get(inventoryComboBox.getValue());
+            Catalog catalog = catalogFileService.get(catalogComboBox.getValue());
+
+            if (inventory != null && catalog != null) {
+                CreateItemForm.refresh();
+                CreateItemForm.setInventory(inventory);
+                CreateItemForm.setCatalog(catalog);
+                CreateItemForm.setPreviousPane(pane);
+                ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.CREATE_ITEM));
+            }
+        }catch (ServiceException e){
+            System.out.println(e.getMessage());
         }
     }
     /**
@@ -361,26 +378,31 @@ public class CatalogConfig implements PaneViewer {
             // Wait the result and select
             if (result.isPresent())
                 // Case #1 Yes
-                if (result.get() == buttonTypeYes) {
-                    Catalog catalog = catalogFileService.get(catalogComboBox.getValue());
-                    // Validate edit
-                    if (catalog != null) {
-                        System.out.println("Before: "+catalog);
-                        catalog.getItems().clear();
-                        if (catalogFileService.edit(catalog)) {
-                            // Remove -> valid
-                            System.out.println("edited, items deleted");
-                            System.out.println("After: "+catalog);
+                try {
+                    if (result.get() == buttonTypeYes) {
+                        Catalog catalog = catalogFileService.get(catalogComboBox.getValue());
+                        // Validate edit
+                        if (catalog != null) {
+                            System.out.println("Before: " + catalog);
+                            catalog.getItems().clear();
+                            if (catalogFileService.edit(catalog)) {
+                                // Remove -> valid
+                                System.out.println("edited, items deleted");
+                                System.out.println("After: " + catalog);
 
-                            // Refresh catalogs list
-                            fillCatalogComboBox(inventoryComboBox.getValue());
-                        } else // Remove -> invalid
-                            System.out.println("Error: No edited");
+                                // Refresh catalogs list
+                                fillCatalogComboBox(inventoryComboBox.getValue());
+                            } else // Remove -> invalid
+                                System.out.println("Error: No edited");
+                        }
+                    } else if (result.get() == buttonTypeNo) {
+                        // Case #2 No or cancel as answer.
+                        System.out.println("No");
                     }
-                } else if (result.get() == buttonTypeNo) {
-                    // Case #2 No or cancel as answer.
-                    System.out.println("No");
+                }catch (ServiceException e){
+                    System.out.println(e.getMessage());
                 }
+
         }
     }
     /**
@@ -436,30 +458,33 @@ public class CatalogConfig implements PaneViewer {
      * @param inventoryName to extract the list of catalogs.
      */
     private static void fillCatalogComboBox(String inventoryName) {
-        // Get Inventory
-        Inventory inventory = inventoryFileService.get(inventoryName);
-        // Validate Inventory
-        // Case #1 invalid inventory.
-        if (inventory == null) {
-            catalogComboBox.setDisable(true);
-            catalogComboBox.getItems().clear();
-        } else {
-            // Case #2 Valid inventory
-            // Get update catalog list
-            updateCatalogService(inventory);
-            List<String> catalogList = catalogFileService.getNamesList();
-            // Validate list
-            if (catalogList != null && !catalogList.isEmpty()) {
-                // Case #1 The list has catalogs
-                BuilderFX.fillComboBox(catalogComboBox, catalogList);
-                catalogComboBox.setTooltip(new Tooltip("Select one catalog."));
-            } else {
+        try {
+            // Get Inventory
+            Inventory inventory = inventoryFileService.get(inventoryName);
+            // Validate Inventory
+            // Case #1 invalid inventory.
+            if (inventory == null) {
+                catalogComboBox.setDisable(true);
                 catalogComboBox.getItems().clear();
+            } else {
+                // Case #2 Valid inventory
+                // Get update catalog list
+                updateCatalogService(inventory);
+                List<String> catalogList = catalogFileService.getNamesList();
+                // Validate list
+                if (catalogList != null && !catalogList.isEmpty()) {
+                    // Case #1 The list has catalogs
+                    BuilderFX.fillComboBox(catalogComboBox, catalogList);
+                    catalogComboBox.setTooltip(new Tooltip("Select one catalog."));
+                } else {
+                    catalogComboBox.getItems().clear();
+                }
+                // Enable comboBox
+                catalogComboBox.setDisable(false);
             }
-            // Enable comboBox
-            catalogComboBox.setDisable(false);
+        } catch (ServiceException e){
+            System.out.println(e.getMessage());
         }
-
 
     }
     /**
@@ -468,11 +493,19 @@ public class CatalogConfig implements PaneViewer {
     private static void fillSchemaList(String catalogName) {
 
         // Validate catalog
-        Catalog catalog = catalogFileService.get(catalogName);
-        if (catalog != null) {
-            // Get catalog list
-            BuilderFX.fillListView(schemaList, catalog.getSchema());
+        Catalog catalog = null;
+        try {
+            catalog = catalogFileService.get(catalogName);
+            if (catalog != null) {
+                // Get catalog list
+                BuilderFX.fillListView(schemaList, catalog.getSchema());
+            }
+
+
+        } catch (ServiceException e) {
+            System.out.println(e.getMessage());
         }
+
     }
     /**
      * Disable and collapse the titlePane

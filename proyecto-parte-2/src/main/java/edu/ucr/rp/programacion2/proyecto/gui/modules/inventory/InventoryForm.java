@@ -5,6 +5,7 @@ import edu.ucr.rp.programacion2.proyecto.gui.modules.util.PaneUtil;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.ManagePane;
 import edu.ucr.rp.programacion2.proyecto.logic.InventoryFileService;
+import edu.ucr.rp.programacion2.proyecto.logic.ServiceException;
 import edu.ucr.rp.programacion2.proyecto.util.builders.BuilderFX;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -96,7 +97,13 @@ public class InventoryForm implements PaneViewer {
             inventoryNameTextField.setStyle("-fx-background-color: #FDC7C7");
         } else {
             inventory = new Inventory(inventoryNameTextField.getText());
-            wasAdded = inventoryFileService.add(inventory);
+            try {
+
+
+                wasAdded = inventoryFileService.add(inventory);
+            }catch (ServiceException e){
+                System.out.println(e.getMessage());
+            }
         }
         if (wasAdded) {
             PaneUtil.showAlert(Alert.AlertType.INFORMATION, "Inventory added", "The inventory " + inventoryNameTextField.getText() + " was added correctly");

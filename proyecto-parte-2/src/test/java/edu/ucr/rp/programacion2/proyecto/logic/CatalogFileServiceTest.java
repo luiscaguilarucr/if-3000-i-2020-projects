@@ -18,7 +18,7 @@ public class CatalogFileServiceTest extends TestCase {
     private CatalogFileService catalogFileService;
 
     @Test
-    public void testAddition() {
+    public void testAddition() throws ServiceException {
         inventory = new Inventory("Carros");
         catalogFileService = new CatalogFileService(inventory);
         for(int i = 0 ; i < 5; i++) {
@@ -32,7 +32,7 @@ public class CatalogFileServiceTest extends TestCase {
     }
 
   //  @Test
-    public void testDelete() {
+    public void testDelete() throws ServiceException {
         this.inventory = new Inventory("Carros");
         catalogFileService = new CatalogFileService(inventory);
         for(int i = 0 ; i < 100; i++) {
@@ -46,7 +46,7 @@ public class CatalogFileServiceTest extends TestCase {
     }
 
     @Test
-    public void testEdit() {
+    public void testEdit() throws ServiceException {
         this.inventory = new Inventory("Carros");
         catalogFileService = new CatalogFileService(inventory);
 
@@ -77,7 +77,7 @@ public class CatalogFileServiceTest extends TestCase {
         return items;
     }
   //  @Test
-    public void testShow(){
+    public void testShow() throws ServiceException {
         this.inventory = new Inventory("Carros");
         catalogFileService = new CatalogFileService(inventory);
         System.out.println(catalogFileService.getAll());
@@ -85,7 +85,7 @@ public class CatalogFileServiceTest extends TestCase {
         System.out.println(catalogFileService.get("Sedan"));
     }
     @Test
-    public void testDeleteAll(){
+    public void testDeleteAll() throws ServiceException {
         this.inventory = new Inventory("Carros");
         catalogFileService = new CatalogFileService(inventory);
         if (catalogFileService.removeAll())

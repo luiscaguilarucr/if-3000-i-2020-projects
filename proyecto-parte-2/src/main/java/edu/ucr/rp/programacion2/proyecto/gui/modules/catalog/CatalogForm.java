@@ -6,6 +6,8 @@ import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.ManagePane;
 import edu.ucr.rp.programacion2.proyecto.logic.CatalogFileService;
 import edu.ucr.rp.programacion2.proyecto.logic.InventoryFileService;
+import edu.ucr.rp.programacion2.proyecto.logic.Service;
+import edu.ucr.rp.programacion2.proyecto.logic.ServiceException;
 import edu.ucr.rp.programacion2.proyecto.util.builders.BuilderFX;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -77,11 +79,15 @@ public class CatalogForm implements PaneViewer {
      */
     public static void refresh() {
         initializeInventoryService();
-        if (inventoryFileService.getAll().size() == 0) {
-            ManagePane.clearPane();
-            PaneUtil.showAlert(Alert.AlertType.INFORMATION, "There are no inventories", "You must add at least one inventory to be able to access this function");
+        try {
+            if (inventoryFileService.getAll().size() == 0) {
+                ManagePane.clearPane();
+                PaneUtil.showAlert(Alert.AlertType.INFORMATION, "There are no inventories", "You must add at least one inventory to be able to access this function");
+            }
+            refreshItems();
+        }catch (ServiceException e){
+            System.out.println(e.getMessage());
         }
-        refreshItems();
     }
 
     private static void refreshItems() {
@@ -123,7 +129,11 @@ public class CatalogForm implements PaneViewer {
         });
         inventoryComboBox.setOnAction(e -> {
             if (inventoryComboBox.getValue() != null) {
-                updateCatalogService(inventoryFileService.get(inventoryComboBox.getValue()));
+                try {
+                    updateCatalogService(inventoryFileService.get(inventoryComboBox.getValue()));
+                }catch (ServiceException exception){
+                    System.out.println(exception.getMessage());
+                }
             }
         });
         saveCatalogButton.setOnAction(e -> {
@@ -184,20 +194,25 @@ public class CatalogForm implements PaneViewer {
             catalogNameTextField.setPromptText("Obligatory field");
             catalogNameTextField.setStyle("-fx-background-color: #FDC7C7");
         } else if (schema.size() > 0) {
-            featureNameTextField.setPromptText("");
-            featureNameTextField.setStyle("-fx-background-color: #FFFFFF");
-            updateCatalogService(inventoryFileService.get(inventoryComboBox.getValue()));
-            catalogBuilder.withName(catalogNameTextField.getText());
-            catalogBuilder.withSchema(schema);
-            Catalog catalog = catalogBuilder.build();
-            wasAdded = catalogFileService.add(catalog);
+            try {
+                featureNameTextField.setPromptText("");
+                featureNameTextField.setStyle("-fx-background-color: #FFFFFF");
+                updateCatalogService(inventoryFileService.get(inventoryComboBox.getValue()));
+                catalogBuilder.withName(catalogNameTextField.getText());
+                catalogBuilder.withSchema(schema);
+                Catalog catalog = catalogBuilder.build();
+                wasAdded = catalogFileService.add(catalog);
+                if (wasAdded) {
+                    wasAdded = false;
+                    PaneUtil.showAlert(Alert.AlertType.INFORMATION, "Catalog added", "The catalog was added correctly");
+                } else {
+                    PaneUtil.showAlert(Alert.AlertType.INFORMATION, "ERROR when adding", "The catalog was not added");
+                }
+            }catch (ServiceException e){
+                System.out.println(e.getMessage());
+            }
         }
-        if (wasAdded) {
-            wasAdded = false;
-            PaneUtil.showAlert(Alert.AlertType.INFORMATION, "Catalog added", "The catalog was added correctly");
-        } else {
-            PaneUtil.showAlert(Alert.AlertType.INFORMATION, "ERROR when adding", "The catalog was not added");
-        }
+
     }
 
     @Override
