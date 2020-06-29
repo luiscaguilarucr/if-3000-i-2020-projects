@@ -32,7 +32,7 @@ public class InventoryFileService implements InventoryService{
      * @return {@code true} if the inventory element has been added correctly. {@code false} Otherwise.
      */
     @Override
-    public boolean add(Inventory inventory) {
+    public boolean add(Inventory inventory)  throws ServiceException{
         refresh();
         if(validateAddition(inventory)){
             list.add(inventory);
@@ -49,7 +49,7 @@ public class InventoryFileService implements InventoryService{
      * @return {@code true} if the inventory element has been modified. {@code false} Otherwise.
      */
     @Override
-    public boolean edit(Inventory inventory) {
+    public boolean edit(Inventory inventory)  throws ServiceException{
         refresh();
         if(validateEdition(inventory)){
             Inventory oldInventory = list.get(list.indexOf(inventory));
@@ -66,7 +66,7 @@ public class InventoryFileService implements InventoryService{
      * @return {@code true} if the inventory element has been removed. {@code false} Otherwise.
      */
     @Override
-    public boolean remove(Inventory inventory) {
+    public boolean remove(Inventory inventory)  throws ServiceException{
         refresh();
         if (inventory == null || !list.contains(inventory)) {
             return false;
@@ -75,7 +75,7 @@ public class InventoryFileService implements InventoryService{
         return inventoryFilePersistence.delete(inventory);
     }
 
-    public boolean removeAll() {
+    public boolean removeAll()  throws ServiceException{
         list.clear();
         if (!inventoryFilePersistence.deleteAll()) return false;
         refresh();
@@ -89,7 +89,7 @@ public class InventoryFileService implements InventoryService{
      * @return {@code Inventory} if the inventory element's name is in the list. {@code null} Otherwise.
      */
     @Override
-    public Inventory get(String name) {
+    public Inventory get(String name)  throws ServiceException{
         refresh();
         for(Inventory inventory: list)
             if(inventory.getName().equals(name))
@@ -104,7 +104,7 @@ public class InventoryFileService implements InventoryService{
      * @return {@code List<Inventory>} List with inventory elements
      */
     @Override
-    public List<Inventory> getAll() {
+    public List<Inventory> getAll()  throws ServiceException{
         refresh();
         return list;
     }
@@ -114,7 +114,7 @@ public class InventoryFileService implements InventoryService{
      *
      * @return  {@code List<String>} List with names of inventories.
      */
-    public List<String> getNamesList(){
+    public List<String> getNamesList() {
         List<String> namesList = new ArrayList();
         for(Inventory inventory : list)
             namesList.add(inventory.getName());

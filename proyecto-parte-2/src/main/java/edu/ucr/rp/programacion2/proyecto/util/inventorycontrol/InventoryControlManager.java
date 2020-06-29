@@ -4,6 +4,7 @@ import edu.ucr.rp.programacion2.proyecto.domain.Catalog;
 import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
 import edu.ucr.rp.programacion2.proyecto.logic.CatalogFileService;
 import edu.ucr.rp.programacion2.proyecto.logic.InventoryFileService;
+import edu.ucr.rp.programacion2.proyecto.logic.ServiceException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,17 +52,21 @@ public class InventoryControlManager {
      */
     private void updateList() {
         list = new ArrayList<>();
-        List<Inventory> inventories = inventoryFileService.getAll();
-        // SEARCH IN EACH INVENTORY
-        for (Inventory inventory : inventories) {
-            List<Catalog> catalogs = getCatalogsOf(inventory);
-            if (catalogs.isEmpty()) {
-                list.add(new InventoryControl(inventory.getName(), null));
-            } else {
-                for (Catalog catalog : catalogs) {
-                    list.add(new InventoryControl(inventory.getName(), catalog.getName()));
+        try {
+            List<Inventory> inventories = inventoryFileService.getAll();
+            // SEARCH IN EACH INVENTORY
+            for (Inventory inventory : inventories) {
+                List<Catalog> catalogs = getCatalogsOf(inventory);
+                if (catalogs.isEmpty()) {
+                    list.add(new InventoryControl(inventory.getName(), null));
+                } else {
+                    for (Catalog catalog : catalogs) {
+                        list.add(new InventoryControl(inventory.getName(), catalog.getName()));
+                    }
                 }
             }
+        }catch (ServiceException e){
+            System.out.println(e.getMessage());
         }
     }
 
@@ -71,7 +76,12 @@ public class InventoryControlManager {
      */
     private List<Catalog> getCatalogsOf(Inventory inventory) {
         catalogFileService = new CatalogFileService(inventory);
-        return catalogFileService.getAll();
+        try {
+            return catalogFileService.getAll();
+        } catch (ServiceException exception) {
+            System.out.println(exception.getMessage());
+        }
+        return new ArrayList<>();
     }
 
     public int size() {

@@ -21,7 +21,7 @@ public class CatalogFileService implements CatalogService {
 
     //  Constructor \\
     public CatalogFileService(Inventory inventory) {
-        list = new ArrayList<Catalog>();
+        list = new ArrayList<>();
         catalogFilePersistence = new CatalogFilePersistence(inventory.getName());
         refresh();
         idGenerator = new IDGenerator(inventory);
@@ -36,7 +36,7 @@ public class CatalogFileService implements CatalogService {
      * @return {@code true} if the element has been added correctly. {@code false} Otherwise.
      */
     @Override
-    public boolean add(Catalog catalog) {
+    public boolean add(Catalog catalog) throws ServiceException{
         refresh();
         catalog.getConfiguration().setId(idGenerator.get());
         if (validateAddition(catalog)) {
@@ -57,7 +57,7 @@ public class CatalogFileService implements CatalogService {
      * @return {@code true} if the element has been modified. {@code false} Otherwise.
      */
     @Override
-    public boolean edit(Catalog catalog) {
+    public boolean edit(Catalog catalog)  throws ServiceException{
         refresh();
         if (validateEdition(catalog)) {
             // Delete the old value
@@ -78,7 +78,7 @@ public class CatalogFileService implements CatalogService {
      * @return {@code true} if the element has been removed. {@code false} Otherwise.
      */
     @Override
-    public boolean remove(Catalog catalog) {
+    public boolean remove(Catalog catalog)  throws ServiceException{
         refresh();
         if (catalog == null || !list.contains(catalog)) {
             return false;
@@ -87,7 +87,7 @@ public class CatalogFileService implements CatalogService {
         return catalogFilePersistence.delete(catalog);
     }
 
-    public boolean removeAll() {
+    public boolean removeAll()  throws ServiceException{
         if (!idGenerator.reset()) return false;
         list.clear();
         if (!catalogFilePersistence.deleteAll()) return false;
@@ -102,7 +102,7 @@ public class CatalogFileService implements CatalogService {
      * @return {@code Catalog} if the element's name is in the list. {@code null} Otherwise.
      */
     @Override
-    public Catalog get(String name) {
+    public Catalog get(String name)  throws ServiceException{
         refresh();
         for (Catalog catalog : list)
             if (catalog.getName().equals(name))
@@ -117,7 +117,7 @@ public class CatalogFileService implements CatalogService {
      * @return {@code List<Catalog>} List with elements
      */
     @Override
-    public List<Catalog> getAll() {
+    public List<Catalog> getAll()  throws ServiceException{
         refresh();
         return list;
     }

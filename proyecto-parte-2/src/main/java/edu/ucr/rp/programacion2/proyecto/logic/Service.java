@@ -8,11 +8,10 @@ import java.util.List;
  * @param <K> key to identified an element
  */
 public interface Service<E, K> {
-    boolean add(E element);
-    boolean edit(E element);
-    boolean remove(E element);
-    boolean removeAll();
-    E get(K key);
-    List<E> getAll();
-    List<String> getNamesList();
+    boolean add(E element) throws ServiceException;
+    boolean edit(E element)  throws ServiceException;
+    boolean remove(E element)  throws ServiceException;
+    boolean removeAll()  throws ServiceException;
+    E get(K key)  throws ServiceException;
+    List<E> getAll()  throws ServiceException;
 }

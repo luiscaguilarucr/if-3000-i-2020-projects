@@ -9,6 +9,8 @@ import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.modules.util.PaneUtil;
 import edu.ucr.rp.programacion2.proyecto.logic.CatalogFileService;
 import edu.ucr.rp.programacion2.proyecto.logic.InventoryFileService;
+import edu.ucr.rp.programacion2.proyecto.logic.Service;
+import edu.ucr.rp.programacion2.proyecto.logic.ServiceException;
 import edu.ucr.rp.programacion2.proyecto.util.builders.BuilderFX;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -223,6 +225,7 @@ public class ManageItem implements PaneViewer {
 
     /**
      * This method allows you to change the value of an item from the item table.
+     *
      * @param tableColumn
      */
     private static void setEditableColumn(TableColumn tableColumn) {
@@ -295,17 +298,22 @@ public class ManageItem implements PaneViewer {
      * This action is triggered when the inventory selected is changed to another.
      */
     private static void inventoryChangedAction() {
-        if (inventoryComboBox.getValue() != null) {
-            updateCatalogService(inventoryFileService.get(inventoryComboBox.getValue()));
-        }
-        catalogObservableList.clear();
-        if (catalogFileService.getAll().isEmpty()) {
-            refresh();
-            PaneUtil.showAlert(Alert.AlertType.INFORMATION, "There are no catalogs", "You must add at least one catalog on this inventory to be able to access this function");
-        } else {
-            refreshCatalogComboBox();
-            //refreshTable(); // TODO revisar, si se llama aquí, aún no se ha seleccionado un catálogo, por lo cual no se puede refrescar la table
-            catalogComboBox.setVisible(true);
+        try {
+            if (inventoryComboBox.getValue() != null) {
+                updateCatalogService(inventoryFileService.get(inventoryComboBox.getValue()));
+            }
+            catalogObservableList.clear();
+
+            if (catalogFileService.getAll().isEmpty()) {
+                refresh();
+                PaneUtil.showAlert(Alert.AlertType.INFORMATION, "There are no catalogs", "You must add at least one catalog on this inventory to be able to access this function");
+            } else {
+                refreshCatalogComboBox();
+                //refreshTable(); // TODO revisar, si se llama aquí, aún no se ha seleccionado un catálogo, por lo cual no se puede refrescar la table
+                catalogComboBox.setVisible(true);
+            }
+        } catch (ServiceException e) {
+            System.out.println(e.getMessage());
         }
     }
 
@@ -328,22 +336,26 @@ public class ManageItem implements PaneViewer {
     }
 
     private void createItemAction() {
+        System.out.println("Create item Button pressed");
         // Validations
         if (inventoryComboBox.getValue() == null) return;
         if (catalogComboBox.getValue() == null) return;
-        Inventory inventory = inventoryFileService.get(inventoryComboBox.getValue());
-        Catalog catalog = catalogFileService.get(catalogComboBox.getValue());
-        if (inventory != null && catalog != null) {
-            CreateItemForm.refresh();
-            CreateItemForm.setInventory(inventory);
-            CreateItemForm.setCatalog(catalog);
-            CreateItemForm.setPreviousPane(pane);
-            ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.CREATE_ITEM));
-            refreshTable();// TODO llamar luego de agregar el item
-            updateResultsLabel();
+        try {
+            Inventory inventory = inventoryFileService.get(inventoryComboBox.getValue());
+            Catalog catalog = catalogFileService.get(catalogComboBox.getValue());
+            if (inventory != null && catalog != null) {
+                CreateItemForm.refresh();
+                CreateItemForm.setInventory(inventory);
+                CreateItemForm.setCatalog(catalog);
+                CreateItemForm.setPreviousPane(pane);
+                ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.CREATE_ITEM));
+                refreshTable();// TODO llamar luego de agregar el item
+                updateResultsLabel();
+            }
+            //refresh();
+        }catch (ServiceException e){
+            System.out.println(e.getMessage());
         }
-        //refresh();
-        System.out.println("Create item Button pressed");
     }
 
     private void deleteItemAction() {
@@ -358,40 +370,48 @@ public class ManageItem implements PaneViewer {
             // Wait the result and select
             if (result.isPresent())
                 // Case #1 Yes
-                if (result.get() == buttonTypeYes) {
-                    Catalog catalog = catalogFileService.get(catalogComboBox.getValue());
-                    // Validate edit
-                    if (catalog != null) {
-                        System.out.println("Before: " + catalog);
-                        catalog.getItems().clear();
-                        if (catalogFileService.edit(catalog)) {
-                            // Remove -> valid
-                            System.out.println("edited, items deleted");
-                            System.out.println("After: " + catalog);
+                try {
+                    if (result.get() == buttonTypeYes) {
+                        Catalog catalog = catalogFileService.get(catalogComboBox.getValue());
+                        // Validate edit
+                        if (catalog != null) {
+                            System.out.println("Before: " + catalog);
+                            catalog.getItems().clear();
+                            if (catalogFileService.edit(catalog)) {
+                                // Remove -> valid
+                                System.out.println("edited, items deleted");
+                                System.out.println("After: " + catalog);
 
-                            // Refresh catalogs list
-                            refreshTable();
-                        } else // Remove -> invalid
-                            System.out.println("Error: No edited");
+                                // Refresh catalogs list
+                                refreshTable();
+                            } else // Remove -> invalid
+                                System.out.println("Error: No edited");
+                        }
+                    } else if (result.get() == buttonTypeNo) {
+                        // Case #2 No or cancel as answer.
+                        System.out.println("No");
                     }
-                } else if (result.get() == buttonTypeNo) {
-                    // Case #2 No or cancel as answer.
-                    System.out.println("No");
+                }catch (ServiceException e){
+                    System.out.println(e.getMessage());
                 }
         }
     }
 
     private void deleteOneItemAction(Map item) {
         System.out.println("Delete items Button pressed");
-        Catalog catalog = catalogFileService.get(catalogComboBox.getValue());
-        if (catalog != null) {
-            catalog.getItems().remove(item);
-            System.out.println("Se actualizaron los cambios la lista (eliminó)");
-            if (catalogFileService.edit(catalog)) {
-                System.out.println("Se guardaron los cambios en la lista");
+        try {
+            Catalog catalog = catalogFileService.get(catalogComboBox.getValue());
+            if (catalog != null) {
+                catalog.getItems().remove(item);
+                System.out.println("Se actualizaron los cambios la lista (eliminó)");
+                if (catalogFileService.edit(catalog)) {
+                    System.out.println("Se guardaron los cambios en la lista");
+                }
             }
+            refreshTable();
+        }catch (ServiceException e){
+            System.out.println(e.getMessage());
         }
-        refreshTable();
     }
 
     /**
@@ -422,12 +442,16 @@ public class ManageItem implements PaneViewer {
      * @return {@code List} list with register in inventory service.
      */
     private static List<Map> getList() {
-        Catalog catalog = catalogFileService.get(catalogComboBox.getValue());
-        if (catalog != null) {
-            return catalog.getItems();
-        } else {
-            return new ArrayList<Map>();
+        try {
+            Catalog catalog = catalogFileService.get(catalogComboBox.getValue());
+            if (catalog != null) {
+                return catalog.getItems();
+            }
+        }catch (ServiceException e){
+            System.out.println(e.getMessage());
         }
+        return new ArrayList<Map>();
+
     }
 
     /**
@@ -491,33 +515,40 @@ public class ManageItem implements PaneViewer {
     }
 
     private static void refreshCatalogComboBox() {
-        if (inventoryComboBox.getValue() != null) {
-            updateCatalogService(inventoryFileService.get(inventoryComboBox.getValue()));
-            catalogObservableList.setAll(catalogFileService.getNamesList());
+        try {
+            if (inventoryComboBox.getValue() != null) {
+                updateCatalogService(inventoryFileService.get(inventoryComboBox.getValue()));
+                catalogObservableList.setAll(catalogFileService.getNamesList());
+            }
+        }catch (ServiceException e){
+            System.out.println(e.getMessage());
         }
     }
 
     public static void refreshTable() {
         tableView.getColumns().clear();
-        //tableView.getItems().clear();
-        if (inventoryComboBox.getValue() != null && !inventoryComboBox.getValue().isEmpty()) {
-            updateCatalogService(inventoryFileService.get(inventoryComboBox.getValue()));
-        }
-        if (catalogFileService != null) {
-            Catalog catalog = catalogFileService.get(catalogComboBox.getValue());
-            // Validate catalog.
-            if (catalog != null) {
-                tableView.setVisible(true);
-                // Settings for Table Columns
-                for (String s : catalog.getSchema()) {
-                    buildTableColumn(s, s, tableView); //property es el key para encontrar el valor
-                }
-                // Delete Column
-                tableView.getColumns().add(deleteItemColumn);
-                // Validate items
-                fillTable(tableView);
-
+        try {
+            if (inventoryComboBox.getValue() != null && !inventoryComboBox.getValue().isEmpty()) {
+                updateCatalogService(inventoryFileService.get(inventoryComboBox.getValue()));
             }
+            if (catalogFileService != null) {
+                Catalog catalog = catalogFileService.get(catalogComboBox.getValue());
+                // Validate catalog.
+                if (catalog != null) {
+                    tableView.setVisible(true);
+                    // Settings for Table Columns
+                    for (String s : catalog.getSchema()) {
+                        buildTableColumn(s, s, tableView); //property es el key para encontrar el valor
+                    }
+                    // Delete Column
+                    tableView.getColumns().add(deleteItemColumn);
+                    // Validate items
+                    fillTable(tableView);
+
+                }
+            }
+        }catch (ServiceException e){
+            System.out.println(e.getMessage());
         }
     }
 
@@ -535,14 +566,18 @@ public class ManageItem implements PaneViewer {
      * Save changes done in the table.
      */
     private static void saveChanges() {
-        updateCatalogService(inventoryFileService.get(inventoryComboBox.getValue()));
-        Catalog catalog = catalogFileService.get(catalogComboBox.getValue());
-        if (catalog != null) {
-            catalog.setItems(getItemsFromTable());
-            System.out.println("Se actualizaron los cambios en la lista");
-            if (catalogFileService.edit(catalog)) {
-                System.out.println("Se guardaron los cambios en la lista");
+        try {
+            updateCatalogService(inventoryFileService.get(inventoryComboBox.getValue()));
+            Catalog catalog = catalogFileService.get(catalogComboBox.getValue());
+            if (catalog != null) {
+                catalog.setItems(getItemsFromTable());
+                System.out.println("Se actualizaron los cambios en la lista");
+                if (catalogFileService.edit(catalog)) {
+                    System.out.println("Se guardaron los cambios en la lista");
+                }
             }
+        }catch (ServiceException e){
+            System.out.println(e.getMessage());
         }
     }
 
@@ -550,11 +585,15 @@ public class ManageItem implements PaneViewer {
      * Updates the label of the matches and number of items showed in the table.
      */
     private static void updateResultsLabel() {
-        if (catalogComboBox.getValue() != null) {
-            Catalog catalog = catalogFileService.get(catalogComboBox.getValue());
-            int total = catalog.getItems().size();                   // Total of inventories and catalogs.
-            int current = tableView.getItems().size();      // Number of inventories and catalogs in the table.
-            resultsLabel.setText("Showing " + current + " of " + total + " results.");
+        try {
+            if (catalogComboBox.getValue() != null) {
+                Catalog catalog = catalogFileService.get(catalogComboBox.getValue());
+                int total = catalog.getItems().size();                   // Total of inventories and catalogs.
+                int current = tableView.getItems().size();      // Number of inventories and catalogs in the table.
+                resultsLabel.setText("Showing " + current + " of " + total + " results.");
+            }
+        }catch (ServiceException e){
+            System.out.println(e.getMessage());
         }
     }
 
