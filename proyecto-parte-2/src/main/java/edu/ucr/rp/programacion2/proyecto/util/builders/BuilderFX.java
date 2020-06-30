@@ -104,8 +104,8 @@ public class BuilderFX {
      * @param row    row where it will be assigned.
      * @return {@code TableView <>} table view ready to add columns and objects.
      */
-    public static TableView<Object> buildTableView(GridPane pane, int column, int row, int numColumns, int numRows) {
-        TableView<Object> tableView = new TableView<>();
+    public static TableView buildTableView(GridPane pane, int column, int row, int numColumns, int numRows) {
+        TableView tableView = new TableView<>();
         pane.add(tableView, column, row, numColumns, numRows);
         return tableView;
     }
@@ -250,8 +250,7 @@ public class BuilderFX {
         return separator;
     }
 
-    public static void fillListView(ListView listView, List<String> list) {
-        listView.getItems().clear();
+    public static void fillListView(ListView<String> listView, List<String> list) {
         listView.setItems(FXCollections.observableList(list));
 
     }

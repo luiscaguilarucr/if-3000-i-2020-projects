@@ -122,18 +122,6 @@ public class CatalogFileService implements CatalogService {
         return list;
     }
 
-    /**
-     * Creates a list with the names of the catalogs.
-     *
-     * @return {@code List<String>} List with names of catalogs.
-     */
-    public List<String> getNamesList(){
-        List<String> namesList = new ArrayList();
-        for (Catalog catalog : list)
-            namesList.add(catalog.getName());
-        return namesList;
-    }
-
     //  More methods \\
 
     /**

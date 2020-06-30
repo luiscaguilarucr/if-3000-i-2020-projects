@@ -78,11 +78,11 @@ public class CatalogServiceTest extends TestCase {
     }
   //  @Test
     public void testShow() throws ServiceException {
-        this.inventory = new Inventory("Carros");
+        this.inventory = new Inventory("AUDI");
         catalogService = new CatalogFileService(inventory);
         System.out.println(catalogService.getAll());
         System.out.println(catalogService.getAll().size());
-        System.out.println(catalogService.get("Sedan"));
+        System.out.println(catalogService.get("SUVs"));
     }
     @Test
     public void testDeleteAll() throws ServiceException {

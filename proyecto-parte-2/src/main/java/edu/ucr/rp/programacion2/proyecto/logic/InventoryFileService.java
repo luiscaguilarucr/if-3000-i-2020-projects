@@ -108,18 +108,6 @@ public class InventoryFileService implements InventoryService{
         refresh();
         return list;
     }
-
-    /**
-     * Creates a list with the names of the inventories.
-     *
-     * @return  {@code List<String>} List with names of inventories.
-     */
-    public List<String> getNamesList() {
-        List<String> namesList = new ArrayList();
-        for(Inventory inventory : list)
-            namesList.add(inventory.getName());
-        return namesList;
-    }
     /**
      * Check if the inventory can be added.
      *

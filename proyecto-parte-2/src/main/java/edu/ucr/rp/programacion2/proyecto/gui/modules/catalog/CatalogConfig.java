@@ -10,10 +10,7 @@ import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.ManagePane;
 import edu.ucr.rp.programacion2.proyecto.gui.modules.item.ManageItem;
 import edu.ucr.rp.programacion2.proyecto.logic.CatalogFileService;
-import edu.ucr.rp.programacion2.proyecto.logic.Service;
 import edu.ucr.rp.programacion2.proyecto.logic.ServiceException;
-import edu.ucr.rp.programacion2.proyecto.server.Server;
-import edu.ucr.rp.programacion2.proyecto.util.inventorycontrol.InventoryControlManager;
 import edu.ucr.rp.programacion2.proyecto.logic.InventoryFileService;
 import edu.ucr.rp.programacion2.proyecto.util.builders.BuilderFX;
 import javafx.geometry.HPos;
@@ -40,7 +37,7 @@ public class CatalogConfig implements PaneViewer {
     private static Inventory inventorySelected;
     // Components
     private static ComboBox<Inventory> inventoryComboBox;
-    private static ComboBox<String> catalogComboBox;
+    private static ComboBox<Catalog> catalogComboBox;
     private static Button editInventoryButton;
     private static Button deleteInventoryButton;
     private static Button editCatalogButton;
@@ -48,7 +45,7 @@ public class CatalogConfig implements PaneViewer {
     private static Separator separator;
     private static TitledPane schemaTitledPane;
     private static TitledPane itemOptionsTitledPane;
-    private static ListView schemaList;
+    private static ListView<String> schemaList;
     private static VBox itemsOptionsPane;
     private static Button showItemsButton;
     private static Button addItemButton;
@@ -59,8 +56,8 @@ public class CatalogConfig implements PaneViewer {
     private static ButtonType buttonTypeNo;
     private static TextInputDialog textInputDialog;
     //  Services
-    private static InventoryFileService inventoryFileService;
-    private static CatalogFileService catalogFileService;
+    private static InventoryFileService inventoryService;
+    private static CatalogFileService catalogService;
 
     // Constructor \\
     public CatalogConfig() {
@@ -92,11 +89,11 @@ public class CatalogConfig implements PaneViewer {
      * This method initialize the services required.
      */
     private void initializeServices() {
-        inventoryFileService = InventoryFileService.getInstance();
+        inventoryService = InventoryFileService.getInstance();
     }
 
     private static void updateCatalogService(Inventory inventory) {
-        catalogFileService = new CatalogFileService(inventory);
+        catalogService = new CatalogFileService(inventory);
     }
     //  Builders  \\
 
@@ -246,13 +243,12 @@ public class CatalogConfig implements PaneViewer {
     /**
      * Build
      *
-     * @param text
-     * @return
+     * @param text that will appear in the button.
+     *
+     * @return a new Button with a label in it.
      */
     private Button buildItemButton(String text) {
-        Button button = new Button(text);
-        // More code..
-        return button;
+        return new Button(text);
     }
     //  Handlers  \\
 
@@ -284,14 +280,14 @@ public class CatalogConfig implements PaneViewer {
             // Get catalog
             Catalog catalog = null;
             try {
-                catalog = catalogFileService.get(catalogComboBox.getValue());
+                catalog = catalogComboBox.getValue();
                 if (catalog != null) {
                     // Show alert
                     Optional<String> result = textInputDialog.showAndWait();
                     // Wait the result and select
                     if (result.isPresent() && !result.get().isEmpty()) {
                         catalog.setName(result.get());
-                        if (catalogFileService.edit(catalog)) {
+                        if (catalogService.edit(catalog)) {
                             System.out.println(catalog + " edited...");
                             // Remove -> invalid
                             fillCatalogComboBox(inventoryComboBox.getValue());
@@ -323,10 +319,10 @@ public class CatalogConfig implements PaneViewer {
                 // Case #1 Yes
                 try {
                     if (result.get() == buttonTypeYes) {
-                        Catalog catalog = catalogFileService.get(catalogComboBox.getValue());
+                        Catalog catalog = catalogComboBox.getValue();
                         // Validate remove
                         if (catalog != null) {
-                            if (catalogFileService.remove(catalog)) {
+                            if (catalogService.remove(catalog)) {
                                 // Remove -> valid
                                 System.out.println("deleted");
                                 // Refresh catalogs list
@@ -349,36 +345,32 @@ public class CatalogConfig implements PaneViewer {
      *
      */
     private void deleteInventoryAction() {
-        DeleteInventory.setInventory(inventoryComboBox.getValue().getName());
+        DeleteInventory.setInventory(inventoryComboBox.getValue());
         ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.DELETE_INVENTORY));
     }
 
     private void showItemsAction() {
         ManageItem.refresh();
         ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.MANAGE_ITEM));
-        ManageItem.setInventorySelected(inventoryComboBox.getValue().getName());
+        ManageItem.setInventorySelected(inventoryComboBox.getValue());
         ManageItem.setCatalogSelected(catalogComboBox.getValue());
         ManageItem.setPreviousPane(pane);
     }
 
     private static void addItemsAction() {
         // Validations
-        if (inventoryComboBox.getValue() == null) return;
-        if (catalogComboBox.getValue() == null) return;
-        try {
-            Inventory inventory = inventoryFileService.get(inventoryComboBox.getValue().getName());
-            Catalog catalog = catalogFileService.get(catalogComboBox.getValue());
+        Inventory inventory = inventoryComboBox.getValue();
+        Catalog catalog = catalogComboBox.getValue();
 
-            if (inventory != null && catalog != null) {
-                CreateItemForm.refresh();
-                CreateItemForm.setInventory(inventory);
-                CreateItemForm.setCatalog(catalog);
-                CreateItemForm.setPreviousPane(pane);
-                ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.CREATE_ITEM));
-            }
-        } catch (ServiceException e) {
-            System.out.println(e.getMessage());
+        if (inventory != null && catalog != null) {
+            CreateItemForm.refresh();
+            CreateItemForm.setInventory(inventory);
+            CreateItemForm.setCatalog(catalog);
+            CreateItemForm.setPreviousPane(pane);
+            ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.CREATE_ITEM));
         }
+        else
+            System.out.println("Add ItemsAction is something null");
     }
 
     /**
@@ -398,12 +390,12 @@ public class CatalogConfig implements PaneViewer {
                 // Case #1 Yes
                 try {
                     if (result.get() == buttonTypeYes) {
-                        Catalog catalog = catalogFileService.get(catalogComboBox.getValue());
+                        Catalog catalog = catalogComboBox.getValue();
                         // Validate edit
                         if (catalog != null) {
                             System.out.println("Before: " + catalog);
                             catalog.getItems().clear();
-                            if (catalogFileService.edit(catalog)) {
+                            if (catalogService.edit(catalog)) {
                                 // Remove -> valid
                                 System.out.println("edited, items deleted");
                                 System.out.println("After: " + catalog);
@@ -461,7 +453,7 @@ public class CatalogConfig implements PaneViewer {
     private static void fillInventoryComboBox() {
         try {
             // Get the list of inventories
-            List<Inventory> inventories = inventoryFileService.getAll();
+            List<Inventory> inventories = inventoryService.getAll();
             // Validate list
             if (inventories != null) {
                 if (inventories.isEmpty()) {
@@ -493,39 +485,35 @@ public class CatalogConfig implements PaneViewer {
             // Case #2 Valid inventory
             // Get update catalog list
             updateCatalogService(inventory);
-            List<String> catalogList = catalogFileService.getNamesList();
-            // Validate list
-            if (catalogList != null && !catalogList.isEmpty()) {
-                // Case #1 The list has catalogs
-                BuilderFX.fillComboBox(catalogComboBox, catalogList);
-                catalogComboBox.setTooltip(new Tooltip("Select one catalog."));
-            } else {
-                catalogComboBox.getItems().clear();
+            List<Catalog> catalogList = null;
+            try {
+                catalogList = catalogService.getAll();
+
+                // Validate list
+                if (catalogList != null && !catalogList.isEmpty()) {
+                    // Case #1 The list has catalogs
+                    BuilderFX.fillComboBox(catalogComboBox, catalogList);
+                    catalogComboBox.setTooltip(new Tooltip("Select one catalog."));
+                } else {
+                    catalogComboBox.getItems().clear();
+                }
+                // Enable comboBox
+                catalogComboBox.setDisable(false);
+            } catch (ServiceException exception) {
+                System.out.println(exception.getMessage());
             }
-            // Enable comboBox
-            catalogComboBox.setDisable(false);
         }
     }
 
     /**
      * Updates the list of the list view if one catalog is selected.
      */
-    private static void fillSchemaList(String catalogName) {
-
+    private static void fillSchemaList(Catalog catalog) {
         // Validate catalog
-        Catalog catalog = null;
-        try {
-            catalog = catalogFileService.get(catalogName);
-            if (catalog != null) {
-                // Get catalog list
-                BuilderFX.fillListView(schemaList, catalog.getSchema());
-            }
-
-
-        } catch (ServiceException e) {
-            System.out.println(e.getMessage());
+        if (catalog != null) {
+            // Get catalog list
+            BuilderFX.fillListView(schemaList, catalog.getSchema());
         }
-
     }
 
     /**
@@ -620,9 +608,10 @@ public class CatalogConfig implements PaneViewer {
      *
      * @param catalog catalog to select.
      */
-    public static void setCatalog(String catalog) {
+    public static void setCatalog(Catalog catalog) {
         // Refresh catalog.
         refreshCatalogBox();
+        System.out.println(catalog);
         // Fill catalog list
         fillCatalogComboBox(inventoryComboBox.getValue());
         // Validate catalog
@@ -630,6 +619,7 @@ public class CatalogConfig implements PaneViewer {
             // Set the catalog
             catalogComboBox.setValue(catalog);
             catalogChangedEvent();
+            fillSchemaList(catalog);
         }
     }
 }

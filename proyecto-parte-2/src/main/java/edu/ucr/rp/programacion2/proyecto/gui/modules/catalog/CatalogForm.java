@@ -4,10 +4,7 @@ import edu.ucr.rp.programacion2.proyecto.domain.Catalog;
 import edu.ucr.rp.programacion2.proyecto.gui.modules.util.PaneUtil;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.ManagePane;
-import edu.ucr.rp.programacion2.proyecto.logic.CatalogFileService;
-import edu.ucr.rp.programacion2.proyecto.logic.InventoryFileService;
-import edu.ucr.rp.programacion2.proyecto.logic.Service;
-import edu.ucr.rp.programacion2.proyecto.logic.ServiceException;
+import edu.ucr.rp.programacion2.proyecto.logic.*;
 import edu.ucr.rp.programacion2.proyecto.util.builders.BuilderFX;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -29,9 +26,9 @@ import static edu.ucr.rp.programacion2.proyecto.gui.modules.util.LabelConstants.
  * @version 2.0
  */
 public class CatalogForm implements PaneViewer {
-    private static InventoryFileService inventoryFileService;
-    private static CatalogFileService catalogFileService;
-    private static CatalogBuilder catalogBuilder = new CatalogBuilder();
+    private static InventoryService inventoryService;
+    private static CatalogService catalogService;
+    private static final CatalogBuilder catalogBuilder = new CatalogBuilder();
     private static TextField catalogNameTextField;
     private static TextField featureNameTextField;
     private static Label inventoryIndicationLabel;
@@ -40,9 +37,9 @@ public class CatalogForm implements PaneViewer {
     private static Button addFeatureButton;
     private static Button saveCatalogButton;
     private static Button cancelButton;
-    private static ComboBox<String> inventoryComboBox;
-    private static ObservableList inventoryObservableList;
-    private static List<String> schema = new ArrayList<>();
+    private static ComboBox<Inventory> inventoryComboBox;
+    private static ObservableList<Inventory> inventoryObservableList;
+    private static final List<String> schema = new ArrayList<>();
     private static Boolean emptySpace = false;
     private static Boolean wasAdded = false;
     private static GridPane pane;
@@ -64,14 +61,14 @@ public class CatalogForm implements PaneViewer {
      * This method initializes the inventory service.
      */
     private static void initializeInventoryService() {
-        inventoryFileService = InventoryFileService.getInstance();
+        inventoryService = InventoryFileService.getInstance();
     }
 
     /**
      * This method initializes the catalog service.
      */
     private void updateCatalogService(Inventory inventory) {
-        catalogFileService = new CatalogFileService(inventory);
+        catalogService = new CatalogFileService(inventory);
     }
 
     /**
@@ -80,7 +77,7 @@ public class CatalogForm implements PaneViewer {
     public static void refresh() {
         initializeInventoryService();
         try {
-            if (inventoryFileService.getAll().size() == 0) {
+            if (inventoryService.getAll().size() == 0) {
                 ManagePane.clearPane();
                 PaneUtil.showAlert(Alert.AlertType.INFORMATION, "There are no inventories", "You must add at least one inventory to be able to access this function");
             }
@@ -99,7 +96,11 @@ public class CatalogForm implements PaneViewer {
         featureNameTextField.clear();
         schema.clear();
         inventoryObservableList.clear();
-        inventoryObservableList.addAll(inventoryFileService.getNamesList());
+        try {
+            inventoryObservableList.addAll(inventoryService.getAll());
+        } catch (ServiceException exception) {
+            System.out.println(exception.getMessage());
+        }
     }
 
     /**
@@ -129,11 +130,7 @@ public class CatalogForm implements PaneViewer {
         });
         inventoryComboBox.setOnAction(e -> {
             if (inventoryComboBox.getValue() != null) {
-                try {
-                    updateCatalogService(inventoryFileService.get(inventoryComboBox.getValue()));
-                }catch (ServiceException exception){
-                    System.out.println(exception.getMessage());
-                }
+                updateCatalogService(inventoryComboBox.getValue());
             }
         });
         saveCatalogButton.setOnAction(e -> {
@@ -174,7 +171,7 @@ public class CatalogForm implements PaneViewer {
             featureNameTextField.setPromptText("Obligatory field");
             featureNameTextField.setStyle("-fx-background-color: #FDC7C7");
         } else {
-            schema.add(featureNameTextField.getText() + "");
+            schema.add(featureNameTextField.getText());
             featureNameTextField.clear();
             featureNameTextField.setStyle("-fx-background-color: #FFFFFF");
             catalogNameTextField.setDisable(true);
@@ -197,11 +194,11 @@ public class CatalogForm implements PaneViewer {
             try {
                 featureNameTextField.setPromptText("");
                 featureNameTextField.setStyle("-fx-background-color: #FFFFFF");
-                updateCatalogService(inventoryFileService.get(inventoryComboBox.getValue()));
+                updateCatalogService(inventoryComboBox.getValue());
                 catalogBuilder.withName(catalogNameTextField.getText());
                 catalogBuilder.withSchema(schema);
                 Catalog catalog = catalogBuilder.build();
-                wasAdded = catalogFileService.add(catalog);
+                wasAdded = catalogService.add(catalog);
                 if (wasAdded) {
                     wasAdded = false;
                     PaneUtil.showAlert(Alert.AlertType.INFORMATION, "Catalog added", "The catalog was added correctly");
