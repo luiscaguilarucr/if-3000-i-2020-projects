@@ -1,7 +1,7 @@
 package edu.ucr.rp.programacion2.proyecto.gui.manage;
 
 import edu.ucr.rp.programacion2.proyecto.gui.modules.others.ViewMenuBar;
-import edu.ucr.rp.programacion2.proyecto.gui.modules.catalog.CatalogForm;
+import edu.ucr.rp.programacion2.proyecto.gui.modules.catalog.CreateCatalogForm;
 import edu.ucr.rp.programacion2.proyecto.gui.modules.catalog.DeleteCatalog;
 import edu.ucr.rp.programacion2.proyecto.gui.modules.inventory.DeleteInventory;
 import edu.ucr.rp.programacion2.proyecto.gui.modules.inventory.InventoryForm;
@@ -11,7 +11,6 @@ import edu.ucr.rp.programacion2.proyecto.gui.modules.others.AboutUI;
 import edu.ucr.rp.programacion2.proyecto.gui.modules.others.CreditsUI;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneName;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneViewer;
-import edu.ucr.rp.programacion2.proyecto.gui.manage.model.SceneName;
 import edu.ucr.rp.programacion2.proyecto.gui.modules.catalog.CatalogConfig;
 import edu.ucr.rp.programacion2.proyecto.gui.modules.inventory.InventoryView;
 import javafx.scene.layout.GridPane;
@@ -44,16 +43,16 @@ public class ManagePane implements PaneViewer {
     private void initializePanes(Stage stage, Pane basePane) {
         panes.put(PaneName.BASE, basePane);
         panes.put(PaneName.MENU_BAR, new ViewMenuBar(stage).getPane());
-        panes.put(PaneName.ADD_INVENTORY, new InventoryForm().getPane());
-        panes.put(PaneName.DELETE_INVENTORY, new DeleteInventory().getPane());
-        panes.put(PaneName.ADD_CATALOG, new CatalogForm().getPane());
-        panes.put(PaneName.DELETE_CATALOG, new DeleteCatalog().getPane());
-        panes.put(PaneName.MANAGE_ITEM, new ManageItem().getPane());
-        panes.put(PaneName.SHOW_INVENTORY, new InventoryView().getPane());
-        panes.put(PaneName.CATALOG_CONFIG, new CatalogConfig().getPane());
-        panes.put(PaneName.CREDITS_UI, CreditsUI.getInstance().getPane());
         panes.put(PaneName.ABOUT_UI, AboutUI.getInstance().getPane());
-        panes.put(PaneName.CREATE_ITEM, CreateItemForm.getInstance().getPane());
+        panes.put(PaneName.CREDITS_UI, CreditsUI.getInstance().getPane());
+        panes.put(PaneName.ADD_INVENTORY, new InventoryForm().getPane());
+        panes.put(PaneName.SHOW_INVENTORY, new InventoryView().getPane());
+        panes.put(PaneName.DELETE_INVENTORY, new DeleteInventory().getPane());
+        panes.put(PaneName.CREATE_CATALOG_FORM, new CreateCatalogForm().getPane());
+        panes.put(PaneName.CATALOG_CONFIG, new CatalogConfig().getPane());
+        panes.put(PaneName.DELETE_CATALOG, new DeleteCatalog().getPane());
+        panes.put(PaneName.CREATE_ITEM_FORM, CreateItemForm.getInstance().getPane());
+        panes.put(PaneName.MANAGE_ITEM, new ManageItem().getPane());
     }
 
     @Override
@@ -88,9 +87,9 @@ public class ManagePane implements PaneViewer {
      *
      * @param pane
      */
-    public static void setCenterPane(Pane pane) {
+    public static void setCenterPane(PaneName pane) {
         hbox.getChildren().clear();
-        hbox.getChildren().add(pane);
+        hbox.getChildren().add(panes.get(pane));
     }
 
     /**
@@ -99,14 +98,5 @@ public class ManagePane implements PaneViewer {
      */
     public static void clearPane() {
         hbox.getChildren().clear();
-    }
-
-    /**
-     * Returns a Map of the scenes by {@link SceneName}
-     *
-     * @return
-     */
-    public static Map<PaneName, Pane> getPanes() {
-        return panes;
     }
 }

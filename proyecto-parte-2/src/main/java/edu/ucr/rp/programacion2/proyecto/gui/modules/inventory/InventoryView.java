@@ -309,14 +309,18 @@ public class InventoryView implements PaneViewer {
                         btn.setGraphic(new ImageView(new Image(image)));
                         btn.getStyleClass().add("table-buttons");
                         switch (label) {
-                            case ITEMS_COLUMN: btn.setOnAction(actionEvent -> {
-                                InventoryControl data = getTableView().getItems().get(getIndex());
-                                viewItemsAction(data);
-                            });
-                            case CONFIG_NAME_COLUMN: btn.setOnAction(actionEvent -> {
-                                InventoryControl data = getTableView().getItems().get(getIndex());
-                                configAction(data);
-                            });
+                            case ITEMS_COLUMN:
+                                btn.setOnAction(actionEvent -> {
+                                    InventoryControl data = getTableView().getItems().get(getIndex());
+                                    viewItemsAction(data);
+                                });
+                                break;
+                            case CONFIG_NAME_COLUMN:
+                                btn.setOnAction(actionEvent -> {
+                                    InventoryControl data = getTableView().getItems().get(getIndex());
+                                    configAction(data);
+                                });
+                                break;
                         }
                     }
 
@@ -356,13 +360,13 @@ public class InventoryView implements PaneViewer {
 
     private void createInventoryAction() {
         refresh();
-        ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.ADD_INVENTORY));
+        ManagePane.setCenterPane(PaneName.ADD_INVENTORY);
         System.out.println("Create Inventory Button pressed");
     }
 
     private void createCatalogAction() {
         refresh();
-        ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.ADD_CATALOG));
+        ManagePane.setCenterPane(PaneName.CREATE_CATALOG_FORM);
         System.out.println("Create Catalog Button pressed");
     }
 
@@ -371,15 +375,16 @@ public class InventoryView implements PaneViewer {
         if (inventoryControl.getCatalogName() != null) {
             ManageItem.refresh();
             try {
-                ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.MANAGE_ITEM));
+                ManagePane.setCenterPane(PaneName.MANAGE_ITEM);
                 Inventory inventory = inventoryFileService.get(inventoryControl.getInventoryName());
                 ManageItem.setInventorySelected(inventory);
+                catalogService = new CatalogFileService(inventory);
                 Catalog catalog = catalogService.get(inventoryControl.getCatalogName());
                 ManageItem.setCatalogSelected(catalog);
-                ManageItem.setPreviousPane(getPane());
+                ManageItem.setPreviousPane(PaneName.SHOW_INVENTORY);
                 System.out.println("Showing to items of " + inventoryControl);
                 refresh();
-            }catch (ServiceException e){
+            } catch (ServiceException e) {
                 System.out.println(e.getMessage());
             }
         } else
@@ -387,7 +392,7 @@ public class InventoryView implements PaneViewer {
     }
 
     private void configAction(InventoryControl inventoryControl) {
-        ManagePane.setCenterPane(catalogConfig.getPane());
+        ManagePane.setCenterPane(PaneName.CATALOG_CONFIG);
         CatalogConfig.refresh();
         try {
             Inventory inventory = inventoryFileService.get(inventoryControl.getInventoryName());
@@ -399,7 +404,7 @@ public class InventoryView implements PaneViewer {
                 System.out.println("Going to config table view.. of " + inventoryControl.getCatalogName());
                 refresh();
             }
-        }catch (ServiceException e){
+        } catch (ServiceException e) {
             System.out.println(e.getMessage());
         }
 
@@ -421,6 +426,7 @@ public class InventoryView implements PaneViewer {
         fillTable(tableView);
         updateResultsLabel();
     }
+
     /**
      * Updates the label of the matches and number of items showed in the table.
      */

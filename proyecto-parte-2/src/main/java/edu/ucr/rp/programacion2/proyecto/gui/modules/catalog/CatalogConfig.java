@@ -346,15 +346,15 @@ public class CatalogConfig implements PaneViewer {
      */
     private void deleteInventoryAction() {
         DeleteInventory.setInventory(inventoryComboBox.getValue());
-        ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.DELETE_INVENTORY));
+        ManagePane.setCenterPane(PaneName.DELETE_INVENTORY);
     }
 
     private void showItemsAction() {
         ManageItem.refresh();
-        ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.MANAGE_ITEM));
+        ManagePane.setCenterPane(PaneName.MANAGE_ITEM);
         ManageItem.setInventorySelected(inventoryComboBox.getValue());
         ManageItem.setCatalogSelected(catalogComboBox.getValue());
-        ManageItem.setPreviousPane(pane);
+        ManageItem.setPreviousPane(PaneName.CATALOG_CONFIG);
     }
 
     private static void addItemsAction() {
@@ -366,8 +366,8 @@ public class CatalogConfig implements PaneViewer {
             CreateItemForm.refresh();
             CreateItemForm.setInventory(inventory);
             CreateItemForm.setCatalog(catalog);
-            CreateItemForm.setPreviousPane(pane);
-            ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.CREATE_ITEM));
+            CreateItemForm.setPreviousPane(PaneName.CATALOG_CONFIG);
+            ManagePane.setCenterPane(PaneName.CREATE_ITEM_FORM);
         }
         else
             System.out.println("Add ItemsAction is something null");

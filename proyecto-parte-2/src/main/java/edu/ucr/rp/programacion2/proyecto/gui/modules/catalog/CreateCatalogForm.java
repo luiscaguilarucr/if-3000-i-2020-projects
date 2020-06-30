@@ -25,7 +25,7 @@ import static edu.ucr.rp.programacion2.proyecto.gui.modules.util.LabelConstants.
  * @author Luis Carlos Aguilar Morales | B90514
  * @version 2.0
  */
-public class CatalogForm implements PaneViewer {
+public class CreateCatalogForm implements PaneViewer {
     private static InventoryService inventoryService;
     private static CatalogService catalogService;
     private static final CatalogBuilder catalogBuilder = new CatalogBuilder();

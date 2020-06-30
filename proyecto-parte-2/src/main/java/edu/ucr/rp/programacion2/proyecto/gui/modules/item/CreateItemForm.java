@@ -2,6 +2,7 @@ package edu.ucr.rp.programacion2.proyecto.gui.modules.item;
 
 import edu.ucr.rp.programacion2.proyecto.domain.Catalog;
 import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
+import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneName;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.ManagePane;
 import edu.ucr.rp.programacion2.proyecto.logic.ServiceException;
@@ -46,7 +47,7 @@ public class CreateItemForm implements PaneViewer {
     private static Button createButton;
     private static Button cancelButton;
     private static GridPane pane;
-    private static Pane previousPane;
+    private static PaneName previousPane;
     // Service \\
     CatalogFileService catalogFileService;
 
@@ -357,7 +358,7 @@ public class CreateItemForm implements PaneViewer {
         }
     }
 
-    public static void setPreviousPane(Pane previousPane) {
+    public static void setPreviousPane(PaneName previousPane) {
         CreateItemForm.previousPane = previousPane;
     }
 

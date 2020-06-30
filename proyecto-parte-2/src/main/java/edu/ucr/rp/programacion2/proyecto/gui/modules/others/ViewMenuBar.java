@@ -1,6 +1,6 @@
 package edu.ucr.rp.programacion2.proyecto.gui.modules.others;
 
-import edu.ucr.rp.programacion2.proyecto.gui.modules.catalog.CatalogForm;
+import edu.ucr.rp.programacion2.proyecto.gui.modules.catalog.CreateCatalogForm;
 import edu.ucr.rp.programacion2.proyecto.gui.modules.catalog.DeleteCatalog;
 import edu.ucr.rp.programacion2.proyecto.gui.modules.inventory.DeleteInventory;
 import edu.ucr.rp.programacion2.proyecto.gui.modules.item.ManageItem;
@@ -50,16 +50,16 @@ public class ViewMenuBar implements PaneViewer {
         MenuItem mI_DeleteInventory = new MenuItem("Delete inventory", iV_mI_DeleteInventory);
 
         mI_CreateInventory.setOnAction((event) -> {
-            ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.ADD_INVENTORY));
+            ManagePane.setCenterPane(PaneName.ADD_INVENTORY);
         });
 
         mI_SeeInventory.setOnAction((event)->{
-            ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.SHOW_INVENTORY));
+            ManagePane.setCenterPane(PaneName.SHOW_INVENTORY);
             InventoryView.refresh();
         });
 
         mI_DeleteInventory.setOnAction((event) -> {
-            ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.DELETE_INVENTORY));
+            ManagePane.setCenterPane(PaneName.DELETE_INVENTORY);
             DeleteInventory.refresh();
         });
 
@@ -88,23 +88,23 @@ public class ViewMenuBar implements PaneViewer {
 
         // Give action to MenuItems
         mI_AddCatalog.setOnAction((event) -> {
-            ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.ADD_CATALOG));
-            CatalogForm.refresh();
+            ManagePane.setCenterPane(PaneName.CREATE_CATALOG_FORM);
+            CreateCatalogForm.refresh();
         });
 
         mI_ViewAllCatalogs.setOnAction((event) -> {
-            ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.SHOW_INVENTORY));
+            ManagePane.setCenterPane(PaneName.SHOW_INVENTORY);
             InventoryView.refresh();
         });
 
         mI_EditCatalog.setOnAction((event) -> {
             CatalogConfig.refresh();
-            ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.CATALOG_CONFIG));
+            ManagePane.setCenterPane(PaneName.CATALOG_CONFIG);
 
         });
 
         mI_DeleteCatalog.setOnAction((event) -> {
-            ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.DELETE_CATALOG));
+            ManagePane.setCenterPane(PaneName.DELETE_CATALOG);
             DeleteCatalog.refresh();
         });
 
@@ -120,7 +120,7 @@ public class ViewMenuBar implements PaneViewer {
         MenuItem mI_ManageItem = new MenuItem("Manage", iV_mI_ManageItem);
 
         mI_ManageItem.setOnAction(event -> {
-            ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.MANAGE_ITEM));
+            ManagePane.setCenterPane(PaneName.MANAGE_ITEM);
             ManageItem.refresh();
             ManageItem.setPreviousPane(null);
         });
@@ -144,11 +144,11 @@ public class ViewMenuBar implements PaneViewer {
         MenuItem mI_Exit = new MenuItem("Exit", iV_mI_Exit);
 
         mI_About.setOnAction((event) -> {
-            ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.ABOUT_UI));
+            ManagePane.setCenterPane(PaneName.ABOUT_UI);
         });
 
         mI_Credits.setOnAction((event) -> {
-            ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.CREDITS_UI));
+            ManagePane.setCenterPane(PaneName.CREDITS_UI);
         });
 
         mI_Exit.setOnAction((event) -> Platform.exit());

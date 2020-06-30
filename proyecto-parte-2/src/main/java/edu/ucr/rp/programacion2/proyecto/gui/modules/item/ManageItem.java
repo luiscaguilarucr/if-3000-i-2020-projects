@@ -9,7 +9,6 @@ import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.modules.util.PaneUtil;
 import edu.ucr.rp.programacion2.proyecto.logic.CatalogFileService;
 import edu.ucr.rp.programacion2.proyecto.logic.InventoryFileService;
-import edu.ucr.rp.programacion2.proyecto.logic.Service;
 import edu.ucr.rp.programacion2.proyecto.logic.ServiceException;
 import edu.ucr.rp.programacion2.proyecto.util.builders.BuilderFX;
 import javafx.collections.FXCollections;
@@ -65,7 +64,7 @@ public class ManageItem implements PaneViewer {
     private static Alert deleteAlert;
     private static ButtonType buttonTypeYes;
     private static ButtonType buttonTypeNo;
-    private static Pane previousPane;
+    private static PaneName previousPane;
 
     public ManageItem() {
         initializeServices();
@@ -350,8 +349,8 @@ public class ManageItem implements PaneViewer {
             CreateItemForm.refresh();
             CreateItemForm.setInventory(inventory);
             CreateItemForm.setCatalog(catalog);
-            CreateItemForm.setPreviousPane(pane);
-            ManagePane.setCenterPane(ManagePane.getPanes().get(PaneName.CREATE_ITEM));
+            CreateItemForm.setPreviousPane(PaneName.MANAGE_ITEM);
+            ManagePane.setCenterPane(PaneName.CREATE_ITEM_FORM);
             refreshTable();// TODO llamar luego de agregar el item
             updateResultsLabel();
         }
@@ -589,7 +588,7 @@ public class ManageItem implements PaneViewer {
         }
     }
 
-    public static void setPreviousPane(Pane previousPane) {
+    public static void setPreviousPane(PaneName previousPane) {
         ManageItem.previousPane = previousPane;
     }
 
