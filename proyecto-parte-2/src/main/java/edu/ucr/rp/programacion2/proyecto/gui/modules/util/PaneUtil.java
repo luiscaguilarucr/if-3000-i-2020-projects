@@ -71,8 +71,8 @@ public class PaneUtil {
         return comboBox;
     }
 
-    public static CheckComboBox buildCheckComboBox(GridPane pane, ObservableList<String> observableList, int column, int row) {
-        CheckComboBox<String> checkComboBox = new CheckComboBox<>(observableList);
+    public static CheckComboBox buildCheckComboBox(GridPane pane, ObservableList observableList, int column, int row) {
+        CheckComboBox checkComboBox = new CheckComboBox<>(observableList);
         checkComboBox.setMaxWidth(INPUT_WITH_MAX);
         pane.add(checkComboBox, column, row);
         return checkComboBox;

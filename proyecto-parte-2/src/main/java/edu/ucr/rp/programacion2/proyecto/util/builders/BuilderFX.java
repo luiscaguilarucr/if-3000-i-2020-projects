@@ -79,13 +79,14 @@ public class BuilderFX {
      * @param row
      * @return
      */
-    public static ComboBox<String> buildComboBox(String promptText, GridPane pane, int column, int row) {
-        ComboBox<String> comboBox = new ComboBox<>();
+    public static ComboBox buildComboBox(String promptText, GridPane pane, int column, int row) {
+        ComboBox comboBox = new ComboBox<>();
         comboBox.setPromptText(promptText);
         pane.add(comboBox, column, row);
         comboBox.setCursor(Cursor.HAND);
         return comboBox;
     }
+
 
 
     public static ChoiceBox buildChoiceBox(GridPane pane, int column, int row) {
@@ -103,8 +104,8 @@ public class BuilderFX {
      * @param row    row where it will be assigned.
      * @return {@code TableView <>} table view ready to add columns and objects.
      */
-    public static TableView<Object> buildTableView(GridPane pane, int column, int row, int numColumns, int numRows) {
-        TableView<Object> tableView = new TableView<>();
+    public static TableView buildTableView(GridPane pane, int column, int row, int numColumns, int numRows) {
+        TableView tableView = new TableView<>();
         pane.add(tableView, column, row, numColumns, numRows);
         return tableView;
     }
@@ -205,7 +206,7 @@ public class BuilderFX {
      * @param comboBox to fill.
      * @param list     list og items.
      */
-    public static void fillComboBox(ComboBox<String> comboBox, List<String> list) {
+    public static void fillComboBox(ComboBox comboBox, List list) {
         comboBox.getItems().clear();
         comboBox.setItems(FXCollections.observableArrayList(list));
         comboBox.getItems().sorted();
@@ -249,8 +250,7 @@ public class BuilderFX {
         return separator;
     }
 
-    public static void fillListView(ListView listView, List<String> list) {
-        listView.getItems().clear();
+    public static void fillListView(ListView<String> listView, List<String> list) {
         listView.setItems(FXCollections.observableList(list));
 
     }

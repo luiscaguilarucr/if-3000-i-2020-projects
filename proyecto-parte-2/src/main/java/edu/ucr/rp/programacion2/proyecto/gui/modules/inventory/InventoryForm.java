@@ -5,6 +5,7 @@ import edu.ucr.rp.programacion2.proyecto.gui.modules.util.PaneUtil;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.ManagePane;
 import edu.ucr.rp.programacion2.proyecto.logic.InventoryFileService;
+import edu.ucr.rp.programacion2.proyecto.logic.InventoryService;
 import edu.ucr.rp.programacion2.proyecto.logic.ServiceException;
 import edu.ucr.rp.programacion2.proyecto.util.builders.BuilderFX;
 import javafx.scene.control.Alert;
@@ -24,7 +25,7 @@ import static edu.ucr.rp.programacion2.proyecto.gui.modules.util.LabelConstants.
  */
 public class InventoryForm implements PaneViewer {
     private Inventory inventory;
-    private InventoryFileService inventoryFileService;
+    private InventoryService inventoryService;
     private TextField inventoryNameTextField;
     private Label inventoryNameLabel;
     private Button saveInventoryButton;
@@ -48,7 +49,7 @@ public class InventoryForm implements PaneViewer {
      * This method initializes the inventory service.
      */
     private void initializeInventoryService() {
-        inventoryFileService = InventoryFileService.getInstance();
+        inventoryService = InventoryFileService.getInstance();
     }
 
     /**
@@ -88,7 +89,7 @@ public class InventoryForm implements PaneViewer {
      * This method generates a new inventory based on the information entered.
      */
     private void generateInventory() {
-        Boolean emptySpace = false, wasAdded = false;
+        boolean emptySpace = false, wasAdded = false;
         if (inventoryNameTextField.getText().isEmpty()) {
             emptySpace = true;
         }
@@ -100,7 +101,7 @@ public class InventoryForm implements PaneViewer {
             try {
 
 
-                wasAdded = inventoryFileService.add(inventory);
+                wasAdded = inventoryService.add(inventory);
             }catch (ServiceException e){
                 System.out.println(e.getMessage());
             }

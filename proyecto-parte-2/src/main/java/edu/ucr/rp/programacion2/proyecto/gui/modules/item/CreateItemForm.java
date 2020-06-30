@@ -2,6 +2,7 @@ package edu.ucr.rp.programacion2.proyecto.gui.modules.item;
 
 import edu.ucr.rp.programacion2.proyecto.domain.Catalog;
 import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
+import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneName;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.ManagePane;
 import edu.ucr.rp.programacion2.proyecto.logic.ServiceException;
@@ -40,13 +41,13 @@ public class CreateItemForm implements PaneViewer {
     private static String FEATURE_KEY = TITLE_FEATURE;
     private static String VALUE_KEY = TITLE_VALUE;
     // Components \\
-    private static TableView tableView; // contains 2 columns [features and values].
+    private static TableView<Map<String, Object>> tableView; // contains 2 columns [features and values].
     private static TableColumn featuresColumn;
     private static TableColumn valuesColumn;
     private static Button createButton;
     private static Button cancelButton;
     private static GridPane pane;
-    private static Pane previousPane;
+    private static PaneName previousPane;
     // Service \\
     CatalogFileService catalogFileService;
 
@@ -152,24 +153,21 @@ public class CreateItemForm implements PaneViewer {
 
     private void editCellAction(TableColumn tableColumn) {
         // Variables \\
-        tableColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent>() {
-            @Override
-            public void handle(TableColumn.CellEditEvent event) {
-                //  Variables  \\
-                Object oldValue = event.getOldValue();
-                Integer row = event.getTablePosition().getRow();//índice fila
+        tableColumn.setOnEditCommit((EventHandler<TableColumn.CellEditEvent>) event -> {
+            //  Variables  \\
+            Object oldValue = event.getOldValue();
+            Integer row = event.getTablePosition().getRow();//índice fila
 
-                Map<String, Object> feature = (Map<String, Object>) tableView.getItems().get(row);
-                feature.put(VALUE_KEY, event.getNewValue());
-                System.out.println("Se cambió " + oldValue + " por " + event.getNewValue() + " en la fila [" + row + "]");
-            }
+            Map<String, Object> feature = (Map<String, Object>) tableView.getItems().get(row);
+            feature.put(VALUE_KEY, event.getNewValue());
+            System.out.println("Se cambió " + oldValue + " por " + event.getNewValue() + " en la fila [" + row + "]");
         });
     }
 
     /**
      * This fills the the table with the schema keys.
      *
-     * @param schema
+     * @param schema of the catalog.
      */
     private static void fillTable(List<String> schema) {
         tableView.getItems().clear();
@@ -187,10 +185,10 @@ public class CreateItemForm implements PaneViewer {
      * @param list list of feature's names.
      * @return {ObservableList}  observable list with the features and values.
      */
-    private static ObservableList<Map> generateDataInMap(List<String> list) {
-        ObservableList<Map> data = FXCollections.observableArrayList(); // List
+    private static ObservableList<Map<String, Object>> generateDataInMap(List<String> list) {
+        ObservableList<Map<String, Object>> data = FXCollections.observableArrayList(); // List
         for (String feature : list) {
-            Map<String, String> dataRow = new HashMap<>();
+            Map<String, Object> dataRow = new HashMap<>();
             dataRow.put(FEATURE_KEY, feature);
             dataRow.put(VALUE_KEY, null);
             data.add(dataRow);
@@ -205,7 +203,7 @@ public class CreateItemForm implements PaneViewer {
      * Then extract for each row the feature and the value.
      * Put each feature : value in a map.
      *
-     * @return
+     * @return map of features.
      */
     private static Map<String, Object> getFeaturesMap() {
         // Create Map
@@ -323,7 +321,7 @@ public class CreateItemForm implements PaneViewer {
     /**
      * Set the inventory that owns the catalog selected.
      *
-     * @param inventory
+     * @param inventory selected.
      */
     public static void setInventory(Inventory inventory) {
         inventorySelected = inventory;
@@ -360,7 +358,7 @@ public class CreateItemForm implements PaneViewer {
         }
     }
 
-    public static void setPreviousPane(Pane previousPane) {
+    public static void setPreviousPane(PaneName previousPane) {
         CreateItemForm.previousPane = previousPane;
     }
 
