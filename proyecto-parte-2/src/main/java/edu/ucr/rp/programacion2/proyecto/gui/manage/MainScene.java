@@ -4,6 +4,9 @@ import edu.ucr.rp.programacion2.proyecto.gui.manage.model.SceneViewer;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+/**
+ * This is the Main scene where the principal panes are going to be showed.
+ */
 public class MainScene implements SceneViewer {
 
     private Stage stage;
