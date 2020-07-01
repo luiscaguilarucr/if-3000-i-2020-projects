@@ -1,27 +1,27 @@
 package edu.ucr.rp.programacion2.proyecto.logic;
 
-import edu.ucr.rp.programacion2.proyecto.persistance.InventoryFilePersistence;
 import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
 import edu.ucr.rp.programacion2.proyecto.persistance.InventoryPersistance;
+import edu.ucr.rp.programacion2.proyecto.persistance.InventorySocketPersistence;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class InventoryFileService implements InventoryService{
+public class InventorySocketService implements InventoryService{
     //  Variables  \\
-    private static InventoryFileService instance;
+    private static InventorySocketService instance;
     private List<Inventory> list;
     private InventoryPersistance inventoryPersistance;
     //  Constructor  \\
-    private InventoryFileService(){
+    private InventorySocketService(){
         list = new ArrayList<>();
-        inventoryPersistance = new InventoryFilePersistence();
+        inventoryPersistance = new InventorySocketPersistence();
         refresh();
     }
     //  Singleton Pattern  \\
-    public static InventoryFileService getInstance(){
+    public static InventorySocketService getInstance(){
         if(instance == null)
-            instance = new InventoryFileService();
+            instance = new InventorySocketService();
         return instance;
     }
 

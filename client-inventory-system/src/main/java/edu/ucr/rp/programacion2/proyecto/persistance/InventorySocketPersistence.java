@@ -7,12 +7,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-public class InventoryFilePersistence implements InventoryPersistance {
+
+public class InventorySocketPersistence  implements InventoryPersistance{
     //  Variables  \\
     private final String path = "files/inventories/";
     //  Constructor \\
 
-    public InventoryFilePersistence() {
+    public InventorySocketPersistence() {
         verifyCatalogsDir(path);
     }
 

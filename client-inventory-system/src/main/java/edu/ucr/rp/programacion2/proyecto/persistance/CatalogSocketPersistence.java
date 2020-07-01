@@ -1,9 +1,9 @@
 package edu.ucr.rp.programacion2.proyecto.persistance;
 
 import edu.ucr.rp.programacion2.proyecto.domain.Catalog;
-import edu.ucr.rp.programacion2.proyecto.util.inventorycontrol.Configuration;
 import edu.ucr.rp.programacion2.proyecto.util.JsonUtil;
 import edu.ucr.rp.programacion2.proyecto.util.builders.CatalogBuilder;
+import edu.ucr.rp.programacion2.proyecto.domain.Configuration;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class CatalogFilePersistence implements CatalogPersistence {
+public class CatalogSocketPersistence implements CatalogPersistance{
 
     private String path;
     private final String suffix = ".json";
@@ -25,7 +25,7 @@ public class CatalogFilePersistence implements CatalogPersistence {
      *
      * @param inventoryName of the list of catalogs
      */
-    public CatalogFilePersistence(String inventoryName) {
+    public CatalogSocketPersistence(String inventoryName) {
         this.path = "files/inventories/" + inventoryName + "/catalogs/";
         verifyCatalogsDir(path);
     }

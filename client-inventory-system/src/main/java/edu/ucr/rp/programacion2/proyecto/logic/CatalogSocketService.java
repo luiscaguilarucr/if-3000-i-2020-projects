@@ -2,9 +2,8 @@ package edu.ucr.rp.programacion2.proyecto.logic;
 
 import edu.ucr.rp.programacion2.proyecto.domain.Catalog;
 import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
-import edu.ucr.rp.programacion2.proyecto.persistance.CatalogFilePersistence;
-import edu.ucr.rp.programacion2.proyecto.persistance.CatalogPersistence;
-import edu.ucr.rp.programacion2.proyecto.util.idgenerator.IDGenerator;
+import edu.ucr.rp.programacion2.proyecto.persistance.CatalogPersistance;
+import edu.ucr.rp.programacion2.proyecto.persistance.CatalogSocketPersistence;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,17 +14,14 @@ import java.util.List;
  * @version 2.0
  * Singleton Pattern added.
  */
-public class CatalogFileService implements CatalogService {
+public class CatalogSocketService implements CatalogService {
     private List<Catalog> list;
-    private CatalogPersistence catalogPersistence;
-    private IDGenerator idGenerator;
-
+    private CatalogPersistance catalogFilePersistence;
     //  Constructor \\
-    public CatalogFileService(Inventory inventory) {
+    public CatalogSocketService(Inventory inventory) {
         list = new ArrayList<>();
-        catalogPersistence = new CatalogFilePersistence(inventory.getName());
+        catalogFilePersistence = new CatalogSocketPersistence(inventory.getName());
         refresh();
-        idGenerator = new IDGenerator(inventory);
     }
     //  Methods  \\
 
@@ -39,11 +35,9 @@ public class CatalogFileService implements CatalogService {
     @Override
     public boolean add(Catalog catalog) throws ServiceException{
         refresh();
-        catalog.getConfiguration().setId(idGenerator.get());
         if (validateAddition(catalog)) {
-            catalog.getConfiguration().setId(idGenerator.generate());
             list.add(catalog);
-            catalogPersistence.write(catalog);
+            catalogFilePersistence.write(catalog);
             refresh();
             return list.contains(catalog);
         }
@@ -62,8 +56,8 @@ public class CatalogFileService implements CatalogService {
         refresh();
         if (validateEdition(catalog)) {
             // Delete the old value
-            if(catalogPersistence.delete(list.get(list.indexOf(catalog))))
-                if(catalogPersistence.write(catalog))//Write the newOne
+            if(catalogFilePersistence.delete(list.get(list.indexOf(catalog))))
+                if(catalogFilePersistence.write(catalog))//Write the newOne
                     list.add(catalog);
                     refresh();
             return list.contains(catalog);
@@ -85,13 +79,12 @@ public class CatalogFileService implements CatalogService {
             return false;
         }
         list.remove(catalog);
-        return catalogPersistence.delete(catalog);
+        return catalogFilePersistence.delete(catalog);
     }
 
     public boolean removeAll()  throws ServiceException{
-        if (!idGenerator.reset()) return false;
         list.clear();
-        if (!catalogPersistence.deleteAll()) return false;
+        if (!catalogFilePersistence.deleteAll()) return false;
         refresh();
         return list.isEmpty();
     }
@@ -203,7 +196,7 @@ public class CatalogFileService implements CatalogService {
 
     private Boolean refresh() {
         //Lee el archivo
-        Object object = catalogPersistence.read();
+        Object object = catalogFilePersistence.read();
         //Valida que existe y lo sustituye por la lista en memoria
         if (object != null) {
             list = (List<Catalog>) object;
