@@ -4,5 +4,5 @@ import edu.ucr.rp.programacion2.proyecto.domain.Catalog;
 
 import java.util.List;
 
-public interface CatalogPersistance extends Persistence<Catalog, List<Catalog>>  {
+public interface CatalogPersistence extends Persistence<Catalog, List<Catalog>>  {
 }

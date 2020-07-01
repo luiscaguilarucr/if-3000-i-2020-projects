@@ -1,5 +1,6 @@
-package edu.ucr.rp.programacion2.proyecto.util.inventorycontrol;
+package edu.ucr.rp.programacion2.proyecto.persistance;
 
+import edu.ucr.rp.programacion2.proyecto.domain.Configuration;
 import edu.ucr.rp.programacion2.proyecto.persistance.Persistence;
 import edu.ucr.rp.programacion2.proyecto.util.JsonUtil;
 import org.apache.commons.io.FileUtils;

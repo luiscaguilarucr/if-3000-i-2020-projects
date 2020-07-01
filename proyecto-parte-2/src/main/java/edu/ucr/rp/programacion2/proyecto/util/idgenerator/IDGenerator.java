@@ -1,6 +1,6 @@
 package edu.ucr.rp.programacion2.proyecto.util.idgenerator;
 
-import edu.ucr.rp.programacion2.proyecto.util.inventorycontrol.ConfigurationPersistence;
+import edu.ucr.rp.programacion2.proyecto.persistance.ConfigurationPersistence;
 import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
 
 public class IDGenerator implements Generable<Integer> {

@@ -1,22 +1,13 @@
 package edu.ucr.rp.programacion2.proyecto.server.messages;
 
-
 public class Request {
-    private Enum<RequestType> type ;
+    private String type;
 
-    public Enum<RequestType> getType() {
+    public String getType() {
         return type;
     }
 
-    public Request setType(Enum<RequestType> type) {
+    public void setType(String type) {
         this.type = type;
-        return this;
-    }
-
-    @Override
-    public String toString() {
-        return "Request{" +
-                "type=" + type +
-                '}';
     }
 }

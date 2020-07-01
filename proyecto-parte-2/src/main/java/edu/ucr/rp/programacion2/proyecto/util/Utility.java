@@ -2,7 +2,7 @@ package edu.ucr.rp.programacion2.proyecto.util;
 
 import edu.ucr.rp.programacion2.proyecto.domain.Catalog;
 import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
-import edu.ucr.rp.programacion2.proyecto.util.inventorycontrol.Configuration;
+import edu.ucr.rp.programacion2.proyecto.domain.Configuration;
 
 import java.util.*;
 

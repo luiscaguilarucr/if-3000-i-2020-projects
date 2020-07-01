@@ -1,4 +1,4 @@
-package edu.ucr.rp.programacion2.proyecto.util.inventorycontrol;
+package edu.ucr.rp.programacion2.proyecto.domain;
 
 public class Configuration {
     //  Variables  \\

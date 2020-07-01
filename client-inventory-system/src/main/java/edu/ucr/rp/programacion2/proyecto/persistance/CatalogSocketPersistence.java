@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class CatalogSocketPersistence implements CatalogPersistance{
+public class CatalogSocketPersistence implements CatalogPersistence {
 
     private String path;
     private final String suffix = ".json";

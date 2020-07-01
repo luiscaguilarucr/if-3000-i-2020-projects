@@ -1,7 +1,5 @@
 package edu.ucr.rp.programacion2.proyecto.domain;
 
-import edu.ucr.rp.programacion2.proyecto.util.inventorycontrol.Configuration;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
