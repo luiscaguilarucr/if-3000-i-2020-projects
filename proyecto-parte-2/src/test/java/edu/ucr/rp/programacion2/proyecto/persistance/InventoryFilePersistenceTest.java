@@ -18,41 +18,41 @@ public class InventoryFilePersistenceTest extends TestCase {
         inventories = new ArrayList();
     }
 
-    @Test
-    public void testSave(){
-        inventoryFilePersistence = new InventoryFilePersistence();
-        for(int i = 0 ; i < 5; i++){
-            Inventory inventory = Utility.randomInventory();
-            if(inventoryFilePersistence.write(inventory))
-                System.out.println("Se guardo: " + inventory);
-            else
-                System.out.println("- No se guardo: " + inventory);
-
-        }
-    }
-
-    @Test
-    public void testDelete(){
-        for(int i = 0 ; i < 5; i++){
-            Inventory inventory = Utility.randomInventory();
-            if(inventoryFilePersistence.delete(inventory))
-                System.out.println("Se eliminó: " + inventory);
-            else
-                System.out.println("- No se eliminó: " + inventory);
-
-        }
-    }
-
-    @Test
-    public void testGet(){
-        inventoryFilePersistence = new InventoryFilePersistence();
-        inventories = inventoryFilePersistence.read();
-        System.out.println(inventories);
-    }
-    @Test
-    public void testRemoveAll(){
-        inventoryFilePersistence = new InventoryFilePersistence();
-        System.out.println("deleteAll(): " + inventoryFilePersistence.deleteAll());
-    }
+//    @Test
+//    public void testSave(){
+//        inventoryFilePersistence = new InventoryFilePersistence();
+//        for(int i = 0 ; i < 5; i++){
+//            Inventory inventory = Utility.randomInventory();
+//            if(inventoryFilePersistence.write(inventory))
+//                System.out.println("Se guardo: " + inventory);
+//            else
+//                System.out.println("- No se guardo: " + inventory);
+//
+//        }
+//    }
+//
+//    @Test
+//    public void testDelete(){
+//        for(int i = 0 ; i < 5; i++){
+//            Inventory inventory = Utility.randomInventory();
+//            if(inventoryFilePersistence.delete(inventory))
+//                System.out.println("Se eliminó: " + inventory);
+//            else
+//                System.out.println("- No se eliminó: " + inventory);
+//
+//        }
+//    }
+//
+//    @Test
+//    public void testGet(){
+//        inventoryFilePersistence = new InventoryFilePersistence();
+//        inventories = inventoryFilePersistence.read();
+//        System.out.println(inventories);
+//    }
+//    @Test
+//    public void testRemoveAll(){
+//        inventoryFilePersistence = new InventoryFilePersistence();
+//        System.out.println("deleteAll(): " + inventoryFilePersistence.deleteAll());
+//    }
 
 }
