@@ -2,7 +2,8 @@ package edu.ucr.rp.programacion2.proyecto.logic;
 
 import edu.ucr.rp.programacion2.proyecto.persistance.InventoryFilePersistence;
 import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
-import edu.ucr.rp.programacion2.proyecto.persistance.InventoryPersistance;
+import edu.ucr.rp.programacion2.proyecto.persistance.InventoryPersistence;
+import edu.ucr.rp.programacion2.proyecto.persistance.PersistenceException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,11 +12,11 @@ public class InventoryFileService implements InventoryService{
     //  Variables  \\
     private static InventoryFileService instance;
     private List<Inventory> list;
-    private InventoryPersistance inventoryPersistance;
+    private InventoryPersistence inventoryPersistence;
     //  Constructor  \\
     private InventoryFileService(){
         list = new ArrayList<>();
-        inventoryPersistance = new InventoryFilePersistence();
+        inventoryPersistence = new InventoryFilePersistence();
         refresh();
     }
     //  Singleton Pattern  \\
@@ -37,7 +38,12 @@ public class InventoryFileService implements InventoryService{
         refresh();
         if(validateAddition(inventory)){
             list.add(inventory);
-                return inventoryPersistance.write(inventory);
+            try {
+                return inventoryPersistence.write(inventory);
+            } catch (PersistenceException e) {
+                throw new ServiceException("Inventory can't be saved, because "  + e.getMessage());
+
+            }
 
         }
         return false;
@@ -55,9 +61,13 @@ public class InventoryFileService implements InventoryService{
         refresh();
         if(validateEdition(inventory)){
             Inventory oldInventory = list.get(list.indexOf(inventory));
-            return inventoryPersistance.rename(oldInventory.getName(), inventory.getName());
+            try {
+                return inventoryPersistence.rename(oldInventory.getName(), inventory.getName());
+            } catch (PersistenceException e) {
+                throw new ServiceException("Inventory can't be edited, because "  + e.getMessage());
+            }
         }
-        return false;
+    return false;
     }//TODO evaluate how to change name. or identify witch object was selected. [id generator].
 
     /**
@@ -74,12 +84,21 @@ public class InventoryFileService implements InventoryService{
             return false;
         }
         list.remove(inventory);
-        return inventoryPersistance.delete(inventory);
+        try {
+            return inventoryPersistence.delete(inventory);
+        } catch (PersistenceException e) {
+            throw new ServiceException("Inventory can't be deleted, because "  + e.getMessage());
+
+        }
     }
 
     public boolean removeAll()  throws ServiceException{
         list.clear();
-        if (!inventoryPersistance.deleteAll()) return false;
+        try {
+            if (!inventoryPersistence.deleteAll()) return false;
+        } catch (PersistenceException e) {
+            throw new ServiceException("Inventories can't be deleted, because "  + e.getMessage());
+        }
         refresh();
         return list.isEmpty();
     }
@@ -136,10 +155,12 @@ public class InventoryFileService implements InventoryService{
      * @param inventory to be validate.
      * @return {@code true} if the element is valid. {@code false} otherwise.
      */
-    private boolean validateEdition(Inventory inventory){
-        if(inventory==null) return false;                         // Not null
-        if(!list.contains(inventory)) return false;               // ID in list
-        return !nameUsedByOtherInventory(inventory);              // Name used
+    private boolean validateEdition(Inventory inventory) throws ServiceException {
+        if(inventory==null) throw new ServiceException("the inventory is null.");        // Not null
+        if(!list.contains(inventory))  throw new ServiceException("the inventory doesn't exist.");                           // Unique ID
+        if(nameUsedByOtherInventory(inventory)) throw new ServiceException("the inventory's name is already used.");              // Unique Name
+
+        return true;
     }
 
     /**
@@ -171,11 +192,15 @@ public class InventoryFileService implements InventoryService{
 
     private Boolean refresh(){
         //Lee el archivo
-        Object object = inventoryPersistance.read();
-        //Valida que existe y lo sustituye por la lista en memoria
-        if(object!=null){
-            list = (List<Inventory>) object;
-            return true;
+        List<Inventory> inventoryList = null;
+        try {
+            inventoryList = inventoryPersistence.read();
+            if(inventoryList!=null){
+                list = inventoryList;
+                return true;
+            }
+        } catch (PersistenceException e) {
+            System.out.println("Error: Inventory/refresh: " + e.getMessage());
         }
         return false;
     }

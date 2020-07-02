@@ -7,7 +7,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-public class InventoryFilePersistence implements InventoryPersistance {
+
+public class InventoryFilePersistence implements InventoryPersistence {
     //  Variables  \\
     private final String path = "files/inventories/";
     //  Constructor \\
@@ -17,17 +18,18 @@ public class InventoryFilePersistence implements InventoryPersistance {
     }
 
     //  Methods  \\
-    private void verifyCatalogsDir(String path){
+    private void verifyCatalogsDir(String path) {
         // Validate files/
         File root = new File("files");
-        if(!root.exists()) {
+        if (!root.exists()) {
             root.mkdir();
         }
         // Validate files/inventories/
         File file = new File(path);
-        if(!file.exists())
+        if (!file.exists())
             file.mkdir();
     }
+
     /**
      * Creates a new directory with the name of the inventory.
      * Checks if the directory exists.
@@ -36,31 +38,36 @@ public class InventoryFilePersistence implements InventoryPersistance {
      * @return {@code true} if the directory have been created or saved.{@code false} Otherwise.
      */
     @Override
-    public boolean write(Inventory inventory) {
-        if (inventory == null) return false;
+    public boolean write(Inventory inventory) throws PersistenceException {
+        if (inventory == null) throw new PersistenceException("The inventory is null.");
         File file = new File(path + inventory.getName());
         if (file.exists())
-            return false;
+            throw new PersistenceException("The inventory file already exists.");
         else
             return file.mkdir();
     }
 
 
-    public boolean rename(String oldValue, String newValue){
-        if (oldValue == null || oldValue.isEmpty()) return false;
-        if (newValue == null || newValue.isEmpty()) return false;
+    public boolean rename(String oldValue, String newValue) throws PersistenceException {
+        if (oldValue == null || oldValue.isEmpty()) throw new PersistenceException("Inventory can't be identify");
+        if (newValue == null || newValue.isEmpty()) throw new PersistenceException("Inventory is not valid.");
         File oldFile = new File(path + oldValue);
         File newFile = new File(path + newValue);
         oldFile.renameTo(newFile);
-        return !oldFile.exists() && newFile.exists();
+        if (!oldFile.exists() && newFile.exists()) {
+            return true;
+        } else {
+            throw new PersistenceException("Inventory hasn't been saved.");
+        }
     }
+
     /**
      * Search and return a list with inventories.
      *
      * @return {@code List<Inventory>} List of the inventories.
      */
     @Override
-    public List<Inventory> read() {
+    public List<Inventory> read() throws PersistenceException {
         return getInventories();
     }
 
@@ -71,35 +78,35 @@ public class InventoryFilePersistence implements InventoryPersistance {
      * @return {@code true} if the directory have been removed or doesn't exists.{@code false} Otherwise.
      */
     @Override
-    public boolean delete(Inventory inventory) {
-        if (inventory == null) return false;
+    public boolean delete(Inventory inventory) throws PersistenceException {
+        if (inventory == null) throw new PersistenceException("The inventory is null.");
         File file = new File(path + inventory.getName());
         if (!file.exists()) return true;
         try {
             FileUtils.forceDelete(file);
             return true;
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            throw new PersistenceException(e.getMessage());
         }
-        return false;
     }
 
     /**
      * Deletes all the inventories.
+     *
      * @return {@code true} if the directory have been removed or doesn't exists.{@code false} Otherwise.
      */
     @Override
-    public boolean deleteAll(){
+    public boolean deleteAll() throws PersistenceException {
         File file = new File(path);
         if (!file.exists()) return true;
         try {
             FileUtils.cleanDirectory(file);
             return true;
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            throw new PersistenceException(e.getMessage());
         }
-        return false;
     }
+
     /**
      * Search in the inventories path all the directories created.
      * Creates Inventory objects with the name of each subdirectory found.
@@ -107,7 +114,7 @@ public class InventoryFilePersistence implements InventoryPersistance {
      *
      * @return {@code List<Inventory>} List of the inventories found.
      */
-    private List<Inventory> getInventories() {
+    private List<Inventory> getInventories() throws PersistenceException {
         File file = new File(path);
         List<Inventory> inventories = new ArrayList();
 
@@ -117,7 +124,9 @@ public class InventoryFilePersistence implements InventoryPersistance {
                 for (String name : names) {
                     inventories.add(new Inventory(name));
                 }
+            return inventories;
+        } else {
+            throw new PersistenceException("The inventory file doesn't exists.");
         }
-        return inventories;
     }
 }

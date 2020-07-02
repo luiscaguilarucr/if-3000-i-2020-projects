@@ -4,6 +4,7 @@ import edu.ucr.rp.programacion2.proyecto.domain.Catalog;
 import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
 import edu.ucr.rp.programacion2.proyecto.persistance.CatalogFilePersistence;
 import edu.ucr.rp.programacion2.proyecto.persistance.CatalogPersistence;
+import edu.ucr.rp.programacion2.proyecto.persistance.PersistenceException;
 import edu.ucr.rp.programacion2.proyecto.util.idgenerator.IDGenerator;
 
 import java.util.ArrayList;
@@ -48,7 +49,11 @@ public class CatalogFileService implements CatalogService {
         if (validateAddition(catalog)) {
             catalog.getConfiguration().setId(idGenerator.generate());
             list.add(catalog);
-            catalogPersistence.write(catalog);
+            try {
+                catalogPersistence.write(catalog);
+            } catch (PersistenceException e) {
+                throw new ServiceException("Catalogs can't be added, because "  + e.getMessage());
+            }
             refresh();
             return list.contains(catalog);
         }
@@ -67,10 +72,14 @@ public class CatalogFileService implements CatalogService {
         refresh();
         if (validateEdition(catalog)) {
             // Delete the old value
-            if(catalogPersistence.delete(list.get(list.indexOf(catalog))))
-                if(catalogPersistence.write(catalog))//Write the newOne
-                    list.add(catalog);
-                    refresh();
+            try {
+                if(catalogPersistence.delete(list.get(list.indexOf(catalog))))
+                    if(catalogPersistence.write(catalog))//Write the newOne
+                        list.add(catalog);
+            } catch (PersistenceException e) {
+                throw new ServiceException("Catalog can't be edited, because "  + e.getMessage());
+            }
+            refresh();
             return list.contains(catalog);
         }
         return false;
@@ -90,13 +99,21 @@ public class CatalogFileService implements CatalogService {
             return false;
         }
         list.remove(catalog);
-        return catalogPersistence.delete(catalog);
+        try {
+            return catalogPersistence.delete(catalog);
+        } catch (PersistenceException e) {
+            throw new ServiceException("Catalog can't be deleted, because "  + e.getMessage());
+        }
     }
 
     public boolean removeAll()  throws ServiceException{
         if (!idGenerator.reset()) return false;
         list.clear();
-        if (!catalogPersistence.deleteAll()) return false;
+        try {
+            if (!catalogPersistence.deleteAll()) return false;
+        } catch (PersistenceException e) {
+            throw new ServiceException("Catalogs can't be deleted, because "  + e.getMessage());
+        }
         refresh();
         return list.isEmpty();
     }
@@ -208,11 +225,15 @@ public class CatalogFileService implements CatalogService {
 
     private Boolean refresh() {
         //Lee el archivo
-        Object object = catalogPersistence.read();
-        //Valida que existe y lo sustituye por la lista en memoria
-        if (object != null) {
-            list = (List<Catalog>) object;
-            return true;
+        List<Catalog> catalogs = null;
+        try {
+            catalogs = catalogPersistence.read();
+            if (catalogs != null) {
+                list = catalogs;
+                return true;
+            }
+        } catch (PersistenceException e) {
+            System.out.println("Error: Catalog/refresh: " + e.getMessage());
         }
         return false;
     }
