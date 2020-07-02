@@ -10,5 +10,4 @@ public interface Persistence<E, T> {
     T read();
     boolean delete(E e);
     boolean deleteAll();
-
 }
