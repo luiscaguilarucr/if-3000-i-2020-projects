@@ -13,6 +13,8 @@ public class Inventory {
         this.name = name;
     }
 
+    public Inventory() {  }
+
     public String getName() {
         return name;
     }

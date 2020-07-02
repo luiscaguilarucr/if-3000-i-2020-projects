@@ -9,7 +9,7 @@ import static edu.ucr.rp.programacion2.proyecto.util.Utility.randomInventoryName
 public class InventoryFileServiceTest extends TestCase {
     InventoryFileService inventoryFileService = InventoryFileService.getInstance();
 
-    public void testAdd() {
+    public void testAdd() throws ServiceException {
         for (int i = 0; i < 2 ; i++){
             Inventory inventory = randomInventory();
             if ( inventoryFileService.add(inventory))
@@ -19,7 +19,7 @@ public class InventoryFileServiceTest extends TestCase {
         }
     }
 
-    public void testEdit() {
+    public void testEdit() throws ServiceException {
         Inventory inventory = inventoryFileService.get(randomInventoryName());
         if(inventory!=null){
             System.out.println("Old inventory: " + inventory);
@@ -32,7 +32,7 @@ public class InventoryFileServiceTest extends TestCase {
         }
     }
 
-    public void testRemove() {
+    public void testRemove() throws ServiceException {
         for (int i = 0; i < 0 ; i++){
             Inventory inventory = randomInventory();
             if ( inventoryFileService.remove(inventory))
@@ -47,11 +47,11 @@ public class InventoryFileServiceTest extends TestCase {
     public void testGet() {
     }
 
-    public void testGetAll() {
+    public void testGetAll() throws ServiceException {
         System.out.println(inventoryFileService.getAll());
     }
 
-    public void deleteAll(){
+    public void deleteAll() throws ServiceException {
         if ( inventoryFileService.removeAll())
             System.out.println("Se eliminaron los inventarios.");
         else

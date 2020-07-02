@@ -2,6 +2,7 @@ package edu.ucr.rp.programacion2.proyecto.logic;
 
 import edu.ucr.rp.programacion2.proyecto.domain.Catalog;
 import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
+import edu.ucr.rp.programacion2.proyecto.persistance.CatalogFilePersistence;
 import edu.ucr.rp.programacion2.proyecto.persistance.CatalogPersistence;
 import edu.ucr.rp.programacion2.proyecto.util.idgenerator.IDGenerator;
 
@@ -18,15 +19,20 @@ public class CatalogFileService implements CatalogService {
     private List<Catalog> list;
     private CatalogPersistence catalogPersistence;
     private IDGenerator idGenerator;
-
+    private Inventory inventory;
     //  Constructor \\
     public CatalogFileService(Inventory inventory) {
-        list = new ArrayList<Catalog>();
-        catalogPersistence = new CatalogPersistence(inventory.getName());
+        list = new ArrayList<>();
+        catalogPersistence = new CatalogFilePersistence(inventory.getName());
         refresh();
         idGenerator = new IDGenerator(inventory);
     }
     //  Methods  \\
+
+    public CatalogFileService setInventory(Inventory inventory) {
+        this.inventory = inventory;
+        return this;
+    }
 
     /**
      * This method add a new element to the list.
@@ -36,7 +42,7 @@ public class CatalogFileService implements CatalogService {
      * @return {@code true} if the element has been added correctly. {@code false} Otherwise.
      */
     @Override
-    public boolean add(Catalog catalog) {
+    public boolean add(Catalog catalog) throws ServiceException{
         refresh();
         catalog.getConfiguration().setId(idGenerator.get());
         if (validateAddition(catalog)) {
@@ -57,7 +63,7 @@ public class CatalogFileService implements CatalogService {
      * @return {@code true} if the element has been modified. {@code false} Otherwise.
      */
     @Override
-    public boolean edit(Catalog catalog) {
+    public boolean edit(Catalog catalog)  throws ServiceException{
         refresh();
         if (validateEdition(catalog)) {
             // Delete the old value
@@ -78,7 +84,7 @@ public class CatalogFileService implements CatalogService {
      * @return {@code true} if the element has been removed. {@code false} Otherwise.
      */
     @Override
-    public boolean remove(Catalog catalog) {
+    public boolean remove(Catalog catalog)  throws ServiceException{
         refresh();
         if (catalog == null || !list.contains(catalog)) {
             return false;
@@ -87,7 +93,7 @@ public class CatalogFileService implements CatalogService {
         return catalogPersistence.delete(catalog);
     }
 
-    public boolean removeAll() {
+    public boolean removeAll()  throws ServiceException{
         if (!idGenerator.reset()) return false;
         list.clear();
         if (!catalogPersistence.deleteAll()) return false;
@@ -102,7 +108,7 @@ public class CatalogFileService implements CatalogService {
      * @return {@code Catalog} if the element's name is in the list. {@code null} Otherwise.
      */
     @Override
-    public Catalog get(String name) {
+    public Catalog get(String name)  throws ServiceException{
         refresh();
         for (Catalog catalog : list)
             if (catalog.getName().equals(name))
@@ -117,21 +123,9 @@ public class CatalogFileService implements CatalogService {
      * @return {@code List<Catalog>} List with elements
      */
     @Override
-    public List<Catalog> getAll() {
+    public List<Catalog> getAll()  throws ServiceException{
         refresh();
         return list;
-    }
-
-    /**
-     * Creates a list with the names of the catalogs.
-     *
-     * @return {@code List<String>} List with names of catalogs.
-     */
-    public List<String> getNamesList(){
-        List<String> namesList = new ArrayList();
-        for (Catalog catalog : list)
-            namesList.add(catalog.getName());
-        return namesList;
     }
 
     //  More methods \\

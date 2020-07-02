@@ -9,4 +9,6 @@ public interface Persistence<E, T> {
     boolean write(E e);
     T read();
     boolean delete(E e);
+    boolean deleteAll();
+
 }

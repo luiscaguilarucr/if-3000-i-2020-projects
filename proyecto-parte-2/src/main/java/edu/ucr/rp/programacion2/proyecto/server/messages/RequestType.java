@@ -1,24 +1,21 @@
 package edu.ucr.rp.programacion2.proyecto.server.messages;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum RequestType {
-    @JsonProperty("START")
-    START("START"),
-    @JsonProperty("CLOSE")
-    CLOSE("CLOSE");
+    INSERT_CATALOG(0), UPDATE_CATALOG(1),
+    READ_CATALOG(2), READ_ALL_CATALOGS(3),
+    DELETE_CATALOG(4), DELETE_ALL_CATALOGS(5),
+    INSERT_INVENTORY(6), UPDATE_INVENTORY(7),
+    READ_INVENTORY(8), READ_ALL_INVENTORIES(9),
+    DELETE_INVENTORY(10), DELETE_ALL_INVENTORIES(11),
+    CLOSE(12);
 
-    private String type;
-
-    RequestType(String type) {
-        this.type = type;
-    }
-    public String getType() {
-        return type;
+    RequestType(int id) {
+        this.id = id;
     }
 
-    public RequestType setType(String type) {
-        this.type = type;
-        return this;
-    }
+    @JsonValue
+    final int id;
+
 }

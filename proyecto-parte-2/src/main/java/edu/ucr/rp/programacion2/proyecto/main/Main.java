@@ -1,10 +1,10 @@
 package edu.ucr.rp.programacion2.proyecto.main;
 
-import edu.ucr.rp.programacion2.proyecto.gui.App;
+
+import edu.ucr.rp.programacion2.proyecto.server.Server;
 
 public class Main {
     public static void main(String...args){
-        App app = new App();
-        app.display();
+        Server server = new Server(12121);
     }
 }
