@@ -1,4 +1,4 @@
-package edu.ucr.rp.programacion2.proyecto.server.messages;
+package edu.ucr.rp.programacion2.proyecto.persistance.messages;
 
 public class Request {
     private RequestType type;

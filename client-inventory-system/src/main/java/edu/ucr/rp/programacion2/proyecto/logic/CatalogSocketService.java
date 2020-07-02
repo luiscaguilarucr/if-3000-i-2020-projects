@@ -4,7 +4,9 @@ import edu.ucr.rp.programacion2.proyecto.domain.Catalog;
 import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
 import edu.ucr.rp.programacion2.proyecto.persistance.CatalogPersistence;
 import edu.ucr.rp.programacion2.proyecto.persistance.CatalogSocketPersistence;
+import edu.ucr.rp.programacion2.proyecto.persistance.PersistenceException;
 
+import java.rmi.ServerException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,12 +18,17 @@ import java.util.List;
  */
 public class CatalogSocketService implements CatalogService {
     private List<Catalog> list;
-    private CatalogPersistence catalogFilePersistence;
+    private CatalogPersistence catalogPersistence;
+
     //  Constructor \\
     public CatalogSocketService(Inventory inventory) {
         list = new ArrayList<>();
-        catalogFilePersistence = new CatalogSocketPersistence(inventory.getName());
-        refresh();
+        catalogPersistence = new CatalogSocketPersistence(inventory.getName());
+        try {
+            refresh();
+        } catch (ServiceException e) {
+            System.out.println(e.getMessage());
+        }
     }
     //  Methods  \\
 
@@ -33,11 +40,15 @@ public class CatalogSocketService implements CatalogService {
      * @return {@code true} if the element has been added correctly. {@code false} Otherwise.
      */
     @Override
-    public boolean add(Catalog catalog) throws ServiceException{
+    public boolean add(Catalog catalog) throws ServiceException {
         refresh();
         if (validateAddition(catalog)) {
             list.add(catalog);
-            catalogFilePersistence.write(catalog);
+            try {
+                catalogPersistence.write(catalog);
+            } catch (PersistenceException e) {
+                throw new ServiceException(e.getMessage());
+            }
             refresh();
             return list.contains(catalog);
         }
@@ -52,17 +63,24 @@ public class CatalogSocketService implements CatalogService {
      * @return {@code true} if the element has been modified. {@code false} Otherwise.
      */
     @Override
-    public boolean edit(Catalog catalog)  throws ServiceException{
+    public boolean edit(Catalog catalog) throws ServiceException {
         refresh();
         if (validateEdition(catalog)) {
             // Delete the old value
-            if(catalogFilePersistence.delete(list.get(list.indexOf(catalog))))
-                if(catalogFilePersistence.write(catalog))//Write the newOne
-                    list.add(catalog);
-                    refresh();
-            return list.contains(catalog);
+            try {
+                if (catalogPersistence.delete(list.get(list.indexOf(catalog))))
+                    if (catalogPersistence.write(catalog))//Write the newOne
+
+                        list.add(catalog);
+                refresh();
+                return list.contains(catalog);
+            } catch (PersistenceException e) {
+                throw new ServiceException(e.getMessage());
+            }
         }
+
         return false;
+
     }
 
     /**
@@ -73,18 +91,26 @@ public class CatalogSocketService implements CatalogService {
      * @return {@code true} if the element has been removed. {@code false} Otherwise.
      */
     @Override
-    public boolean remove(Catalog catalog)  throws ServiceException{
+    public boolean remove(Catalog catalog) throws ServiceException {
         refresh();
         if (catalog == null || !list.contains(catalog)) {
             return false;
         }
         list.remove(catalog);
-        return catalogFilePersistence.delete(catalog);
+        try {
+            return catalogPersistence.delete(catalog);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage());
+        }
     }
 
-    public boolean removeAll()  throws ServiceException{
+    public boolean removeAll() throws ServiceException {
         list.clear();
-        if (!catalogFilePersistence.deleteAll()) return false;
+        try {
+            if (!catalogPersistence.deleteAll()) return false;
+        } catch (edu.ucr.rp.programacion2.proyecto.persistance.PersistenceException e) {
+            e.printStackTrace();
+        }
         refresh();
         return list.isEmpty();
     }
@@ -96,7 +122,7 @@ public class CatalogSocketService implements CatalogService {
      * @return {@code Catalog} if the element's name is in the list. {@code null} Otherwise.
      */
     @Override
-    public Catalog get(String name)  throws ServiceException{
+    public Catalog get(String name) throws ServiceException {
         refresh();
         for (Catalog catalog : list)
             if (catalog.getName().equals(name))
@@ -111,7 +137,7 @@ public class CatalogSocketService implements CatalogService {
      * @return {@code List<Catalog>} List with elements
      */
     @Override
-    public List<Catalog> getAll()  throws ServiceException{
+    public List<Catalog> getAll() throws ServiceException {
         refresh();
         return list;
     }
@@ -194,9 +220,14 @@ public class CatalogSocketService implements CatalogService {
         return false;
     }
 
-    private Boolean refresh() {
+    private Boolean refresh() throws ServiceException{
         //Lee el archivo
-        Object object = catalogFilePersistence.read();
+        Object object = null;
+        try {
+            object = catalogPersistence.read();
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage());
+        }
         //Valida que existe y lo sustituye por la lista en memoria
         if (object != null) {
             list = (List<Catalog>) object;

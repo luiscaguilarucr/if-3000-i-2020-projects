@@ -104,12 +104,11 @@ public class InventoryForm implements PaneViewer {
                 wasAdded = inventoryService.add(inventory);
             }catch (ServiceException e){
                 System.out.println(e.getMessage());
+                PaneUtil.showAlert(Alert.AlertType.INFORMATION, "ERROR when adding", "The inventory " + inventoryNameTextField.getText() + " was not added, because " + e.getMessage());
             }
         }
         if (wasAdded) {
             PaneUtil.showAlert(Alert.AlertType.INFORMATION, "Inventory added", "The inventory " + inventoryNameTextField.getText() + " was added correctly");
-        } else {
-            PaneUtil.showAlert(Alert.AlertType.INFORMATION, "ERROR when adding", "The inventory " + inventoryNameTextField.getText() + " was not added");
         }
     }
 

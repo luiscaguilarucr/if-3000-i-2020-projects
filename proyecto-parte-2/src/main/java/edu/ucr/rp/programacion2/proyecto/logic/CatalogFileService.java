@@ -19,7 +19,7 @@ public class CatalogFileService implements CatalogService {
     private List<Catalog> list;
     private CatalogPersistence catalogPersistence;
     private IDGenerator idGenerator;
-
+    private Inventory inventory;
     //  Constructor \\
     public CatalogFileService(Inventory inventory) {
         list = new ArrayList<>();
@@ -28,6 +28,11 @@ public class CatalogFileService implements CatalogService {
         idGenerator = new IDGenerator(inventory);
     }
     //  Methods  \\
+
+    public CatalogFileService setInventory(Inventory inventory) {
+        this.inventory = inventory;
+        return this;
+    }
 
     /**
      * This method add a new element to the list.

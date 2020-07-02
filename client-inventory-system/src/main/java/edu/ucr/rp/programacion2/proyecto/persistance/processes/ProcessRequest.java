@@ -1,4 +1,4 @@
-package edu.ucr.rp.programacion2.proyecto.server.processes;
+package edu.ucr.rp.programacion2.proyecto.persistance.processes;
 
 import java.io.IOException;
 import java.net.Socket;

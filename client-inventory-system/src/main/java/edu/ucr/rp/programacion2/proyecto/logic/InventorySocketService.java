@@ -3,6 +3,7 @@ package edu.ucr.rp.programacion2.proyecto.logic;
 import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
 import edu.ucr.rp.programacion2.proyecto.persistance.InventoryPersistance;
 import edu.ucr.rp.programacion2.proyecto.persistance.InventorySocketPersistence;
+import edu.ucr.rp.programacion2.proyecto.persistance.PersistenceException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,8 +16,12 @@ public class InventorySocketService implements InventoryService{
     //  Constructor  \\
     private InventorySocketService(){
         list = new ArrayList<>();
-        inventoryPersistance = new InventorySocketPersistence();
-        refresh();
+        inventoryPersistance = new InventorySocketPersistence("127.0.0.1", 12121);
+        try {
+            refresh();
+        } catch (ServiceException e) {
+            System.out.println(e.getMessage());
+        }
     }
     //  Singleton Pattern  \\
     public static InventorySocketService getInstance(){
@@ -37,7 +42,11 @@ public class InventorySocketService implements InventoryService{
         refresh();
         if(validateAddition(inventory)){
             list.add(inventory);
-            return inventoryPersistance.write(inventory);
+            try {
+                return inventoryPersistance.write(inventory);
+            } catch (PersistenceException e) {
+                throw new ServiceException(e.getMessage());
+            }
         }
         return false;
     }
@@ -73,12 +82,20 @@ public class InventorySocketService implements InventoryService{
             return false;
         }
         list.remove(inventory);
-        return inventoryPersistance.delete(inventory);
+        try {
+            return inventoryPersistance.delete(inventory);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage());
+        }
     }
 
     public boolean removeAll()  throws ServiceException{
         list.clear();
-        if (!inventoryPersistance.deleteAll()) return false;
+        try {
+            if (!inventoryPersistance.deleteAll()) return false;
+        } catch (edu.ucr.rp.programacion2.proyecto.persistance.PersistenceException e) {
+            e.printStackTrace();
+        }
         refresh();
         return list.isEmpty();
     }
@@ -119,10 +136,11 @@ public class InventorySocketService implements InventoryService{
      * @param inventory to be validate.
      * @return {@code true} if the element is valid. {@code false} otherwise.
      */
-    private boolean validateAddition(Inventory inventory) {
-        if(inventory == null) return false;                         // Not null
-        if(list.contains(inventory)) return false;                  // Unique ID
-        return !containsByName(inventory.getName());                // Unique Name
+    private boolean validateAddition(Inventory inventory) throws ServiceException{
+        if(inventory == null) throw new ServiceException("the inventory is null.");                                         // Not null
+        if(list.contains(inventory)) throw new ServiceException("the inventory already exists.");                           // Unique ID
+        if(containsByName(inventory.getName()))   throw new ServiceException("the inventory already exists.");              // Unique Name
+        return true;
     }
 
     /**
@@ -168,9 +186,14 @@ public class InventorySocketService implements InventoryService{
         return false;
     }
 
-    private Boolean refresh(){
+    private Boolean refresh() throws ServiceException{
         //Lee el archivo
-        Object object = inventoryPersistance.read();
+        Object object = null;
+        try {
+            object = inventoryPersistance.read();
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage());
+        }
         //Valida que existe y lo sustituye por la lista en memoria
         if(object!=null){
             list = (List<Inventory>) object;

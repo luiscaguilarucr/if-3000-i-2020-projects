@@ -37,7 +37,8 @@ public class InventoryFileService implements InventoryService{
         refresh();
         if(validateAddition(inventory)){
             list.add(inventory);
-            return inventoryPersistance.write(inventory);
+                return inventoryPersistance.write(inventory);
+
         }
         return false;
     }
@@ -119,12 +120,12 @@ public class InventoryFileService implements InventoryService{
      * @param inventory to be validate.
      * @return {@code true} if the element is valid. {@code false} otherwise.
      */
-    private boolean validateAddition(Inventory inventory) {
-        if(inventory == null) return false;                         // Not null
-        if(list.contains(inventory)) return false;                  // Unique ID
-        return !containsByName(inventory.getName());                // Unique Name
+    private boolean validateAddition(Inventory inventory) throws ServiceException{
+        if(inventory == null) throw new ServiceException("the inventory is null.");                                         // Not null
+        if(list.contains(inventory)) throw new ServiceException("the inventory already exists.");                           // Unique ID
+        if(containsByName(inventory.getName()))   throw new ServiceException("the inventory already exists.");              // Unique Name
+        return true;
     }
-
     /**
      * Check if the inventory can be editing.
      *

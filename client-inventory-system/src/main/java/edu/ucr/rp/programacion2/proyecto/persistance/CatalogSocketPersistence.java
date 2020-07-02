@@ -41,7 +41,7 @@ public class CatalogSocketPersistence implements CatalogPersistence {
      * @return {@code true} if the catalog have been saved.{@code false} Otherwise.
      */
     @Override
-    public boolean write(Catalog catalog) {
+    public boolean write(Catalog catalog) throws PersistenceException{
         if (catalog == null) return false;                       // Not null
         if (!checkDirectory(catalog.getName())) return false;    // Check dir
         if (!saveConfig(catalog)) return false;                      // Save ID
@@ -55,12 +55,12 @@ public class CatalogSocketPersistence implements CatalogPersistence {
      * @return {@code List<Catalog>} List of the catalogs.
      */
     @Override
-    public List<Catalog> read() {
+    public List<Catalog> read() throws PersistenceException{
         return readCatalogs();
     }
 
     @Override
-    public boolean delete(Catalog catalog) {
+    public boolean delete(Catalog catalog) throws PersistenceException {
         try {
             FileUtils.forceDelete(new File(path + catalog.getName()));
         } catch (IOException e) {
@@ -236,7 +236,7 @@ public class CatalogSocketPersistence implements CatalogPersistence {
         return null;
     }
     @Override
-    public boolean deleteAll(){
+    public boolean deleteAll() throws PersistenceException {
         try {
             FileUtils.cleanDirectory(new File(path));
         } catch (IOException e) {

@@ -1,18 +1,25 @@
 package edu.ucr.rp.programacion2.proyecto.server;
 
+import edu.ucr.rp.programacion2.proyecto.logic.InventoryFileService;
 import edu.ucr.rp.programacion2.proyecto.server.messages.Request;
+import edu.ucr.rp.programacion2.proyecto.server.messages.RequestType;
+import edu.ucr.rp.programacion2.proyecto.server.processes.ProcessCatalogRequest;
+import edu.ucr.rp.programacion2.proyecto.server.processes.ProcessInventoryRequest;
+import edu.ucr.rp.programacion2.proyecto.server.processes.ProcessRequest;
 import edu.ucr.rp.programacion2.proyecto.util.JsonUtil;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import static edu.ucr.rp.programacion2.proyecto.server.messages.RequestType.CLOSE;
 import static edu.ucr.rp.programacion2.proyecto.server.processes.RequestProcessUtil.receive;
 
 public class Server {
     private JsonUtil jsonUtil = new JsonUtil();
     private ServerSocket serverSocket = null;
-
+    private ProcessRequest catalogProcessRequest;
+    private ProcessRequest inventoryProcessRequest;
     /**
      * Runs the server.
      * @param port of the server.
@@ -20,6 +27,7 @@ public class Server {
     public Server(int port) {
         try {
             serverSocket = new ServerSocket(port);              // Initialize the Server.
+            initializeProcessRequests();                        // Initialize processRequests
             System.out.println("Esperando conexión");
             while(true) {
                 Socket socket = serverSocket.accept();          // Wait for indeterminate client connections.
@@ -28,10 +36,30 @@ public class Server {
                 Request request = receive(Request.class, socket); // Select the request type.
                 System.out.println("Message Recibido: " + jsonUtil.asJson(request));//
 
-                if (request.getType().equals("CLOSE")) {
-                    socket.close();
+                // Classify the request
+                RequestType type = request.getType();
+                switch (type){
+                    // Catalogs request
+                    case INSERT_CATALOG: catalogProcessRequest.insert(socket);
+                    case UPDATE_CATALOG: catalogProcessRequest.update(socket);
+                    case READ_CATALOG:catalogProcessRequest.read(socket);
+                    case READ_ALL_CATALOGS: catalogProcessRequest.readAll(socket);
+                    case DELETE_CATALOG: catalogProcessRequest.delete(socket);
+                    case DELETE_ALL_CATALOGS: catalogProcessRequest.deleteAll(socket);
+                    // Inventory request
+                    case INSERT_INVENTORY: inventoryProcessRequest.insert(socket);
+                    case UPDATE_INVENTORY: inventoryProcessRequest.update(socket);
+                    case READ_INVENTORY: inventoryProcessRequest.read(socket);
+                    case READ_ALL_INVENTORIES: inventoryProcessRequest.readAll(socket);
+                    case DELETE_INVENTORY: inventoryProcessRequest.delete(socket);
+                    case DELETE_ALL_INVENTORIES: inventoryProcessRequest.deleteAll(socket);
+                    default: {
+                        request = receive(Request.class, socket);
+                        if(request.getType().equals(CLOSE)) {
+                            socket.close();
+                        }
+                    }
                 }
-
             }
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -46,4 +74,9 @@ public class Server {
     }
 
 
+
+    private void initializeProcessRequests(){
+        catalogProcessRequest = new ProcessCatalogRequest();
+        inventoryProcessRequest = new ProcessInventoryRequest(InventoryFileService.getInstance());
+    }
 }
