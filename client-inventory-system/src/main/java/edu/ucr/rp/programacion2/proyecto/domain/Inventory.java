@@ -3,8 +3,14 @@ package edu.ucr.rp.programacion2.proyecto.domain;
 import java.util.Objects;
 
 public class Inventory {
+    // Variables
     private String name;
+    // Constructor
 
+    public Inventory() {
+    }
+
+    // Methods
     /**
      * Object Inventory that contains catalogs.
      * @param name name of the catalog.

@@ -2,6 +2,7 @@ package edu.ucr.rp.programacion2.proyecto.persistance;
 
 import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
 import edu.ucr.rp.programacion2.proyecto.persistance.messages.ConfirmationRequest;
+import edu.ucr.rp.programacion2.proyecto.persistance.messages.InventoryListRequest;
 import edu.ucr.rp.programacion2.proyecto.persistance.messages.InventoryRequest;
 import edu.ucr.rp.programacion2.proyecto.persistance.messages.Request;
 import edu.ucr.rp.programacion2.proyecto.util.JsonUtil;
@@ -10,8 +11,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.List;
 
-import static edu.ucr.rp.programacion2.proyecto.persistance.messages.RequestType.CLOSE;
-import static edu.ucr.rp.programacion2.proyecto.persistance.messages.RequestType.INSERT_INVENTORY;
+import static edu.ucr.rp.programacion2.proyecto.persistance.messages.RequestType.*;
 import static edu.ucr.rp.programacion2.proyecto.persistance.processes.RequestProcessUtil.receive;
 import static edu.ucr.rp.programacion2.proyecto.persistance.processes.RequestProcessUtil.send;
 
@@ -35,7 +35,6 @@ public class InventorySocketPersistence implements InventoryPersistance {
      */
     @Override
     public boolean insert(Inventory inventory) throws PersistenceException {
-
         try {
             return insert0(inventory);
         } catch (IOException | ClassNotFoundException e) {
@@ -66,7 +65,11 @@ public class InventorySocketPersistence implements InventoryPersistance {
      */
     @Override
     public List<Inventory> readAll() throws PersistenceException {
-        return getInventories();
+        try {
+            return readAll0();
+        } catch (IOException | ClassNotFoundException e) {
+            throw new PersistenceException(e.getMessage());
+        }
     }
 
     /**
@@ -90,16 +93,6 @@ public class InventorySocketPersistence implements InventoryPersistance {
         return false;
     }
 
-    /**
-     * Search in the inventories path all the directories created.
-     * Creates Inventory objects with the name of each subdirectory found.
-     * Add the each inventory to a list.
-     *
-     * @return {@code List<Inventory>} List of the inventories found.
-     */
-    private List<Inventory> getInventories() {
-        return null;
-    }
 
     private boolean insert0(Inventory inventory) throws IOException, ClassNotFoundException, PersistenceException {
         Request request = new Request();
@@ -145,4 +138,39 @@ public class InventorySocketPersistence implements InventoryPersistance {
         }
 
     }
+
+    private List<Inventory> readAll0() throws IOException, ClassNotFoundException {
+        Request request = new Request();
+        try {
+            // Establish the connection with the server.
+            clientSocket = new Socket(host, port);
+            // Create a read all request.
+            request.setType(READ_ALL_INVENTORIES);
+            System.out.println("Se ha enviado una petición para obtener todos los inventarios.");
+            // Send and wait the request.
+            send(request, clientSocket);
+
+            // Receives an InventoryListRequest.
+            System.out.println("Esperando lista.");
+            InventoryListRequest inventoryListRequest = receive(InventoryListRequest.class, clientSocket);
+            List<Inventory> list = inventoryListRequest.getList();
+            System.out.println("Lista recibida= " + list);
+
+            return list;
+        } finally {
+            // Send close request
+            Request closeRequest = new Request();
+            closeRequest.setType(CLOSE);
+            send(closeRequest, clientSocket);
+
+            if (clientSocket != null) {
+                clientSocket.close();
+                System.out.println("Conexión cerrada");
+            }
+        }
+    }
 }
+
+
+
+

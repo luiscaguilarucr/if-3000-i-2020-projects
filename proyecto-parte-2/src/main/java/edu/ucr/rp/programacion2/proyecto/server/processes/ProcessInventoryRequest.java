@@ -4,16 +4,19 @@ import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
 import edu.ucr.rp.programacion2.proyecto.logic.InventoryService;
 import edu.ucr.rp.programacion2.proyecto.logic.ServiceException;
 import edu.ucr.rp.programacion2.proyecto.server.messages.ConfirmationRequest;
+import edu.ucr.rp.programacion2.proyecto.server.messages.InventoryListRequest;
 import edu.ucr.rp.programacion2.proyecto.server.messages.InventoryRequest;
 import edu.ucr.rp.programacion2.proyecto.util.JsonUtil;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 import static edu.ucr.rp.programacion2.proyecto.server.processes.RequestProcessUtil.receive;
 import static edu.ucr.rp.programacion2.proyecto.server.processes.RequestProcessUtil.send;
 
-public class ProcessInventoryRequest  implements ProcessRequest{
+public class ProcessInventoryRequest implements ProcessRequest {
     // Variables
     private InventoryService inventoryService;
     private JsonUtil jsonUtil = new JsonUtil();
@@ -34,7 +37,7 @@ public class ProcessInventoryRequest  implements ProcessRequest{
         // Add inventory.
         ConfirmationRequest confirmationRequest = new ConfirmationRequest();
         try {
-            if(inventoryService.add(inventory)){
+            if (inventoryService.add(inventory)) {
                 confirmationRequest.setCompleted(true);
                 confirmationRequest.setDetails("Inventory has been added");
             }
@@ -48,7 +51,7 @@ public class ProcessInventoryRequest  implements ProcessRequest{
     }
 
     @Override
-    public void update(Socket socket)  throws IOException, ClassNotFoundException{
+    public void update(Socket socket) throws IOException, ClassNotFoundException {
 
     }
 
@@ -58,17 +61,27 @@ public class ProcessInventoryRequest  implements ProcessRequest{
     }
 
     @Override
-    public void readAll(Socket socket) throws IOException, ClassNotFoundException{
+    public void readAll(Socket socket) throws IOException, ClassNotFoundException {
+        InventoryListRequest inventoryListRequest = new InventoryListRequest();
+        try {
+            // Get inventories.
+            List<Inventory> list = inventoryService.getAll();
+            // Add the list to the request
+            inventoryListRequest.setList(list);
+        } catch (ServiceException serviceException) {
+            System.out.println("Error in getAll() inventories...");
+        }
+        // Sent List
+        send(inventoryListRequest, socket);
+    }
+
+    @Override
+    public void delete(Socket socket) throws IOException, ClassNotFoundException {
 
     }
 
     @Override
-    public void delete(Socket socket) throws IOException, ClassNotFoundException{
-
-    }
-
-    @Override
-    public void deleteAll(Socket socket) throws IOException, ClassNotFoundException{
+    public void deleteAll(Socket socket) throws IOException, ClassNotFoundException {
 
     }
 }
