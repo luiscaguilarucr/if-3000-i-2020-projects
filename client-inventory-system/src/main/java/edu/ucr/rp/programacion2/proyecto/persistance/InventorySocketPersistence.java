@@ -34,17 +34,74 @@ public class InventorySocketPersistence implements InventoryPersistance {
      * @return {@code true} if the directory have been created or saved.{@code false} Otherwise.
      */
     @Override
-    public boolean write(Inventory inventory) throws PersistenceException {
+    public boolean insert(Inventory inventory) throws PersistenceException {
 
         try {
-            return insert(inventory);
+            return insert0(inventory);
         } catch (IOException | ClassNotFoundException e) {
             throw new PersistenceException(e.getMessage());// TODO
         }
 
     }
 
-    private boolean insert(Inventory inventory) throws IOException, ClassNotFoundException, PersistenceException {
+    @Override
+    public boolean update(Inventory inventory) throws PersistenceException {
+        return false;
+    }
+
+    @Override
+    public Inventory read(List<Inventory> key) throws PersistenceException {
+        return null;
+    }
+
+
+    public boolean rename(String oldValue, String newValue) {
+        throw new UnsupportedOperationException("No implementado");
+    }
+
+    /**
+     * Search and return a list with inventories.
+     *
+     * @return {@code List<Inventory>} List of the inventories.
+     */
+    @Override
+    public List<Inventory> readAll() throws PersistenceException {
+        return getInventories();
+    }
+
+    /**
+     * Deletes an inventory.
+     *
+     * @param inventory to delete.
+     * @return {@code true} if the directory have been removed or doesn't exists.{@code false} Otherwise.
+     */
+    @Override
+    public boolean delete(Inventory inventory) throws PersistenceException {
+        return false;
+    }
+
+    /**
+     * Deletes all the inventories.
+     *
+     * @return {@code true} if the directory have been removed or doesn't exists.{@code false} Otherwise.
+     */
+    @Override
+    public boolean deleteAll() throws PersistenceException {
+        return false;
+    }
+
+    /**
+     * Search in the inventories path all the directories created.
+     * Creates Inventory objects with the name of each subdirectory found.
+     * Add the each inventory to a list.
+     *
+     * @return {@code List<Inventory>} List of the inventories found.
+     */
+    private List<Inventory> getInventories() {
+        return null;
+    }
+
+    private boolean insert0(Inventory inventory) throws IOException, ClassNotFoundException, PersistenceException {
         Request request = new Request();
         try {
             // Establish the connection with the server.
@@ -87,53 +144,5 @@ public class InventorySocketPersistence implements InventoryPersistance {
             System.out.println("Conexión cerrada");
         }
 
-    }
-
-
-    public boolean rename(String oldValue, String newValue) {
-        throw new UnsupportedOperationException("No implementado");
-    }
-
-    /**
-     * Search and return a list with inventories.
-     *
-     * @return {@code List<Inventory>} List of the inventories.
-     */
-    @Override
-    public List<Inventory> read() throws PersistenceException {
-        return getInventories();
-    }
-
-    /**
-     * Deletes an inventory.
-     *
-     * @param inventory to delete.
-     * @return {@code true} if the directory have been removed or doesn't exists.{@code false} Otherwise.
-     */
-    @Override
-    public boolean delete(Inventory inventory) throws PersistenceException {
-
-        return false;
-    }
-
-    /**
-     * Deletes all the inventories.
-     *
-     * @return {@code true} if the directory have been removed or doesn't exists.{@code false} Otherwise.
-     */
-    @Override
-    public boolean deleteAll() throws PersistenceException {
-        return false;
-    }
-
-    /**
-     * Search in the inventories path all the directories created.
-     * Creates Inventory objects with the name of each subdirectory found.
-     * Add the each inventory to a list.
-     *
-     * @return {@code List<Inventory>} List of the inventories found.
-     */
-    private List<Inventory> getInventories() {
-        return null;
     }
 }

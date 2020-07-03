@@ -6,7 +6,6 @@ import edu.ucr.rp.programacion2.proyecto.persistance.CatalogPersistence;
 import edu.ucr.rp.programacion2.proyecto.persistance.CatalogSocketPersistence;
 import edu.ucr.rp.programacion2.proyecto.persistance.PersistenceException;
 
-import java.rmi.ServerException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +22,7 @@ public class CatalogSocketService implements CatalogService {
     //  Constructor \\
     public CatalogSocketService(Inventory inventory) {
         list = new ArrayList<>();
-        catalogPersistence = new CatalogSocketPersistence(inventory.getName());
+        catalogPersistence = new CatalogSocketPersistence("127.0.0.1", 12121);
         try {
             refresh();
         } catch (ServiceException e) {
@@ -45,7 +44,7 @@ public class CatalogSocketService implements CatalogService {
         if (validateAddition(catalog)) {
             list.add(catalog);
             try {
-                catalogPersistence.write(catalog);
+                catalogPersistence.insert(catalog);
             } catch (PersistenceException e) {
                 throw new ServiceException(e.getMessage());
             }
@@ -69,7 +68,7 @@ public class CatalogSocketService implements CatalogService {
             // Delete the old value
             try {
                 if (catalogPersistence.delete(list.get(list.indexOf(catalog))))
-                    if (catalogPersistence.write(catalog))//Write the newOne
+                    if (catalogPersistence.insert(catalog))//Write the newOne
 
                         list.add(catalog);
                 refresh();
@@ -224,7 +223,7 @@ public class CatalogSocketService implements CatalogService {
         //Lee el archivo
         Object object = null;
         try {
-            object = catalogPersistence.read();
+            object = catalogPersistence.readAll();
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage());
         }

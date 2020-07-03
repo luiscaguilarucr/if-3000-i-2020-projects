@@ -43,7 +43,7 @@ public class InventorySocketService implements InventoryService{
         if(validateAddition(inventory)){
             list.add(inventory);
             try {
-                return inventoryPersistance.write(inventory);
+                return inventoryPersistance.insert(inventory);
             } catch (PersistenceException e) {
                 throw new ServiceException(e.getMessage());
             }
@@ -190,7 +190,7 @@ public class InventorySocketService implements InventoryService{
         //Lee el archivo
         Object object = null;
         try {
-            object = inventoryPersistance.read();
+            object = inventoryPersistance.readAll();
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage());
         }
