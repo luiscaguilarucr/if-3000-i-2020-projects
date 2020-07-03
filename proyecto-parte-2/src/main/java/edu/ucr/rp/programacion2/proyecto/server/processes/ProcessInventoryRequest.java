@@ -77,7 +77,25 @@ public class ProcessInventoryRequest implements ProcessRequest {
 
     @Override
     public void delete(Socket socket) throws IOException, ClassNotFoundException {
-
+        // Wait until receives an InventoryRequest.
+        InventoryRequest inventoryRequest = receive(InventoryRequest.class, socket);
+        System.out.println("Recibiendo el inventario: ");
+        Inventory inventory = inventoryRequest.getInventory();
+        System.out.println(inventory);
+        // Remove inventory.
+        ConfirmationRequest confirmationRequest = new ConfirmationRequest();
+        try {
+            if (inventoryService.remove(inventory)) {
+                confirmationRequest.setCompleted(true);
+                confirmationRequest.setDetails("Inventory has been removed");
+            }
+        } catch (ServiceException e) {
+            System.out.println(e.getMessage());
+            confirmationRequest.setCompleted(false);
+            confirmationRequest.setDetails(e.getMessage());
+        }
+        // Send confirmation.
+        send(confirmationRequest, socket);
     }
 
     @Override
