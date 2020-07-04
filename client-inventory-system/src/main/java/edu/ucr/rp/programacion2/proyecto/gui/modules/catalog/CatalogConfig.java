@@ -66,8 +66,6 @@ public class CatalogConfig implements PaneViewer {
         setupControls(pane);
         addHandlers();
         setupStyles();
-        refresh();
-
     }
 
     // Getter  \\

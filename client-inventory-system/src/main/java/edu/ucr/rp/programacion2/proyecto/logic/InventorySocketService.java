@@ -8,24 +8,19 @@ import edu.ucr.rp.programacion2.proyecto.persistance.PersistenceException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InventorySocketService implements InventoryService{
+public class InventorySocketService implements InventoryService {
     //  Variables  \\
     private static InventorySocketService instance;
-    private List<Inventory> list;
     private InventoryPersistance inventoryPersistance;
+
     //  Constructor  \\
-    private InventorySocketService(){
-        list = new ArrayList<>();
-        inventoryPersistance = new InventorySocketPersistence("127.0.0.1", 12121);
-        try {
-            refresh();
-        } catch (ServiceException e) {
-            System.out.println(e.getMessage());
-        }
+    private InventorySocketService() {
+        inventoryPersistance = new InventorySocketPersistence("127.0.0.1", 12121);//TODO Sacar a constante
     }
+
     //  Singleton Pattern  \\
-    public static InventorySocketService getInstance(){
-        if(instance == null)
+    public static InventorySocketService getInstance() {
+        if (instance == null)
             instance = new InventorySocketService();
         return instance;
     }
@@ -38,17 +33,16 @@ public class InventorySocketService implements InventoryService{
      * @return {@code true} if the inventory element has been added correctly. {@code false} Otherwise.
      */
     @Override
-    public boolean add(Inventory inventory)  throws ServiceException{
-        refresh();
-        if(validateAddition(inventory)){
-            list.add(inventory);
-            try {
-                return inventoryPersistance.insert(inventory);
-            } catch (PersistenceException e) {
-                throw new ServiceException(e.getMessage());
-            }
+    public boolean add(Inventory inventory) throws ServiceException {
+        if (inventory == null) {
+            throw new ServiceException("The inventory is null.");
         }
-        return false;
+        try {
+            return inventoryPersistance.insert(inventory);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage());
+        }
+
     }
 
     /**
@@ -59,16 +53,15 @@ public class InventorySocketService implements InventoryService{
      * @return {@code true} if the inventory element has been modified. {@code false} Otherwise.
      */
     @Override
-    public boolean edit(Inventory inventory)  throws ServiceException{
-        refresh();
-        if(validateEdition(inventory)){
-            try {
-                return inventoryPersistance.update(inventory);
-            } catch (PersistenceException e) {
-                throw new ServiceException(e.getMessage());
-            }
+    public boolean edit(Inventory inventory) throws ServiceException {
+        if (inventory == null) {
+            throw new ServiceException("The inventory is null.");
         }
-        return false;
+        try {
+            return inventoryPersistance.update(inventory);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage());
+        }
     }//TODO evaluate how to change name. or identify witch object was selected. [id generator].
 
     /**
@@ -77,14 +70,13 @@ public class InventorySocketService implements InventoryService{
      *
      * @param inventory to be remove.
      * @return {@code true} if the inventory element has been removed. {@code false} Otherwise.
+     * @throws ServiceException When an error occurred.
      */
     @Override
-    public boolean remove(Inventory inventory)  throws ServiceException{
-        refresh();
-        if (inventory == null || !list.contains(inventory)) {
-            return false;
+    public boolean remove(Inventory inventory) throws ServiceException {
+        if (inventory == null) {
+            throw new ServiceException("The inventory is null.");
         }
-        list.remove(inventory);
         try {
             return inventoryPersistance.delete(inventory);
         } catch (PersistenceException e) {
@@ -92,25 +84,29 @@ public class InventorySocketService implements InventoryService{
         }
     }
 
-    public boolean removeAll()  throws ServiceException{
-        list.clear();
+    /**
+     * Removes all the inventories.
+     *
+     * @return  {@code true} if the inventories have been removed. {@code false} Otherwise.
+     * @throws ServiceException When an error occurred.
+     */
+    public boolean removeAll() throws ServiceException {
         try {
-            if (!inventoryPersistance.deleteAll()) return false;
-        } catch (edu.ucr.rp.programacion2.proyecto.persistance.PersistenceException e) {
-            e.printStackTrace();
+            if (inventoryPersistance.deleteAll()) return true;
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage());
         }
-        refresh();
-        return list.isEmpty();
+        return false;
     }
 
     /**
-     * This method returns an inventory element if this exists in the list.
+     * This method returns an inventory element if this exists one with that name.
      *
      * @param name of the inventory.
      * @return {@code Inventory} if the inventory element's name is in the list. {@code null} Otherwise.
      */
     @Override
-    public Inventory get(String name)  throws ServiceException{
+    public Inventory get(String name) throws ServiceException {
         try {
             return inventoryPersistance.read(name);
         } catch (PersistenceException e) {
@@ -119,88 +115,17 @@ public class InventorySocketService implements InventoryService{
     }
 
     /**
-     * Returns the list with all the inventory elements.
+     * Returns the list with all the inventories.
      *
-     * @return {@code List<Inventory>} List with inventory elements
+     * @return {@code List<Inventory>} List with inventories.
      */
     @Override
-    public List<Inventory> getAll()  throws ServiceException{
-        refresh();
-        return list;
-    }
-    /**
-     * Check if the inventory can be added.
-     *
-     * Validations:
-     * - Most have an unique name.
-     * - The name can't be repeated.
-     *
-     * @param inventory to be validate.
-     * @return {@code true} if the element is valid. {@code false} otherwise.
-     */
-    private boolean validateAddition(Inventory inventory) throws ServiceException{
-        if(inventory == null) throw new ServiceException("the inventory is null.");                                         // Not null
-        if(list.contains(inventory)) throw new ServiceException("the inventory already exists.");                           // Unique ID
-        if(containsByName(inventory.getName()))   throw new ServiceException("the inventory already exists.");              // Unique Name
-        return true;
-    }
-
-    /**
-     * Check if the inventory can be editing.
-     *
-     * Validations:
-     * - Most exists in the list.
-     * - The name can't be repeated.
-     *
-     * @param inventory to be validate.
-     * @return {@code true} if the element is valid. {@code false} otherwise.
-     */
-    private boolean validateEdition(Inventory inventory){
-        if(inventory==null) return false;                         // Not null
-        if(!list.contains(inventory)) return false;               // ID in list
-        return !nameUsedByOtherInventory(inventory);              // Name used
-    }
-
-    /**
-     * Checks if the name has been used by one inventory.
-     *
-     * @param name to search.
-     * @return {@code true} if the name is used. {@code false} otherwise.
-     */
-    private boolean containsByName(String name) {
-        for (Inventory i : list)
-            if (name.equalsIgnoreCase(i.getName()))
-                return true;
-        return false;
-    }
-
-    /**
-     * Checks if the name is used used by other inventory.
-     *
-     * @param inventory to search.
-     * @return {@code true} if the name is used by other inventory. {@code false} otherwise.
-     */
-    private boolean nameUsedByOtherInventory(Inventory inventory) {
-        for (Inventory i : list)
-            if(!i.equals(inventory))
-                if (i.getName().equals(inventory.getName()))
-                    return true;
-        return false;
-    }
-
-    private Boolean refresh() throws ServiceException{
-        //Lee el archivo
-        Object object = null;
+    public List<Inventory> getAll() throws ServiceException {
         try {
-            object = inventoryPersistance.readAll();
+            return inventoryPersistance.readAll();
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage());
         }
-        //Valida que existe y lo sustituye por la lista en memoria
-        if(object!=null){
-            list = (List<Inventory>) object;
-            return true;
-        }
-        return false;
     }
+
 }

@@ -80,7 +80,6 @@ public class InventoryView implements PaneViewer {
         setupTableView(tableView);
         addHandlers();
         setupStyles();
-        updateResultsLabel();
         return pane;
     }
 
@@ -101,7 +100,6 @@ public class InventoryView implements PaneViewer {
         filterField = BuilderFX.buildTextInput("", pane, 3, 1);
         tableView = BuilderFX.buildTableView(pane, 0, 2, 4, 1);
         resultsLabel = BuilderFX.buildLabelMinimal("", pane, 0, 3, 2);
-        //pagination = BuilderFX.buildPagination(pane, 2, 3, 2, 1);// TODO pagination
         backButton = BuilderFX.buildButton(BACK_LABEL, pane, 2, 3);
     }
 
@@ -188,7 +186,6 @@ public class InventoryView implements PaneViewer {
      */
     private void setupTableView(TableView tableView) {
         addColumns(tableView);
-        fillTable(tableView);
     }
 
     /**
