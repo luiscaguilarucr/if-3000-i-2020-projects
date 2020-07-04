@@ -4,5 +4,5 @@ import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
 
 import java.util.List;
 
-public interface InventoryPersistance extends Persistence<Inventory, String>{
+public interface InventoryPersistence extends Persistence<Inventory, String>{
 }

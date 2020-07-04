@@ -1,21 +1,20 @@
 package edu.ucr.rp.programacion2.proyecto.logic;
 
 import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
-import edu.ucr.rp.programacion2.proyecto.persistance.InventoryPersistance;
+import edu.ucr.rp.programacion2.proyecto.persistance.InventoryPersistence;
 import edu.ucr.rp.programacion2.proyecto.persistance.InventorySocketPersistence;
 import edu.ucr.rp.programacion2.proyecto.persistance.PersistenceException;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class InventorySocketService implements InventoryService {
     //  Variables  \\
     private static InventorySocketService instance;
-    private InventoryPersistance inventoryPersistance;
+    private InventoryPersistence inventoryPersistence;
 
     //  Constructor  \\
     private InventorySocketService() {
-        inventoryPersistance = new InventorySocketPersistence("127.0.0.1", 12121);//TODO Sacar a constante
+        inventoryPersistence = new InventorySocketPersistence("127.0.0.1", 12121);//TODO Sacar a constante
     }
 
     //  Singleton Pattern  \\
@@ -38,7 +37,7 @@ public class InventorySocketService implements InventoryService {
             throw new ServiceException("The inventory is null.");
         }
         try {
-            return inventoryPersistance.insert(inventory);
+            return inventoryPersistence.insert(inventory);
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage());
         }
@@ -58,7 +57,7 @@ public class InventorySocketService implements InventoryService {
             throw new ServiceException("The inventory is null.");
         }
         try {
-            return inventoryPersistance.update(inventory);
+            return inventoryPersistence.update(inventory);
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage());
         }
@@ -78,7 +77,7 @@ public class InventorySocketService implements InventoryService {
             throw new ServiceException("The inventory is null.");
         }
         try {
-            return inventoryPersistance.delete(inventory);
+            return inventoryPersistence.delete(inventory);
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage());
         }
@@ -92,7 +91,7 @@ public class InventorySocketService implements InventoryService {
      */
     public boolean removeAll() throws ServiceException {
         try {
-            if (inventoryPersistance.deleteAll()) return true;
+            if (inventoryPersistence.deleteAll()) return true;
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage());
         }
@@ -108,7 +107,7 @@ public class InventorySocketService implements InventoryService {
     @Override
     public Inventory get(String name) throws ServiceException {
         try {
-            return inventoryPersistance.read(name);
+            return inventoryPersistence.read(name);
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage());
         }
@@ -122,7 +121,7 @@ public class InventorySocketService implements InventoryService {
     @Override
     public List<Inventory> getAll() throws ServiceException {
         try {
-            return inventoryPersistance.readAll();
+            return inventoryPersistence.readAll();
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage());
         }

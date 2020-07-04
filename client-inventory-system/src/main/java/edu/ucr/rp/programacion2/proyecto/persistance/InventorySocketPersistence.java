@@ -1,49 +1,63 @@
 package edu.ucr.rp.programacion2.proyecto.persistance;
 
 import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
-import edu.ucr.rp.programacion2.proyecto.persistance.messages.ConfirmationRequest;
-import edu.ucr.rp.programacion2.proyecto.persistance.messages.InventoryListRequest;
-import edu.ucr.rp.programacion2.proyecto.persistance.messages.InventoryRequest;
-import edu.ucr.rp.programacion2.proyecto.persistance.messages.Request;
-import edu.ucr.rp.programacion2.proyecto.persistance.processes.InventoryReadRequest;
-import edu.ucr.rp.programacion2.proyecto.util.JsonUtil;
+import edu.ucr.rp.programacion2.proyecto.persistance.messages.*;
 
 import java.io.IOException;
 import java.net.Socket;
 import java.util.List;
 
 import static edu.ucr.rp.programacion2.proyecto.persistance.messages.RequestType.*;
-import static edu.ucr.rp.programacion2.proyecto.persistance.processes.RequestProcessUtil.receive;
-import static edu.ucr.rp.programacion2.proyecto.persistance.processes.RequestProcessUtil.send;
+import static edu.ucr.rp.programacion2.proyecto.util.RequestProcessUtil.receive;
+import static edu.ucr.rp.programacion2.proyecto.util.RequestProcessUtil.send;
 
-
-public class InventorySocketPersistence implements InventoryPersistance {
+/**
+ * This class sends a receives data to a server.
+ */
+public class InventorySocketPersistence implements InventoryPersistence {
     //  Variables  \\
-    private String host;
-    private int port;
+    private final String host;
+    private final int port;
     private Socket clientSocket;
-    private JsonUtil jsonUtil = new JsonUtil();
     //  Constructor \\
 
+    /**
+     * Information used to establish the connection to the server.
+     *
+     * @param host server ip.
+     * @param port server port.
+     */
     public InventorySocketPersistence(String host, int port) {
         this.host = host;
         this.port = port;
     }
 
+    // Methods \\
+
     /**
-     * @param inventory inventory to save.
-     * @return {@code true} if the directory have been created or saved.{@code false} Otherwise.
+     * Send an insert request to the server and then receives a confirmation.
+     *
+     * @param inventory inventory to insert.
+     * @return {@code true} if the directory have been saved.{@code false} Otherwise.
+     * @throws PersistenceException if the inventory is not valid or the connection has failed.
      */
     @Override
     public boolean insert(Inventory inventory) throws PersistenceException {
         try {
             return insert0(inventory);
         } catch (IOException | ClassNotFoundException e) {
-            throw new PersistenceException(e.getMessage());// TODO
+            throw new PersistenceException(e.getMessage());
         }
 
     }
 
+    /**
+     * Send an update request to the server and then receives a confirmation.
+     *
+     * @param inventory to be updated.
+     * @return {@code true} if the directory have been saved.{@code false} Otherwise.
+     * @throws PersistenceException if the inventory is not valid or the connection has failed.
+     */
     @Override
     public boolean update(Inventory inventory) throws PersistenceException {
         try {
@@ -53,20 +67,27 @@ public class InventorySocketPersistence implements InventoryPersistance {
         }
     }
 
+    /**
+     * Send an update request to the server using the name to identify the inventory. Then receives the inventory if exists.
+     *
+     * @param name of the inventory.
+     * @return {Inventory} inventory has been found.
+     * @throws PersistenceException if the inventory is not found or the connection has failed.
+     */
     @Override
-    public Inventory read(String key) throws PersistenceException {
+    public Inventory read(String name) throws PersistenceException {
         try {
-            return read0(key);
+            return read0(name);
         } catch (IOException | ClassNotFoundException e) {
             throw new PersistenceException(e.getMessage());
         }
     }
 
-
     /**
      * Search and return a list with inventories.
      *
      * @return {@code List<Inventory>} List of the inventories.
+     * @throws PersistenceException if the connection has failed.
      */
     @Override
     public List<Inventory> readAll() throws PersistenceException {
@@ -108,7 +129,6 @@ public class InventorySocketPersistence implements InventoryPersistance {
         }
     }
 
-
     private boolean insert0(Inventory inventory) throws IOException, ClassNotFoundException, PersistenceException {
         Request request = new Request();
         try {
@@ -140,7 +160,6 @@ public class InventorySocketPersistence implements InventoryPersistance {
 
             return true;
         } finally {
-            // Send close request
             closeConnection();
         }
 
@@ -177,7 +196,6 @@ public class InventorySocketPersistence implements InventoryPersistance {
 
             return true;
         } finally {
-            // Send close request
             closeConnection();
         }
 
@@ -211,7 +229,6 @@ public class InventorySocketPersistence implements InventoryPersistance {
             System.out.println("Se eliminó correctamente");
             return true;
         } finally {
-            // Send close request
             closeConnection();
         }
     }
@@ -238,20 +255,7 @@ public class InventorySocketPersistence implements InventoryPersistance {
             System.out.println("Inventarios eliminados correctamente");
             return true;
         } finally {
-            // Send close request
             closeConnection();
-        }
-    }
-
-    private void closeConnection() throws IOException {
-        Request closeRequest = new Request();
-        closeRequest.setType(CLOSE);
-        send(closeRequest, clientSocket);
-        System.out.println("Se envió la petición para finalizar la conexión.");
-
-        if (clientSocket != null) {
-            clientSocket.close();
-            System.out.println("Conexión cerrada");
         }
     }
 
@@ -287,7 +291,6 @@ public class InventorySocketPersistence implements InventoryPersistance {
             System.out.println("Inventario recibido= " + inventory);
             return inventory;
         } finally {
-            // Send close request
             closeConnection();
         }
     }
@@ -312,8 +315,24 @@ public class InventorySocketPersistence implements InventoryPersistance {
 
             return list;
         } finally {
-            // Send close request
             closeConnection();
+        }
+    }
+
+    /**
+     * Send a close request to the server and close the client socket connection.
+     *
+     * @throws IOException when the connection failed.
+     */
+    private void closeConnection() throws IOException {
+        Request closeRequest = new Request();
+        closeRequest.setType(CLOSE);
+        send(closeRequest, clientSocket);
+        System.out.println("Se envió la petición para finalizar la conexión.");
+
+        if (clientSocket != null) {
+            clientSocket.close();
+            System.out.println("Conexión cerrada");
         }
     }
 }
