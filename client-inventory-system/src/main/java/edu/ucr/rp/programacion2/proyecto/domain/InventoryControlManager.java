@@ -11,15 +11,12 @@ import java.util.List;
 public class InventoryControlManager {
     //  Varaibles  \\
     private static InventoryControlManager instance;
-    private List<InventoryControl> list;
     private final InventoryService inventoryService;
     private CatalogService catalogService;
 
     //  Constructor  \\
     private InventoryControlManager() {
         inventoryService = InventorySocketService.getInstance();
-        list = new ArrayList<>();
-        updateList();
     }
 
     //  Singlenton Pattern  \\
@@ -36,8 +33,7 @@ public class InventoryControlManager {
      * @return {@code List} list of names of catalogs linked with an Inventory.
      */
     public List<InventoryControl> getAll() {
-        updateList();
-        return list;
+        return getAll0();
     }
 
     /**
@@ -46,8 +42,8 @@ public class InventoryControlManager {
      *
      * @return {@code List} List of inventories Controls
      */
-    private void updateList() {
-        list = new ArrayList<>();
+    private List<InventoryControl> getAll0() {
+        List<InventoryControl> list = new ArrayList<>();
         try {
             List<Inventory> inventories = inventoryService.getAll();
             // SEARCH IN EACH INVENTORY
@@ -64,6 +60,7 @@ public class InventoryControlManager {
         }catch (ServiceException e){
             System.out.println(e.getMessage());
         }
+        return list;
     }
 
     /**
@@ -80,9 +77,5 @@ public class InventoryControlManager {
         return new ArrayList<>();
     }
 
-    public int size() {
-        updateList();
-        return list.size();
-    }
 
 }
