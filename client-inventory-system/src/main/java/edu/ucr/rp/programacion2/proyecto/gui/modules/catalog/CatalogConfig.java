@@ -212,7 +212,6 @@ public class CatalogConfig implements PaneViewer {
         setButtonEffect(deleteAllItemsButton);
         setButtonEffect(showItemsButton);
 
-        editInventoryButton.setVisible(false);// TODO realizar funciones
     }
 
     /**
@@ -256,6 +255,7 @@ public class CatalogConfig implements PaneViewer {
     private void addHandlers() {
         inventoryComboBox.setOnAction(event -> inventoryChangedEvent());
         catalogComboBox.setOnAction(e -> catalogChangedEvent());
+        editInventoryButton.setOnAction(e -> editInventoryAction());
         deleteInventoryButton.setOnAction(e -> deleteInventoryAction());
         editCatalogButton.setOnAction(e -> editCatalogAction());
         deleteCatalogButton.setOnAction(e -> deleteCatalogAction());
@@ -264,6 +264,37 @@ public class CatalogConfig implements PaneViewer {
         deleteAllItemsButton.setOnAction(e -> deleteAllItemsAction());
 
 
+    }
+
+    private void editInventoryAction() {
+        if(inventoryComboBox.getValue()!=null){
+            // Set dialog details
+            textInputDialog.setHeaderText("Edit inventory");
+            textInputDialog.setContentText("Change name: ");
+            // Get inventory
+            Inventory inventory = null;
+            try {
+                inventory = inventoryComboBox.getValue();
+                if (inventory != null) {
+                    // Show alert
+                    Optional<String> result = textInputDialog.showAndWait();
+                    // Wait the result and select
+                    if (result.isPresent() && !result.get().isEmpty()) {
+                        inventory.setName(result.get());
+                        if (inventoryService.edit(inventory)) {
+                            System.out.println(inventory + " edited...");
+                            // Remove -> invalid
+                            refreshInventoryBox();
+                            inventoryComboBox.setValue(inventory);
+                            fillCatalogComboBox(inventoryComboBox.getValue());
+                        } else
+                            System.out.println(inventory + " no edited...");
+                    }
+                }
+            } catch (ServiceException e) {
+                System.out.println(e.getMessage());
+            }
+        }
     }
 
     /**

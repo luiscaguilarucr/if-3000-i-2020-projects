@@ -62,8 +62,11 @@ public class InventorySocketService implements InventoryService{
     public boolean edit(Inventory inventory)  throws ServiceException{
         refresh();
         if(validateEdition(inventory)){
-            Inventory oldInventory = list.get(list.indexOf(inventory));
-            return inventoryPersistance.rename(oldInventory.getName(), inventory.getName());
+            try {
+                return inventoryPersistance.update(inventory);
+            } catch (PersistenceException e) {
+                throw new ServiceException(e.getMessage());
+            }
         }
         return false;
     }//TODO evaluate how to change name. or identify witch object was selected. [id generator].
@@ -108,12 +111,11 @@ public class InventorySocketService implements InventoryService{
      */
     @Override
     public Inventory get(String name)  throws ServiceException{
-        refresh();
-        for(Inventory inventory: list)
-            if(inventory.getName().equals(name))
-                return inventory;
-
-        return null;
+        try {
+            return inventoryPersistance.read(name);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage());
+        }
     }
 
     /**

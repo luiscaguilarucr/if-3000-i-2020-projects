@@ -7,6 +7,7 @@ import edu.ucr.rp.programacion2.proyecto.persistance.PersistenceException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class InventoryFileService implements InventoryService{
     //  Variables  \\
@@ -36,6 +37,7 @@ public class InventoryFileService implements InventoryService{
     @Override
     public boolean add(Inventory inventory)  throws ServiceException{
         refresh();
+        inventory.setId(UUID.randomUUID());
         if(validateAddition(inventory)){
             list.add(inventory);
             try {
@@ -60,15 +62,14 @@ public class InventoryFileService implements InventoryService{
     public boolean edit(Inventory inventory)  throws ServiceException{
         refresh();
         if(validateEdition(inventory)){
-            Inventory oldInventory = list.get(list.indexOf(inventory));
             try {
-                return inventoryPersistence.rename(oldInventory.getName(), inventory.getName());
+                return inventoryPersistence.write(inventory);
             } catch (PersistenceException e) {
                 throw new ServiceException("Inventory can't be edited, because "  + e.getMessage());
             }
         }
     return false;
-    }//TODO evaluate how to change name. or identify witch object was selected. [id generator].
+    }
 
     /**
      * This method removes an inventory element that most be in the list.
@@ -116,7 +117,7 @@ public class InventoryFileService implements InventoryService{
             if(inventory.getName().equals(name))
                 return inventory;
 
-        return null;
+        throw new ServiceException("Inventory named " + name + " is not found.");
     }
 
     /**

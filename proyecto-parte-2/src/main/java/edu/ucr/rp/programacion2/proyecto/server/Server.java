@@ -40,11 +40,11 @@ public class Server {
                 RequestType type = request.getType();
                 switch (type){
                     // Catalogs request
-                    case INSERT_CATALOG: catalogProcessRequest.insert(socket); break;
-                    case UPDATE_CATALOG: catalogProcessRequest.update(socket); break;
-                    case READ_CATALOG:catalogProcessRequest.read(socket); break;
+                    case INSERT_CATALOG:    catalogProcessRequest.insert(socket); break;
+                    case UPDATE_CATALOG:    catalogProcessRequest.update(socket); break;
+                    case READ_CATALOG:      catalogProcessRequest.read(socket); break;
                     case READ_ALL_CATALOGS: catalogProcessRequest.readAll(socket); break;
-                    case DELETE_CATALOG: catalogProcessRequest.delete(socket); break;
+                    case DELETE_CATALOG:    catalogProcessRequest.delete(socket); break;
                     case DELETE_ALL_CATALOGS: catalogProcessRequest.deleteAll(socket); break;
                     // Inventory request
                     case INSERT_INVENTORY: inventoryProcessRequest.insert(socket); break;
@@ -53,6 +53,7 @@ public class Server {
                     case READ_ALL_INVENTORIES: inventoryProcessRequest.readAll(socket); break;
                     case DELETE_INVENTORY: inventoryProcessRequest.delete(socket); break;
                     case DELETE_ALL_INVENTORIES: inventoryProcessRequest.deleteAll(socket); break;
+                    // Close request
                     default: {
                         request = receive(Request.class, socket);
                         if(request.getType().equals(CLOSE)) {

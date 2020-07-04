@@ -5,6 +5,7 @@ import edu.ucr.rp.programacion2.proyecto.persistance.messages.ConfirmationReques
 import edu.ucr.rp.programacion2.proyecto.persistance.messages.InventoryListRequest;
 import edu.ucr.rp.programacion2.proyecto.persistance.messages.InventoryRequest;
 import edu.ucr.rp.programacion2.proyecto.persistance.messages.Request;
+import edu.ucr.rp.programacion2.proyecto.persistance.processes.InventoryReadRequest;
 import edu.ucr.rp.programacion2.proyecto.util.JsonUtil;
 
 import java.io.IOException;
@@ -45,18 +46,22 @@ public class InventorySocketPersistence implements InventoryPersistance {
 
     @Override
     public boolean update(Inventory inventory) throws PersistenceException {
-        return false;
+        try {
+            return update0(inventory);
+        } catch (IOException | ClassNotFoundException e) {
+            throw new PersistenceException(e.getMessage());
+        }
     }
 
     @Override
-    public Inventory read(List<Inventory> key) throws PersistenceException {
-        return null;
+    public Inventory read(String key) throws PersistenceException {
+        try {
+            return read0(key);
+        } catch (IOException | ClassNotFoundException e) {
+            throw new PersistenceException(e.getMessage());
+        }
     }
 
-
-    public boolean rename(String oldValue, String newValue) {
-        throw new UnsupportedOperationException("No implementado");
-    }
 
     /**
      * Search and return a list with inventories.
@@ -67,9 +72,11 @@ public class InventorySocketPersistence implements InventoryPersistance {
     public List<Inventory> readAll() throws PersistenceException {
         try {
             return readAll0();
+
         } catch (IOException | ClassNotFoundException e) {
             throw new PersistenceException(e.getMessage());
         }
+
     }
 
     /**
@@ -94,7 +101,11 @@ public class InventorySocketPersistence implements InventoryPersistance {
      */
     @Override
     public boolean deleteAll() throws PersistenceException {
-        return false;
+        try {
+            return deleteAll0();
+        } catch (IOException | ClassNotFoundException e) {
+            throw new PersistenceException(e.getMessage());
+        }
     }
 
 
@@ -127,18 +138,47 @@ public class InventorySocketPersistence implements InventoryPersistance {
             }
             System.out.println("Se agregó correctamente");
 
+            return true;
+        } finally {
+            // Send close request
+            closeConnection();
+        }
+
+    }
+
+    private boolean update0(Inventory inventory) throws IOException, ClassNotFoundException, PersistenceException {
+        Request request = new Request();
+        try {
+            // Establish the connection with the server.
+            clientSocket = new Socket(host, port);
+            // Create a update request.
+            request.setType(UPDATE_INVENTORY);
+            System.out.println("Se ha enviado una petición para editar un inventario.");
+            // Send and wait the request.
+            send(request, clientSocket);
+
+            // Create an inventory request.
+            InventoryRequest inventoryRequest = new InventoryRequest();
+            inventoryRequest.setInventory(inventory);
+            System.out.println("Se ha enviado el inventario." + inventory);
+
+            // Send and wait the request.
+            send(inventoryRequest, clientSocket);
+
+            // Receives a ConfirmationRequest.
+            System.out.println("Esperando confirmación.");
+            ConfirmationRequest confirmationRequest = receive(ConfirmationRequest.class, clientSocket);
+
+            if (!confirmationRequest.isCompleted()) {
+                System.out.println("No fue editado");
+                throw new PersistenceException(confirmationRequest.getDetails());
+            }
+            System.out.println("Se actualizó correctamente");
 
             return true;
         } finally {
             // Send close request
-            Request closeRequest = new Request();
-            closeRequest.setType(CLOSE);
-            send(closeRequest, clientSocket);
-            System.out.println("Se envió la petición para finalizar la conexión.");
-
-            if (clientSocket != null)
-                clientSocket.close();
-            System.out.println("Conexión cerrada");
+            closeConnection();
         }
 
     }
@@ -172,16 +212,86 @@ public class InventorySocketPersistence implements InventoryPersistance {
             return true;
         } finally {
             // Send close request
-            Request closeRequest = new Request();
-            closeRequest.setType(CLOSE);
-            send(closeRequest, clientSocket);
-            System.out.println("Se envió la petición para finalizar la conexión.");
+            closeConnection();
+        }
+    }
 
-            if (clientSocket != null)
-                clientSocket.close();
+    private boolean deleteAll0() throws IOException, ClassNotFoundException, PersistenceException {
+        Request request = new Request();
+        try {
+            // Establish the connection with the server.
+            clientSocket = new Socket(host, port);
+            // Create a read all request.
+            request.setType(DELETE_ALL_INVENTORIES);
+            System.out.println("Se ha enviado una petición para eliminar todos los inventarios.");
+            // Send and wait the request.
+            send(request, clientSocket);
+
+            // Receives a ConfirmationRequest.
+            System.out.println("Esperando confirmación.");
+            ConfirmationRequest confirmationRequest = receive(ConfirmationRequest.class, clientSocket);
+
+            if (!confirmationRequest.isCompleted()) {
+                System.out.println("No fue eliminado");
+                throw new PersistenceException(confirmationRequest.getDetails());
+            }
+            System.out.println("Inventarios eliminados correctamente");
+            return true;
+        } finally {
+            // Send close request
+            closeConnection();
+        }
+    }
+
+    private void closeConnection() throws IOException {
+        Request closeRequest = new Request();
+        closeRequest.setType(CLOSE);
+        send(closeRequest, clientSocket);
+        System.out.println("Se envió la petición para finalizar la conexión.");
+
+        if (clientSocket != null) {
+            clientSocket.close();
             System.out.println("Conexión cerrada");
         }
     }
+
+    private Inventory read0(String key) throws IOException, PersistenceException, ClassNotFoundException {
+        Request request = new Request();
+        try {
+            // Establish the connection with the server.
+            clientSocket = new Socket(host, port);
+            // Create a read all request.
+            request.setType(READ_INVENTORY);
+            System.out.println("Se ha enviado una petición para obtener un inventario.");
+            // Send and wait the request.
+            send(request, clientSocket);
+
+            // Create a read request.
+            InventoryReadRequest inventoryReadRequest = new InventoryReadRequest();
+            inventoryReadRequest.setName(key);
+            send(inventoryReadRequest, clientSocket);
+            System.out.println("Se ha enviado una petición para obtener un inventario con nombre " + key);
+
+            // Receives a ConfirmationRequest.
+            System.out.println("Esperando confirmación.");
+            ConfirmationRequest confirmationRequest = receive(ConfirmationRequest.class, clientSocket);
+
+            if (!confirmationRequest.isCompleted()) {
+                System.out.println("No fue encontrado");
+                throw new PersistenceException(confirmationRequest.getDetails());
+            }
+            // Wait for an inventory
+            System.out.println("El inventario existe, esperando para recibirlo.");
+            InventoryRequest inventoryRequest = receive(InventoryRequest.class, clientSocket);
+            Inventory inventory = inventoryRequest.getInventory();
+            System.out.println("Inventario recibido= " + inventory);
+            return inventory;
+        } finally {
+            // Send close request
+            closeConnection();
+        }
+    }
+
 
     private List<Inventory> readAll0() throws IOException, ClassNotFoundException {
         Request request = new Request();
@@ -203,15 +313,7 @@ public class InventorySocketPersistence implements InventoryPersistance {
             return list;
         } finally {
             // Send close request
-            Request closeRequest = new Request();
-            closeRequest.setType(CLOSE);
-            send(closeRequest, clientSocket);
-            System.out.println("Se envió la petición para finalizar la conexión.");
-
-            if (clientSocket != null) {
-                clientSocket.close();
-                System.out.println("Conexión cerrada");
-            }
+            closeConnection();
         }
     }
 }

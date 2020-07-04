@@ -38,7 +38,7 @@ public class CatalogSocketPersistence implements CatalogPersistence {
     }
 
     @Override
-    public Catalog read(List<Catalog> key) throws PersistenceException {
+    public Catalog read(Integer key) throws PersistenceException {
         return null;
     }
 

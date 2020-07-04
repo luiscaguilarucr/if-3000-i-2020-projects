@@ -40,7 +40,16 @@ public class InventoryFilePersistence implements InventoryPersistence {
     @Override
     public boolean write(Inventory inventory) throws PersistenceException {
         if (inventory == null) throw new PersistenceException("The inventory is null.");
-        File file = new File(path + inventory.getName());
+        List<Inventory> inventories = getInventories();
+        // Check is exist.
+        for(Inventory inventory1: inventories){
+            if(inventory1.getId().equals(inventory.getId())){
+                rename(inventory1.getDirectoryName(), inventory.getDirectoryName());
+                return true;
+            }
+        }
+        // Doesn't exists.
+        File file = new File(path + inventory.getDirectoryName());;
         if (file.exists())
             throw new PersistenceException("The inventory file already exists.");
         else
@@ -48,7 +57,7 @@ public class InventoryFilePersistence implements InventoryPersistence {
     }
 
 
-    public boolean rename(String oldValue, String newValue) throws PersistenceException {
+    private boolean rename(String oldValue, String newValue) throws PersistenceException {
         if (oldValue == null || oldValue.isEmpty()) throw new PersistenceException("Inventory can't be identify");
         if (newValue == null || newValue.isEmpty()) throw new PersistenceException("Inventory is not valid.");
         File oldFile = new File(path + oldValue);
@@ -80,7 +89,7 @@ public class InventoryFilePersistence implements InventoryPersistence {
     @Override
     public boolean delete(Inventory inventory) throws PersistenceException {
         if (inventory == null) throw new PersistenceException("The inventory is null.");
-        File file = new File(path + inventory.getName());
+        File file = new File(path + inventory.getDirectoryName());
         if (!file.exists()) return true;
         try {
             FileUtils.forceDelete(file);
@@ -119,10 +128,12 @@ public class InventoryFilePersistence implements InventoryPersistence {
         List<Inventory> inventories = new ArrayList();
 
         if (file.exists()) {
-            String[] names = file.list();
-            if (names != null)
-                for (String name : names) {
-                    inventories.add(new Inventory(name));
+            String[] directories = file.list();
+            if (directories != null)
+                for (String directory : directories) {
+                    Inventory inventory = new Inventory();
+                    inventory.setInventory(directory);
+                    inventories.add(inventory);
                 }
             return inventories;
         } else {
