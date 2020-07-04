@@ -5,7 +5,7 @@ import edu.ucr.rp.programacion2.proyecto.persistance.messages.ConfirmationReques
 import edu.ucr.rp.programacion2.proyecto.persistance.messages.InventoryListRequest;
 import edu.ucr.rp.programacion2.proyecto.persistance.messages.InventoryRequest;
 import edu.ucr.rp.programacion2.proyecto.persistance.messages.Request;
-import edu.ucr.rp.programacion2.proyecto.persistance.processes.InventoryReadRequest;
+import edu.ucr.rp.programacion2.proyecto.persistance.messages.InventoryReadRequest;
 import edu.ucr.rp.programacion2.proyecto.util.JsonUtil;
 
 import java.io.IOException;
@@ -13,8 +13,8 @@ import java.net.Socket;
 import java.util.List;
 
 import static edu.ucr.rp.programacion2.proyecto.persistance.messages.RequestType.*;
-import static edu.ucr.rp.programacion2.proyecto.persistance.processes.RequestProcessUtil.receive;
-import static edu.ucr.rp.programacion2.proyecto.persistance.processes.RequestProcessUtil.send;
+import static edu.ucr.rp.programacion2.proyecto.util.RequestProcessUtil.receive;
+import static edu.ucr.rp.programacion2.proyecto.util.RequestProcessUtil.send;
 
 
 public class InventorySocketPersistence implements InventoryPersistance {

@@ -1,4 +1,4 @@
-package edu.ucr.rp.programacion2.proyecto.server.processes;
+package edu.ucr.rp.programacion2.proyecto.util;
 
 import edu.ucr.rp.programacion2.proyecto.util.JsonUtil;
 
@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-
 /**
  * This class contains methods used to send and receive data form one socket to another.
  */
