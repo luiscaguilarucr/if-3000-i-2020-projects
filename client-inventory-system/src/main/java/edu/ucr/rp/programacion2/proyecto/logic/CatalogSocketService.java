@@ -9,6 +9,9 @@ import edu.ucr.rp.programacion2.proyecto.persistance.PersistenceException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static edu.ucr.rp.programacion2.proyecto.logic.SocketConstants.HOST;
+import static edu.ucr.rp.programacion2.proyecto.logic.SocketConstants.PORT;
+
 /**
  * This is a service to manage the Catalogs.
  *
@@ -22,7 +25,7 @@ public class CatalogSocketService implements CatalogService {
 
     //  Constructor \\
     private CatalogSocketService() {
-        catalogPersistence = new CatalogSocketPersistence("127.0.0.1", 12121);
+        catalogPersistence = new CatalogSocketPersistence(HOST, PORT);
     }
 
     public static CatalogSocketService getInstance(){

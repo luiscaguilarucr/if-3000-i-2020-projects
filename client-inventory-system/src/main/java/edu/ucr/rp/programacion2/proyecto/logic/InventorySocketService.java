@@ -4,8 +4,13 @@ import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
 import edu.ucr.rp.programacion2.proyecto.persistance.InventoryPersistence;
 import edu.ucr.rp.programacion2.proyecto.persistance.InventorySocketPersistence;
 import edu.ucr.rp.programacion2.proyecto.persistance.PersistenceException;
+import edu.ucr.rp.programacion2.proyecto.logic.SocketConstants;
 
 import java.util.List;
+
+import static edu.ucr.rp.programacion2.proyecto.logic.SocketConstants.HOST;
+import static edu.ucr.rp.programacion2.proyecto.logic.SocketConstants.PORT;
+
 
 public class InventorySocketService implements InventoryService {
     //  Variables  \\
@@ -14,7 +19,7 @@ public class InventorySocketService implements InventoryService {
 
     //  Constructor  \\
     private InventorySocketService() {
-        inventoryPersistence = new InventorySocketPersistence("127.0.0.1", 12121);//TODO Sacar a constante
+        inventoryPersistence = new InventorySocketPersistence(HOST, PORT);
     }
 
     //  Singleton Pattern  \\
