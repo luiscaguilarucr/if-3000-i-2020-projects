@@ -50,7 +50,7 @@ public class CreateItemForm implements PaneViewer {
     private static GridPane pane;
     private static PaneName previousPane;
     // Service \\
-    private static CatalogService catalogFileService;
+    private static CatalogService catalogService;
 
     // Constructor \\
     private CreateItemForm() {
@@ -74,8 +74,8 @@ public class CreateItemForm implements PaneViewer {
      */
     private void updateCatalogService() {
         if (inventorySelected != null) {
-            catalogFileService = new CatalogSocketService();
-            catalogFileService.setInventory(inventorySelected);
+            catalogService = CatalogSocketService.getInstance();
+            catalogService.setInventory(inventorySelected);
         }
     }
 
@@ -284,8 +284,8 @@ public class CreateItemForm implements PaneViewer {
         updateCatalogService();
         // Validate catalog and service
         try {
-            if (catalogSelected != null && catalogFileService != null) {
-                return catalogFileService.edit(catalogSelected);
+            if (catalogSelected != null && catalogService != null) {
+                return catalogService.edit(catalogSelected);
             }
         }catch (ServiceException e){
             System.out.println(e.getMessage());

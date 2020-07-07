@@ -10,8 +10,8 @@ import java.net.Socket;
 import java.util.List;
 
 import static edu.ucr.rp.programacion2.proyecto.persistance.messages.RequestType.*;
-import static edu.ucr.rp.programacion2.proyecto.persistance.processes.RequestProcessUtil.receive;
-import static edu.ucr.rp.programacion2.proyecto.persistance.processes.RequestProcessUtil.send;
+import static edu.ucr.rp.programacion2.proyecto.util.RequestProcessUtil.receive;
+import static edu.ucr.rp.programacion2.proyecto.util.RequestProcessUtil.send;
 
 public class CatalogSocketPersistence implements CatalogPersistence {
 
@@ -32,9 +32,8 @@ public class CatalogSocketPersistence implements CatalogPersistence {
     }
 
     @Override
-    public CatalogSocketPersistence setInventory(Inventory inventory) {
+    public void setInventory(Inventory inventory) {
         this.inventory = inventory;
-        return this;
     }
 
     @Override

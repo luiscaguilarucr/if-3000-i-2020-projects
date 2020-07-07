@@ -10,6 +10,9 @@ public class Catalog{
     private String name;
     private List<Map> items;
     private List<String> schema;
+
+    public Catalog(){}
+
     //  Constructor  \\
     public Catalog(Configuration configuration, String name, List<Map> items, List<String> schema) {
         this.configuration = configuration;

@@ -3,6 +3,7 @@ package edu.ucr.rp.programacion2.proyecto.persistance;
 import edu.ucr.rp.programacion2.proyecto.domain.Catalog;
 import edu.ucr.rp.programacion2.proyecto.domain.Configuration;
 import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
+import edu.ucr.rp.programacion2.proyecto.logic.CatalogFileService;
 import edu.ucr.rp.programacion2.proyecto.util.JsonUtil;
 import edu.ucr.rp.programacion2.proyecto.util.builders.CatalogBuilder;
 import org.apache.commons.io.FileUtils;
@@ -19,14 +20,21 @@ public class CatalogFilePersistence implements CatalogPersistence {
     private final String suffix = ".json";
     private final JsonUtil jsonUtil = new JsonUtil();
     public Inventory inventory;
+    private static CatalogFilePersistence instance;
 
     /**
      * It's responsibly is make an catalog persistent.
      * Also can restore catalogs and convert them to objects in memory.
      */
-    public CatalogFilePersistence(String name) {
-        this.path = "files/inventories/" + name + "/catalogs/";
-        verifyCatalogsDir(path);
+    private CatalogFilePersistence() {
+
+    }
+
+    //  Singleton Pattern  \\
+    public static CatalogFilePersistence getInstance() {
+        if (instance == null)
+            instance = new CatalogFilePersistence();
+        return instance;
     }
 
     private void verifyCatalogsDir(String path) {
@@ -42,7 +50,7 @@ public class CatalogFilePersistence implements CatalogPersistence {
      * @return {@code true} if the catalog have been saved.{@code false} Otherwise.
      */
     @Override
-    public boolean write(Catalog catalog) throws PersistenceException {
+    public synchronized boolean write(Catalog catalog) throws PersistenceException {
         if (catalog == null) throw new PersistenceException("The catalog is null"); // Not null
         if (!checkDirectory(catalog.getName())) throw new PersistenceException("The directory indicated does not exist"); // Check dir
         if (!saveConfig(catalog)) throw new PersistenceException("The config was not saved"); // Save ID
@@ -62,7 +70,7 @@ public class CatalogFilePersistence implements CatalogPersistence {
     }
 
     @Override
-    public boolean delete(Catalog catalog) throws PersistenceException  {
+    public synchronized boolean delete(Catalog catalog) throws PersistenceException  {
         try {
             FileUtils.forceDelete(new File(path + catalog.getName()));
         } catch (IOException e) {
@@ -251,4 +259,15 @@ public class CatalogFilePersistence implements CatalogPersistence {
         return true;
     }
 
+    @Override
+    public Inventory getInventory() {
+        return inventory;
+    }
+
+    @Override
+    public void setInventory(Inventory inventory) {
+        this.inventory = inventory;
+        this.path = "files/inventories/" + inventory.getDirectoryName() + "/catalogs/";
+        verifyCatalogsDir(path);
+    }
 }

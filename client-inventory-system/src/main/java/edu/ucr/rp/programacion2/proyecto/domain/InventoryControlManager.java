@@ -68,7 +68,7 @@ public class InventoryControlManager {
      * @return
      */
     private List<Catalog> getCatalogsOf(Inventory inventory) {
-        catalogService = new CatalogSocketService();
+        catalogService = CatalogSocketService.getInstance();
         catalogService.setInventory(inventory);
         try {
             return catalogService.getAll();

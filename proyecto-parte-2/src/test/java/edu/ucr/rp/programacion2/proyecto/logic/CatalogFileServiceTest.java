@@ -36,7 +36,8 @@ public class CatalogFileServiceTest extends TestCase {
   //  @Test
     public void testDelete() throws ServiceException {
         this.inventory = new Inventory("Carros");
-        catalogFileService = new CatalogFileService(inventory);
+        catalogFileService = CatalogFileService.getInstance();
+        catalogFileService.setInventory(inventory);
         for(int i = 0 ; i < 100; i++) {
             Catalog catalog = Utility.randomCatalog();
             catalog.setConfiguration(new Configuration(new Random().nextInt(15)));
@@ -50,7 +51,8 @@ public class CatalogFileServiceTest extends TestCase {
     @Test
     public void testEdit() throws ServiceException {
         this.inventory = new Inventory("Carros");
-        catalogFileService = new CatalogFileService(inventory);
+        catalogFileService = CatalogFileService.getInstance();
+        catalogFileService.setInventory(inventory);
 
         for(int i = 0 ; i < 5; i++) {
             Catalog catalog = catalogFileService.get(Utility.randomCatalogName());
@@ -81,7 +83,8 @@ public class CatalogFileServiceTest extends TestCase {
   //  @Test
     public void testShow() throws ServiceException {
         this.inventory = new Inventory("Carros");
-        catalogFileService = new CatalogFileService(inventory);
+        catalogFileService = CatalogFileService.getInstance();
+
         System.out.println(catalogFileService.getAll());
         System.out.println(catalogFileService.getAll().size());
         System.out.println(catalogFileService.get("Sedan"));
@@ -89,7 +92,8 @@ public class CatalogFileServiceTest extends TestCase {
     @Test
     public void testDeleteAll() throws ServiceException {
         this.inventory = new Inventory("Carros");
-        catalogFileService = new CatalogFileService(inventory);
+        catalogFileService = CatalogFileService.getInstance();
+
         if (catalogFileService.removeAll())
             System.out.println("Se eliminaron los Catalogos de " + inventory.getName());
         else

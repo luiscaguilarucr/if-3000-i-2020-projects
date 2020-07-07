@@ -27,8 +27,8 @@ public class CatalogFileService implements CatalogService {
     //  Constructor  \\
     private CatalogFileService() {
         list = new ArrayList<>();
-        catalogPersistence = new CatalogFilePersistence(getInventory().getName());
-        idGenerator = new IDGenerator(getInventory());
+        catalogPersistence = CatalogFilePersistence.getInstance();
+        idGenerator = IDGenerator.getInstance();
         refresh();
     }
 
@@ -242,20 +242,25 @@ public class CatalogFileService implements CatalogService {
                 list = catalogs;
                 return true;
             }
-        } catch (PersistenceException e) {
+        } catch (PersistenceException | NullPointerException e) {
             System.out.println("Error: Catalog/refresh: " + e.getMessage());
         }
         return false;
     }
 
     @Override
-    public Inventory getInventory() {
+    public Inventory getInventory() throws ServiceException{
         return inventory;
     }
 
     @Override
-    public CatalogFileService setInventory(Inventory inventory) {
+    public void setInventory(Inventory inventory) throws ServiceException{
+        try {
+            idGenerator.setInventory(inventory);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        catalogPersistence.setInventory(inventory);
         this.inventory = inventory;
-        return this;
     }
 }

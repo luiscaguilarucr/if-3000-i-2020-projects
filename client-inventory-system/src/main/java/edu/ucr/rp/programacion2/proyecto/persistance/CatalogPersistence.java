@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface CatalogPersistence extends Persistence<Catalog, String>  {
     Inventory getInventory();
-    CatalogSocketPersistence setInventory(Inventory inventory);
+    void setInventory(Inventory inventory);
 }

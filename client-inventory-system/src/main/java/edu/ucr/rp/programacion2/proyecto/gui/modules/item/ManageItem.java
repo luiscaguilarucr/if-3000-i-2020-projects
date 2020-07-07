@@ -80,7 +80,7 @@ public class ManageItem implements PaneViewer {
     }
 
     private static void updateCatalogService(Inventory inventory) {
-        catalogFileService = new CatalogSocketService();
+        catalogFileService = CatalogSocketService.getInstance();
         catalogFileService.setInventory(inventory);
     }
 

@@ -20,7 +20,8 @@ public class CatalogServiceTest extends TestCase {
     @Test
     public void testAddition() throws ServiceException {
         inventory = new Inventory("Carros");
-        catalogService = new CatalogFileService(inventory);
+        catalogService = CatalogFileService.getInstance();
+        catalogService.setInventory(inventory);
         for(int i = 0 ; i < 5; i++) {
             Catalog catalog = Utility.randomCatalog();
             if (catalogService.add(catalog))
@@ -34,7 +35,7 @@ public class CatalogServiceTest extends TestCase {
   //  @Test
     public void testDelete() throws ServiceException {
         this.inventory = new Inventory("Carros");
-        catalogService = new CatalogFileService(inventory);
+        catalogService = CatalogFileService.getInstance();
         for(int i = 0 ; i < 100; i++) {
             Catalog catalog = Utility.randomCatalog();
             catalog.setConfiguration(new Configuration(new Random().nextInt(15)));
@@ -48,7 +49,7 @@ public class CatalogServiceTest extends TestCase {
     @Test
     public void testEdit() throws ServiceException {
         this.inventory = new Inventory("Carros");
-        catalogService = new CatalogFileService(inventory);
+        catalogService = CatalogFileService.getInstance();
 
         for(int i = 0 ; i < 5; i++) {
             Catalog catalog = catalogService.get(Utility.randomCatalogName());
@@ -79,7 +80,7 @@ public class CatalogServiceTest extends TestCase {
   //  @Test
     public void testShow() throws ServiceException {
         this.inventory = new Inventory("AUDI");
-        catalogService = new CatalogFileService(inventory);
+        catalogService = CatalogFileService.getInstance();
         System.out.println(catalogService.getAll());
         System.out.println(catalogService.getAll().size());
         System.out.println(catalogService.get("SUVs"));
@@ -87,7 +88,7 @@ public class CatalogServiceTest extends TestCase {
     @Test
     public void testDeleteAll() throws ServiceException {
         this.inventory = new Inventory("Carros");
-        catalogService = new CatalogFileService(inventory);
+        catalogService = CatalogFileService.getInstance();
         if (catalogService.removeAll())
             System.out.println("Se eliminaron los Catalogos de " + inventory.getName());
         else

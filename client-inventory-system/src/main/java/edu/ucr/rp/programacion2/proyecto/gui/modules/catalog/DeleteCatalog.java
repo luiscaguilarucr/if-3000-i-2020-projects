@@ -59,7 +59,7 @@ public class DeleteCatalog implements PaneViewer {
      * This method initializes the catalog service.
      */
     private void updateCatalogService(Inventory inventory) {
-        catalogService = new CatalogSocketService();
+        catalogService = CatalogSocketService.getInstance();
         catalogService.setInventory(inventory);
     }
 
@@ -138,9 +138,10 @@ public class DeleteCatalog implements PaneViewer {
      */
     private void buildInventoryComboBox() {
         try {
-            inventoryObservableList = FXCollections.observableArrayList(inventoryService.getAll());
+            inventoryObservableList = FXCollections.observableArrayList();
             inventoryComboBox = PaneUtil.buildComboBox(pane, inventoryObservableList, 1, 1);
-        } catch (ServiceException exception) {
+            inventoryObservableList.addAll(inventoryService.getAll());
+        } catch (ServiceException | NullPointerException exception) {
             System.out.println(exception.getMessage());
         }
     }

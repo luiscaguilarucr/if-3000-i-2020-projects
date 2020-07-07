@@ -68,7 +68,7 @@ public class CreateCatalogForm implements PaneViewer {
      * This method initializes the catalog service.
      */
     private void updateCatalogService(Inventory inventory) {
-        catalogService = new CatalogSocketService();
+        catalogService = CatalogSocketService.getInstance();
         catalogService.setInventory(inventory);
     }
 

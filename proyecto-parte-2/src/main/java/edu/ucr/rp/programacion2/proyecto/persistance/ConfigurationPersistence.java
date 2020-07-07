@@ -1,8 +1,10 @@
 package edu.ucr.rp.programacion2.proyecto.persistance;
 
 import edu.ucr.rp.programacion2.proyecto.domain.Configuration;
+import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
 import edu.ucr.rp.programacion2.proyecto.persistance.Persistence;
 import edu.ucr.rp.programacion2.proyecto.util.JsonUtil;
+import edu.ucr.rp.programacion2.proyecto.util.idgenerator.IDGenerator;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -14,10 +16,18 @@ public class ConfigurationPersistence implements Persistence<Integer, Integer> {
     private String path;
     private final String suffix = ".json";
     private final JsonUtil jsonUtil = new JsonUtil();
-    //  Constructor  \\
+    private static ConfigurationPersistence instance;
+    private Inventory inventory;
 
-    public ConfigurationPersistence(String inventoryName) {
-        this.path = "files/inventories/" + inventoryName + "/";
+    //  Constructor  \\
+    private ConfigurationPersistence() {
+    }
+
+    //  Singleton Pattern  \\
+    public static ConfigurationPersistence getInstance() {
+        if (instance == null)
+            instance = new ConfigurationPersistence();
+        return instance;
     }
     //  Methods  \\
     @Override
@@ -55,5 +65,14 @@ public class ConfigurationPersistence implements Persistence<Integer, Integer> {
     @Override
     public boolean deleteAll() {
         throw new UnsupportedOperationException("Method deleteAll hasn't been implement yet.");
+    }
+
+    public Inventory getInventory() {
+        return inventory;
+    }
+
+    public void setInventory(Inventory inventory) {
+        this.path = "files/inventories/" + inventory.getDirectoryName() + "/";
+        this.inventory = inventory;
     }
 }

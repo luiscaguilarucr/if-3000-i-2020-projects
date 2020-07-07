@@ -325,15 +325,16 @@ public class InventorySocketPersistence implements InventoryPersistence {
      * @throws IOException when the connection failed.
      */
     private void closeConnection() throws IOException {
-        Request closeRequest = new Request();
-        closeRequest.setType(CLOSE);
-        send(closeRequest, clientSocket);
-        System.out.println("Se envió la petición para finalizar la conexión.");
-
         if (clientSocket != null) {
+            Request closeRequest = new Request();
+            closeRequest.setType(CLOSE);
+            send(closeRequest, clientSocket);
+            System.out.println("Se envió la petición para finalizar la conexión.");
+
             clientSocket.close();
             System.out.println("Conexión cerrada");
         }
+
     }
 }
 

@@ -168,12 +168,9 @@ public class ProcessCatalogRequest implements ProcessCatalog {
         // Add inventory.
         ConfirmationRequest confirmationRequest = new ConfirmationRequest();
         try {
-            Inventory inventory1 = inventoryService.get(inventory.getName());
-
-            catalogService.setInventory(inventory1);
+            catalogService.setInventory(inventory);
             confirmationRequest.setCompleted(true);
             confirmationRequest.setDetails("Inventory was put into action");
-
         } catch (ServiceException e) {
             System.out.println(e.getMessage());
             confirmationRequest.setCompleted(false);

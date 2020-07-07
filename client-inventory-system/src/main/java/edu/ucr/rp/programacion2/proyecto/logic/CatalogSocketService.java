@@ -18,11 +18,20 @@ import java.util.List;
 public class CatalogSocketService implements CatalogService {
     private CatalogSocketPersistence catalogPersistence;
     private Inventory inventory;
+    private static CatalogSocketService instance;
 
     //  Constructor \\
-    public CatalogSocketService() {
+    private CatalogSocketService() {
         catalogPersistence = new CatalogSocketPersistence("127.0.0.1", 12121);
     }
+
+    public static CatalogSocketService getInstance(){
+        if(instance == null){
+            instance = new CatalogSocketService();
+        }
+        return instance;
+    }
+
     //  Methods  \\
     /**
      * This method add a new element to the list.
@@ -124,6 +133,7 @@ public class CatalogSocketService implements CatalogService {
     }
 
     public void setInventory(Inventory inventory) {
+        catalogPersistence.setInventory(inventory);
         this.inventory = inventory;
     }
 }

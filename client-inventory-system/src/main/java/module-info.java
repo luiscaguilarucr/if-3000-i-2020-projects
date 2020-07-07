@@ -8,5 +8,7 @@ module inventory.system {
     exports edu.ucr.rp.programacion2.proyecto.domain to com.fasterxml.jackson.databind;
     exports edu.ucr.rp.programacion2.proyecto.util to com.fasterxml.jackson.databind;
     exports edu.ucr.rp.programacion2.proyecto.gui to javafx.graphics;
+    exports edu.ucr.rp.programacion2.proyecto.persistance.messages to com.fasterxml.jackson.databind;
     opens edu.ucr.rp.programacion2.proyecto.domain to javafx.base;
+    opens edu.ucr.rp.programacion2.proyecto.persistance.messages to com.fasterxml.jackson.databind;
 }

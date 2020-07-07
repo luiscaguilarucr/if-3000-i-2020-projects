@@ -38,7 +38,7 @@ public class InventoryFilePersistence implements InventoryPersistence {
      * @return {@code true} if the directory have been created or saved.{@code false} Otherwise.
      */
     @Override
-    public boolean write(Inventory inventory) throws PersistenceException {
+    public synchronized boolean write(Inventory inventory) throws PersistenceException {
         if (inventory == null) throw new PersistenceException("The inventory is null.");
         List<Inventory> inventories = getInventories();
         // Check is exist.
@@ -87,7 +87,7 @@ public class InventoryFilePersistence implements InventoryPersistence {
      * @return {@code true} if the directory have been removed or doesn't exists.{@code false} Otherwise.
      */
     @Override
-    public boolean delete(Inventory inventory) throws PersistenceException {
+    public synchronized  boolean delete(Inventory inventory) throws PersistenceException {
         if (inventory == null) throw new PersistenceException("The inventory is null.");
         File file = new File(path + inventory.getDirectoryName());
         if (!file.exists()) return true;
