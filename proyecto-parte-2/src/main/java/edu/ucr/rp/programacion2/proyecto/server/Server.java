@@ -1,8 +1,10 @@
 package edu.ucr.rp.programacion2.proyecto.server;
 
+import edu.ucr.rp.programacion2.proyecto.logic.CatalogFileService;
 import edu.ucr.rp.programacion2.proyecto.logic.InventoryFileService;
 import edu.ucr.rp.programacion2.proyecto.server.messages.Request;
 import edu.ucr.rp.programacion2.proyecto.server.messages.RequestType;
+import edu.ucr.rp.programacion2.proyecto.server.processes.ProcessCatalog;
 import edu.ucr.rp.programacion2.proyecto.server.processes.ProcessCatalogRequest;
 import edu.ucr.rp.programacion2.proyecto.server.processes.ProcessInventoryRequest;
 import edu.ucr.rp.programacion2.proyecto.server.processes.ProcessRequest;
@@ -18,10 +20,12 @@ import static edu.ucr.rp.programacion2.proyecto.server.processes.RequestProcessU
 public class Server {
     private JsonUtil jsonUtil = new JsonUtil();
     private ServerSocket serverSocket = null;
-    private ProcessRequest catalogProcessRequest;
+    private ProcessCatalog catalogProcessRequest;
     private ProcessRequest inventoryProcessRequest;
+
     /**
      * Runs the server.
+     *
      * @param port of the server.
      */
     public Server(int port) {
@@ -29,7 +33,7 @@ public class Server {
             serverSocket = new ServerSocket(port);              // Initialize the Server.
             initializeProcessRequests();                        // Initialize processRequests
             System.out.println("Esperando conexión");
-            while(true) {
+            while (true) {
                 Socket socket = serverSocket.accept();          // Wait for indeterminate client connections.
                 System.out.println("Conexión recibida");        // Connection with client established.
 
@@ -38,25 +42,52 @@ public class Server {
 
                 // Classify the request
                 RequestType type = request.getType();
-                switch (type){
+                switch (type) {
                     // Catalogs request
-                    case INSERT_CATALOG:    catalogProcessRequest.insert(socket); break;
-                    case UPDATE_CATALOG:    catalogProcessRequest.update(socket); break;
-                    case READ_CATALOG:      catalogProcessRequest.read(socket); break;
-                    case READ_ALL_CATALOGS: catalogProcessRequest.readAll(socket); break;
-                    case DELETE_CATALOG:    catalogProcessRequest.delete(socket); break;
-                    case DELETE_ALL_CATALOGS: catalogProcessRequest.deleteAll(socket); break;
+                    case SET_INVENTORY:
+                        catalogProcessRequest.refresh(socket);
+                        break;
+                    case INSERT_CATALOG:
+                        catalogProcessRequest.insert(socket);
+                        break;
+                    case UPDATE_CATALOG:
+                        catalogProcessRequest.update(socket);
+                        break;
+                    case READ_CATALOG:
+                        catalogProcessRequest.read(socket);
+                        break;
+                    case READ_ALL_CATALOGS:
+                        catalogProcessRequest.readAll(socket);
+                        break;
+                    case DELETE_CATALOG:
+                        catalogProcessRequest.delete(socket);
+                        break;
+                    case DELETE_ALL_CATALOGS:
+                        catalogProcessRequest.deleteAll(socket);
+                        break;
                     // Inventory request
-                    case INSERT_INVENTORY: inventoryProcessRequest.insert(socket); break;
-                    case UPDATE_INVENTORY: inventoryProcessRequest.update(socket); break;
-                    case READ_INVENTORY: inventoryProcessRequest.read(socket); break;
-                    case READ_ALL_INVENTORIES: inventoryProcessRequest.readAll(socket); break;
-                    case DELETE_INVENTORY: inventoryProcessRequest.delete(socket); break;
-                    case DELETE_ALL_INVENTORIES: inventoryProcessRequest.deleteAll(socket); break;
+                    case INSERT_INVENTORY:
+                        inventoryProcessRequest.insert(socket);
+                        break;
+                    case UPDATE_INVENTORY:
+                        inventoryProcessRequest.update(socket);
+                        break;
+                    case READ_INVENTORY:
+                        inventoryProcessRequest.read(socket);
+                        break;
+                    case READ_ALL_INVENTORIES:
+                        inventoryProcessRequest.readAll(socket);
+                        break;
+                    case DELETE_INVENTORY:
+                        inventoryProcessRequest.delete(socket);
+                        break;
+                    case DELETE_ALL_INVENTORIES:
+                        inventoryProcessRequest.deleteAll(socket);
+                        break;
                     // Close request
                     default: {
                         request = receive(Request.class, socket);
-                        if(request.getType().equals(CLOSE)) {
+                        if (request.getType().equals(CLOSE)) {
                             socket.close();
                         }
                     }
@@ -64,8 +95,7 @@ public class Server {
             }
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
-        }
-        finally {
+        } finally {
             try {
                 serverSocket.close();                           // Close Server connection.
             } catch (IOException e) {
@@ -74,10 +104,8 @@ public class Server {
         }
     }
 
-
-
-    private void initializeProcessRequests(){
-        catalogProcessRequest = new ProcessCatalogRequest();
+    private void initializeProcessRequests() {
+        catalogProcessRequest = new ProcessCatalogRequest(CatalogFileService.getInstance(), InventoryFileService.getInstance());
         inventoryProcessRequest = new ProcessInventoryRequest(InventoryFileService.getInstance());
     }
 }

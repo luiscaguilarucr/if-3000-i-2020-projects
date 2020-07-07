@@ -20,7 +20,9 @@ public class CatalogFileServiceTest extends TestCase {
     @Test
     public void testAddition() throws ServiceException {
         inventory = new Inventory("Carros");
-        catalogFileService = new CatalogFileService(inventory);
+        catalogFileService = CatalogFileService.getInstance();
+        catalogFileService.setInventory(inventory);
+
         for(int i = 0 ; i < 5; i++) {
             Catalog catalog = Utility.randomCatalog();
             if (catalogFileService.add(catalog))

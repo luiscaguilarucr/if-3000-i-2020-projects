@@ -9,7 +9,7 @@ public enum RequestType {
     INSERT_INVENTORY(6), UPDATE_INVENTORY(7),
     READ_INVENTORY(8), READ_ALL_INVENTORIES(9),
     DELETE_INVENTORY(10), DELETE_ALL_INVENTORIES(11),
-    CLOSE(12);
+    CLOSE(12), SET_INVENTORY(13);
 
     RequestType(int id) {
         this.id = id;

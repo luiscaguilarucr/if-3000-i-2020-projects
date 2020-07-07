@@ -10,5 +10,4 @@ public interface ProcessRequest {
     void readAll(Socket socket) throws IOException, ClassNotFoundException;
     void delete(Socket socket) throws IOException, ClassNotFoundException;
     void deleteAll(Socket socket) throws IOException, ClassNotFoundException;
-
 }

@@ -16,21 +16,14 @@ import java.util.List;
  * Singleton Pattern added.
  */
 public class CatalogSocketService implements CatalogService {
-    private List<Catalog> list;
-    private CatalogPersistence catalogPersistence;
+    private CatalogSocketPersistence catalogPersistence;
+    private Inventory inventory;
 
     //  Constructor \\
-    public CatalogSocketService(Inventory inventory) {
-        list = new ArrayList<>();
+    public CatalogSocketService() {
         catalogPersistence = new CatalogSocketPersistence("127.0.0.1", 12121);
-        try {
-            refresh();
-        } catch (ServiceException e) {
-            System.out.println(e.getMessage());
-        }
     }
     //  Methods  \\
-
     /**
      * This method add a new element to the list.
      * The elements is colocate and validate before been added.
@@ -40,18 +33,14 @@ public class CatalogSocketService implements CatalogService {
      */
     @Override
     public boolean add(Catalog catalog) throws ServiceException {
-        refresh();
-        if (validateAddition(catalog)) {
-            list.add(catalog);
-            try {
-                catalogPersistence.insert(catalog);
-            } catch (PersistenceException e) {
-                throw new ServiceException(e.getMessage());
-            }
-            refresh();
-            return list.contains(catalog);
+        if (catalog == null) {
+            throw new ServiceException("The catalog is null.");
         }
-        return false;
+        try {
+            return catalogPersistence.insert(catalog);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage());
+        }
     }
 
     /**
@@ -63,23 +52,14 @@ public class CatalogSocketService implements CatalogService {
      */
     @Override
     public boolean edit(Catalog catalog) throws ServiceException {
-        refresh();
-        if (validateEdition(catalog)) {
-            // Delete the old value
-            try {
-                if (catalogPersistence.delete(list.get(list.indexOf(catalog))))
-                    if (catalogPersistence.insert(catalog))//Write the newOne
-
-                        list.add(catalog);
-                refresh();
-                return list.contains(catalog);
-            } catch (PersistenceException e) {
-                throw new ServiceException(e.getMessage());
-            }
+        if (catalog == null) {
+            throw new ServiceException("The catalog is null.");
         }
-
-        return false;
-
+        try {
+            return catalogPersistence.update(catalog);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage());
+        }
     }
 
     /**
@@ -91,11 +71,9 @@ public class CatalogSocketService implements CatalogService {
      */
     @Override
     public boolean remove(Catalog catalog) throws ServiceException {
-        refresh();
-        if (catalog == null || !list.contains(catalog)) {
-            return false;
+        if (catalog == null) {
+            throw new ServiceException("The catalog is null.");
         }
-        list.remove(catalog);
         try {
             return catalogPersistence.delete(catalog);
         } catch (PersistenceException e) {
@@ -104,14 +82,12 @@ public class CatalogSocketService implements CatalogService {
     }
 
     public boolean removeAll() throws ServiceException {
-        list.clear();
         try {
-            if (!catalogPersistence.deleteAll()) return false;
-        } catch (edu.ucr.rp.programacion2.proyecto.persistance.PersistenceException e) {
-            e.printStackTrace();
+            if (catalogPersistence.deleteAll()) return true;
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage());
         }
-        refresh();
-        return list.isEmpty();
+        return false;
     }
 
     /**
@@ -122,12 +98,11 @@ public class CatalogSocketService implements CatalogService {
      */
     @Override
     public Catalog get(String name) throws ServiceException {
-        refresh();
-        for (Catalog catalog : list)
-            if (catalog.getName().equals(name))
-                return catalog;
-
-        return null;
+        try {
+            return catalogPersistence.read(name);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage());
+        }
     }
 
     /**
@@ -137,102 +112,18 @@ public class CatalogSocketService implements CatalogService {
      */
     @Override
     public List<Catalog> getAll() throws ServiceException {
-        refresh();
-        return list;
-    }
-
-    //  More methods \\
-
-    /**
-     * Check if the catalog can be added.
-     * <p>
-     * Validations:
-     * - Most have an unique id.
-     * - Most have a valid schema.
-     * - The name can't be repeated.
-     *
-     * @param catalog to be validate.
-     * @return {@code true} if the element is valid. {@code false} otherwise.
-     */
-    private boolean validateAddition(Catalog catalog) {
-        if (catalog == null) return false;                          // Not null
-        if (list.contains(catalog)) return false;                   // Unique ID
-        if (!validateSchema(catalog.getSchema())) return false;     // Valid schema
-        return !containsByName(catalog.getName());                  // Unique Name
-    }
-
-    /**
-     * Check if the catalog can be editing.
-     * <p>
-     * Validations:
-     * - Most exists in the list.
-     * - Most have a valid schema.
-     * - The name can't be repeated.
-     *
-     * @param catalog to be validate.
-     * @return {@code true} if the element is valid. {@code false} otherwise.
-     */
-    private boolean validateEdition(Catalog catalog) {
-        if (catalog == null) return false;                          // Not null
-        if (!list.contains(catalog)) return false;                  // ID in list
-        if (!validateSchema(catalog.getSchema())) return false;     // Valid schema
-        return !nameUsedByOtherCatalog(catalog);                    // Name used
-    }
-
-    /**
-     * Validates the schema of one Catalog.
-     * <p>
-     * Validations:
-     * - Most have a schema and, at least, one property defined.
-     *
-     * @param schema to verify.
-     * @return {@code true} if the schema is valid. {@code false} otherwise.
-     */
-    private boolean validateSchema(List<String> schema) {
-        return schema != null && !schema.isEmpty();
-    }
-
-    /**
-     * Checks if the name has been used by one Catalog.
-     *
-     * @param name to search.
-     * @return {@code true} if the name is used. {@code false} otherwise.
-     */
-    private boolean containsByName(String name) {
-        for (Catalog c : list)
-            if (name.equalsIgnoreCase(c.getName()))
-                return true;
-        return false;
-    }
-
-    /**
-     * Checks if the name is used used by other Catalog.
-     *
-     * @param catalog to search.
-     * @return {@code true} if the name is used by other catalog. {@code false} otherwise.
-     */
-    private boolean nameUsedByOtherCatalog(Catalog catalog) {
-        for (Catalog c : list)
-            if (!c.equals(catalog))
-                if (c.getName().equals(catalog.getName()))
-                    return true;
-        return false;
-    }
-
-    private Boolean refresh() throws ServiceException{
-        //Lee el archivo
-        Object object = null;
         try {
-            object = catalogPersistence.readAll();
+            return catalogPersistence.readAll();
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage());
         }
-        //Valida que existe y lo sustituye por la lista en memoria
-        if (object != null) {
-            list = (List<Catalog>) object;
-            return true;
-        }
-        return false;
     }
 
+    public Inventory getInventory() {
+        return inventory;
+    }
+
+    public void setInventory(Inventory inventory) {
+        this.inventory = inventory;
+    }
 }

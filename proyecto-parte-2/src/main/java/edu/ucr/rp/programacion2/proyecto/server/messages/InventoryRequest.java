@@ -7,7 +7,6 @@ public class InventoryRequest {
     private Inventory inventory;
     // Methods
 
-
     public Inventory getInventory() {
         return inventory;
     }

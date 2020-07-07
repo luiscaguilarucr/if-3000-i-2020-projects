@@ -99,8 +99,6 @@ public class InventoryForm implements PaneViewer {
         } else {
             inventory = new Inventory(inventoryNameTextField.getText());
             try {
-
-
                 wasAdded = inventoryService.add(inventory);
             }catch (ServiceException e){
                 System.out.println(e.getMessage());

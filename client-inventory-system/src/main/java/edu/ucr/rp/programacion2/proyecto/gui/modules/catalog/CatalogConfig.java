@@ -89,7 +89,7 @@ public class CatalogConfig implements PaneViewer {
     }
 
     private static void updateCatalogService(Inventory inventory) {
-        catalogService = new CatalogSocketService(inventory);
+        catalogService = new CatalogSocketService();
     }
     //  Builders  \\
 

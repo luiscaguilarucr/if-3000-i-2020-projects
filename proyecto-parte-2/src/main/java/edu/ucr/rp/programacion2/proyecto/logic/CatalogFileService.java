@@ -17,22 +17,26 @@ import java.util.List;
  * Singleton Pattern added.
  */
 public class CatalogFileService implements CatalogService {
+    //  Variables  \\
+    private static CatalogFileService instance;
     private List<Catalog> list;
     private CatalogPersistence catalogPersistence;
     private IDGenerator idGenerator;
     private Inventory inventory;
-    //  Constructor \\
-    public CatalogFileService(Inventory inventory) {
-        list = new ArrayList<>();
-        catalogPersistence = new CatalogFilePersistence(inventory.getName());
-        refresh();
-        idGenerator = new IDGenerator(inventory);
-    }
-    //  Methods  \\
 
-    public CatalogFileService setInventory(Inventory inventory) {
-        this.inventory = inventory;
-        return this;
+    //  Constructor  \\
+    private CatalogFileService() {
+        list = new ArrayList<>();
+        catalogPersistence = new CatalogFilePersistence(getInventory().getName());
+        idGenerator = new IDGenerator(getInventory());
+        refresh();
+    }
+
+    //  Singleton Pattern  \\
+    public static CatalogFileService getInstance() {
+        if (instance == null)
+            instance = new CatalogFileService();
+        return instance;
     }
 
     /**
@@ -43,19 +47,17 @@ public class CatalogFileService implements CatalogService {
      * @return {@code true} if the element has been added correctly. {@code false} Otherwise.
      */
     @Override
-    public boolean add(Catalog catalog) throws ServiceException{
+    public boolean add(Catalog catalog) throws ServiceException {
         refresh();
         catalog.getConfiguration().setId(idGenerator.get());
         if (validateAddition(catalog)) {
             catalog.getConfiguration().setId(idGenerator.generate());
             list.add(catalog);
             try {
-                catalogPersistence.write(catalog);
+                return catalogPersistence.write(catalog);
             } catch (PersistenceException e) {
-                throw new ServiceException("Catalogs can't be added, because "  + e.getMessage());
+                throw new ServiceException("Catalogs can't be added, because " + e.getMessage());
             }
-            refresh();
-            return list.contains(catalog);
         }
         return false;
     }
@@ -68,19 +70,17 @@ public class CatalogFileService implements CatalogService {
      * @return {@code true} if the element has been modified. {@code false} Otherwise.
      */
     @Override
-    public boolean edit(Catalog catalog)  throws ServiceException{
+    public boolean edit(Catalog catalog) throws ServiceException {
         refresh();
         if (validateEdition(catalog)) {
-            // Delete the old value
             try {
-                if(catalogPersistence.delete(list.get(list.indexOf(catalog))))
-                    if(catalogPersistence.write(catalog))//Write the newOne
-                        list.add(catalog);
+                if (catalogPersistence.delete(list.get(list.indexOf(catalog)))) { // Delete the old value
+                    list.add(catalog);
+                    return catalogPersistence.write(catalog); //Write the newOne
+                }
             } catch (PersistenceException e) {
-                throw new ServiceException("Catalog can't be edited, because "  + e.getMessage());
+                throw new ServiceException("Catalog can't be edited, because " + e.getMessage());
             }
-            refresh();
-            return list.contains(catalog);
         }
         return false;
     }
@@ -93,7 +93,7 @@ public class CatalogFileService implements CatalogService {
      * @return {@code true} if the element has been removed. {@code false} Otherwise.
      */
     @Override
-    public boolean remove(Catalog catalog)  throws ServiceException{
+    public boolean remove(Catalog catalog) throws ServiceException {
         refresh();
         if (catalog == null || !list.contains(catalog)) {
             return false;
@@ -102,17 +102,17 @@ public class CatalogFileService implements CatalogService {
         try {
             return catalogPersistence.delete(catalog);
         } catch (PersistenceException e) {
-            throw new ServiceException("Catalog can't be deleted, because "  + e.getMessage());
+            throw new ServiceException("Catalog can't be deleted, because " + e.getMessage());
         }
     }
 
-    public boolean removeAll()  throws ServiceException{
+    public boolean removeAll() throws ServiceException {
         if (!idGenerator.reset()) return false;
         list.clear();
         try {
             if (!catalogPersistence.deleteAll()) return false;
         } catch (PersistenceException e) {
-            throw new ServiceException("Catalogs can't be deleted, because "  + e.getMessage());
+            throw new ServiceException("Catalogs can't be deleted, because " + e.getMessage());
         }
         refresh();
         return list.isEmpty();
@@ -125,13 +125,14 @@ public class CatalogFileService implements CatalogService {
      * @return {@code Catalog} if the element's name is in the list. {@code null} Otherwise.
      */
     @Override
-    public Catalog get(String name)  throws ServiceException{
+    public Catalog get(String name) throws ServiceException {
         refresh();
-        for (Catalog catalog : list)
-            if (catalog.getName().equals(name))
+        for (Catalog catalog : list) {
+            if (catalog.getName().equals(name)) {
                 return catalog;
-
-        return null;
+            }
+        }
+        throw new ServiceException("Catalog named " + name + " is not found.");
     }
 
     /**
@@ -140,7 +141,7 @@ public class CatalogFileService implements CatalogService {
      * @return {@code List<Catalog>} List with elements
      */
     @Override
-    public List<Catalog> getAll()  throws ServiceException{
+    public List<Catalog> getAll() throws ServiceException {
         refresh();
         return list;
     }
@@ -158,11 +159,14 @@ public class CatalogFileService implements CatalogService {
      * @param catalog to be validate.
      * @return {@code true} if the element is valid. {@code false} otherwise.
      */
-    private boolean validateAddition(Catalog catalog) {
-        if (catalog == null) return false;                          // Not null
-        if (list.contains(catalog)) return false;                   // Unique ID
-        if (!validateSchema(catalog.getSchema())) return false;     // Valid schema
-        return !containsByName(catalog.getName());                  // Unique Name
+    private boolean validateAddition(Catalog catalog) throws ServiceException {
+        if (catalog == null)
+            throw new ServiceException("the catalog is null.");                             // Not null
+        if (list.contains(catalog))
+            throw new ServiceException("the catalog already exists.");                      // Unique ID
+        validateSchema(catalog.getSchema());                                                // Valid schema
+        nameUsedByOtherCatalog(catalog);                                                    // Unique Name
+        return true;
     }
 
     /**
@@ -176,11 +180,14 @@ public class CatalogFileService implements CatalogService {
      * @param catalog to be validate.
      * @return {@code true} if the element is valid. {@code false} otherwise.
      */
-    private boolean validateEdition(Catalog catalog) {
-        if (catalog == null) return false;                          // Not null
-        if (!list.contains(catalog)) return false;                  // ID in list
-        if (!validateSchema(catalog.getSchema())) return false;     // Valid schema
-        return !nameUsedByOtherCatalog(catalog);                    // Name used
+    private boolean validateEdition(Catalog catalog) throws ServiceException {
+        if (catalog == null)
+            throw new ServiceException("the catalog is null.");                            // Not null
+        if (!list.contains(catalog))
+            throw new ServiceException("the catalog doesn't exist.");                      // ID in list
+        validateSchema(catalog.getSchema());
+        nameUsedByOtherCatalog(catalog);                                                   // Name used
+        return true;
     }
 
     /**
@@ -202,7 +209,7 @@ public class CatalogFileService implements CatalogService {
      * @param name to search.
      * @return {@code true} if the name is used. {@code false} otherwise.
      */
-    private boolean containsByName(String name) {
+    private boolean containsByName(String name) throws ServiceException {
         for (Catalog c : list)
             if (name.equalsIgnoreCase(c.getName()))
                 return true;
@@ -215,11 +222,14 @@ public class CatalogFileService implements CatalogService {
      * @param catalog to search.
      * @return {@code true} if the name is used by other catalog. {@code false} otherwise.
      */
-    private boolean nameUsedByOtherCatalog(Catalog catalog) {
-        for (Catalog c : list)
-            if (!c.equals(catalog))
-                if (c.getName().equals(catalog.getName()))
-                    return true;
+    private boolean nameUsedByOtherCatalog(Catalog catalog) throws ServiceException {
+        for (Catalog c : list) {
+            if (!c.equals(catalog)) {
+                if (c.getName().equals(catalog.getName())) {
+                    throw new ServiceException("the catalog's name is already used.");
+                }
+            }
+        }
         return false;
     }
 
@@ -238,4 +248,14 @@ public class CatalogFileService implements CatalogService {
         return false;
     }
 
+    @Override
+    public Inventory getInventory() {
+        return inventory;
+    }
+
+    @Override
+    public CatalogFileService setInventory(Inventory inventory) {
+        this.inventory = inventory;
+        return this;
+    }
 }

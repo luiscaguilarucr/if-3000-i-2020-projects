@@ -74,7 +74,8 @@ public class CreateItemForm implements PaneViewer {
      */
     private void updateCatalogService() {
         if (inventorySelected != null) {
-            catalogFileService = new CatalogSocketService(inventorySelected);
+            catalogFileService = new CatalogSocketService();
+            catalogFileService.setInventory(inventorySelected);
         }
     }
 

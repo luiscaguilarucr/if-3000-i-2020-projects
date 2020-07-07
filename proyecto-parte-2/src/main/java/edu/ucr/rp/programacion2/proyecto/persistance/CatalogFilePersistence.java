@@ -2,6 +2,7 @@ package edu.ucr.rp.programacion2.proyecto.persistance;
 
 import edu.ucr.rp.programacion2.proyecto.domain.Catalog;
 import edu.ucr.rp.programacion2.proyecto.domain.Configuration;
+import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
 import edu.ucr.rp.programacion2.proyecto.util.JsonUtil;
 import edu.ucr.rp.programacion2.proyecto.util.builders.CatalogBuilder;
 import org.apache.commons.io.FileUtils;
@@ -14,26 +15,26 @@ import java.util.List;
 import java.util.Map;
 
 public class CatalogFilePersistence implements CatalogPersistence {
-
     private String path;
     private final String suffix = ".json";
     private final JsonUtil jsonUtil = new JsonUtil();
+    public Inventory inventory;
 
     /**
      * It's responsibly is make an catalog persistent.
      * Also can restore catalogs and convert them to objects in memory.
-     *
-     * @param inventoryName of the list of catalogs
      */
-    public CatalogFilePersistence(String inventoryName) {
-        this.path = "files/inventories/" + inventoryName + "/catalogs/";
+    public CatalogFilePersistence(String name) {
+        this.path = "files/inventories/" + name + "/catalogs/";
         verifyCatalogsDir(path);
     }
-    private void verifyCatalogsDir(String path){
+
+    private void verifyCatalogsDir(String path) {
         File file = new File(path);
-        if(!file.exists())
+        if (!file.exists())
             file.mkdir();
     }
+
     /**
      * Saves one catalog.
      *
@@ -41,12 +42,13 @@ public class CatalogFilePersistence implements CatalogPersistence {
      * @return {@code true} if the catalog have been saved.{@code false} Otherwise.
      */
     @Override
-    public boolean write(Catalog catalog) {
-        if (catalog == null) return false;                       // Not null
-        if (!checkDirectory(catalog.getName())) return false;    // Check dir
-        if (!saveConfig(catalog)) return false;                      // Save ID
-        if (!saveSchema(catalog)) return false;                  // Save Schema
-        return saveItems(catalog);                               // Save Items
+    public boolean write(Catalog catalog) throws PersistenceException {
+        if (catalog == null) throw new PersistenceException("The catalog is null"); // Not null
+        if (!checkDirectory(catalog.getName())) throw new PersistenceException("The directory indicated does not exist"); // Check dir
+        if (!saveConfig(catalog)) throw new PersistenceException("The config was not saved"); // Save ID
+        if (!saveSchema(catalog)) throw new PersistenceException("The scheme was not saved"); // Save Schema
+        if (!saveItems(catalog)) throw new PersistenceException("Items were not saved"); //Save Items
+        return true;
     }
 
     /**
@@ -55,12 +57,12 @@ public class CatalogFilePersistence implements CatalogPersistence {
      * @return {@code List<Catalog>} List of the catalogs.
      */
     @Override
-    public List<Catalog> read() {
+    public List<Catalog> read() throws PersistenceException {
         return readCatalogs();
     }
 
     @Override
-    public boolean delete(Catalog catalog) {
+    public boolean delete(Catalog catalog) throws PersistenceException  {
         try {
             FileUtils.forceDelete(new File(path + catalog.getName()));
         } catch (IOException e) {
@@ -77,18 +79,21 @@ public class CatalogFilePersistence implements CatalogPersistence {
      *
      * @return @return {@code List<Catalog>} List of the catalogs.
      */
-    private List<Catalog> readCatalogs() {
+    private List<Catalog> readCatalogs() throws PersistenceException {
+        File file = new File(path);
         List<Catalog> catalogs = new ArrayList<>();
         String[] catalogNames = readCatalogNames();
-
-        if (catalogNames != null) {
-            for (String catalogName : catalogNames) {
-                Catalog catalog = buildCatalog(catalogName);
-                if (catalog != null)
-                    catalogs.add(catalog);
-                else
-                    System.out.println("Error while reading catalog: " + catalogName);
+        if (file.exists()) {
+            if (catalogNames != null) {
+                for (String catalogName : catalogNames) {
+                    Catalog catalog = buildCatalog(catalogName);
+                    if (catalog != null) {
+                        catalogs.add(catalog);
+                    }
+                }
             }
+        } else {
+            throw new PersistenceException("The catalog file doesn't exists.");
         }
         return catalogs;
     }
@@ -235,8 +240,9 @@ public class CatalogFilePersistence implements CatalogPersistence {
         }
         return null;
     }
+
     @Override
-    public boolean deleteAll(){
+    public boolean deleteAll() {
         try {
             FileUtils.cleanDirectory(new File(path));
         } catch (IOException e) {
@@ -244,4 +250,5 @@ public class CatalogFilePersistence implements CatalogPersistence {
         }
         return true;
     }
+
 }

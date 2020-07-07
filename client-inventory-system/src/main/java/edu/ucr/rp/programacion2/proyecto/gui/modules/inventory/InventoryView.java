@@ -375,7 +375,8 @@ public class InventoryView implements PaneViewer {
                 ManagePane.setCenterPane(PaneName.MANAGE_ITEM);
                 Inventory inventory = inventoryFileService.get(inventoryControl.getInventoryName());
                 ManageItem.setInventorySelected(inventory);
-                catalogService = new CatalogSocketService(inventory);
+                catalogService = new CatalogSocketService();
+                catalogService.setInventory(inventory);
                 Catalog catalog = catalogService.get(inventoryControl.getCatalogName());
                 ManageItem.setCatalogSelected(catalog);
                 ManageItem.setPreviousPane(PaneName.SHOW_INVENTORY);
@@ -395,7 +396,8 @@ public class InventoryView implements PaneViewer {
             Inventory inventory = inventoryFileService.get(inventoryControl.getInventoryName());
             if (inventory != null) {
                 CatalogConfig.setInventory(inventory);
-                catalogService = new CatalogSocketService(inventory);
+                catalogService = new CatalogSocketService();
+                catalogService.setInventory(inventory);
                 Catalog catalog = catalogService.get(inventoryControl.getCatalogName());
                 CatalogConfig.setCatalog(catalog);
                 System.out.println("Going to config table view.. of " + inventoryControl.getCatalogName());
