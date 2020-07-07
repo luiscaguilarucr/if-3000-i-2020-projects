@@ -1,16 +1,23 @@
 package edu.ucr.rp.programacion2.proyecto.util.idgenerator;
 
-import edu.ucr.rp.programacion2.proyecto.util.inventorycontrol.ConfigurationPersistence;
+import edu.ucr.rp.programacion2.proyecto.logic.CatalogFileService;
+import edu.ucr.rp.programacion2.proyecto.logic.ServiceException;
+import edu.ucr.rp.programacion2.proyecto.persistance.ConfigurationPersistence;
 import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
 
 public class IDGenerator implements Generable<Integer> {
     private Integer counter;
     private ConfigurationPersistence persistence;
+    private Inventory inventory;
+    private static IDGenerator instance;
 
-    public IDGenerator(Inventory inventory) {
-        this.counter = 0;
-        this.persistence = new ConfigurationPersistence(inventory.getName());
-        refresh();
+    private IDGenerator() {}
+
+    //  Singleton Pattern  \\
+    public static IDGenerator getInstance() {
+        if (instance == null)
+            instance = new IDGenerator();
+        return instance;
     }
 
     /**
@@ -60,5 +67,17 @@ public class IDGenerator implements Generable<Integer> {
             return true;
         }
         return false;
+    }
+
+    public Inventory getInventory() throws Exception{
+        return inventory;
+    }
+
+    public void setInventory(Inventory inventory) throws Exception {
+        this.inventory = inventory;
+        this.counter = 0;
+        this.persistence = ConfigurationPersistence.getInstance();
+        persistence.setInventory(inventory);
+        refresh();
     }
 }

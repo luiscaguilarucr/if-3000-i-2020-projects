@@ -1,25 +1,30 @@
 package edu.ucr.rp.programacion2.proyecto.logic;
 
-import edu.ucr.rp.programacion2.proyecto.persistance.InventoryPersistence;
+import edu.ucr.rp.programacion2.proyecto.persistance.InventoryFilePersistence;
 import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
+import edu.ucr.rp.programacion2.proyecto.persistance.InventoryPersistence;
+import edu.ucr.rp.programacion2.proyecto.persistance.PersistenceException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
-public class InventoryFileService implements InventoryService{
+public class InventoryFileService implements InventoryService {
     //  Variables  \\
     private static InventoryFileService instance;
     private List<Inventory> list;
     private InventoryPersistence inventoryPersistence;
+
     //  Constructor  \\
-    private InventoryFileService(){
+    private InventoryFileService() {
         list = new ArrayList<>();
-        inventoryPersistence = new InventoryPersistence();
+        inventoryPersistence = new InventoryFilePersistence();
         refresh();
     }
+
     //  Singleton Pattern  \\
-    public static InventoryFileService getInstance(){
-        if(instance == null)
+    public static InventoryFileService getInstance() {
+        if (instance == null)
             instance = new InventoryFileService();
         return instance;
     }
@@ -32,11 +37,16 @@ public class InventoryFileService implements InventoryService{
      * @return {@code true} if the inventory element has been added correctly. {@code false} Otherwise.
      */
     @Override
-    public boolean add(Inventory inventory) {
+    public boolean add(Inventory inventory) throws ServiceException {
         refresh();
-        if(validateAddition(inventory)){
+        inventory.setId(UUID.randomUUID());
+        if (validateAddition(inventory)) {
             list.add(inventory);
-            return inventoryPersistence.write(inventory);
+            try {
+                return inventoryPersistence.write(inventory);
+            } catch (PersistenceException e) {
+                throw new ServiceException("Inventory can't be saved, because " + e.getMessage());
+            }
         }
         return false;
     }
@@ -49,14 +59,17 @@ public class InventoryFileService implements InventoryService{
      * @return {@code true} if the inventory element has been modified. {@code false} Otherwise.
      */
     @Override
-    public boolean edit(Inventory inventory) {
+    public boolean edit(Inventory inventory) throws ServiceException {
         refresh();
-        if(validateEdition(inventory)){
-            Inventory oldInventory = list.get(list.indexOf(inventory));
-            return inventoryPersistence.rename(oldInventory.getName(), inventory.getName());
+        if (validateEdition(inventory)) {
+            try {
+                return inventoryPersistence.write(inventory);
+            } catch (PersistenceException e) {
+                throw new ServiceException("Inventory can't be edited, because " + e.getMessage());
+            }
         }
         return false;
-    }//TODO evaluate how to change name. or identify witch object was selected. [id generator].
+    }
 
     /**
      * This method removes an inventory element that most be in the list.
@@ -66,18 +79,27 @@ public class InventoryFileService implements InventoryService{
      * @return {@code true} if the inventory element has been removed. {@code false} Otherwise.
      */
     @Override
-    public boolean remove(Inventory inventory) {
+    public boolean remove(Inventory inventory) throws ServiceException {
         refresh();
         if (inventory == null || !list.contains(inventory)) {
             return false;
         }
         list.remove(inventory);
-        return inventoryPersistence.delete(inventory);
+        try {
+            return inventoryPersistence.delete(inventory);
+        } catch (PersistenceException e) {
+            throw new ServiceException("Inventory can't be deleted, because " + e.getMessage());
+
+        }
     }
 
-    public boolean removeAll() {
+    public boolean removeAll() throws ServiceException {
         list.clear();
-        if (!inventoryPersistence.deleteAll()) return false;
+        try {
+            if (!inventoryPersistence.deleteAll()) return false;
+        } catch (PersistenceException e) {
+            throw new ServiceException("Inventories can't be deleted, because " + e.getMessage());
+        }
         refresh();
         return list.isEmpty();
     }
@@ -89,13 +111,13 @@ public class InventoryFileService implements InventoryService{
      * @return {@code Inventory} if the inventory element's name is in the list. {@code null} Otherwise.
      */
     @Override
-    public Inventory get(String name) {
+    public Inventory get(String name) throws ServiceException {
         refresh();
-        for(Inventory inventory: list)
-            if(inventory.getName().equals(name))
+        for (Inventory inventory : list)
+            if (inventory.getName().equals(name))
                 return inventory;
 
-        return null;
+        throw new ServiceException("Inventory named " + name + " is not found.");
     }
 
     /**
@@ -104,25 +126,14 @@ public class InventoryFileService implements InventoryService{
      * @return {@code List<Inventory>} List with inventory elements
      */
     @Override
-    public List getAll() {
+    public List<Inventory> getAll() throws ServiceException {
         refresh();
         return list;
     }
 
     /**
-     * Creates a list with the names of the inventories.
-     *
-     * @return  {@code List<String>} List with names of inventories.
-     */
-    public List getNamesList(){
-        List<String> namesList = new ArrayList();
-        for(Inventory inventory : list)
-            namesList.add(inventory.getName());
-        return namesList;
-    }
-    /**
      * Check if the inventory can be added.
-     *
+     * <p>
      * Validations:
      * - Most have an unique name.
      * - The name can't be repeated.
@@ -130,15 +141,19 @@ public class InventoryFileService implements InventoryService{
      * @param inventory to be validate.
      * @return {@code true} if the element is valid. {@code false} otherwise.
      */
-    private boolean validateAddition(Inventory inventory) {
-        if(inventory == null) return false;                         // Not null
-        if(list.contains(inventory)) return false;                  // Unique ID
-        return !containsByName(inventory.getName());                // Unique Name
+    private boolean validateAddition(Inventory inventory) throws ServiceException {
+        if (inventory == null)
+            throw new ServiceException("the inventory is null.");                                         // Not null
+        if (list.contains(inventory))
+            throw new ServiceException("the inventory already exists.");                           // Unique ID
+        if (containsByName(inventory.getName()))
+            throw new ServiceException("the inventory already exists.");              // Unique Name
+        return true;
     }
 
     /**
      * Check if the inventory can be editing.
-     *
+     * <p>
      * Validations:
      * - Most exists in the list.
      * - The name can't be repeated.
@@ -146,10 +161,13 @@ public class InventoryFileService implements InventoryService{
      * @param inventory to be validate.
      * @return {@code true} if the element is valid. {@code false} otherwise.
      */
-    private boolean validateEdition(Inventory inventory){
-        if(inventory==null) return false;                         // Not null
-        if(!list.contains(inventory)) return false;               // ID in list
-        return !nameUsedByOtherInventory(inventory);              // Name used
+    private boolean validateEdition(Inventory inventory) throws ServiceException {
+        if (inventory == null) throw new ServiceException("the inventory is null.");        // Not null
+        if (!list.contains(inventory))
+            throw new ServiceException("the inventory doesn't exist.");                           // Unique ID
+        if (nameUsedByOtherInventory(inventory))
+            throw new ServiceException("the inventory's name is already used.");              // Unique Name
+        return true;
     }
 
     /**
@@ -173,19 +191,23 @@ public class InventoryFileService implements InventoryService{
      */
     private boolean nameUsedByOtherInventory(Inventory inventory) {
         for (Inventory i : list)
-            if(!i.equals(inventory))
+            if (!i.equals(inventory))
                 if (i.getName().equals(inventory.getName()))
                     return true;
         return false;
     }
 
-    private Boolean refresh(){
+    private Boolean refresh() {
         //Lee el archivo
-        Object object = inventoryPersistence.read();
-        //Valida que existe y lo sustituye por la lista en memoria
-        if(object!=null){
-            list = (List<Inventory>) object;
-            return true;
+        List<Inventory> inventoryList = null;
+        try {
+            inventoryList = inventoryPersistence.read();
+            if (inventoryList != null) {
+                list = inventoryList;
+                return true;
+            }
+        } catch (PersistenceException e) {
+            System.out.println("Error: Inventory/refresh: " + e.getMessage());
         }
         return false;
     }

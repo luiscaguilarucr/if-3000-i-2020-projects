@@ -2,7 +2,7 @@ package edu.ucr.rp.programacion2.proyecto.logic;
 
 import edu.ucr.rp.programacion2.proyecto.domain.Catalog;
 import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
-import edu.ucr.rp.programacion2.proyecto.util.inventorycontrol.Configuration;
+import edu.ucr.rp.programacion2.proyecto.domain.Configuration;
 import edu.ucr.rp.programacion2.proyecto.util.Utility;
 import junit.framework.TestCase;
 import org.junit.Test;
@@ -18,9 +18,11 @@ public class CatalogFileServiceTest extends TestCase {
     private CatalogFileService catalogFileService;
 
     @Test
-    public void testAddition() {
+    public void testAddition() throws ServiceException {
         inventory = new Inventory("Carros");
-        catalogFileService = new CatalogFileService(inventory);
+        catalogFileService = CatalogFileService.getInstance();
+        catalogFileService.setInventory(inventory);
+
         for(int i = 0 ; i < 5; i++) {
             Catalog catalog = Utility.randomCatalog();
             if (catalogFileService.add(catalog))
@@ -32,9 +34,10 @@ public class CatalogFileServiceTest extends TestCase {
     }
 
   //  @Test
-    public void testDelete() {
+    public void testDelete() throws ServiceException {
         this.inventory = new Inventory("Carros");
-        catalogFileService = new CatalogFileService(inventory);
+        catalogFileService = CatalogFileService.getInstance();
+        catalogFileService.setInventory(inventory);
         for(int i = 0 ; i < 100; i++) {
             Catalog catalog = Utility.randomCatalog();
             catalog.setConfiguration(new Configuration(new Random().nextInt(15)));
@@ -46,9 +49,10 @@ public class CatalogFileServiceTest extends TestCase {
     }
 
     @Test
-    public void testEdit() {
+    public void testEdit() throws ServiceException {
         this.inventory = new Inventory("Carros");
-        catalogFileService = new CatalogFileService(inventory);
+        catalogFileService = CatalogFileService.getInstance();
+        catalogFileService.setInventory(inventory);
 
         for(int i = 0 ; i < 5; i++) {
             Catalog catalog = catalogFileService.get(Utility.randomCatalogName());
@@ -77,17 +81,19 @@ public class CatalogFileServiceTest extends TestCase {
         return items;
     }
   //  @Test
-    public void testShow(){
+    public void testShow() throws ServiceException {
         this.inventory = new Inventory("Carros");
-        catalogFileService = new CatalogFileService(inventory);
+        catalogFileService = CatalogFileService.getInstance();
+
         System.out.println(catalogFileService.getAll());
         System.out.println(catalogFileService.getAll().size());
         System.out.println(catalogFileService.get("Sedan"));
     }
     @Test
-    public void testDeleteAll(){
+    public void testDeleteAll() throws ServiceException {
         this.inventory = new Inventory("Carros");
-        catalogFileService = new CatalogFileService(inventory);
+        catalogFileService = CatalogFileService.getInstance();
+
         if (catalogFileService.removeAll())
             System.out.println("Se eliminaron los Catalogos de " + inventory.getName());
         else
