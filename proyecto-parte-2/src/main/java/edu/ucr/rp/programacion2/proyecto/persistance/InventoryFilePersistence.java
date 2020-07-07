@@ -105,7 +105,7 @@ public class InventoryFilePersistence implements InventoryPersistence {
      * @return {@code true} if the directory have been removed or doesn't exists.{@code false} Otherwise.
      */
     @Override
-    public boolean deleteAll() throws PersistenceException {
+    public synchronized boolean deleteAll() throws PersistenceException {
         File file = new File(path);
         if (!file.exists()) return true;
         try {
