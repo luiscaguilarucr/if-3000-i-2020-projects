@@ -60,6 +60,8 @@ public class LabelConstants {
     public static final String CONFIG_ICON = "configIcon.png";
     public static final String EDIT_ICON = "editIcon.png";
     public static final String DELETE_ICON = "delete.png";
+    public static final String SERVER_STATUS_CONNECTED_ICON = "greenPoint.png";
+    public static final String SERVER_STATUS_FAILED_ICON = "redPoint.png";
     // Others UI
     public static final String TITLE_ABOUT = "About";
     public static final String TITLE_CREDITS = "Credits";

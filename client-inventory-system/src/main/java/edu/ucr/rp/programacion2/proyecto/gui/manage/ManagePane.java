@@ -12,7 +12,9 @@ import edu.ucr.rp.programacion2.proyecto.gui.modules.item.CreateItemForm;
 import edu.ucr.rp.programacion2.proyecto.gui.modules.item.ManageItem;
 import edu.ucr.rp.programacion2.proyecto.gui.modules.others.AboutUI;
 import edu.ucr.rp.programacion2.proyecto.gui.modules.others.CreditsUI;
+import edu.ucr.rp.programacion2.proyecto.gui.modules.others.ServerStatus;
 import edu.ucr.rp.programacion2.proyecto.gui.modules.others.ViewMenuBar;
+import javafx.geometry.HPos;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -34,6 +36,12 @@ public class ManagePane implements PaneViewer {
         this.basePane = buildBasePane();
         initializePanes(stage, basePane);
         setupBasePane(basePane);
+        setStyle();
+    }
+
+    private void setStyle() {
+        basePane.getStyleClass().add("manage-pane");
+        basePane.autosize();
     }
 
     /**
@@ -53,6 +61,7 @@ public class ManagePane implements PaneViewer {
         panes.put(PaneName.DELETE_CATALOG, new DeleteCatalog().getPane());
         panes.put(PaneName.CREATE_ITEM_FORM, CreateItemForm.getInstance().getPane());
         panes.put(PaneName.MANAGE_ITEM, new ManageItem().getPane());
+        panes.put(PaneName.SERVER_STATUS, new ServerStatus().getPane());
     }
 
     @Override
@@ -77,9 +86,13 @@ public class ManagePane implements PaneViewer {
      * @param pane
      */
     private void setupBasePane(Pane pane) {
+        // Row #0
         ((GridPane) pane).add(panes.get(PaneName.MENU_BAR), 0, 0);
+        // Row #1
+        ((GridPane) pane).add(panes.get(PaneName.SERVER_STATUS), 0, 1);
+        // Row #2
         hbox = new HBox();
-        ((GridPane) pane).add(hbox, 0, 1);
+        ((GridPane) pane).add(hbox, 0, 2);
     }
 
     /**

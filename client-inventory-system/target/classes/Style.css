@@ -104,3 +104,16 @@
     -fx-min-height: 30;
     -fx-min-width: 65;
 }
+.manage-pane{
+    -fx-max-width: inherit;
+}
+.server-status-pane {
+    -fx-alignment: top-center;
+    -fx-max-width: 100%;
+    -fx-padding: 5px;
+    -fx-border-color: black;
+}
+.server-status-image{
+    -fx-alignment: top-right;
+
+}
