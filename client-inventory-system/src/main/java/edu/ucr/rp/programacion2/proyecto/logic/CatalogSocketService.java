@@ -1,12 +1,11 @@
 package edu.ucr.rp.programacion2.proyecto.logic;
 
+
 import edu.ucr.rp.programacion2.proyecto.domain.Catalog;
 import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
-import edu.ucr.rp.programacion2.proyecto.persistance.CatalogPersistence;
 import edu.ucr.rp.programacion2.proyecto.persistance.CatalogSocketPersistence;
 import edu.ucr.rp.programacion2.proyecto.persistance.PersistenceException;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static edu.ucr.rp.programacion2.proyecto.logic.SocketConstants.HOST;

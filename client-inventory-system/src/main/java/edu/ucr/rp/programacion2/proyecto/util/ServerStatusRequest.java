@@ -1,5 +1,6 @@
 package edu.ucr.rp.programacion2.proyecto.util;
 
+
 import edu.ucr.rp.programacion2.proyecto.persistance.messages.Request;
 import edu.ucr.rp.programacion2.proyecto.persistance.messages.ServerRequest;
 
@@ -22,7 +23,9 @@ public class ServerStatusRequest {
         return instance;
     }
 
-    public boolean isConnected() throws IOException {
+
+
+    public boolean isConnected1() throws IOException {
         Request request = new Request();
         try {
             // Establish the connection with the server.

@@ -6,7 +6,9 @@ public class ServerStatus {
     private static ServerStatus instance;
     private static ServerStatusRequest serverStatusRequest;
 
-    private ServerStatus(){}
+    private ServerStatus(){
+        serverStatusRequest = ServerStatusRequest.getInstance();
+    }
     public static ServerStatus getInstance(){
         if(instance == null){
             instance = new ServerStatus();
@@ -15,7 +17,6 @@ public class ServerStatus {
     }
 
     public static boolean isConnected() {
-        serverStatusRequest = ServerStatusRequest.getInstance();
         try {
             return serverStatusRequest.isConnected();
         } catch (IOException e) {
