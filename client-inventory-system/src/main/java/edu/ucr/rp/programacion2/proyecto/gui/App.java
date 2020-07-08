@@ -26,6 +26,7 @@ public class App extends Application {
         stage.setTitle("Inventory System");
         stage.show();
     }
+
     /** Returns a Map of the scenes by {@link SceneName} */
     public static Map<SceneName, Scene> getScenes() {
         return scenes;

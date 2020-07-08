@@ -34,6 +34,31 @@ public class PaneUtil {
         return gridPane;
     }
 
+    public static GridPane buildPanePlus() {
+        GridPane gridPane = new GridPane();
+
+        gridPane.setPadding(new Insets(40, 40, 40, 40));
+        gridPane.setHgap(5);
+        gridPane.setVgap(5);
+        ColumnConstraints columnOneConstraints = new ColumnConstraints(LABEL_WITH, LABEL_WITH, LABEL_WITH_MAX);
+        columnOneConstraints.setHalignment(HPos.RIGHT);
+        ColumnConstraints columnTwoConstraints = new ColumnConstraints(INPUT_WITH, INPUT_WITH, INPUT_WITH_MAX);
+        columnTwoConstraints.setHgrow(Priority.ALWAYS);
+        ColumnConstraints columnThreeConstraints = new ColumnConstraints(100, 200, 300);
+        columnThreeConstraints.setHgrow(Priority.ALWAYS);
+        gridPane.getColumnConstraints().addAll(columnOneConstraints, columnTwoConstraints, columnThreeConstraints);
+        return gridPane;
+    }
+
+    public static ListView buildListView(GridPane pane, ObservableList observableList, int column, int row, int columnQuantity, int rowQuantity) {
+        ListView listView = new ListView();
+        listView.setItems(observableList);
+        listView.setMaxHeight(100);
+        listView.setMaxWidth(100);
+        listView.setMaxSize(400, 300);
+        pane.add(listView, column, row, columnQuantity, rowQuantity);
+        return listView;
+    }
 
     public static TextField buildTextInput(GridPane pane, int row) {
         TextField textField = new TextField();
@@ -49,17 +74,21 @@ public class PaneUtil {
         alert.show();
     }
 
-    public static Button buildButton(String text, GridPane pane, int column, int row) {
+    public static Button buildButton(String text, GridPane pane, int column, int row, boolean center) {
         Button button = new Button(text);
-        pane.setHalignment(button, HPos.CENTER);
+        if (center) {
+            pane.setHalignment(button, HPos.CENTER);
+        }
         pane.setMargin(button, BUTTON_DEFAULT_INSETS);
         pane.add(button, column, row);
         return button;
     }
 
-    public static Button buildButtonImage(Image image, GridPane pane, int column, int row) {
+    public static Button buildButtonImage(Image image, GridPane pane, int column, int row, boolean center) {
         Button button = new Button("", new ImageView(image));
-        pane.setHalignment(button, HPos.CENTER);
+        if (center) {
+            pane.setHalignment(button, HPos.CENTER);
+        }
         pane.setMargin(button, BUTTON_DEFAULT_INSETS);
         pane.add(button, column, row);
         return button;
