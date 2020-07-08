@@ -2,6 +2,8 @@ package edu.ucr.rp.programacion2.proyecto.gui;
 
 import edu.ucr.rp.programacion2.proyecto.gui.manage.MainScene;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.model.SceneName;
+import edu.ucr.rp.programacion2.proyecto.gui.modules.others.ServerStatusUI;
+import edu.ucr.rp.programacion2.proyecto.util.ThreadPool;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -24,7 +26,17 @@ public class App extends Application {
         // Start with the main scene
         stage.setScene(scenes.get(SceneName.MAIN));
         stage.setTitle("Inventory System");
+
+
+
         stage.show();
+    }
+
+    @Override
+    public void stop() throws Exception {
+        ServerStatusUI.stopRefresh();
+        ThreadPool.shutdown();
+        super.stop();
     }
 
     /** Returns a Map of the scenes by {@link SceneName} */

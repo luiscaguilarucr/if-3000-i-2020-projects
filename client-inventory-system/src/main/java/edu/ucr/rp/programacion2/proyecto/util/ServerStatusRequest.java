@@ -29,15 +29,15 @@ public class ServerStatusRequest {
             socket = new Socket(HOST, PORT);
             // Create a server status request.
             request.setType(SERVER_STATUS);
-            System.out.println("Se ha enviado una confirmación de establecer conexión.");
+//            System.out.println("Se ha enviado una confirmación de establecer conexión.");
             // Send and wait the request.
             send(request, socket);
 
             // Receives an InventoryListRequest.
-            System.out.println("Esperando respuesta.");
+//            System.out.println("Esperando respuesta.");
             ServerRequest serverRequest = receive(ServerRequest.class, socket);
             boolean isConnected = serverRequest.getConnected();
-            System.out.println("Está conectado= " + isConnected);
+//            System.out.println("Está conectado= " + isConnected);
             return isConnected;
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -57,10 +57,7 @@ public class ServerStatusRequest {
             Request closeRequest = new Request();
             closeRequest.setType(CLOSE);
             send(closeRequest, socket);
-            System.out.println("Se envió la petición para finalizar la conexión.");
-
             socket.close();
-            System.out.println("Conexión cerrada");
         }
 
     }

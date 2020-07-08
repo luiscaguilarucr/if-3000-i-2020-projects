@@ -12,9 +12,8 @@ import edu.ucr.rp.programacion2.proyecto.gui.modules.item.CreateItemForm;
 import edu.ucr.rp.programacion2.proyecto.gui.modules.item.ManageItem;
 import edu.ucr.rp.programacion2.proyecto.gui.modules.others.AboutUI;
 import edu.ucr.rp.programacion2.proyecto.gui.modules.others.CreditsUI;
-import edu.ucr.rp.programacion2.proyecto.gui.modules.others.ServerStatus;
+import edu.ucr.rp.programacion2.proyecto.gui.modules.others.ServerStatusUI;
 import edu.ucr.rp.programacion2.proyecto.gui.modules.others.ViewMenuBar;
-import javafx.geometry.HPos;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -61,7 +60,7 @@ public class ManagePane implements PaneViewer {
         panes.put(PaneName.DELETE_CATALOG, new DeleteCatalog().getPane());
         panes.put(PaneName.CREATE_ITEM_FORM, CreateItemForm.getInstance().getPane());
         panes.put(PaneName.MANAGE_ITEM, new ManageItem().getPane());
-        panes.put(PaneName.SERVER_STATUS, new ServerStatus().getPane());
+        panes.put(PaneName.SERVER_STATUS, new ServerStatusUI().getPane());
     }
 
     @Override

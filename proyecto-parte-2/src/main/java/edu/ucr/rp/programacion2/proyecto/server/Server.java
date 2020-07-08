@@ -34,72 +34,10 @@ public class Server {
             System.out.println("Esperando conexión");
             while (true) {
                 Socket socket = serverSocket.accept();          // Wait for indeterminate client connections.
-                System.out.println("Conexión recibida");        // Connection with client established.
-<<<<<<< HEAD
+                //System.out.println("Conexión recibida");        // Connection with client established.
                 ThreadPool.getPool().submit(() -> {
                     processRequest(socket);
                 });
-=======
-
-                Request request = receive(Request.class, socket); // Select the request type.
-                System.out.println("Message Recibido: " + jsonUtil.asJson(request));//
-
-                // Classify the request
-                RequestType type = request.getType();
-                switch (type) {
-                    // Catalogs request
-                    case SERVER_STATUS:
-                        processServerRequest.establishedConnection(socket);
-                        break;
-                    case SET_INVENTORY:
-                        catalogProcessRequest.refresh(socket);
-                        break;
-                    case INSERT_CATALOG:
-                        catalogProcessRequest.insert(socket);
-                        break;
-                    case UPDATE_CATALOG:
-                        catalogProcessRequest.update(socket);
-                        break;
-                    case READ_CATALOG:
-                        catalogProcessRequest.read(socket);
-                        break;
-                    case READ_ALL_CATALOGS:
-                        catalogProcessRequest.readAll(socket);
-                        break;
-                    case DELETE_CATALOG:
-                        catalogProcessRequest.delete(socket);
-                        break;
-                    case DELETE_ALL_CATALOGS:
-                        catalogProcessRequest.deleteAll(socket);
-                        break;
-                    // Inventory request
-                    case INSERT_INVENTORY:
-                        inventoryProcessRequest.insert(socket);
-                        break;
-                    case UPDATE_INVENTORY:
-                        inventoryProcessRequest.update(socket);
-                        break;
-                    case READ_INVENTORY:
-                        inventoryProcessRequest.read(socket);
-                        break;
-                    case READ_ALL_INVENTORIES:
-                        inventoryProcessRequest.readAll(socket);
-                        break;
-                    case DELETE_INVENTORY:
-                        inventoryProcessRequest.delete(socket);
-                        break;
-                    case DELETE_ALL_INVENTORIES:
-                        inventoryProcessRequest.deleteAll(socket);
-                        break;
-                    // Close request
-                    default: {
-                        request = receive(Request.class, socket);
-                        if (request.getType().equals(CLOSE)) {
-                            socket.close();
-                        }
-                    }
-                }
->>>>>>> f658ba86e0ec5318c8c7603913e5007d6b099a2f
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -115,7 +53,7 @@ public class Server {
     private void processRequest(Socket socket) {
         try {
             Request request = receive(Request.class, socket); // Select the request type.
-            System.out.println("Message Recibido: " + jsonUtil.asJson(request));//
+            System.out.println("Request received: " + request.getType());//
 
             // Classify the request
             RequestType type = request.getType();
@@ -160,6 +98,9 @@ public class Server {
                     break;
                 case DELETE_ALL_INVENTORIES:
                     inventoryProcessRequest.deleteAll(socket);
+                    break;
+                case SERVER_STATUS:
+                    processServerRequest.establishedConnection(socket);
                     break;
                 // Close request
                 default: {

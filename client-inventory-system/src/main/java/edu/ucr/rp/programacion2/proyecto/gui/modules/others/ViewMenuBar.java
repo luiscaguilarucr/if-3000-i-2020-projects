@@ -22,6 +22,9 @@ import javafx.stage.Stage;
 
 public class ViewMenuBar implements PaneViewer {
     private Stage stage;
+    private static Menu inventoryMenu;
+    private static Menu catalogMenu;
+    private static Menu itemMenu;
 
     public ViewMenuBar(Stage stage) {
         this.stage = stage;
@@ -33,7 +36,7 @@ public class ViewMenuBar implements PaneViewer {
         MenuBar mB_View_MenuBar = new MenuBar();
 
         ////////////////////////////////////////////////////////////////////////// Menu "Inventory"
-        Menu m_Inventory = new Menu("Inventory");
+        inventoryMenu = new Menu("Inventory");
 
         ////////////////////////////////////////// MenuItems for m_Inventory
         //MenuItem mI_SeeInventory
@@ -63,11 +66,11 @@ public class ViewMenuBar implements PaneViewer {
             DeleteInventory.refresh();
         });
 
-        m_Inventory.getItems().addAll(mI_CreateInventory, mI_SeeInventory, mI_DeleteInventory);
+        inventoryMenu.getItems().addAll(mI_CreateInventory, mI_SeeInventory, mI_DeleteInventory);
 
 
         ////////////////////////////////////////////////////////////////////////// Menu "Catalog"
-        Menu m_Catalog = new Menu("Catalog");
+        catalogMenu = new Menu("Catalog");
 
         ////////////////////////////////////////// MenuItems for m_Catalog
         //MenuItem iV_mI_AddCatalog
@@ -108,11 +111,11 @@ public class ViewMenuBar implements PaneViewer {
             DeleteCatalog.refresh();
         });
 
-        m_Catalog.getItems().addAll(mI_AddCatalog, mI_ViewAllCatalogs, mI_EditCatalog, mI_DeleteCatalog);
+        catalogMenu.getItems().addAll(mI_AddCatalog, mI_ViewAllCatalogs, mI_EditCatalog, mI_DeleteCatalog);
 
 
         ////////////////////////////////////////////////////////////////////////// Menu "Item"
-        Menu m_Item = new Menu("Item");
+        itemMenu = new Menu("Item");
 
         ////////////////////////////////////////// MenuItems for m_Item
         //MenuItem mI_ManageItem
@@ -121,11 +124,11 @@ public class ViewMenuBar implements PaneViewer {
 
         mI_ManageItem.setOnAction(event -> {
             ManagePane.setCenterPane(PaneName.MANAGE_ITEM);
-            ManageItem.refresh();
+            ManageItem. refresh();
             ManageItem.setPreviousPane(null);
         });
 
-        m_Item.getItems().addAll(mI_ManageItem);
+        itemMenu.getItems().addAll(mI_ManageItem);
 
         ////////////////////////////////////////////////////////////////////////// Menu "Configuration"
         Menu m_Configuration = new Menu("File");
@@ -159,7 +162,7 @@ public class ViewMenuBar implements PaneViewer {
 
 
         // Get the Menus in MenuBar
-        mB_View_MenuBar.getMenus().addAll(m_Configuration, m_Inventory, m_Catalog, m_Item);
+        mB_View_MenuBar.getMenus().addAll(m_Configuration, inventoryMenu, catalogMenu, itemMenu);
         mB_View_MenuBar.setMinWidth(2000);
 
         /// Get the MenuBar in VBox
@@ -168,6 +171,12 @@ public class ViewMenuBar implements PaneViewer {
         return vB_MenuBar;
     }//End VBox()
 
+
+    public static void disableMenus(boolean b){
+        inventoryMenu.setDisable(b);
+        catalogMenu.setDisable(b);
+        itemMenu.setDisable(b);
+    }
     @Override
     public Pane getPane() {
         return getMenuVBox();

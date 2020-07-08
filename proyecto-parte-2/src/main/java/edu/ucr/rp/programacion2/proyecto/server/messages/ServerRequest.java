@@ -7,8 +7,7 @@ public class ServerRequest {
         return isConnected;
     }
 
-    public ServerRequest setConnected(boolean isConnected) {
+    public void setConnected(boolean isConnected) {
         this.isConnected = isConnected;
-        return this;
     }
 }

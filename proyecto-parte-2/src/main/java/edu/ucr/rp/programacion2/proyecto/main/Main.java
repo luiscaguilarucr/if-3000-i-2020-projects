@@ -8,6 +8,6 @@ public class Main {
     private static final int PORT = 12121;
     // Methods
     public static void main(String...args){
-        Server server = new Ser ver(PORT);
+        Server server = new Server(PORT);
     }
 }

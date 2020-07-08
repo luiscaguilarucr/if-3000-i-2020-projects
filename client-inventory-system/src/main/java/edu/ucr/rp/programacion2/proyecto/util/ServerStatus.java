@@ -4,9 +4,9 @@ import java.io.IOException;
 
 public class ServerStatus {
     private static ServerStatus instance;
-    private boolean isConnected;
-    private ServerStatusRequest serverStatusRequest;
+    private static ServerStatusRequest serverStatusRequest;
 
+    private ServerStatus(){}
     public static ServerStatus getInstance(){
         if(instance == null){
             instance = new ServerStatus();
@@ -14,9 +14,13 @@ public class ServerStatus {
         return instance;
     }
 
-    public boolean isConnected() throws IOException {
+    public static boolean isConnected() {
         serverStatusRequest = ServerStatusRequest.getInstance();
-        return serverStatusRequest.isConnected();
+        try {
+            return serverStatusRequest.isConnected();
+        } catch (IOException e) {
+            return false;
+        }
     }
 
 }
