@@ -6,6 +6,8 @@ import edu.ucr.rp.programacion2.proyecto.gui.manage.ManagePane;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.modules.util.PaneUtil;
 import edu.ucr.rp.programacion2.proyecto.logic.*;
+import edu.ucr.rp.programacion2.proyecto.util.CatalogConverter;
+import edu.ucr.rp.programacion2.proyecto.util.InventoryConverter;
 import edu.ucr.rp.programacion2.proyecto.util.builders.BuilderFX;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -45,6 +47,7 @@ public class DeleteCatalog implements PaneViewer {
         initializeInventoryService();
         addControls();
         addHandlers();
+        setStyle();
         return pane;
     }
 
@@ -100,8 +103,8 @@ public class DeleteCatalog implements PaneViewer {
         buildInventoryComboBox();
         catalogIndicationLabel = PaneUtil.buildLabel(pane, "Select the catalog", 0, 2);
         buildCatalogCheckComboBox();
-        deleteCatalogButton = PaneUtil.buildButtonImage(new Image("delete.png"), pane, 2, 2);
-        cancelButton = PaneUtil.buildButton("Cancel", pane, 2, 1);
+        deleteCatalogButton = PaneUtil.buildButtonImage(new Image("delete.png"), pane, 2, 2, false);
+        cancelButton = PaneUtil.buildButton("Cancel", pane, 2, 1, false);
         catalogIndicationLabel.setVisible(false);
         deleteCatalogButton.setVisible(false);
         catalogCheckComboBox.setVisible(false);
@@ -216,6 +219,10 @@ public class DeleteCatalog implements PaneViewer {
         }
     }
 
+    private void setStyle(){
+        inventoryComboBox.setConverter(new InventoryConverter());
+        catalogCheckComboBox.setConverter(new CatalogConverter());
+    }
 
     @Override
     public Pane getPane() {

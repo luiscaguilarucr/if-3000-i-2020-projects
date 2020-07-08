@@ -66,8 +66,8 @@ public class InventoryForm implements PaneViewer {
         BuilderFX.buildLabelTitleNormal(TITLE_INVENTORY_FORM, pane, 0, 0);
         inventoryNameLabel = PaneUtil.buildLabel(pane, "Inventory name: ", 0, 1);
         inventoryNameTextField = PaneUtil.buildTextInput(pane, 1);
-        saveInventoryButton = PaneUtil.buildButtonImage(new Image("save.png"), pane, 2, 1);
-        cancelButton = PaneUtil.buildButton("Cancel", pane, 3, 1);
+        saveInventoryButton = PaneUtil.buildButtonImage(new Image("save.png"), pane, 2, 1, false);
+        cancelButton = PaneUtil.buildButton("Cancel", pane, 3, 1, false);
     }
 
     /**

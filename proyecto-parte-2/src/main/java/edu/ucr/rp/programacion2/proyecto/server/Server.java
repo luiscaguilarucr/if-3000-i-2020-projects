@@ -4,10 +4,7 @@ import edu.ucr.rp.programacion2.proyecto.logic.CatalogFileService;
 import edu.ucr.rp.programacion2.proyecto.logic.InventoryFileService;
 import edu.ucr.rp.programacion2.proyecto.server.messages.Request;
 import edu.ucr.rp.programacion2.proyecto.server.messages.RequestType;
-import edu.ucr.rp.programacion2.proyecto.server.processes.ProcessCatalog;
-import edu.ucr.rp.programacion2.proyecto.server.processes.ProcessCatalogRequest;
-import edu.ucr.rp.programacion2.proyecto.server.processes.ProcessInventoryRequest;
-import edu.ucr.rp.programacion2.proyecto.server.processes.ProcessRequest;
+import edu.ucr.rp.programacion2.proyecto.server.processes.*;
 import edu.ucr.rp.programacion2.proyecto.util.JsonUtil;
 
 import java.io.IOException;
@@ -20,6 +17,7 @@ import static edu.ucr.rp.programacion2.proyecto.server.processes.RequestProcessU
 public class Server {
     private JsonUtil jsonUtil = new JsonUtil();
     private ServerSocket serverSocket = null;
+    private ProcessServerRequest processServerRequest;
     private ProcessCatalog catalogProcessRequest;
     private ProcessRequest inventoryProcessRequest;
 
@@ -44,6 +42,9 @@ public class Server {
                 RequestType type = request.getType();
                 switch (type) {
                     // Catalogs request
+                    case SERVER_STATUS:
+                        processServerRequest.establishedConnection(socket);
+                        break;
                     case SET_INVENTORY:
                         catalogProcessRequest.refresh(socket);
                         break;
@@ -107,5 +108,6 @@ public class Server {
     private void initializeProcessRequests() {
         catalogProcessRequest = new ProcessCatalogRequest(CatalogFileService.getInstance(), InventoryFileService.getInstance());
         inventoryProcessRequest = new ProcessInventoryRequest(InventoryFileService.getInstance());
+        processServerRequest = new ProcessServerRequest();
     }
 }

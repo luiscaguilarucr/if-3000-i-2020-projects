@@ -10,6 +10,8 @@ import edu.ucr.rp.programacion2.proyecto.gui.modules.inventory.DeleteInventory;
 import edu.ucr.rp.programacion2.proyecto.gui.modules.item.CreateItemForm;
 import edu.ucr.rp.programacion2.proyecto.gui.modules.item.ManageItem;
 import edu.ucr.rp.programacion2.proyecto.logic.*;
+import edu.ucr.rp.programacion2.proyecto.util.CatalogConverter;
+import edu.ucr.rp.programacion2.proyecto.util.InventoryConverter;
 import edu.ucr.rp.programacion2.proyecto.util.builders.BuilderFX;
 import javafx.geometry.HPos;
 import javafx.geometry.Orientation;
@@ -92,6 +94,7 @@ public class CatalogConfig implements PaneViewer {
         catalogService = CatalogSocketService.getInstance();
         catalogService.setInventory(inventory);
     }
+
     //  Builders  \\
 
     /**
@@ -211,6 +214,8 @@ public class CatalogConfig implements PaneViewer {
         setButtonEffect(deleteAllItemsButton);
         setButtonEffect(showItemsButton);
 
+        inventoryComboBox.setConverter(new InventoryConverter());
+        catalogComboBox.setConverter(new CatalogConverter());
     }
 
     /**
@@ -261,8 +266,6 @@ public class CatalogConfig implements PaneViewer {
         showItemsButton.setOnAction(e -> showItemsAction());
         addItemButton.setOnAction(e -> addItemsAction());
         deleteAllItemsButton.setOnAction(e -> deleteAllItemsAction());
-
-
     }
 
     private void editInventoryAction() {
@@ -339,7 +342,7 @@ public class CatalogConfig implements PaneViewer {
         if (notNullCatalog()) {
             // Set dialog details
             deleteAlert.setHeaderText("Delete catalog");
-            deleteAlert.setContentText("Are you sure you want to delete " + catalogComboBox.getValue() + " from " + inventoryComboBox.getValue() + " catalogs list?");
+            deleteAlert.setContentText("Are you sure you want to delete " + catalogComboBox.getValue().getName() + " from " + inventoryComboBox.getValue().getName() + " catalogs list?");
             // Show alert
             Optional<ButtonType> result = deleteAlert.showAndWait();
             // Wait the result and select

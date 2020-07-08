@@ -8,6 +8,8 @@ import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneName;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.modules.util.PaneUtil;
 import edu.ucr.rp.programacion2.proyecto.logic.*;
+import edu.ucr.rp.programacion2.proyecto.util.CatalogConverter;
+import edu.ucr.rp.programacion2.proyecto.util.InventoryConverter;
 import edu.ucr.rp.programacion2.proyecto.util.builders.BuilderFX;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -194,6 +196,9 @@ public class ManageItem implements PaneViewer {
         deleteItemColumn.getStyleClass().add("table-view-column-button");
         deleteItemColumn.setMaxWidth(70);
         deleteItemColumn.setMinWidth(70);
+
+        inventoryComboBox.setConverter(new InventoryConverter());
+        catalogComboBox.setConverter(new CatalogConverter());
     }
 
     /**
@@ -362,7 +367,7 @@ public class ManageItem implements PaneViewer {
         if (catalogComboBox.getValue() != null) {
             // Set dialog details
             deleteAlert.setHeaderText("Delete Items");
-            deleteAlert.setContentText("Are you sure you want to delete all the items of " + catalogComboBox.getValue() + " from " + inventoryComboBox.getValue() + "?");
+            deleteAlert.setContentText("Are you sure you want to delete all the items of " + catalogComboBox.getValue().getName() + " from " + inventoryComboBox.getValue().getName() + "?");
             // Show alert
             Optional<ButtonType> result = deleteAlert.showAndWait();
             // Wait the result and select

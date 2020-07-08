@@ -8,6 +8,8 @@ import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.logic.CatalogService;
 import edu.ucr.rp.programacion2.proyecto.logic.CatalogSocketService;
 import edu.ucr.rp.programacion2.proyecto.logic.ServiceException;
+import edu.ucr.rp.programacion2.proyecto.util.CatalogConverter;
+import edu.ucr.rp.programacion2.proyecto.util.InventoryConverter;
 import edu.ucr.rp.programacion2.proyecto.util.builders.BuilderFX;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

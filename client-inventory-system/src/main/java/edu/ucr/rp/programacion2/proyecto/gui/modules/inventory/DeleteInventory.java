@@ -7,6 +7,7 @@ import edu.ucr.rp.programacion2.proyecto.gui.modules.util.PaneUtil;
 import edu.ucr.rp.programacion2.proyecto.logic.InventoryService;
 import edu.ucr.rp.programacion2.proyecto.logic.InventorySocketService;
 import edu.ucr.rp.programacion2.proyecto.logic.ServiceException;
+import edu.ucr.rp.programacion2.proyecto.util.InventoryConverter;
 import edu.ucr.rp.programacion2.proyecto.util.builders.BuilderFX;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -43,6 +44,7 @@ public class DeleteInventory implements PaneViewer {
         initializeInventoryService();
         addControls();
         addHandlers();
+        setStyle();
         return pane;
     }
 
@@ -87,8 +89,8 @@ public class DeleteInventory implements PaneViewer {
         BuilderFX.buildLabelTitleNormal(TITLE_DELETE_INVENTORY, pane, 0, 0);
         inventoryIndicationLabel = PaneUtil.buildLabel(pane, "Select the inventory", 0, 1);
         buildCheckComboBoxComboBox();
-        deleteInventoryButton = PaneUtil.buildButtonImage(new Image("delete.png"), pane, 2, 1);
-        cancelButton = PaneUtil.buildButton("Cancel", pane, 3, 1);
+        deleteInventoryButton = PaneUtil.buildButtonImage(new Image("delete.png"), pane, 2, 1, false);
+        cancelButton = PaneUtil.buildButton("Cancel", pane, 3, 1, false);
     }
 
     /**
@@ -129,8 +131,6 @@ public class DeleteInventory implements PaneViewer {
         Boolean removed = false;
         ObservableList<Inventory> list = checkComboBox.getCheckModel().getCheckedItems();
         try {
-
-
             for (Inventory inventory : list) {
                 inventoryService.remove(inventory);
                 i++;
@@ -155,6 +155,10 @@ public class DeleteInventory implements PaneViewer {
      */
     public static void setInventory(Inventory inventory){
         checkComboBox.getCheckModel().check(inventory);
+    }
+
+    private void setStyle(){
+        checkComboBox.setConverter(new InventoryConverter());
     }
 
     @Override

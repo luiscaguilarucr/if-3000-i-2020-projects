@@ -6,6 +6,7 @@ import edu.ucr.rp.programacion2.proyecto.gui.manage.ManagePane;
 import edu.ucr.rp.programacion2.proyecto.gui.manage.model.PaneViewer;
 import edu.ucr.rp.programacion2.proyecto.gui.modules.util.PaneUtil;
 import edu.ucr.rp.programacion2.proyecto.logic.*;
+import edu.ucr.rp.programacion2.proyecto.util.InventoryConverter;
 import edu.ucr.rp.programacion2.proyecto.util.builders.BuilderFX;
 import edu.ucr.rp.programacion2.proyecto.util.builders.CatalogBuilder;
 import javafx.collections.FXCollections;
@@ -38,11 +39,14 @@ public class CreateCatalogForm implements PaneViewer {
     private static Button saveCatalogButton;
     private static Button cancelButton;
     private static ComboBox<Inventory> inventoryComboBox;
+    private static ListView<String> featureListView;
     private static ObservableList<Inventory> inventoryObservableList;
+    private static ObservableList<String> featureObservableList;
     private static final List<String> schema = new ArrayList<>();
     private static Boolean emptySpace = false;
     private static Boolean wasAdded = false;
     private static GridPane pane;
+    private static List<String> featureList = new ArrayList<>();
 
     /**
      * Return the pane with all the components and styles added.
@@ -50,10 +54,11 @@ public class CreateCatalogForm implements PaneViewer {
      * @return {@code GridPane} pane with components.
      */
     public GridPane getCatalogFormPane() {
-        pane = PaneUtil.buildPane();
+        pane = PaneUtil.buildPanePlus();
         initializeInventoryService();
         addControls();
         addHandlers();
+        setStyle();
         return pane;
     }
 
@@ -93,6 +98,9 @@ public class CreateCatalogForm implements PaneViewer {
         addFeatureButton.setVisible(false);
         catalogNameTextField.setDisable(false);
         featureNameTextField.setDisable(false);
+        featureListView.setVisible(false);
+        featureObservableList.clear();
+        featureList.clear();
         catalogNameTextField.clear();
         featureNameTextField.clear();
         schema.clear();
@@ -108,6 +116,9 @@ public class CreateCatalogForm implements PaneViewer {
      * Configure and add the required components in the pane.
      */
     private void addControls() {
+        featureObservableList = FXCollections.observableArrayList();
+        featureListView = PaneUtil.buildListView(pane, featureObservableList, 4, 1, 1, 5);
+        featureListView.setVisible(false);
         BuilderFX.buildLabelTitleNormal(TITLE_CATALOG_FORM, pane, 0, 0);
         inventoryIndicationLabel = PaneUtil.buildLabel(pane, "Chose an inventory", 0, 1);
         buildInventoryComboBox();
@@ -115,11 +126,11 @@ public class CreateCatalogForm implements PaneViewer {
         catalogNameTextField = PaneUtil.buildTextInput(pane, 2);
         featureNameLabel = PaneUtil.buildLabel(pane, "Feature:", 0, 3);
         featureNameTextField = PaneUtil.buildTextInput(pane, 3);
-        addFeatureButton = PaneUtil.buildButtonImage(new Image("add.png"), pane, 2, 3);
-        saveCatalogButton = PaneUtil.buildButton("Save catalog", pane, 1, 4);
+        addFeatureButton = PaneUtil.buildButtonImage(new Image("add.png"), pane, 2, 3, false);
+        saveCatalogButton = PaneUtil.buildButton("Save catalog", pane, 1, 4, true);
         saveCatalogButton.setVisible(false);
         addFeatureButton.setVisible(false);
-        cancelButton = PaneUtil.buildButton("Cancel", pane, 2, 1);
+        cancelButton = PaneUtil.buildButton("Cancel", pane, 2, 1, false);
     }
 
     /**
@@ -129,19 +140,23 @@ public class CreateCatalogForm implements PaneViewer {
         cancelButton.setOnAction(e -> {
             ManagePane.clearPane();
         });
+
         inventoryComboBox.setOnAction(e -> {
             if (inventoryComboBox.getValue() != null) {
                 updateCatalogService(inventoryComboBox.getValue());
             }
         });
+
         saveCatalogButton.setOnAction(e -> {
             saveCatalogButton.setVisible(false);
             ManagePane.clearPane();
             generateCatalog();
         });
+
         featureNameTextField.setOnMouseClicked(e -> {
             addFeatureButton.setVisible(true);
         });
+
         addFeatureButton.setOnAction(e -> {
             saveCatalogButton.setVisible(true);
             inventoryComboBox.setDisable(true);
@@ -172,6 +187,10 @@ public class CreateCatalogForm implements PaneViewer {
             featureNameTextField.setPromptText("Obligatory field");
             featureNameTextField.setStyle("-fx-background-color: #FDC7C7");
         } else {
+            featureObservableList.clear();
+            featureListView.setVisible(true);
+            featureList.add(featureNameTextField.getText());
+            featureObservableList.addAll(featureList);
             schema.add(featureNameTextField.getText());
             featureNameTextField.clear();
             featureNameTextField.setStyle("-fx-background-color: #FFFFFF");
@@ -211,6 +230,10 @@ public class CreateCatalogForm implements PaneViewer {
             }
         }
 
+    }
+
+    private void setStyle(){
+        inventoryComboBox.setConverter(new InventoryConverter());
     }
 
     @Override
