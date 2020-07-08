@@ -62,7 +62,7 @@ public class CreditsUI implements PaneViewer {
     private void setupStyles() {
         pane.getStyleClass().add("default-grid-pane");
         text.setTextAlignment(TextAlignment.JUSTIFY);
-    }//TODO style
+    }
 
     private void backAction() {
         ManagePane.clearPane();

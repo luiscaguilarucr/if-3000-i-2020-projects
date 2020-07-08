@@ -76,7 +76,6 @@ public class CatalogConfig implements PaneViewer {
 
     // Methods  \\
     private GridPane getUI() {
-        refresh();
         return pane;
     }
     // Setting Services  \\
@@ -481,7 +480,7 @@ public class CatalogConfig implements PaneViewer {
     private static void fillInventoryComboBox() {
         try {
             // Get the list of inventories
-            List<Inventory> inventories = inventoryService.getAll();
+            List<Inventory> inventories = inventoryService.getAll(); //TODO Request#2
             // Validate list
             if (inventories != null) {
                 if (inventories.isEmpty()) {

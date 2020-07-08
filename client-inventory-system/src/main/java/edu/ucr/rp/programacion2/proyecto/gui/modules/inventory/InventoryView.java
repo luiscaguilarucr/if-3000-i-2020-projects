@@ -106,7 +106,7 @@ public class InventoryView implements PaneViewer {
     /**
      * Set the styles of the components.
      */
-    private void setupStyles() { //TODO how to simplify. ->
+    private void setupStyles() {
         // Pane
         pane.getStyleClass().add("show-inventory-pane");
         // Row Constraints
@@ -368,7 +368,7 @@ public class InventoryView implements PaneViewer {
     }
 
     // Table Buttons
-    private void viewItemsAction(InventoryControl inventoryControl) {//TODO actionEvent
+    private void viewItemsAction(InventoryControl inventoryControl) {
         if (inventoryControl.getCatalogName() != null) {
             ManageItem.refresh();
             try {

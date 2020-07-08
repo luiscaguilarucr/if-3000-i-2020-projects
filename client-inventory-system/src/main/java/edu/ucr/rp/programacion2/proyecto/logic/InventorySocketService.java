@@ -66,7 +66,7 @@ public class InventorySocketService implements InventoryService {
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage());
         }
-    }//TODO evaluate how to change name. or identify witch object was selected. [id generator].
+    }
 
     /**
      * This method removes an inventory element that most be in the list.

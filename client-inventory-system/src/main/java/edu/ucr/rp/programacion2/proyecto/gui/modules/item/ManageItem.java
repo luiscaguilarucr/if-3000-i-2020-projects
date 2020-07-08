@@ -90,7 +90,6 @@ public class ManageItem implements PaneViewer {
      * @return {@code GridPane} pane with components.
      */
     public GridPane createPane() {
-        refresh();
         return pane;
     }
 
@@ -109,11 +108,7 @@ public class ManageItem implements PaneViewer {
         createTiledPane.setMaxWidth(20);
         createTiledPane.setAlignment(Pos.TOP_LEFT);
         createTiledPane.setVisible(false);
-        try {
-            inventoryObservableList = FXCollections.observableArrayList(inventoryFileService.getAll());
-        } catch (ServiceException exception) {
-            System.out.println(exception.getMessage());
-        }
+        inventoryObservableList = FXCollections.observableArrayList();
         inventoryComboBox = PaneUtil.buildComboBox(pane, inventoryObservableList, 0, 1);
         inventoryComboBox.setTooltip(new Tooltip("Select an inventory"));
         catalogObservableList = FXCollections.observableArrayList();
@@ -124,7 +119,6 @@ public class ManageItem implements PaneViewer {
         filterField = BuilderFX.buildTextInput2(SEARCH_LABEL, pane, 3, 1);
         tableView = BuilderFX.buildTableView(pane, 0, 2, 4, 1);
         resultsLabel = BuilderFX.buildLabelMinimal("", pane, 0, 3, 2);
-        //pagination = BuilderFX.buildPagination(pane, 2, 3, 2, 1);// TODO pagination
         backButton = BuilderFX.buildButton(BACK_LABEL, pane, 2, 3);
         // None Row
         buttonTypeYes = new ButtonType(YES_LABEL);
@@ -137,7 +131,7 @@ public class ManageItem implements PaneViewer {
     /**
      * Set the styles of the components.
      */
-    private void setupStyles() { //TODO how to simplify.
+    private void setupStyles() {
         // Pane
         pane.getStyleClass().add("show-inventory-pane");
         // Row Constraints
@@ -311,7 +305,6 @@ public class ManageItem implements PaneViewer {
                 PaneUtil.showAlert(Alert.AlertType.INFORMATION, "There are no catalogs", "You must add at least one catalog on this inventory to be able to access this function");
             } else {
                 refreshCatalogComboBox();
-                //refreshTable(); // TODO revisar, si se llama aquí, aún no se ha seleccionado un catálogo, por lo cual no se puede refrescar la table
                 catalogComboBox.setVisible(true);
             }
         } catch (ServiceException e) {
@@ -350,10 +343,9 @@ public class ManageItem implements PaneViewer {
             CreateItemForm.setCatalog(catalog);
             CreateItemForm.setPreviousPane(PaneName.MANAGE_ITEM);
             ManagePane.setCenterPane(PaneName.CREATE_ITEM_FORM);
-            refreshTable();// TODO llamar luego de agregar el item
+            refreshTable();
             updateResultsLabel();
         }
-        //refresh();
     }
 
     private void deleteItemAction() {
@@ -487,12 +479,6 @@ public class ManageItem implements PaneViewer {
      * Refresh the pane. Cleans all the components.
      */
     public static void refresh() {
-        /*initializeServices();
-        if (inventoryService.getAll().isEmpty()) {
-            ManagePane.clearPane();
-            PaneUtil.showAlert(Alert.AlertType.INFORMATION, "There are no inventories", "You must add at least one inventory to be able to access this function");
-        }*/ //TODO validar que no se pueda ingresar si no existen inventarios
-        //inventoryComboBox.getSelectionModel().clearSelection();///TODO está generando un IndexOutOfBounds
         refreshInventoryComboBox();
         catalogComboBox.getItems().clear();
         catalogObservableList.clear();
@@ -505,7 +491,7 @@ public class ManageItem implements PaneViewer {
 
     public static void refreshInventoryComboBox() {
         try {
-            inventoryComboBox.setItems(FXCollections.observableList(inventoryFileService.getAll()));
+            inventoryComboBox.setItems(FXCollections.observableList(inventoryFileService.getAll()));// TODO Request #5
         } catch (ServiceException exception) {
             System.out.println(exception.getMessage());
         }

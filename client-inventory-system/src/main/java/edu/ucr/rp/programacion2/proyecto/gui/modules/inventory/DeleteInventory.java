@@ -30,7 +30,7 @@ public class DeleteInventory implements PaneViewer {
     private Button cancelButton;
     private static Label inventoryIndicationLabel;
     private static CheckComboBox<Inventory> checkComboBox;
-    private static ObservableList<Inventory> observableList;
+    private static ObservableList<Inventory> inventoryObservableList;
     private static GridPane pane;
 
     /**
@@ -72,9 +72,9 @@ public class DeleteInventory implements PaneViewer {
     private static void refreshItems() {
         initializeInventoryService();
         checkComboBox.getCheckModel().clearChecks();
-        observableList.clear();
+        inventoryObservableList.clear();
         try {
-            observableList.addAll(inventoryService.getAll());
+            inventoryObservableList.addAll(inventoryService.getAll());
         } catch (ServiceException exception) {
             System.out.println(exception.getMessage());
         }
@@ -113,12 +113,8 @@ public class DeleteInventory implements PaneViewer {
      * This method builds a CheckComboBox that displays the inventory list.
      */
     private void buildCheckComboBoxComboBox() {
-        try {
-            observableList = FXCollections.observableArrayList(inventoryService.getAll());
-            checkComboBox = PaneUtil.buildCheckComboBox(pane, observableList, 1, 1);
-        } catch (ServiceException exception) {
-            System.out.println(exception.getMessage());
-        }
+        inventoryObservableList = FXCollections.observableArrayList();
+        checkComboBox = PaneUtil.buildCheckComboBox(pane, inventoryObservableList, 1, 1);
     }
 
     /**

@@ -140,8 +140,7 @@ public class DeleteCatalog implements PaneViewer {
         try {
             inventoryObservableList = FXCollections.observableArrayList();
             inventoryComboBox = PaneUtil.buildComboBox(pane, inventoryObservableList, 1, 1);
-            inventoryObservableList.addAll(inventoryService.getAll());
-        } catch (ServiceException | NullPointerException exception) {
+        } catch (NullPointerException exception) {
             System.out.println(exception.getMessage());
         }
     }

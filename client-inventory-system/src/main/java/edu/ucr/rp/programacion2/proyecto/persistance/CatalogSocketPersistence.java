@@ -42,7 +42,7 @@ public class CatalogSocketPersistence implements CatalogPersistence {
             refresh();
             return insertRequest(catalog);
         } catch (IOException | ClassNotFoundException e) {
-            throw new PersistenceException(e.getMessage());// TODO
+            throw new PersistenceException(e.getMessage());
         }
     }
 
