@@ -42,9 +42,9 @@ public class RefreshService {
                     case CATALOG_FORM:
                         CreateCatalogForm.refresh();
                         break;
-                    */case CATALOG_CONFIG:
+                    case CATALOG_CONFIG:
                         CatalogConfig.refresh();
-                        break;/*
+                        break;
                     case DELETE_CATALOG:
                         DeleteCatalog.refresh();
                         break;*/
