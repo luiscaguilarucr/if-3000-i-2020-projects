@@ -25,7 +25,7 @@ public class ServerStatusRequest {
 
 
 
-    public boolean isConnected1() throws IOException {
+    public boolean isConnected() throws IOException {
         Request request = new Request();
         try {
             // Establish the connection with the server.
