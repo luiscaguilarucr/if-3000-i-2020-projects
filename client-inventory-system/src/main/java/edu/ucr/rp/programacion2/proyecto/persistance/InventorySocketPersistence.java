@@ -136,7 +136,6 @@ public class InventorySocketPersistence implements InventoryPersistence {
             clientSocket = new Socket(host, port);
             // Create a insert request.
             request.setType(INSERT_INVENTORY);
-            System.out.println("Se ha enviado una petición para agregar un inventario.");
             // Send and wait the request.
             send(request, clientSocket);
 
@@ -151,10 +150,8 @@ public class InventorySocketPersistence implements InventoryPersistence {
             ConfirmationRequest confirmationRequest = receive(ConfirmationRequest.class, clientSocket);
 
             if (!confirmationRequest.isCompleted()) {
-                System.out.println("No fue agregado");
                 throw new PersistenceException(confirmationRequest.getDetails());
             }
-            System.out.println("Se agregó correctamente");
 
             return true;
         } finally {
@@ -170,7 +167,7 @@ public class InventorySocketPersistence implements InventoryPersistence {
             clientSocket = new Socket(host, port);
             // Create a update request.
             request.setType(UPDATE_INVENTORY);
-            System.out.println("Se ha enviado una petición para editar un inventario.");
+
             // Send and wait the request.
             send(request, clientSocket);
 
@@ -185,11 +182,8 @@ public class InventorySocketPersistence implements InventoryPersistence {
             ConfirmationRequest confirmationRequest = receive(ConfirmationRequest.class, clientSocket);
 
             if (!confirmationRequest.isCompleted()) {
-                System.out.println("No fue editado");
                 throw new PersistenceException(confirmationRequest.getDetails());
             }
-            System.out.println("Se actualizó correctamente");
-
             return true;
         } finally {
             closeConnection();
@@ -204,7 +198,6 @@ public class InventorySocketPersistence implements InventoryPersistence {
             clientSocket = new Socket(host, port);
             // Create a delete request.
             request.setType(DELETE_INVENTORY);
-            System.out.println("Se ha enviado una petición para eliminar un inventario.");
             // Send and wait the request.
             send(request, clientSocket);
 
@@ -217,10 +210,8 @@ public class InventorySocketPersistence implements InventoryPersistence {
             ConfirmationRequest confirmationRequest = receive(ConfirmationRequest.class, clientSocket);
 
             if (!confirmationRequest.isCompleted()) {
-                System.out.println("No fue eliminado");
                 throw new PersistenceException(confirmationRequest.getDetails());
             }
-            System.out.println("Se eliminó correctamente");
             return true;
         } finally {
             closeConnection();
@@ -234,7 +225,6 @@ public class InventorySocketPersistence implements InventoryPersistence {
             clientSocket = new Socket(host, port);
             // Create a read all request.
             request.setType(DELETE_ALL_INVENTORIES);
-            System.out.println("Se ha enviado una petición para eliminar todos los inventarios.");
             // Send and wait the request.
             send(request, clientSocket);
 
@@ -242,10 +232,8 @@ public class InventorySocketPersistence implements InventoryPersistence {
             ConfirmationRequest confirmationRequest = receive(ConfirmationRequest.class, clientSocket);
 
             if (!confirmationRequest.isCompleted()) {
-                System.out.println("No fue eliminado");
                 throw new PersistenceException(confirmationRequest.getDetails());
             }
-            System.out.println("Inventarios eliminados correctamente");
             return true;
         } finally {
             closeConnection();
@@ -259,7 +247,6 @@ public class InventorySocketPersistence implements InventoryPersistence {
             clientSocket = new Socket(host, port);
             // Create a read all request.
             request.setType(READ_INVENTORY);
-            System.out.println("Se ha enviado una petición para obtener un inventario.");
             // Send and wait the request.
             send(request, clientSocket);
 
@@ -272,13 +259,11 @@ public class InventorySocketPersistence implements InventoryPersistence {
             ConfirmationRequest confirmationRequest = receive(ConfirmationRequest.class, clientSocket);
 
             if (!confirmationRequest.isCompleted()) {
-                System.out.println("Nombre de inventario no fue encontrado");
                 throw new PersistenceException(confirmationRequest.getDetails());
             }
             // Wait for an inventory
             InventoryRequest inventoryRequest = receive(InventoryRequest.class, clientSocket);
             Inventory inventory = inventoryRequest.getInventory();
-            System.out.println("Inventario recibido= " + inventory);
             return inventory;
         } finally {
             closeConnection();
@@ -293,14 +278,12 @@ public class InventorySocketPersistence implements InventoryPersistence {
             clientSocket = new Socket(host, port);
             // Create a read all request.
             request.setType(READ_ALL_INVENTORIES);
-            System.out.println("Se ha enviado una petición para obtener todos los inventarios.");
             // Send and wait the request.
             send(request, clientSocket);
 
             // Receives an InventoryListRequest.
             InventoryListRequest inventoryListRequest = receive(InventoryListRequest.class, clientSocket);
             List<Inventory> list = inventoryListRequest.getList();
-            System.out.println("Lista recibida= " + list);
 
             return list;
         } finally {

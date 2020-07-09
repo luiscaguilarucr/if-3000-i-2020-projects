@@ -13,6 +13,9 @@ import static edu.ucr.rp.programacion2.proyecto.persistance.messages.RequestType
 import static edu.ucr.rp.programacion2.proyecto.util.RequestProcessUtil.receive;
 import static edu.ucr.rp.programacion2.proyecto.util.RequestProcessUtil.send;
 
+/**
+ * This class sends a receives data to a server.
+ */
 public class CatalogSocketPersistence implements CatalogPersistence {
 
     private String host;
@@ -21,6 +24,12 @@ public class CatalogSocketPersistence implements CatalogPersistence {
     private JsonUtil jsonUtil = new JsonUtil();
     private Inventory inventory;
 
+    /**
+     * Information used to establish the connection to the server.
+     *
+     * @param host server ip.
+     * @param port server port.
+     */
     public CatalogSocketPersistence(String host, int port) {
         this.host = host;
         this.port = port;
@@ -36,6 +45,13 @@ public class CatalogSocketPersistence implements CatalogPersistence {
         this.inventory = inventory;
     }
 
+    /**
+     * Send an insert request to the server and then receives a confirmation.
+     *
+     * @param catalog catalog to insert.
+     * @return {@code true} if the directory have been saved.{@code false} Otherwise.
+     * @throws PersistenceException if the catalog is not valid or the connection has failed.
+     */
     @Override
     public boolean insert(Catalog catalog) throws PersistenceException {
         try {
@@ -46,6 +62,13 @@ public class CatalogSocketPersistence implements CatalogPersistence {
         }
     }
 
+    /**
+     * Send an update request to the server and then receives a confirmation.
+     *
+     * @param catalog catalog to be updated.
+     * @return {@code true} if the directory have been saved.{@code false} Otherwise.
+     * @throws PersistenceException if the catalog is not valid or the connection has failed.
+     */
     @Override
     public boolean update(Catalog catalog) throws PersistenceException {
         try {
@@ -56,16 +79,29 @@ public class CatalogSocketPersistence implements CatalogPersistence {
         }
     }
 
+    /**
+     * Send an update request to the server using the name to identify the catalog. Then receives the inventory if exists.
+     *
+     * @param name of the catalog.
+     * @return {Catalog} inventory has been found.
+     * @throws PersistenceException if the catalog is not found or the connection has failed.
+     */
     @Override
-    public Catalog read(String key) throws PersistenceException {
+    public Catalog read(String name) throws PersistenceException {
         try {
             refresh();
-            return readRequest(key);
+            return readRequest(name);
         } catch (IOException | ClassNotFoundException e) {
             throw new PersistenceException(e.getMessage());
         }
     }
 
+    /**
+     * Search and return a list with inventories.
+     *
+     * @return {@code List<Catalog>} List of the inventories.
+     * @throws PersistenceException if the connection has failed.
+     */
     @Override
     public List<Catalog> readAll() throws PersistenceException {
         try {
@@ -77,6 +113,12 @@ public class CatalogSocketPersistence implements CatalogPersistence {
         }
     }
 
+    /**
+     * Deletes an catalog.
+     *
+     * @param catalog to delete.
+     * @return {@code true} if the directory have been removed or doesn't exists.{@code false} Otherwise.
+     */
     @Override
     public boolean delete(Catalog catalog) throws PersistenceException {
         try {
@@ -87,6 +129,11 @@ public class CatalogSocketPersistence implements CatalogPersistence {
         }
     }
 
+    /**
+     * Deletes all the catalogs.
+     *
+     * @return {@code true} if the directory have been removed or doesn't exists.{@code false} Otherwise.
+     */
     @Override
     public boolean deleteAll() throws PersistenceException {
         try {
@@ -300,7 +347,6 @@ public class CatalogSocketPersistence implements CatalogPersistence {
 
         if (clientSocket != null) {
             clientSocket.close();
-            System.out.println("Conexión cerrada");
         }
     }
 }

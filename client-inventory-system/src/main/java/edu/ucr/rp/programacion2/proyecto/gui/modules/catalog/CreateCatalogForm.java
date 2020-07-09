@@ -107,16 +107,8 @@ public class CreateCatalogForm implements PaneViewer {
         catalogNameTextField.clear();
         featureNameTextField.clear();
         schema.clear();
-        /*Inventory inventory = inventoryComboBox.getSelectionModel().getSelectedItem();
-        inventoryComboBox.getSelectionModel().clearSelection();
-        List<Inventory> list = inventoryService.getAll();
-        for (int i = 0; i < inventoryObservableList.size(); i++) {
-
-        }*/
         inventoryObservableList.clear();
         inventoryObservableList.addAll(inventoryService.getAll());
-        //inventoryComboBox.getSelectionModel().select(inventory);
-        //refreshService.refreshObservableList(inventoryComboBox, inventoryObservableList);
     }
 
     /**

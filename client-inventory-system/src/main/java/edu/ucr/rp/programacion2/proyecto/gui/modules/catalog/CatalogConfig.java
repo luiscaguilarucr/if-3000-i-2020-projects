@@ -325,8 +325,6 @@ public class CatalogConfig implements PaneViewer {
                             System.out.println(catalog + " no edited...");
                     }
                 }
-
-
             } catch (ServiceException e) {
                 System.out.println(e.getMessage());
             }

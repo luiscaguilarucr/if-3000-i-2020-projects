@@ -1,17 +1,8 @@
 package edu.ucr.rp.programacion2.proyecto.util.refresh;
-
-import edu.ucr.rp.programacion2.proyecto.domain.Inventory;
-import edu.ucr.rp.programacion2.proyecto.gui.modules.catalog.CatalogConfig;
-import edu.ucr.rp.programacion2.proyecto.gui.modules.catalog.CreateCatalogForm;
-import edu.ucr.rp.programacion2.proyecto.gui.modules.catalog.DeleteCatalog;
-import edu.ucr.rp.programacion2.proyecto.gui.modules.inventory.DeleteInventory;
 import edu.ucr.rp.programacion2.proyecto.gui.modules.inventory.InventoryView;
 import edu.ucr.rp.programacion2.proyecto.gui.modules.item.ManageItem;
 import edu.ucr.rp.programacion2.proyecto.logic.InventorySocketService;
-import edu.ucr.rp.programacion2.proyecto.logic.ServiceException;
 import edu.ucr.rp.programacion2.proyecto.util.ThreadPool;
-import javafx.collections.ObservableList;
-import javafx.scene.control.ComboBox;
 
 import java.util.concurrent.RejectedExecutionException;
 
