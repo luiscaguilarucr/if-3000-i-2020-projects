@@ -16,7 +16,6 @@ import static edu.ucr.rp.programacion2.proyecto.server.messages.RequestType.CLOS
 import static edu.ucr.rp.programacion2.proyecto.server.processes.RequestProcessUtil.receive;
 
 public class Server {
-    private JsonUtil jsonUtil = new JsonUtil();
     private ServerSocket serverSocket = null;
     private ProcessServerRequest processServerRequest;
     private ProcessCatalog catalogProcessRequest;
@@ -34,7 +33,6 @@ public class Server {
             System.out.println("Esperando conexión");
             while (true) {
                 Socket socket = serverSocket.accept();          // Wait for indeterminate client connections.
-                //System.out.println("Conexión recibida");        // Connection with client established.
                 ThreadPool.getPool().submit(() -> {
                     processRequest(socket);
                 });

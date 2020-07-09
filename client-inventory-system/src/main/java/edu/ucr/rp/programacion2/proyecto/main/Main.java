@@ -1,3 +1,4 @@
+
 package edu.ucr.rp.programacion2.proyecto.main;
 
 import edu.ucr.rp.programacion2.proyecto.gui.App;

@@ -111,6 +111,7 @@
     -fx-alignment: top-left;
     -fx-max-width: 100%;
     -fx-padding: 5px;
+    -fx-spacing: 50px;
 }
 .server-status-image{
     -fx-border-color: black;

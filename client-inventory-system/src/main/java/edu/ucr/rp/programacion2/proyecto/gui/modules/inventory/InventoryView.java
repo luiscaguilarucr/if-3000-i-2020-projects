@@ -49,7 +49,6 @@ public class InventoryView implements PaneViewer {
     private static TableColumn catalogNameColumn;
     private static TableColumn itemsActionColumn;
     private static TableColumn configActionColumn;
-    private static Pagination pagination;
     private static Label resultsLabel;
     private static GridPane pane;
     private static InventoryService inventoryFileService;

@@ -18,8 +18,8 @@ import static edu.ucr.rp.programacion2.proyecto.server.processes.RequestProcessU
 
 public class ProcessInventoryRequest implements ProcessRequest {
     // Variables
-    private InventoryService inventoryService;
-    private JsonUtil jsonUtil = new JsonUtil();
+    private final InventoryService inventoryService;
+    private final JsonUtil jsonUtil = new JsonUtil();
     // Constructor
 
 
@@ -31,15 +31,13 @@ public class ProcessInventoryRequest implements ProcessRequest {
     public void insert(Socket socket) throws IOException, ClassNotFoundException {
         // Wait until receives an InventoryRequest.
         InventoryRequest inventoryRequest = receive(InventoryRequest.class, socket);
-        System.out.println("Recibiendo el inventario: ");
         Inventory inventory = inventoryRequest.getInventory();
-        System.out.println("Inventario por agregar= " +  inventory);
         // Add inventory.
         ConfirmationRequest confirmationRequest = new ConfirmationRequest();
         try {
             if (inventoryService.add(inventory)) {
                 confirmationRequest.setCompleted(true);
-                confirmationRequest.setDetails("Inventory has been added");
+                confirmationRequest.setDetails("Inventory "+ inventory.getName() + " has been added.");
             }
         } catch (ServiceException e) {
             System.out.println(e.getMessage());
@@ -54,15 +52,13 @@ public class ProcessInventoryRequest implements ProcessRequest {
     public void update(Socket socket) throws IOException, ClassNotFoundException {
         // Wait until receives an InventoryRequest.
         InventoryRequest inventoryRequest = receive(InventoryRequest.class, socket);
-        System.out.println("Recibiendo el inventario: ");
         Inventory inventory = inventoryRequest.getInventory();
-        System.out.println("Inventario a editar= " +  inventory);
         // Add inventory.
         ConfirmationRequest confirmationRequest = new ConfirmationRequest();
         try {
             if (inventoryService.edit(inventory)) {
                 confirmationRequest.setCompleted(true);
-                confirmationRequest.setDetails("Inventory has been edited");
+                confirmationRequest.setDetails("Inventory " + inventory.getName() + " has been edited.");
             }
         } catch (ServiceException e) {
             System.out.println(e.getMessage());
@@ -77,9 +73,7 @@ public class ProcessInventoryRequest implements ProcessRequest {
     public void read(Socket socket) throws IOException, ClassNotFoundException {
         // Wait until receives an InventoryKeyRequest.
         InventoryReadRequest inventoryReadRequest = receive(InventoryReadRequest.class, socket);
-        System.out.println("Recibiendo el nombre del inventario: ");
         String name = inventoryReadRequest.getName();
-        System.out.println("Nombre recibido= " + name);
 
         // Get the inventory.
         ConfirmationRequest confirmationRequest = new ConfirmationRequest();
@@ -87,7 +81,7 @@ public class ProcessInventoryRequest implements ProcessRequest {
         try {
             inventory = inventoryService.get(name);
             confirmationRequest.setCompleted(true);
-            confirmationRequest.setDetails("Inventory found.");
+            confirmationRequest.setDetails("Inventory" + inventory.getName() + " has been found.");
 
         } catch (ServiceException e) {
             System.out.println(e.getMessage());
@@ -102,7 +96,6 @@ public class ProcessInventoryRequest implements ProcessRequest {
             InventoryRequest inventoryRequest = new InventoryRequest();
             inventoryRequest.setInventory(inventory);
             send(inventoryRequest, socket);
-            System.out.println("Enviando el inventario.");
         }
     }
 
@@ -115,7 +108,7 @@ public class ProcessInventoryRequest implements ProcessRequest {
             // Add the list to the request
             inventoryListRequest.setList(list);
         } catch (ServiceException serviceException) {
-            System.out.println("Error in getAll() inventories...");
+            System.out.println(serviceException.getMessage());
         }
         // Sent List
         send(inventoryListRequest, socket);
@@ -125,7 +118,6 @@ public class ProcessInventoryRequest implements ProcessRequest {
     public void delete(Socket socket) throws IOException, ClassNotFoundException {
         // Wait until receives an InventoryRequest.
         InventoryRequest inventoryRequest = receive(InventoryRequest.class, socket);
-        System.out.println("Recibiendo el inventario: ");
         Inventory inventory = inventoryRequest.getInventory();
         System.out.println(inventory);
         // Remove inventory.
@@ -133,7 +125,7 @@ public class ProcessInventoryRequest implements ProcessRequest {
         try {
             if (inventoryService.remove(inventory)) {
                 confirmationRequest.setCompleted(true);
-                confirmationRequest.setDetails("Inventory has been removed");
+                confirmationRequest.setDetails("Inventory " + inventory.getName() + " has been removed");
             }
         } catch (ServiceException e) {
             System.out.println(e.getMessage());
