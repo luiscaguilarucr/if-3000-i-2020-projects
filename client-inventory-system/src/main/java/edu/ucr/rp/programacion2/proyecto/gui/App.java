@@ -35,7 +35,6 @@ public class App extends Application {
     @Override
     public void stop() throws Exception {
         ServerStatusUI.stopRefresh();
-        ThreadPool.shutdown();
         super.stop();
     }
 
