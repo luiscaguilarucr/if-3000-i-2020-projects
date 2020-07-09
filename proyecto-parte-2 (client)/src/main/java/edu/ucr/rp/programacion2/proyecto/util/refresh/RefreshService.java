@@ -1,14 +1,12 @@
 package edu.ucr.rp.programacion2.proyecto.util.refresh;
 import edu.ucr.rp.programacion2.proyecto.gui.modules.inventory.InventoryView;
 import edu.ucr.rp.programacion2.proyecto.gui.modules.item.ManageItem;
-import edu.ucr.rp.programacion2.proyecto.logic.InventorySocketService;
 import edu.ucr.rp.programacion2.proyecto.util.ThreadPool;
 
 import java.util.concurrent.RejectedExecutionException;
 
 public class RefreshService {
     private static RefreshService instance;
-    InventorySocketService inventorySocketService = InventorySocketService.getInstance();
 
     private RefreshService() {
     }
