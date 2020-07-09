@@ -27,9 +27,7 @@ public class ProcessCatalogRequest implements ProcessCatalog {
     public void insert(Socket socket) throws IOException, ClassNotFoundException {
         // Wait until receives an CatalogRequest.
         CatalogRequest catalogRequest = receive(CatalogRequest.class, socket);
-        System.out.println("Recibiendo el catálogo: ");
         Catalog catalog = catalogRequest.getCatalog();
-        System.out.println("Catálogo por agregar= " + catalog);
         // Add catalog.
         ConfirmationRequest confirmationRequest = new ConfirmationRequest();
         try {
@@ -50,9 +48,7 @@ public class ProcessCatalogRequest implements ProcessCatalog {
     public void update(Socket socket) throws IOException, ClassNotFoundException {
         // Wait until receives an CatalogRequest.
         CatalogRequest catalogRequest = receive(CatalogRequest.class, socket);
-        System.out.println("Recibiendo el catálogo: ");
         Catalog catalog = catalogRequest.getCatalog();
-        System.out.println("Catálogo a editar= " + catalog);
         // Add catalog.
         ConfirmationRequest confirmationRequest = new ConfirmationRequest();
         try {
@@ -73,10 +69,7 @@ public class ProcessCatalogRequest implements ProcessCatalog {
     public void read(Socket socket) throws IOException, ClassNotFoundException {
         // Wait until receives an CatalogReadRequest.
         CatalogReadRequest catalogReadRequest = receive(CatalogReadRequest.class, socket);
-        System.out.println("Recibiendo el nombre del catálogo: ");
         String name = catalogReadRequest.getName();
-        System.out.println("Nombre recibido= " + name);
-
         // Get the catalog.
         ConfirmationRequest confirmationRequest = new ConfirmationRequest();
         Catalog catalog = null;
@@ -98,7 +91,7 @@ public class ProcessCatalogRequest implements ProcessCatalog {
             CatalogRequest catalogRequest = new CatalogRequest();
             catalogRequest.setCatalog(catalog);
             send(catalogRequest, socket);
-            System.out.println("Enviando el catálogo.");
+
         }
     }
 
@@ -121,7 +114,6 @@ public class ProcessCatalogRequest implements ProcessCatalog {
     public void delete(Socket socket) throws IOException, ClassNotFoundException {
         // Wait until receives an CatalogRequest.
         CatalogRequest catalogRequest = receive(CatalogRequest.class, socket);
-        System.out.println("Recibiendo el catálogo: ");
         Catalog catalog = catalogRequest.getCatalog();
         System.out.println(catalog);
         // Remove catalog.
@@ -162,9 +154,8 @@ public class ProcessCatalogRequest implements ProcessCatalog {
     public void refresh(Socket socket) throws IOException, ClassNotFoundException {
         // Wait until receives an CatalogRequest.
         InventoryRequest inventoryRequest = receive(InventoryRequest.class, socket);
-        System.out.println("Recibiendo el inventario: ");
+
         Inventory inventory = inventoryRequest.getInventory();
-        System.out.println("Inventario por ejecutar= " + inventory);
         // Add inventory.
         ConfirmationRequest confirmationRequest = new ConfirmationRequest();
         try {
