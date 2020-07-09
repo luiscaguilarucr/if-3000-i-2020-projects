@@ -26,9 +26,6 @@ public class App extends Application {
         // Start with the main scene
         stage.setScene(scenes.get(SceneName.MAIN));
         stage.setTitle("Inventory System");
-
-
-
         stage.show();
     }
 

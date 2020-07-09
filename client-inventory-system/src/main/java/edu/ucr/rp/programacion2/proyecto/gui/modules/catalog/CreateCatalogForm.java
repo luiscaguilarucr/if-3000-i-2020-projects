@@ -29,6 +29,7 @@ import static edu.ucr.rp.programacion2.proyecto.gui.modules.util.LabelConstants.
 public class CreateCatalogForm implements PaneViewer {
     private static InventoryService inventoryService;
     private static CatalogService catalogService;
+    private static RefreshService refreshService;
     private static final CatalogBuilder catalogBuilder = new CatalogBuilder();
     private static TextField catalogNameTextField;
     private static TextField featureNameTextField;
@@ -75,6 +76,7 @@ public class CreateCatalogForm implements PaneViewer {
     private void updateCatalogService(Inventory inventory) {
         catalogService = CatalogSocketService.getInstance();
         catalogService.setInventory(inventory);
+        refreshService = RefreshService.getInstance();
     }
 
     /**
@@ -88,7 +90,7 @@ public class CreateCatalogForm implements PaneViewer {
                 PaneUtil.showAlert(Alert.AlertType.INFORMATION, "There are no inventories", "You must add at least one inventory to be able to access this function");
             }
             refreshItems();
-        }catch (ServiceException e){
+        } catch (ServiceException e) {
             System.out.println(e.getMessage());
         }
     }
@@ -105,11 +107,9 @@ public class CreateCatalogForm implements PaneViewer {
         featureNameTextField.clear();
         schema.clear();
         inventoryObservableList.clear();
-        try {
-            inventoryObservableList.addAll(inventoryService.getAll());
-        } catch (ServiceException exception) {
-            System.out.println(exception.getMessage());
-        }
+
+        refreshService.refreshObservableList(inventoryObservableList);
+
     }
 
     /**
@@ -225,14 +225,14 @@ public class CreateCatalogForm implements PaneViewer {
                 } else {
                     PaneUtil.showAlert(Alert.AlertType.INFORMATION, "ERROR when adding", "The catalog was not added");
                 }
-            }catch (ServiceException e){
+            } catch (ServiceException e) {
                 System.out.println(e.getMessage());
             }
         }
 
     }
 
-    private void setStyle(){
+    private void setStyle() {
         inventoryComboBox.setConverter(new InventoryConverter());
     }
 
