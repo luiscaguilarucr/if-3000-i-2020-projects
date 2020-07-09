@@ -27,7 +27,7 @@ public class Server {
      *
      * @param port of the server.
      */
-    public Server(int port) {
+    public Server(int port) {    
         try {
             serverSocket = new ServerSocket(port);              // Initialize the Server.
             initializeProcessRequests();                        // Initialize processRequests
