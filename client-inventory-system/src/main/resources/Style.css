@@ -108,7 +108,7 @@
     -fx-max-width: inherit;
 }
 .server-status-pane {
-    -fx-alignment: top-center;
+    -fx-alignment: top-left;
     -fx-max-width: 100%;
     -fx-padding: 5px;
 }

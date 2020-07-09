@@ -18,7 +18,7 @@ public class ServerStatus {
 
     public static boolean isConnected() {
         try {
-            return serverStatusRequest.isConnected();
+            return serverStatusRequest.isConnected1();
         } catch (IOException e) {
             return false;
         }
