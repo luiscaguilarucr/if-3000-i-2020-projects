@@ -37,7 +37,15 @@ public class ThreadPool {
     }
     public static void pause() {
         try {
-            Thread.sleep(1000);
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void pause2() {
+        try {
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

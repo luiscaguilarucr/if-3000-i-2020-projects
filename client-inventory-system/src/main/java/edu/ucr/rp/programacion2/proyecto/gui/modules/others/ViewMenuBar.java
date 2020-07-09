@@ -9,6 +9,8 @@ import edu.ucr.rp.programacion2.proyecto.gui.modules.catalog.DeleteCatalog;
 import edu.ucr.rp.programacion2.proyecto.gui.modules.inventory.DeleteInventory;
 import edu.ucr.rp.programacion2.proyecto.gui.modules.inventory.InventoryView;
 import edu.ucr.rp.programacion2.proyecto.gui.modules.item.ManageItem;
+import edu.ucr.rp.programacion2.proyecto.util.ThreadPool;
+import edu.ucr.rp.programacion2.proyecto.util.refresh.RefreshService;
 import javafx.application.Platform;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -19,6 +21,8 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
+import static edu.ucr.rp.programacion2.proyecto.util.refresh.RefreshConstants.*;
 
 public class ViewMenuBar implements PaneViewer {
     private Stage stage;
@@ -56,14 +60,16 @@ public class ViewMenuBar implements PaneViewer {
             ManagePane.setCenterPane(PaneName.ADD_INVENTORY);
         });
 
-        mI_SeeInventory.setOnAction((event)->{
+        mI_SeeInventory.setOnAction((event) -> {
             ManagePane.setCenterPane(PaneName.SHOW_INVENTORY);
             InventoryView.refresh();
+            RefreshService.refresh(INVENTORY_VIEW);
         });
 
         mI_DeleteInventory.setOnAction((event) -> {
             ManagePane.setCenterPane(PaneName.DELETE_INVENTORY);
             DeleteInventory.refresh();
+            RefreshService.refresh(DELETE_INVENTORY);
         });
 
         inventoryMenu.getItems().addAll(mI_CreateInventory, mI_SeeInventory, mI_DeleteInventory);
@@ -93,22 +99,25 @@ public class ViewMenuBar implements PaneViewer {
         mI_AddCatalog.setOnAction((event) -> {
             ManagePane.setCenterPane(PaneName.CREATE_CATALOG_FORM);
             CreateCatalogForm.refresh();
+            RefreshService.refresh(CATALOG_FORM);
         });
 
         mI_ViewAllCatalogs.setOnAction((event) -> {
             ManagePane.setCenterPane(PaneName.SHOW_INVENTORY);
             InventoryView.refresh();
+            RefreshService.refresh(INVENTORY_VIEW);
         });
 
         mI_EditCatalog.setOnAction((event) -> {
             CatalogConfig.refresh();
             ManagePane.setCenterPane(PaneName.CATALOG_CONFIG);
-
+            RefreshService.refresh(CATALOG_CONFIG);
         });
 
         mI_DeleteCatalog.setOnAction((event) -> {
             ManagePane.setCenterPane(PaneName.DELETE_CATALOG);
             DeleteCatalog.refresh();
+            RefreshService.refresh(DELETE_CATALOG);
         });
 
         catalogMenu.getItems().addAll(mI_AddCatalog, mI_ViewAllCatalogs, mI_EditCatalog, mI_DeleteCatalog);
@@ -124,7 +133,7 @@ public class ViewMenuBar implements PaneViewer {
 
         mI_ManageItem.setOnAction(event -> {
             ManagePane.setCenterPane(PaneName.MANAGE_ITEM);
-            ManageItem. refresh();
+            ManageItem.refresh();
             ManageItem.setPreviousPane(null);
         });
 
@@ -154,7 +163,9 @@ public class ViewMenuBar implements PaneViewer {
             ManagePane.setCenterPane(PaneName.CREDITS_UI);
         });
 
-        mI_Exit.setOnAction((event) -> Platform.exit());
+        mI_Exit.setOnAction((event) -> {
+            Platform.exit();
+        });
         mI_Exit.setAccelerator(KeyCombination.keyCombination("Ctrl+S"));
 
         //Get the MenuItems in m_Configuration
@@ -172,11 +183,12 @@ public class ViewMenuBar implements PaneViewer {
     }//End VBox()
 
 
-    public static void disableMenus(boolean b){
+    public static void disableMenus(boolean b) {
         inventoryMenu.setDisable(b);
         catalogMenu.setDisable(b);
         itemMenu.setDisable(b);
     }
+
     @Override
     public Pane getPane() {
         return getMenuVBox();

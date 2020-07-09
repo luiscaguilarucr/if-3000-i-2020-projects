@@ -9,6 +9,7 @@ import edu.ucr.rp.programacion2.proyecto.logic.*;
 import edu.ucr.rp.programacion2.proyecto.util.InventoryConverter;
 import edu.ucr.rp.programacion2.proyecto.util.builders.BuilderFX;
 import edu.ucr.rp.programacion2.proyecto.util.builders.CatalogBuilder;
+import edu.ucr.rp.programacion2.proyecto.util.refresh.RefreshService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
@@ -68,6 +69,7 @@ public class CreateCatalogForm implements PaneViewer {
      */
     private static void initializeInventoryService() {
         inventoryService = InventorySocketService.getInstance();
+        refreshService = RefreshService.getInstance();
     }
 
     /**
@@ -76,7 +78,6 @@ public class CreateCatalogForm implements PaneViewer {
     private void updateCatalogService(Inventory inventory) {
         catalogService = CatalogSocketService.getInstance();
         catalogService.setInventory(inventory);
-        refreshService = RefreshService.getInstance();
     }
 
     /**
@@ -95,7 +96,7 @@ public class CreateCatalogForm implements PaneViewer {
         }
     }
 
-    private static void refreshItems() {
+    private static void refreshItems() throws ServiceException {
         inventoryComboBox.setDisable(false);
         addFeatureButton.setVisible(false);
         catalogNameTextField.setDisable(false);
@@ -106,10 +107,16 @@ public class CreateCatalogForm implements PaneViewer {
         catalogNameTextField.clear();
         featureNameTextField.clear();
         schema.clear();
+        /*Inventory inventory = inventoryComboBox.getSelectionModel().getSelectedItem();
+        inventoryComboBox.getSelectionModel().clearSelection();
+        List<Inventory> list = inventoryService.getAll();
+        for (int i = 0; i < inventoryObservableList.size(); i++) {
+
+        }*/
         inventoryObservableList.clear();
-
-        refreshService.refreshObservableList(inventoryObservableList);
-
+        inventoryObservableList.addAll(inventoryService.getAll());
+        //inventoryComboBox.getSelectionModel().select(inventory);
+        //refreshService.refreshObservableList(inventoryComboBox, inventoryObservableList);
     }
 
     /**

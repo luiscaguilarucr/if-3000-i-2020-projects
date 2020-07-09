@@ -10,9 +10,11 @@ import edu.ucr.rp.programacion2.proyecto.gui.modules.catalog.CatalogConfig;
 import edu.ucr.rp.programacion2.proyecto.gui.modules.item.ManageItem;
 import edu.ucr.rp.programacion2.proyecto.gui.modules.util.PaneUtil;
 import edu.ucr.rp.programacion2.proyecto.logic.*;
+import edu.ucr.rp.programacion2.proyecto.util.ThreadPool;
 import edu.ucr.rp.programacion2.proyecto.util.builders.BuilderFX;
 import edu.ucr.rp.programacion2.proyecto.domain.InventoryControl;
 import edu.ucr.rp.programacion2.proyecto.domain.InventoryControlManager;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -413,9 +415,14 @@ public class InventoryView implements PaneViewer {
      * Refresh the pane. Cleans all the components.
      */
     public static void refresh() {
-        filterField.clear();
-        refreshTable();
-        updateResultsLabel();
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                filterField.clear();
+                refreshTable();
+                updateResultsLabel();
+            }
+        });
     }
 
     /**
