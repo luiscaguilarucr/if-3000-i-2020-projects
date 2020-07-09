@@ -32,6 +32,7 @@ public class ServerStatusUI implements PaneViewer {
         pane = buildPane();
         setupControls(pane);
         setStyle();
+        ServerStatus.getInstance();
         autoRefresh = true;
         autoRefresh();
     }

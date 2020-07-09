@@ -113,6 +113,7 @@
     -fx-padding: 5px;
 }
 .server-status-image{
+    -fx-border-color: black;
     -fx-alignment: top-right;
 
 }
