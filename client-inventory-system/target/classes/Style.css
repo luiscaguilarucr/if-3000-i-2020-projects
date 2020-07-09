@@ -118,3 +118,7 @@
     -fx-alignment: top-right;
 
 }
+.progress-bar-status{
+    -fx-border-color: transparent;
+    -fx-background-color: red;
+}

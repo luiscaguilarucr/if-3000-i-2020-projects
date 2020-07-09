@@ -7,8 +7,12 @@ import edu.ucr.rp.programacion2.proyecto.util.ServerStatus;
 import edu.ucr.rp.programacion2.proyecto.util.ThreadPool;
 import edu.ucr.rp.programacion2.proyecto.util.builders.BuilderFX;
 import javafx.application.Platform;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
 import javafx.geometry.HPos;
+import javafx.scene.Cursor;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -48,7 +52,8 @@ public class ServerStatusUI implements PaneViewer {
         serverConnectionImage.setFitHeight(16);
         serverConnectionImage.setFitWidth(16);
         serverConnectionImage.getStyleClass().add("server-status-image");
-
+        progressIndicator.getStyleClass().add("progress-bar-status");
+        progressIndicator.setVisible(true);
     }
 
     private HBox buildPane() {
@@ -57,16 +62,13 @@ public class ServerStatusUI implements PaneViewer {
 
     private void setupControls(HBox pane) {
         // Element 1
-        progressIndicator = buildProgressIndicator(pane);
-
         serverConnectionImage = buildImageView(pane);
         // Element 2
-
-
+        progressIndicator = buildProgressIndicator(pane);
     }
 
     private ProgressBar buildProgressIndicator(HBox pane) {
-        ProgressBar progressBar = new ProgressBar(1);
+        ProgressBar progressBar = new ProgressBar(0);
         pane.getChildren().add(progressBar);
         return progressBar;
     }
@@ -89,7 +91,7 @@ public class ServerStatusUI implements PaneViewer {
      * Refresh the table
      */
     private void autoRefresh() {
-        progressIndicator.setProgress(0);
+        progressIndicator.setProgress(-1);
         ThreadPool.getPool().submit(() -> {
             while (autoRefresh) {
                 try {
@@ -97,14 +99,14 @@ public class ServerStatusUI implements PaneViewer {
                     if (ServerStatus.isConnected()) {
                         serverConnectionImage.setImage(connectedImage);
                         ViewMenuBar.disableMenus(false);
+                        progressIndicator.setVisible(false);
 
                     } else {
                         serverConnectionImage.setImage(failedImage);
                         System.err.println("Server status: Connection lost");
                         ViewMenuBar.disableMenus(true);
-                        ManagePane.clearPane();
-                       // progressIndicator.setProgress(-1);
-
+                        progressIndicator.setVisible(true);
+                        progressIndicator.setProgress(-1);
 
                     }
 //                    Platform.runLater(() -> {
@@ -117,7 +119,7 @@ public class ServerStatusUI implements PaneViewer {
 //                    );
 
                 } catch (Exception ignored) {
-
+                    System.out.println(ignored.getMessage());
                 }
             }
         });
